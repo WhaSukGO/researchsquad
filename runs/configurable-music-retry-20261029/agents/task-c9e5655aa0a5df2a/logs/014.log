@@ -1,0 +1,284 @@
+
+FILE report.md
+# Frozen first candidate
+
+This is a seven-sample development submission. The church-band acceptance goal remains unmet: protected evaluation, chord timing audit and musician acceptance have not been performed. Submission does not establish accuracy.
+
+## Reproduction
+
+Use the declared prepared Python environment (music21 9.9.2 and converter21 4.0.1). Run `python build_candidate.py`, then `python -m unittest test_candidate`. Inputs are resolved by candidate-config.json. Seven root-level sample files are the candidate; provenance.json records source/output SHA256 hashes.
+
+## Observations and source provenance
+
+The supplied kern is preserved verbatim for samples 001, 006 and 012 except an empty harmony spine where required. For samples 017, 019 and 023, canonical converter21 export repairs serialization; exported Harte harmony is translated by an explicit finite map to MusicXML-style **mxhm. Harmonies come only from the supplied source, whose recognition can itself be wrong. Images were supplied but no new visually inferred chord was added in this freeze.
+
+The supplied sample-029 MusicXML has divisions=0 and only two pitched notes with explicit half-note types. The repair uses divisions=1 and duration=2. The original D4/B3 pitches are retained; empty measures remain unresolved.
+
+Evidence: supplied artifacts inputs/brief.txt, inputs/samples.json and the per-sample source paths/hashes in provenance.json; earlier inspection logs 007.log, 008.log, 011.log and 012.log in the task history document raw conversion failures and canonical export behavior. New directly reproducible evidence is build-results.log, test-results.log, provenance.json and transposition-checks.json (when its tests pass).
+
+| Sample | Parse | Source/output note events | Source/output duration | Chords | Exact parsed event preservation |
+|---|---|---|---|---|---|
+| sample-001 | True | 8/8 | 9.0/9.0 | 0 | True |
+| sample-006 | True | 15/15 | 8.5/8.5 | 0 | True |
+| sample-012 | True | 32/32 | 16.0/16.0 | 4 | True |
+| sample-017 | True | 19/19 | 21.5/21.5 | 2 | True |
+| sample-019 | True | 20/22 | 21.0/21.0 | 1 | False |
+| sample-023 | True | 15/16 | 23.0/23.0 | 1 | False |
+| sample-029 | True | 2/2 | 12.0/12.0 | 0 | True |
+
+## Local checks and limitations
+
+test-results.log is authoritative for local test outcomes. Tests check tab-separated active spine widths, matched terminators, converter21 parsing, nonempty notes, and upward-major-second/inverse transposition of parsed note pitches, harmony roots and slash basses, duration, harmony kind and offsets. These checks do not prove source-image accuracy, and do not test a protected evaluator or a transposed file export. Canonical serialization may split tied events; changes in event counts are reported rather than hidden.
+
+Chord timing is inherited from recognized source rows; its alignment to the images is unresolved and was not audited. Missing chords are intentionally omitted. Sample 006 and sample 029 have no source-supported harmonies in the selected notation sources. The MusicXML duration repair for sample 029 is an explicit interpretation of the written note types; correctness of its bar placement is uncertain.
+
+## Hypotheses and next steps
+
+Canonical serialization may improve evaluator parse coverage relative to the delivered baseline (which reported 3/7); this is a hypothesis until coordinator evaluation. No protected accuracy delta is claimed. Next, compare frozen output against the images, audit chord beats and sample-029 missing material, and request musician review after evaluator feedback.
+
+
+FILE candidate-config.json
+{
+  "input_directory": "inputs/inputs",
+  "samples": [
+    "sample-001",
+    "sample-006",
+    "sample-012",
+    "sample-017",
+    "sample-019",
+    "sample-023",
+    "sample-029"
+  ],
+  "preserve_verbatim": [
+    "sample-001",
+    "sample-006",
+    "sample-012"
+  ],
+  "harmony_policy": "Only supplied source harmonies; no speculative labels or timing changes.",
+  "python_packages": {
+    "music21": "9.9.2",
+    "converter21": "4.0.1"
+  }
+}
+
+
+FILE test_candidate.py
+from pathlib import Path
+import json, unittest
+import build_candidate as b
+class CandidateTests(unittest.TestCase):
+    def test_structure_and_parse(self):
+        for sample in b.CONFIG['samples']:
+            with self.subTest(sample=sample):
+                path=b.ROOT/(sample+'.krn'); text=path.read_text()
+                self.assertIn('**kern',text); self.assertIn('**mxhm',text)
+                width=None; terminated=False
+                for line in text.splitlines():
+                    if not line or line.startswith('!!'): continue
+                    cells=line.split('\t')
+                    if width is None:
+                        self.assertTrue(all(c.startswith('**') for c in cells)); width=len(cells)
+                    self.assertEqual(len(cells),width, line)
+                    if '*^' in cells: width+=cells.count('*^')
+                    if '*v' in cells:
+                        groups=0; in_group=False
+                        for c in cells:
+                            if c=='*v' and not in_group: groups+=1
+                            in_group=c=='*v'
+                        width-=cells.count('*v')-groups
+                    if all(c=='*-' for c in cells): terminated=True; width=0
+                self.assertTrue(terminated)
+                score=b.parse(path)
+                self.assertGreater(len(b.events(score)),0)
+                self.assertNotIn('**harte',text)
+    def test_transposition(self):
+        results=[]
+        for sample in b.CONFIG['samples']:
+            with self.subTest(sample=sample):
+                score=b.parse(b.ROOT/(sample+'.krn'))
+                shifted=score.transpose('M2')
+                back=shifted.transpose('-M2')
+                notes=[n for n in score.recurse().notes if not isinstance(n,b.m21.harmony.ChordSymbol)]
+                moved=[n for n in shifted.recurse().notes if not isinstance(n,b.m21.harmony.ChordSymbol)]
+                self.assertEqual(len(notes),len(moved))
+                for a,c in zip(notes,moved):
+                    self.assertEqual(float(a.duration.quarterLength),float(c.duration.quarterLength))
+                    self.assertEqual([float(p.ps)+2 for p in a.pitches],[float(p.ps) for p in c.pitches])
+                chords=list(score.recurse().getElementsByClass(b.m21.harmony.ChordSymbol))
+                changed=list(shifted.recurse().getElementsByClass(b.m21.harmony.ChordSymbol))
+                self.assertEqual(len(chords),len(changed))
+                for a,c in zip(chords,changed):
+                    self.assertEqual((a.root().pitchClass+2)%12,c.root().pitchClass)
+                    self.assertEqual((a.bass().pitchClass+2)%12,c.bass().pitchClass)
+                    self.assertEqual(a.chordKind,c.chordKind)
+                    self.assertEqual(a.getOffsetInHierarchy(score),c.getOffsetInHierarchy(shifted))
+                self.assertEqual(b.events(score),b.events(back))
+                self.assertEqual(b.harmonies(score),b.harmonies(back))
+                results.append({'sample':sample,'note_events':len(notes),'chords':len(chords),'up_M2_and_inverse_pass':True})
+        (b.ROOT/'transposition-checks.json').write_text(json.dumps(results,indent=2)+'\n')
+if __name__=='__main__': unittest.main(verbosity=2)
+
+
+FILE build_candidate.py
+from pathlib import Path
+import hashlib, json, re, sys, tempfile, xml.etree.ElementTree as ET
+import music21 as m21
+import converter21
+converter21.register()
+ROOT = Path(__file__).resolve().parent
+CONFIG = json.loads((ROOT / 'candidate-config.json').read_text())
+INPUT = ROOT / CONFIG['input_directory']
+BASE = INPUT / 'baselines' / 'audiveris-enlarged'
+HARTE = {'C:maj':'C major','C:maj/3':'C major/E','G:maj/3':'G major/B','A:min7':'A minor-seventh','F:maj7':'F major-seventh','C:maj/5':'C major/G','D:min/b7':'D minor/C','A:min':'A minor'}
+def digest(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+def parse(path):
+    return m21.converter.parse(str(path), format='humdrum', forceSource=True)
+def events(score):
+    return [(float(n.getOffsetInHierarchy(score)), float(n.duration.quarterLength), tuple(p.nameWithOctave for p in n.pitches)) for n in score.recurse().notes if not isinstance(n, m21.harmony.ChordSymbol)]
+def harmonies(score):
+    return [(float(h.getOffsetInHierarchy(score)), h.root().name, h.chordKind, h.bass().name) for h in score.recurse().getElementsByClass(m21.harmony.ChordSymbol)]
+def canonical(score, dest):
+    score.write('humdrum', fp=str(dest))
+    lines = dest.read_text().splitlines()
+    # Converter21 exports harmony as Harte; translate only the observed source vocabulary.
+    out=[]
+    for line in lines:
+        fields=line.split('\t')
+        if '**harte' in fields:
+            fields=['**mxhm' if f=='**harte' else f for f in fields]
+        elif not line.startswith(('!', '*', '=')):
+            fields=[HARTE.get(f,f) for f in fields]
+            for f in fields:
+                if re.match(r'^[A-G][b#]?:',f):
+                    raise ValueError('Unmapped exported harmony: '+f)
+        out.append('\t'.join(fields))
+    dest.write_text('\n'.join(out)+'\n')
+def add_empty_harmony(text):
+    if '**mxhm' in text:
+        return text
+    out=[]
+    for line in text.splitlines():
+        if not line or line.startswith('!!'):
+            out.append(line); continue
+        f=line.split('\t')
+        if '**kern' in f: extra='**mxhm'
+        elif all(x=='*-' for x in f): extra='*-'
+        elif line.startswith('*'): extra='*'
+        elif line.startswith('='): extra=f[0]
+        elif line.startswith('!'): extra='!'
+        else: extra='.'
+        out.append(line+'\t'+extra)
+    return '\n'.join(out)+'\n'
+def build():
+    records=[]
+    for sample in CONFIG['samples']:
+        dest=ROOT/(sample+'.krn')
+        repairs=[]
+        if sample != 'sample-029':
+            source=BASE/(sample+'.krn')
+            before=parse(source)
+            if sample in CONFIG['preserve_verbatim']:
+                dest.write_text(add_empty_harmony(source.read_text()))
+                method='Supplied kern preserved; empty harmony spine appended only when absent.'
+            else:
+                canonical(before,dest)
+                dest.write_text(add_empty_harmony(dest.read_text()))
+                method='Supplied kern parsed with converter21 and canonically re-exported; source harmonies retained through explicit Harte-to-mxhm mapping.'
+                repairs.append('Canonical serialization normalizes malformed tokens, ties and spine structure; this is not a manual melody correction.')
+        else:
+            source=BASE/(sample+'.musicxml')
+            tree=ET.parse(source)
+            for div in tree.findall('.//divisions'):
+                if div.text=='0':
+                    div.text='1'
+                    repairs.append('Invalid divisions=0 replaced with 1. Note durations are reconstructed from explicit type/dot, not original duration=1.')
+            durations={'whole':4,'half':2,'quarter':1,'eighth':0.5,'16th':0.25,'32nd':0.125}
+            for note in tree.findall('.//note'):
+                typ=note.findtext('type')
+                if typ not in durations: raise ValueError('Unknown note type '+str(typ))
+                q=durations[typ]*sum(0.5**i for i in range(len(note.findall('dot'))+1))
+                if q != int(q): raise ValueError('This repair requires integer duration with divisions=1')
+                duration=note.find('duration')
+                if duration is not None: duration.text=str(int(q))
+            repaired=ROOT/'sample-029-repaired.musicxml'
+            tree.write(repaired,encoding='utf-8',xml_declaration=True)
+            before=m21.converter.parse(str(repaired),format='musicxml',forceSource=True)
+            canonical(before,dest)
+            dest.write_text(add_empty_harmony(dest.read_text()))
+            method='Supplied MusicXML repaired using explicit half-note types, then converted with converter21 registered.'
+            repairs.append('Only supplied D4 and B3 pitches retained. Empty measures and omitted material remain unresolved; no image melody reconstruction attempted.')
+        after=parse(dest)
+        chords_before=harmonies(before); chords_after=harmonies(after)
+        if [(x[1:]) for x in chords_before] != [(x[1:]) for x in chords_after]:
+            raise AssertionError((sample,'source harmony sequence changed',chords_before,chords_after))
+        records.append({'sample':sample,'source':str(source.relative_to(ROOT)),'source_sha256':digest(source),'image':str((INPUT/'images'/(sample+'.png')).relative_to(ROOT)),'artifact':dest.name,'artifact_sha256':digest(dest),'method':method,'repairs':repairs,'source_note_events':len(events(before)),'output_note_events':len(events(after)),'source_duration':float(before.duration.quarterLength),'output_duration':float(after.duration.quarterLength),'source_harmonies':chords_before,'output_harmonies':chords_after,'exact_event_preservation':events(before)==events(after),'parse_ok':True})
+    (ROOT/'provenance.json').write_text(json.dumps(records,indent=2)+'\n')
+    return records
+if __name__=='__main__':
+    print(json.dumps(build(),indent=2))
+
+
+TRANSPOSITION_CHECKS
+[
+  {
+    "sample": "sample-001",
+    "note_events": 8,
+    "chords": 0,
+    "up_M2_and_inverse_pass": true
+  },
+  {
+    "sample": "sample-006",
+    "note_events": 15,
+    "chords": 0,
+    "up_M2_and_inverse_pass": true
+  },
+  {
+    "sample": "sample-012",
+    "note_events": 32,
+    "chords": 4,
+    "up_M2_and_inverse_pass": true
+  },
+  {
+    "sample": "sample-017",
+    "note_events": 19,
+    "chords": 2,
+    "up_M2_and_inverse_pass": true
+  },
+  {
+    "sample": "sample-019",
+    "note_events": 22,
+    "chords": 1,
+    "up_M2_and_inverse_pass": true
+  },
+  {
+    "sample": "sample-023",
+    "note_events": 16,
+    "chords": 1,
+    "up_M2_and_inverse_pass": true
+  },
+  {
+    "sample": "sample-029",
+    "note_events": 2,
+    "chords": 0,
+    "up_M2_and_inverse_pass": true
+  }
+]
+
+FREEZE_FILE sample-001.krn 132 243522e2324935672363ca70a2c5909a1092e4fd478b7a48d75a245ec7d9d5e0
+FREEZE_FILE sample-006.krn 182 84c09c48ceaba4f9b2a65dd05306c868e10e889b7ba51de43c0601fb18293879
+FREEZE_FILE sample-012.krn 375 e7cebd6b2b821fba3c92e34bd91431dd76152fb0aabc33c5752617d1a30aa1ce
+FREEZE_FILE sample-017.krn 477 e5bd754983bb598446f5b74d43aefcd75fd8297fd96a52ee2204f0e30413927f
+FREEZE_FILE sample-019.krn 582 4602adc8a351d4935156415cab0c909243bd30fc559687a83a800faf13050414
+FREEZE_FILE sample-023.krn 393 829e3b0e74d65f0129a2d0523b30733171a54d8ee2d3fb47ce4333e9a71739d2
+FREEZE_FILE sample-029.krn 464 52c92abee18ff88d272bc4b99cbe5e0f74a110dc19d9a90c562625629546c064
+FREEZE_FILE build_candidate.py 5842 7df117838fd8f282a72ff101b7c9675837bbc071762954f39b6e7c950cfcf7de
+FREEZE_FILE candidate-config.json 444 0fd52cc8be9ac08ab7b25fa36926e90cb63f745f48c31499022d62a223276847
+FREEZE_FILE test_candidate.py 3245 fb5568b1da7ad3568ae4078128f050e5e5f00a51dc61a5db38fd9fe3df5f32fd
+FREEZE_FILE report.md 3572 9a537482226564623c48d481d12272a51adc8e1ce1142fb3f8beb45a6bf23b9a
+FREEZE_FILE provenance.json 7148 38b053c7d7a544e954383eb52a4b6f9ac490357b2b9277a2b9fd4a94559c9a50
+FREEZE_FILE transposition-checks.json 785 80ac16c9ded2a7c712f9d144b71fc01ba3a015c829b28cd00deaa82353924592
+FREEZE_FILE sample-029-repaired.musicxml 3244 cf1aeca5413bc2a41add764c6c9e26c6d99f3baf2a33886e6886399b12529947
+FREEZE_FILE build-results.log 8590 bed1eed8652a554a574d378635a8dc9d3964a7e296200f1ccaeb024f6420a002
+FREEZE_FILE test-results.log 100 cdd2700864d44a54f2c72ce2e79cdb1936fb480d0bf2513f01f7156938a38512
+FREEZE_READY 16

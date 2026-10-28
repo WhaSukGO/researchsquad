@@ -1,0 +1,2 @@
+2026-10-28T15:51:14.379471Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-10-28T15:51:14.380826Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back

@@ -1,0 +1,1 @@
+{"tool":"read_file","argument":"{\"path\":\"inputs/brief.txt\",\"limit\":8000}","why":"Read the explicit workflow requirements before defining distinct experiments and acceptance checks."}

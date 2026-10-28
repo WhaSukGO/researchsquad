@@ -1,0 +1,1 @@
+{"tool":"run","argument":"{\"command\":\"cat inputs/brief.txt; cat inputs/samples.json; cat inputs/delivered-baseline.json; ls -l inputs/baselines/audiveris-enlarged\",\"timeout\":30}","why":"Inspect the declared requirements and baseline inventory before choosing structural repairs and reproducible local checks."}

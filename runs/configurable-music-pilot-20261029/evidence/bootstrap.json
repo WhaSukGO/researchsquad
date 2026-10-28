@@ -1,0 +1,33 @@
+{
+  "status": "ready",
+  "image": {
+    "id": "sha256:68272ce059bbeb37797a1e81a87e896738f103f19134709f4d33cd8a670488ea",
+    "architecture": "arm64",
+    "os": "linux"
+  },
+  "recipe_hash": "a5528011999db30392705e03927524473fa3534bccbe3675aa4727641e6af133",
+  "profile": "music-python",
+  "published_tag": "researchsquad-env:d5e1cb3c9ef68814-2b0564eaa225",
+  "capabilities": [
+    "python",
+    "notation",
+    "ocr"
+  ],
+  "smoke_hash": "0a5a96bc8b297364134a2b9540cbcced47d847d5ad9c635c696a4cab1e5b427a",
+  "platform": "aarch64",
+  "lock_sha256": "23de6396224cd803f0e46b10c3c211df3d80c5cbfa8ba6878c28ff4908ee23c1",
+  "diagnostic": {
+    "exit_code": 0,
+    "interrupted": false,
+    "elapsed_seconds": 1.06,
+    "log": "/Users/geegle/development/whasuk/researchagent/.cache/research-environments/d5e1cb3c9ef68814f6790cf8cadf2ad4e84a0eb6aef2ec091aa28344b9c8dac3/smoke.log",
+    "bytes": 84,
+    "first_diagnostic": "",
+    "tail": "READY: synthetic MusicXML -> nonempty kern -> parsed notes; OCR text; writable temp\n",
+    "phase": "synthetic_export_and_ocr"
+  },
+  "cache_key": "d5e1cb3c9ef68814f6790cf8cadf2ad4e84a0eb6aef2ec091aa28344b9c8dac3",
+  "cache_hit": false,
+  "request": "4f88b7e5832a0934d5a53c7e094dc1fedd827ad732bce592c32159bab4cd47dd",
+  "artifacts": "environments/artifacts/d5e1cb3c9ef68814f6790cf8cadf2ad4e84a0eb6aef2ec091aa28344b9c8dac3"
+}

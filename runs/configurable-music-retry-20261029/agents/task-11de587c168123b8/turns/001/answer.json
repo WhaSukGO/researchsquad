@@ -1,0 +1,1 @@
+{"tool":"list_files","argument":"{\"path\":\".\"}","why":"Inspect inherited workspace files first to recover the prior candidate, reproducible source, and seven required kern artifacts before repairing and freezing the submission."}

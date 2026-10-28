@@ -90,3 +90,9 @@ The fixture creates a specialist, commissions an engineer to register a sorting 
 The recorded local verification is [available here](../runs/configurable-team-final-20261029/verification.json): the complete tool-reuse scenario and a real generic environment build/readiness/cache-hit check passed. The regression suite passed 106 tests; two real-Docker music isolation/scoring tests also passed separately. CI includes the new team fixture alongside the existing Docker checks.
 
 Current submission snapshots contain bounded text source/report files (up to 8 MB total), not large binary model checkpoints. A production evaluator for a new scientific domain must define its artifact and acceptance contracts. The generic environment cache is run-local; its immutable image is reused across assignments, while Docker build layers can accelerate another run. Automatic image garbage collection is not included.
+
+## Live music pilot
+
+`python -m goalagent.music_team --run-dir runs/new-music-team --model gpt-6.1-sol` connects the default configured team to the existing music inputs and protected scorer. It supplies seven images and fourteen prediction/export artifacts, with labels retained by the evaluator. It uses a fresh state and the prepared notation/OCR environment; it does not add a new agent class.
+
+The [29 October live assessment](../runs/configurable-music-retry-20261029/assessment.html) records an important limit: the 40-call run created a candidate but exhausted its budget before submission or evaluation. An unchanged, operator-recovered copy improved parse coverage from 3/7 to 5/7; melody errors stayed at 101/130 and chord errors at 38/38. This diagnostic score was not produced by the autonomous loop. The report distinguishes the initial interrupted interface-bug attempt, all three engineer assignments, and the remaining handoff/progress/evaluation gaps. The goal remains unmet.

@@ -1,0 +1,37 @@
+Moving <music21.note.Rest quarter> from 0.0 to 1.0 in measure 2, part 0
+Moving <music21.chord.Chord C3 B3> from 1.0 to 2.0 in measure 2, part 0
+Moving <music21.note.Note C> from 2.0 to 3.0 in measure 2, part 0
+Moving <music21.chord.Chord C3 B3> from 3.0 to 4.0 in measure 2, part 0
+Moving <music21.chord.Chord A2 C3 D4> from 4.0 to 5.0 in measure 2, part 0
+Moving <music21.note.Note A> from 5.0 to 6.0 in measure 2, part 0
+Moving <music21.chord.Chord A2 C3 F3 A3> from 6.0 to 7.0 in measure 2, part 0
+Moving <music21.note.Note A> from 0.0 to 2.0 in measure 1, part 0
+Moving <music21.note.Rest eighth> from 2.0 to 5.0 in measure 1, part 0
+Moving <music21.note.Rest 16th> from 2.5 to 5.5 in measure 1, part 0
+Moving <music21.note.Note G> from 2.75 to 5.75 in measure 1, part 0
+Moving <music21.note.Note G> from 3.0 to 6.0 in measure 1, part 0
+Moving <music21.note.Note E> from 3.5 to 6.5 in measure 1, part 0
+Moving <music21.note.Note A> from 0.0 to 1.5 in measure 3, part 0
+Moving <music21.note.Note E> from 1.5 to 4.5 in measure 3, part 0
+Moving <music21.note.Note F> from 1.75 to 4.75 in measure 3, part 0
+Moving <music21.note.Rest quarter> from 2.0 to 5.0 in measure 3, part 0
+Moving <music21.note.Rest whole> from 0.0 to 1.0 in measure 2, part 0
+Moving <music21.note.Note B> from 0.0 to 5.0 in measure 2, part 0
+Moving <music21.note.Note C> from 1.0 to 8.0 in measure 2, part 0
+Moving <music21.note.Note C> from 2.0 to 9.0 in measure 2, part 0
+Moving <music21.note.Note C> from 3.0 to 10.0 in measure 2, part 0
+/usr/local/lib/python3.12/site-packages/music21/musicxml/xmlToM21.py:1995: MusicXMLWarning: The following exception took place in m. 0 in part Voice.
+  warnings.warn(
+malformed **mxhm harmony: skipping "C:maj"
+malformed **mxhm harmony: skipping "D:min/C"
+sample-001 raw conversion OK 8 duration 12.0
+sample-006 raw conversion OK 15 duration 8.5
+sample-012 raw conversion OK 36 duration 16.0
+sample-017 raw conversion OK 21 duration 21.5
+sample-019 raw conversion OK 23 duration 21.0
+sample-023 raw conversion OK 18 duration 22.5
+sample-029 raw conversion FAILED ZeroDivisionError float division by zero
+HARMONY C:maj []
+HARMONY C major [('ChordSymbol', '<music21.harmony.ChordSymbol C>')]
+HARMONY D:min/C []
+HARMONY D minor/C [('ChordSymbol', '<music21.harmony.ChordSymbol Dm/C>')]

@@ -1,0 +1,97 @@
+{
+  "status": "research_loop_failed_to_submit_or_evaluate",
+  "implementation": "1579bda",
+  "model": "gpt-6.1-sol",
+  "run_status": "budget_exhausted",
+  "calls_reserved_or_attempted": 40,
+  "completed_model_receipts": 38,
+  "active_seconds": 1062.8820943329993,
+  "assignments": 3,
+  "autonomous_evaluations": 0,
+  "goal_met": false,
+  "operator_diagnostic": {
+    "scope": "Recovered unchanged files after stop; not an autonomous submission or evaluation",
+    "baseline": {
+      "samples": 7,
+      "parseable": 3,
+      "melody": {
+        "reference_count": 130,
+        "prediction_count": 50,
+        "matches": 29,
+        "errors": 101,
+        "substitutions": 21,
+        "deletions": 80,
+        "insertions": 0,
+        "error_rate": 0.7769230769230769,
+        "f1": 0.32222222222222224
+      },
+      "chords": {
+        "reference_count": 38,
+        "prediction_count": 0,
+        "matches": 0,
+        "errors": 38,
+        "substitutions": 0,
+        "deletions": 38,
+        "insertions": 0,
+        "error_rate": 1.0,
+        "f1": 0.0
+      }
+    },
+    "candidate": {
+      "samples": 7,
+      "parseable": 5,
+      "melody": {
+        "reference_count": 130,
+        "prediction_count": 69,
+        "matches": 29,
+        "errors": 101,
+        "substitutions": 40,
+        "deletions": 61,
+        "insertions": 0,
+        "error_rate": 0.7769230769230769,
+        "f1": 0.2914572864321608
+      },
+      "chords": {
+        "reference_count": 38,
+        "prediction_count": 0,
+        "matches": 0,
+        "errors": 38,
+        "substitutions": 0,
+        "deletions": 38,
+        "insertions": 0,
+        "error_rate": 1.0,
+        "f1": 0.0
+      },
+      "accepted": false
+    },
+    "parseable_delta": 2,
+    "melody_error_delta": 0,
+    "chord_error_delta": 0
+  },
+  "checks": {
+    "original_images_and_labels_unchanged": true,
+    "implementation_matches_start_contract": true,
+    "declared_assets_match_start_contract": true,
+    "no_reference_paths_in_delivered_assets": true,
+    "evidence_intact": true,
+    "calls_within_budget": true,
+    "time_within_budget": true,
+    "no_false_completion": true,
+    "autonomous_evaluations_remain_empty": true,
+    "task-fbb9e547265d9939_input_hashes_intact": true,
+    "task-fbb9e547265d9939_frozen_snapshot_intact": true,
+    "task-11de587c168123b8_input_hashes_intact": true,
+    "task-11de587c168123b8_frozen_snapshot_intact": true,
+    "task-c9e5655aa0a5df2a_input_hashes_intact": true,
+    "task-c9e5655aa0a5df2a_frozen_snapshot_intact": true,
+    "operator_snapshot_intact": true
+  },
+  "all_integrity_checks_passed": true,
+  "limitations": [
+    "Seven development excerpts, no held-out accuracy claim.",
+    "Diagnostic scoring was performed by the operator after the autonomous budget stop.",
+    "Chord timing and musician review remain unverified.",
+    "Two timeout calls lack completed usage receipts; dollar billing unavailable.",
+    "Initial interrupted attempt used 10 additional calls and 207.83 active seconds."
+  ]
+}
