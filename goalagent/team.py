@@ -88,7 +88,7 @@ class Team:
         atomic_json(path,data);self.state['evidence'][id]=digest(data);self.save()
         return {'evidence_id':id,**data}
     def catalog(self,agent,action,timeout):
-        return {'agents':[{k:v for k,v in c.items() if k!='system_prompt'} for c in self.definitions.values()],
+        return {'environment':self.state['environment'],'agents':[{k:v for k,v in c.items() if k!='system_prompt'} for c in self.definitions.values()],
                 'tools':self.registry.catalog(list(self.registry.tools))}
     def policy(self,config):
         env=self.state['environment']
@@ -145,7 +145,8 @@ class Team:
                 inventory[dest]={'source':source,'sha256':digest(raw.hex())}
             assignment={'goal':self.task['goal'],'objective':data['objective'],'success_criteria':data['success_criteria'],
                         'depth':depth,'mode':mode,'parent':parent,'inputs':inventory,
-                        'parent_evaluation':self.state['evaluations'].get(parent)}
+                        'parent_evaluation':self.state['evaluations'].get(parent),
+                        'environment':self.state['environment']}
             # Snapshot explicit source artifacts from a sealed parent, never its writable workspace.
             if parent:
                 snapshot=json.loads((self.folder/'agents'/parent/'source-snapshot.json').read_text())

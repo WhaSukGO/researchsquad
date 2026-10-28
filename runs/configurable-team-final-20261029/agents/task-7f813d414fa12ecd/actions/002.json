@@ -10,7 +10,7 @@
   "observation": {
     "exit_code": 0,
     "interrupted": false,
-    "elapsed_seconds": 0.85,
+    "elapsed_seconds": 0.64,
     "log": "/Users/geegle/development/whasuk/researchagent/runs/configurable-team-final-20261029/agents/task-7f813d414fa12ecd/logs/002.log",
     "bytes": 13,
     "first_diagnostic": "",

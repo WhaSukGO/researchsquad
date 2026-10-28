@@ -5,27 +5,25 @@
 #1 DONE 0.0s
 
 #2 [internal] load metadata for docker.io/library/python:3.12-slim@sha256:12316debbfb86890f6b2d825820612741ba527ad5a44e3902759141d572bfe8f
-#2 DONE 1.5s
+#2 DONE 0.0s
 
 #3 [internal] load .dockerignore
 #3 transferring context: 2B done
 #3 DONE 0.0s
 
 #4 [1/2] FROM docker.io/library/python:3.12-slim@sha256:12316debbfb86890f6b2d825820612741ba527ad5a44e3902759141d572bfe8f
-#4 resolve docker.io/library/python:3.12-slim@sha256:12316debbfb86890f6b2d825820612741ba527ad5a44e3902759141d572bfe8f 0.0s done
-#4 CACHED
+#4 resolve docker.io/library/python:3.12-slim@sha256:12316debbfb86890f6b2d825820612741ba527ad5a44e3902759141d572bfe8f done
+#4 DONE 0.0s
 
 #5 [2/2] RUN python -m pip freeze > /opt/python-lock.txt && dpkg-query -W > /opt/system-lock.txt
-#5 DONE 0.9s
+#5 CACHED
 
 #6 exporting to image
-#6 exporting layers
-#6 exporting layers 0.2s done
-#6 exporting manifest sha256:be7603f03543a280c02e1239273245e32990d2efc69453b6b6157148eb86de2f
+#6 exporting layers done
 #6 exporting manifest sha256:be7603f03543a280c02e1239273245e32990d2efc69453b6b6157148eb86de2f done
 #6 exporting config sha256:0d2f8eba89548cd4c1e564da9e17df468ddb93ec95a9a2d94594b74c809c6089 done
-#6 exporting attestation manifest sha256:dcf2febc43997cd61c51d82359c20854e9e8fb796227c663bd95d594f5a9cab4 done
-#6 exporting manifest list sha256:614b22f81e8f04d194c23ec2f1ef0daba85c85cdd07cb1185c0b42c1dbe77309 done
-#6 naming to docker.io/library/researchsquad-team:ef8016ce6d06f881-d12e85fb78 done
-#6 unpacking to docker.io/library/researchsquad-team:ef8016ce6d06f881-d12e85fb78 0.0s done
-#6 DONE 0.3s
+#6 exporting attestation manifest sha256:e1e6666807772677aa58e2f70c9a0a098ffbb9acd3ff0ffcac81579844cc645d done
+#6 exporting manifest list sha256:55cbf862ce56150a5a419990c92b542dde1c72131facc9042ebc0fb0c6ecebeb done
+#6 naming to docker.io/library/researchsquad-team:ef8016ce6d06f881-1c4a31f010 done
+#6 unpacking to docker.io/library/researchsquad-team:ef8016ce6d06f881-1c4a31f010 done
+#6 DONE 0.0s

@@ -161,3 +161,13 @@ def test_role_model_override_reaches_provider(tmp_path):
         return Scripted([action('write_file',{'path':'report.txt','content':'done'}),action('finish',{'summary':'done','files':['report.txt']})])
     Team(tmp_path/'run',task(),agents_dir=configs,model='fallback',provider_factory=factory,sandbox_factory=FakeSandbox).run()
     assert seen==['chosen-model']
+
+
+def test_ready_environment_is_visible_to_lead_and_new_assignment(tmp_path):
+    def provider(c):return Scripted([action('write_file',{'path':'report.txt','content':'ready'}),action('finish',{'summary':'ready','files':['report.txt']})])
+    team=make(tmp_path,provider_factory=provider);a=instance(team)
+    receipt={'image':'sha256:fixture','packages':{'system_packages':['tesseract-ocr'],'python_packages':[]}}
+    team.state['environment']=receipt
+    assert a.execute(action('catalog'),1)['environment']==receipt
+    result=a.execute(action('delegate',{'agent':'planner','objective':'Inspect available capabilities','success_criteria':'A plan','inputs':{}}),30)
+    assert team.state['assignments'][result['assignment_id']]['assignment']['environment']==receipt

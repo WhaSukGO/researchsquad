@@ -13,7 +13,7 @@
     "test": {
       "exit_code": 0,
       "interrupted": false,
-      "elapsed_seconds": 0.63,
+      "elapsed_seconds": 0.65,
       "log": "/Users/geegle/development/whasuk/researchagent/runs/configurable-team-final-20261029/agents/task-e976ea74368ed013/logs/tool-test-2.log",
       "bytes": 7,
       "first_diagnostic": "",

@@ -1,6 +1,6 @@
 {
   "calls": 13,
-  "active_seconds": 3.1480530820044805,
+  "active_seconds": 2.9989671660005115,
   "assignments": {
     "task-e976ea74368ed013": {
       "agent": "experiment_engineer",
@@ -12,7 +12,8 @@
         "mode": "explore",
         "parent": null,
         "inputs": {},
-        "parent_evaluation": null
+        "parent_evaluation": null,
+        "environment": null
       },
       "outcome": {
         "status": "submitted",
@@ -48,6 +49,7 @@
           "samples": 4,
           "scope": "Software integration fixture; not research quality or generalization."
         },
+        "environment": null,
         "parent_artifacts": [
           "sorter.py",
           "result.json"
@@ -96,7 +98,7 @@
     }
   },
   "evidence": {
-    "tool-732f24f20f9a513c": "65737ce3e5356cbccdab9373d29cc7ead6069dfda033706c1c245a251ab04e25",
+    "tool-732f24f20f9a513c": "71d087d7b2df35eafc9b6c31400d19265c7fd6639ad3d9c6da564b909e28751a",
     "task-e976ea74368ed013": "c1a6b4cc03c393e6c75f24667010e3b6fa1af1ed4e1e70d2fe8f507e92309d58",
     "evaluation-task-e976ea74368ed013": "00ca376f1eac616d6cb7ff6f68d0be5ce7ea229b3da6add72c1da7fa9a7efffa",
     "task-7f813d414fa12ecd": "22e978d8bd33f881eb85fee0559f5a97eaa474da41acec2c0d0f016c4f2a50ed",

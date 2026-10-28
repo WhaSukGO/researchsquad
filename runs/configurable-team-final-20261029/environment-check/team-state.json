@@ -5,21 +5,26 @@
   "specialists": {},
   "extensions": {},
   "evidence": {
-    "environment-adcdf97f8f0da67c": "adcdf97f8f0da67c57b9e647ae28f21dd52474efa32c4765b183549edea9d425",
-    "environment-95d81c0e1041ae3b": "95d81c0e1041ae3bda47302c38223ffe80cbf0ea216d4d98083b3f8e51771de7"
+    "environment-54bc50441352de6e": "54bc50441352de6ea72fa552371b81fd18dfd2c4196b2657e30ccf5f647ebee6",
+    "environment-c806c49e723f277f": "c806c49e723f277f90d3b651e6faf845e1004d5124d365414039861c15da7109"
   },
   "evaluations": {},
   "environment": {
     "status": "ready",
-    "image": "sha256:614b22f81e8f04d194c23ec2f1ef0daba85c85cdd07cb1185c0b42c1dbe77309",
-    "tag": "researchsquad-team:ef8016ce6d06f881-d12e85fb78",
+    "image": "sha256:55cbf862ce56150a5a419990c92b542dde1c72131facc9042ebc0fb0c6ecebeb",
+    "tag": "researchsquad-team:ef8016ce6d06f881-1c4a31f010",
     "key": "ef8016ce6d06f88101c8a320f7d8501be9741cabfe8488c07e1ecc7561c26003",
     "cache_hit": true,
-    "elapsed_seconds": 4.517,
+    "elapsed_seconds": 1.755,
+    "packages": {
+      "system_packages": [],
+      "python_packages": []
+    },
+    "readiness_source_hash": "0cc1532da02e32bac25d866b530b36e11c045f225e7d2de7242a848b773f71fd",
     "readiness": {
       "exit_code": 0,
       "interrupted": false,
-      "elapsed_seconds": 0.54,
+      "elapsed_seconds": 0.58,
       "log": "/Users/geegle/development/whasuk/researchagent/runs/configurable-team-final-20261029/environment-check/environments/ef8016ce6d06f88101c8a320f7d8501be9741cabfe8488c07e1ecc7561c26003/smoke.log",
       "bytes": 32,
       "first_diagnostic": "",
@@ -30,5 +35,5 @@
   },
   "goal_met": false,
   "setup_attempts": 1,
-  "setup_active_seconds": 5.016061000002082
+  "setup_active_seconds": 2.297267166999518
 }

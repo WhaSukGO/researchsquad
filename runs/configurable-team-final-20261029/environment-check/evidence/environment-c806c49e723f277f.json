@@ -1,14 +1,19 @@
 {
   "status": "ready",
-  "image": "sha256:614b22f81e8f04d194c23ec2f1ef0daba85c85cdd07cb1185c0b42c1dbe77309",
-  "tag": "researchsquad-team:ef8016ce6d06f881-d12e85fb78",
+  "image": "sha256:55cbf862ce56150a5a419990c92b542dde1c72131facc9042ebc0fb0c6ecebeb",
+  "tag": "researchsquad-team:ef8016ce6d06f881-1c4a31f010",
   "key": "ef8016ce6d06f88101c8a320f7d8501be9741cabfe8488c07e1ecc7561c26003",
-  "cache_hit": false,
-  "elapsed_seconds": 4.517,
+  "cache_hit": true,
+  "elapsed_seconds": 1.755,
+  "packages": {
+    "system_packages": [],
+    "python_packages": []
+  },
+  "readiness_source_hash": "0cc1532da02e32bac25d866b530b36e11c045f225e7d2de7242a848b773f71fd",
   "readiness": {
     "exit_code": 0,
     "interrupted": false,
-    "elapsed_seconds": 0.54,
+    "elapsed_seconds": 0.58,
     "log": "/Users/geegle/development/whasuk/researchagent/runs/configurable-team-final-20261029/environment-check/environments/ef8016ce6d06f88101c8a320f7d8501be9741cabfe8488c07e1ecc7561c26003/smoke.log",
     "bytes": 32,
     "first_diagnostic": "",

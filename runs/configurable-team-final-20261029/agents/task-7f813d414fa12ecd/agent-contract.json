@@ -38,6 +38,7 @@
       "samples": 4,
       "scope": "Software integration fixture; not research quality or generalization."
     },
+    "environment": null,
     "parent_artifacts": [
       "sorter.py",
       "result.json"

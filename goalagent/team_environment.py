@@ -56,5 +56,6 @@ def prepare(team,agent,data,timeout):
     lock=subprocess.run(['docker','run','--rm','--network','none','--read-only',image,'sh','-c','cat /opt/python-lock.txt /opt/system-lock.txt'],check=True,capture_output=True,text=True,timeout=10).stdout
     (folder/'resolved-lock.txt').write_text(lock)
     result={'status':'ready','image':image,'tag':tag,'key':key,'cache_hit':False,'elapsed_seconds':round(time.monotonic()-started,3),
+            'packages':{k:data[k] for k in ('system_packages','python_packages')},'readiness_source_hash':digest(source),
             'readiness':check,'lock_hash':digest(lock),'scope':'Agent-proposed capability smoke test only; independent evaluation still required.'}
     atomic_json(receipt,result);return result

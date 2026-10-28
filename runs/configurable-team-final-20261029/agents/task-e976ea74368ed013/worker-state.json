@@ -1,7 +1,7 @@
 {
-  "assignment_hash": "a38ca09c0ff1220e750dff36b1f088847069d720c7f0ec6da80de3a6a58872fa",
+  "assignment_hash": "e6f7923fbe6ed602620d08efa413021753966bd41bee1b6e28cea0f400bc838b",
   "steps": 3,
-  "active_seconds": 0.9310512500014738,
+  "active_seconds": 0.9085628750035539,
   "history": [
     {
       "step": 1,
@@ -21,7 +21,7 @@
         "test": {
           "exit_code": 0,
           "interrupted": false,
-          "elapsed_seconds": 0.63,
+          "elapsed_seconds": 0.65,
           "log": "/Users/geegle/development/whasuk/researchagent/runs/configurable-team-final-20261029/agents/task-e976ea74368ed013/logs/tool-test-2.log",
           "bytes": 7,
           "first_diagnostic": "",
