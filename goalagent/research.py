@@ -13,6 +13,7 @@ from .music import MusicTools
 from .provider import CodexProvider
 from .sandbox import DockerSandbox, workspace_path, read_file
 from .worker import ExperimentWorker
+from .inputs import resolve_inputs, deliver_inputs, verify_inputs
 
 DEFAULT_WORKER_POLICY = {
     "image": "python:3.12-slim", "network": False, "memory": "2g", "cpus": 2,
@@ -21,7 +22,8 @@ DEFAULT_WORKER_POLICY = {
 }
 EVALUATOR_FILES = ["goalagent/research.py", "goalagent/music.py", "goalagent/inspect.py",
                    "goalagent/contracts.py", "scorebench/metrics.py", "scorebench/evaluate.py",
-                   "scorebench/inspect_prediction.py"]
+                   "scorebench/inspect_prediction.py", "goalagent/inputs.py", "goalagent/environments.py",
+                   "goalagent/sandbox.py", "goalagent/worker.py"]
 
 
 def sha(raw):
@@ -40,7 +42,7 @@ def compact_evaluation(result):
 
 
 class ResearchTools(MusicTools):
-    def __init__(self, run_dir, spec, model=None, worker_provider=None, sandbox_factory=DockerSandbox):
+    def __init__(self, run_dir, spec, model=None, worker_provider=None, sandbox_factory=DockerSandbox, environment_factory=None):
         super().__init__(run_dir, spec, model)
         self.run_dir = self.run_dir.resolve()
         self.run_dir.mkdir(parents=True, exist_ok=True)
@@ -59,6 +61,11 @@ class ResearchTools(MusicTools):
             raise ValueError("Invalid worker image")
         if not isinstance(self.policy["memory"], str) or not re.fullmatch(r"[1-9][0-9]*[mg]", self.policy["memory"]):
             raise ValueError("Invalid worker memory limit")
+        self.environment_manager = None
+        if spec.get('environment'):
+            from .environments import EnvironmentManager
+            self.environment_manager = (environment_factory or EnvironmentManager)(self.run_dir, spec['environment'], self.policy,
+                                                         self.worker_provider)
         self.contract = self.contract_fingerprint()
         contract_path = self.run_dir / "evaluation-contract.json"
         if contract_path.exists():
@@ -69,7 +76,9 @@ class ResearchTools(MusicTools):
 
     def contract_fingerprint(self):
         import importlib.metadata
-        return {"spec_hash": digest(self.spec), "manifest_hash": digest(self.manifest),
+        profile = {str(p.relative_to(ROOT)): sha(p.read_bytes())
+                   for p in (ROOT/'environments/music-python').glob('*') if p.is_file()} if self.environment_manager else {}
+        return {"spec_hash": digest(self.spec), "manifest_hash": digest(self.manifest), 'environment_profile':profile,
                 "baseline_hash": digest(self.baseline),
                 "code": {name: sha((ROOT / name).read_bytes()) for name in EVALUATOR_FILES},
                 "dependencies": {name: importlib.metadata.version(name)
@@ -82,7 +91,10 @@ class ResearchTools(MusicTools):
 
     def experiment_config(self, argument):
         cfg = json.loads(argument)
-        if not isinstance(cfg, dict) or set(cfg) != {"mode", "parent", "approach", "objective", "success_criteria"}:
+        fields = {"mode", "parent", "approach", "objective", "success_criteria"}
+        if self.environment_manager:
+            fields |= {'required_inputs', 'environment'}
+        if not isinstance(cfg, dict) or set(cfg) != fields:
             raise ValueError("Assignment requires mode, parent, approach, objective and success_criteria")
         for key in ("approach", "objective", "success_criteria"):
             if not isinstance(cfg[key], str) or not 10 <= len(cfg[key].strip()) <= 3000:
@@ -94,6 +106,10 @@ class ResearchTools(MusicTools):
                 raise ValueError("Exploration starts a new root; parent must be null")
         elif not isinstance(cfg["parent"], str) or not re.fullmatch(r"exp-[0-9a-f]{12}", cfg["parent"]):
             raise ValueError("Improvement/debugging requires a parent experiment")
+        if self.environment_manager:
+            if cfg['environment'] != 'music-python':
+                raise ValueError('Unknown environment profile; use prepare_environment for missing dependencies')
+            resolve_inputs(cfg['required_inputs'], self.selected())
         return cfg
 
     def prepare_assignment(self, decision):
@@ -119,6 +135,12 @@ class ResearchTools(MusicTools):
                 obs = compact_evaluation(obs)
             evidence.append({"id": evidence_id, "data": json.dumps(obs, ensure_ascii=False)[:3000]})
         assignment["supporting_evidence"] = evidence
+        if self.environment_manager:
+            assignment['input_contract'] = resolve_inputs(cfg['required_inputs'], self.selected())
+            assignment['environment_contract'] = {'profile': cfg['environment'],
+                'separate_setup': True, 'capabilities': ['python','notation','ocr'],
+                'not_available': ['Audiveris', 'reference labels', 'network access during experiment']}
+
         if cfg["parent"]:
             parent = self.run_dir / "experiments" / cfg["parent"]
             self.verify_seal(parent)
@@ -144,6 +166,23 @@ class ResearchTools(MusicTools):
         raise ValueError("Unknown evidence record")
 
     def execute(self, tool, argument, charge_model, remaining_seconds):
+        if tool == 'prepare_environment':
+            if not self.environment_manager:
+                raise ValueError('Managed environments not enabled for this goal')
+            result = self.environment_manager.ensure(charge_model, remaining_seconds, argument)
+            return {'id': 'environment-' + digest(result)[:12], **result}
+        if tool == 'inspect_dataset' and self.environment_manager:
+            result = super().execute(tool, argument, charge_model, remaining_seconds)
+            catalog = {}
+            for engine in ('audiveris-enlarged','audiveris-raw','transcoda-greedy'):
+                try:
+                    contract = resolve_inputs(['baseline:'+engine],self.selected())
+                    catalog['baseline:'+engine] = {'available': True, 'files':len(contract['files']),
+                        'description':'Earlier model predictions, not labels; required_inputs mounts these read-only under baselines/'}
+                except (OSError,ValueError) as e:
+                    catalog['baseline:'+engine] = {'available':False,'reason':str(e)}
+            result['artifact_catalog'] = catalog
+            return result
         if tool == "read_record":
             data = json.loads(argument)
             offset = data.get("offset", 0)
@@ -177,6 +216,15 @@ class ResearchTools(MusicTools):
             self.verify_seal(folder)
             return json.loads((folder / "receipt.json").read_text())
         assignment = json.loads((folder / "assignment.json").read_text())
+        effective_policy = self.policy
+        if self.environment_manager:
+            environment = self.environment_manager.ensure(charge_model, remaining_seconds)
+            atomic_json(folder/'environment.json',environment)
+            if environment['status'] != 'ready':
+                return {'id':'blocked-'+eid,'status':'environment_blocked','experiment_id':eid,
+                        'environment':environment,'note':'No experiment worker dispatched; no accuracy score.'}
+            effective_policy = {**self.policy, 'image':environment['image']['id'],
+                                'network':False, 'managed_environment':True}
         workspace = folder / "worker" / "workspace"
         inputs = workspace / "inputs"
         # Initialization is checkpointed before the worker starts; no host labels
@@ -187,6 +235,9 @@ class ResearchTools(MusicTools):
                 shutil.rmtree(workspace)
             inputs.mkdir(parents=True)
             (workspace / "output").mkdir()
+            (workspace / "tmp").mkdir()
+            if self.environment_manager:
+                deliver_inputs(assignment['input_contract'],workspace)
             for index, sample in self.selected():
                 shutil.copyfile(ROOT / sample["image"], inputs / f"sample-{index:03}.png")
             if cfg["parent"]:
@@ -195,13 +246,15 @@ class ResearchTools(MusicTools):
                 sources = json.loads((parent / "source-snapshot.json").read_text())
                 for relative, content in sources.items():
                     target = workspace_path(workspace, relative)
-                    if target.is_relative_to(inputs) or target.is_relative_to(workspace / "output"):
+                    if any(target.is_relative_to(workspace / name) for name in ("inputs", "output", "baselines")):
                         raise ValueError("Invalid parent source path")
                     target.parent.mkdir(parents=True, exist_ok=True)
                     target.write_text(content)
             atomic_json(marker, {"assignment_hash": digest(assignment)})
+        if self.environment_manager:
+            verify_inputs(assignment['input_contract'],workspace)
         worker = ExperimentWorker(folder / "worker", assignment, self.worker_provider,
-                                  self.policy, self.sandbox_factory)
+                                  effective_policy, self.sandbox_factory)
         try:
             outcome = worker.run(charge_model, remaining_seconds)
         except Exception as error:
@@ -211,6 +264,8 @@ class ResearchTools(MusicTools):
         source_path = folder / "worker" / "source-snapshot.json"
         sources = json.loads(source_path.read_text()) if source_path.exists() else {}
         atomic_json(folder / "source-snapshot.json", sources)
+        if self.environment_manager:
+            verify_inputs(assignment['input_contract'],workspace)
         predictions = {}
         statuses = {"ok": 0, "missing_or_invalid": 0}
         for index, sample in self.selected():
@@ -240,6 +295,7 @@ class ResearchTools(MusicTools):
         # Receipt is published last; a crash while sealing can safely reseal the
         # same completed worker without repeating model calls.
         names = ["assignment.json", "config.json", "source-snapshot.json"]
+        if self.environment_manager: names.append('environment.json')
         names += [f"sample-{i:03}/trace.json" for i, _ in self.selected()]
         atomic_json(folder / "seal.json", {"contract_hash": digest(self.contract),
                     "receipt_hash": digest(receipt), "predictions": predictions,

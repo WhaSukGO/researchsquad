@@ -22,4 +22,4 @@ A future automatic adapter would need an authorized-reviewer allowlist, event de
 
 ## Checks included in this PR
 
-GitHub Actions installs the locked Python dependencies and runs the existing test suite for PRs to `main` and pushes to `main`. It uses a read-only repository token and no model API credentials. The two opt-in Docker integration tests remain skipped in this initial job; ordinary test success is not proof of Docker readiness or music accuracy. Real container checks belong in the environment implementation PR.
+GitHub Actions installs the locked Python dependencies and runs the existing test suite for PRs and pushes to `main`. It uses a read-only repository token and no model API credentials. The ordinary test job skips the two opt-in Docker tests. A separate Docker job now runs those isolation/scoring tests and builds the prepared environment, checking a real synthetic export, OCR and reuse across separate workspaces. None of these checks establishes music recognition accuracy.

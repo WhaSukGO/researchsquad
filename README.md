@@ -9,7 +9,14 @@ remain supported by their original commands below.
 
 ## Human feedback and proposed improvements
 
-Use the [PR review workflow](docs/pr-review-workflow.md) to discuss and revise changes. The [environment and handoff proposal](docs/design/environment-and-review.md) responds to issue #1; it is a design under review, not an implemented runtime change.
+Use the [PR review workflow](docs/pr-review-workflow.md) to discuss and revise changes. The [environment and handoff proposal](docs/design/environment-and-review.md) responds to issue #1; its initial implementation is documented in [environment operations](docs/environment-operations.md).
+
+## Prepared environments and explicit input handoffs
+
+The follow-up implementation is available with `--goal goals/music-research-v2.json`.
+See [environment operations](docs/environment-operations.md) for input contracts,
+readiness checks, environment-engineer escalation, budgets and current limitations.
+Use a new run directory; existing run evidence and acceptance rules are preserved.
 
 ## Run the research coordinator
 

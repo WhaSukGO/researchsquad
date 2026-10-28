@@ -10,7 +10,7 @@ from .sandbox import DockerSandbox, workspace_path, read_file
 
 WORKER_SCHEMA = {
     "type": "object", "properties": {
-        "tool": {"type": "string", "enum": ["write_file", "read_file", "run", "view_image", "finish"]},
+        "tool": {"type": "string", "enum": ["write_file", "read_file", "run", "view_image", "request_environment", "finish"]},
         "argument": {"type": "string"}, "why": {"type": "string"}},
     "required": ["tool", "argument", "why"], "additionalProperties": False,
 }
@@ -44,6 +44,21 @@ Your local success criteria guide your work; you cannot change the system accept
 """
 
 
+MANAGED_INSTRUCTIONS = """
+This is a prepared environment. Your single responsibility is the experiment, not OS setup.
+Do not install dependencies or rebuild runtimes. Commands have no network, a read-only
+system and protected baseline mounts. Python, Pillow, music21, converter21, Verovio and
+Tesseract are prepared. Register converter21 before reading/writing kern/Humdrum.
+No Audiveris capability is promised. Use inputs/ images and the declared baselines/ files.
+Read the input_contract inventory. Baselines are predictions, not reference labels.
+If a capability is absent, use request_environment with a specific dependency and diagnostic.
+This ends your work with environment_blocked; the lead decides whether to commission repair
+or another approach. Save useful source through write_file before requesting a change.
+Never submit null-only melody as a successful complete transcription. Test actual files for
+nonempty note events, syntactic parseability and preservation of both musical parts.
+"""
+
+
 class ExperimentWorker:
     def __init__(self, folder, assignment, provider, policy, sandbox_factory=DockerSandbox):
         self.folder = Path(folder)
@@ -66,6 +81,13 @@ class ExperimentWorker:
         if set(action) != {"tool", "argument", "why"} or not all(isinstance(v, str) for v in action.values()):
             raise ValueError("Invalid worker action")
         tool, argument = action["tool"], action["argument"]
+        if tool == 'request_environment':
+            if not self.policy.get('managed_environment'):
+                raise ValueError('Environment escalation is unavailable in legacy mode')
+            if not 10 <= len(argument) <= 2000:
+                raise ValueError('Describe the missing dependency and observed failure')
+            self.state['status'] = 'environment_blocked'
+            return {'status':'environment_blocked','requirements':argument}
         if tool == "run":
             if len(argument) > 32000:
                 raise ValueError("Command too large")
@@ -75,7 +97,7 @@ class ExperimentWorker:
             if set(data) != {"path", "content"} or not isinstance(data["content"], str):
                 raise ValueError("Invalid write_file fields")
             path = workspace_path(self.workspace, data["path"])
-            if path.is_relative_to(self.workspace / "inputs"):
+            if any(path.is_relative_to(self.workspace / name) for name in ("inputs", "baselines")):
                 raise ValueError("Inputs are read-only")
             if len(data["content"].encode()) > 1_000_000:
                 raise ValueError("File too large")
@@ -120,7 +142,7 @@ class ExperimentWorker:
                 if not isinstance(relative, str):
                     raise ValueError("Submit source/config files, not input or output data")
                 target = workspace_path(self.workspace, relative)
-                if target.is_relative_to(self.workspace / "inputs") or target.is_relative_to(self.workspace / "output"):
+                if any(target.is_relative_to(self.workspace / name) for name in ("inputs", "output", "baselines")):
                     raise ValueError("Submit source/config files, not input or output data")
                 raw = read_file(self.workspace, relative)
                 files[relative] = raw.decode("utf-8")
@@ -163,7 +185,17 @@ class ExperimentWorker:
                                "remaining_steps": self.policy["max_steps"] - self.state["steps"],
                                "remaining_seconds": int(remaining()), "authored_files": self.state.get("written_files", [])[-32:],
                                "recent_actions": self.state["history"][-6:]}
-                    prompt = WORKER_INSTRUCTIONS + "\nTask data:\n" + json.dumps(context, ensure_ascii=False)
+                    instructions = WORKER_INSTRUCTIONS
+                    if self.policy.get('managed_environment'):
+                        start = instructions.index('You are not restricted')
+                        end = instructions.index('Return one JSON action.')
+                        instructions = instructions[:start] + (
+                            'Implement new recognition approaches by writing and executing scripts in a prepared isolated container. '
+                            'Use only the host tools, not tools inside the model process.\n') + instructions[end:]
+                        instructions = instructions.replace('dependency installation, training and inference',
+                                                            'experiment execution and inference')
+                        instructions += MANAGED_INSTRUCTIONS
+                    prompt = instructions + "\nTask data:\n" + json.dumps(context, ensure_ascii=False)
                     try:
                         action, metadata = self.provider.call(
                             prompt, WORKER_SCHEMA, self.folder / "turns" / f'{self.state["steps"]:03}',
@@ -198,7 +230,7 @@ class ExperimentWorker:
                 for relative in self.state.get("written_files", [])[:32]:
                     try:
                         target = workspace_path(self.workspace, relative)
-                        if target.is_relative_to(self.workspace / "inputs") or target.is_relative_to(self.workspace / "output"):
+                        if any(target.is_relative_to(self.workspace / name) for name in ("inputs", "output", "baselines")):
                             continue
                         files[relative] = read_file(self.workspace, relative, limit=250_000).decode("utf-8")
                     except (OSError, ValueError):
