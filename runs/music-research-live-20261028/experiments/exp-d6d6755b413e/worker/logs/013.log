@@ -1,0 +1,292 @@
+DIAGNOSTIC audiveris-release.json 21524
+DIAGNOSTIC audiveris.log 311
+Error: LinkageError occurred while loading main class org.audiveris.omr.Main
+	java.lang.UnsupportedClassVersionError: org/audiveris/omr/Main has been compiled by a more recent version of the Java Runtime (class file version 69.0), this version of the Java Runtime only recognizes class file versions up to 65.0
+
+Error: LinkageError occurred while loading main class org.audiveris.omr.Main
+	java.lang.UnsupportedClassVersionError: org/audiveris/omr/Main has been compiled by a more recent version of the Java Runtime (class file version 69.0), this version of the Java Runtime only recognizes class file versions up to 65.0
+
+DIAGNOSTIC pip.log 6491
+Collecting music21
+  Downloading music21-10.5.1-py3-none-any.whl.metadata (6.5 kB)
+Collecting pillow
+  Downloading pillow-13.0.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (9.1 kB)
+Collecting pytesseract
+  Downloading pytesseract-0.3.13-py3-none-any.whl.metadata (11 kB)
+Collecting requests
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting chardet (from music21)
+  Downloading chardet-7.7.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (10 kB)
+Collecting joblib (from music21)
+  Downloading joblib-1.6.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting jsonpickle (from music21)
+  Downloading jsonpickle-4.1.4-py3-none-any.whl.metadata (8.1 kB)
+Collecting matplotlib (from music21)
+  Downloading matplotlib-3.11.2-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (80 kB)
+Collecting more-itertools (from music21)
+  Downloading more_itertools-11.2.1-py3-none-any.whl.metadata (42 kB)
+Collecting numpy>=1.26.4 (from music21)
+  Downloading numpy-2.5.4-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+Collecting webcolors>=1.5 (from music21)
+  Downloading webcolors-25.10.0-py3-none-any.whl.metadata (2.2 kB)
+Collecting packaging>=21.3 (from pytesseract)
+  Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting charset_normalizer<4,>=2 (from requests)
+  Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (46 kB)
+Collecting idna<4,>=2.5 (from requests)
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting urllib3<3,>=1.26 (from requests)
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi>=2023.5.7 (from requests)
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting cloudpickle>=3.0 (from joblib->music21)
+  Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
+Collecting contourpy>=1.0.1 (from matplotlib->music21)
+  Downloading contourpy-1.4.0-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (3.8 kB)
+Collecting cycler>=0.10 (from matplotlib->music21)
+  Downloading cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+Collecting fonttools>=4.28.2 (from matplotlib->music21)
+  Downloading fonttools-4.68.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (139 kB)
+Collecting kiwisolver>=1.3.1 (from 
+kB)
+Downloading matplotlib-3.11.2-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl (10.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.7/10.7 MB 20.3 MB/s eta 0:00:00
+Downloading more_itertools-11.2.1-py3-none-any.whl (74 kB)
+Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+Downloading contourpy-1.4.0-cp312-cp312-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl (356 kB)
+Downloading cycler-0.12.1-py3-none-any.whl (8.3 kB)
+Downloading fonttools-4.68.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (5.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.5/5.5 MB 29.0 MB/s eta 0:00:00
+Downloading kiwisolver-1.5.1-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 27.6 MB/s eta 0:00:00
+Downloading pyparsing-3.3.3-py3-none-any.whl (126 kB)
+Downloading python_dateutil-3.0.0-py2.py3-none-any.whl (94 kB)
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading tzdata-2026.5-py2.py3-none-any.whl (347 kB)
+Installing collected packages: webcolors, urllib3, tzdata, six, pyparsing, pillow, packaging, numpy, more-itertools, kiwisolver, jsonpickle, idna, fonttools, cycler, cloudpickle, charset_normalizer, chardet, certifi, requests, python-dateutil, pytesseract, joblib, contourpy, matplotlib, music21
+ERROR: Could not install packages due to an OSError: [Errno 28] No space left on device
+
+WARNING: There was an error checking the latest version of pip.
+
+DIAGNOSTIC recognition-command.json 840
+DIAGNOSTIC recognition-retry.log 10200
+Exception in thread "main" java.lang.UnsatisfiedLinkError: Unable to load library 'gtk-3':
+libgtk-3.so: cannot open shared object file: No such file or directory
+libgtk-3.so: cannot open shared object file: No such file or directory
+Native library (linux-aarch64/libgtk-3.so) not found in resource path (/workspace/tmp/audiveris-root/opt/audiveris/lib/app/commons-lang3-3.18.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/commons-logging-1.3.5.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/fontbox-3.0.6.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jgoodies-common-1.8.1.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/tesseract-5.5.2-1.5.13.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/txw2-4.0.5.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/leptonica-1.87.0-1.5.13-linux-arm64.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/commonmark-0.27.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/javassist-3.28.0-GA.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/logback-core-1.4.14.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/javax.activation-api-1.2.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jai-imageio-jpeg2000-1.4.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/commons-io-2.16.1.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/eventbus-1.4.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/ij-1.54p.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/tesseract-5.5.2-1.5.13-linux-arm64.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/reflections-0.10.2.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jackson-databind-2.20.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jheaps-0.14.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/org.apache.commons.io-2.4.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jfreechart-1.5.6.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jgoodies-looks-2.7.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jaxb-api-2.3.1.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jai-imageio-core-1.4.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jaxb-impl-2.3.1.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/leptonica-1.87.0-1.5.13.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jna-5.14.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jakarta.activation-api-2.1.3.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jam
+ce/tmp/audiveris-root/opt/audiveris/lib/app/proxymusic-4.0.3.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/tesseract-5.5.2-1.5.13-linux-x86_64.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/slf4j-api-2.0.17.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/logback-classic-1.4.14.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jgoodies-forms-1.9.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/bsaf-1.9.2.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jaxb-runtime-4.0.5.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/itextpdf-5.5.13.2.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jai-core-1.1.3.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jaxb-core-2.3.0.1.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/args4j-2.33.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jcip-annotations-1.0.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/istack-commons-runtime-4.1.2.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jakarta.xml.bind-api-4.0.2.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jsr305-3.0.2.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/jaxb-core-4.0.5.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/github-api-1.330.jar:/workspace/tmp/audiveris-root/opt/audiveris/lib/app/angus-activation-2.0.2.jar)
+		at com.sun.jna.Native.extractFromResourcePath(Native.java:1141)
+		at com.sun.jna.NativeLibrary.loadLibrary(NativeLibrary.java:297)
+		... 8 more
+
+DIAGNOSTIC recognition-status.json 17
+PARENT_TAIL for item in d['accepted']:
+                if not events:break
+                frac=min(1,max(0,item['bbox_original_pixels'][0]/im.width));ei=round(frac*(len(events)-1));idx=events[ei]
+                d['alignment'].append({'bbox':item['bbox_original_pixels'],'proposed_event_index':ei,'uncertain':True,'method':'proportional horizontal position; no note geometry','applied':False})
+                # Do not override baseline harmony or resolve timing collisions silently.
+                fields=rows[idx].split('\t')
+                if fields[1]=='.' and idx not in taken:
+                    fields[1]=item['harmony'];rows[idx]='\t'.join(fields);taken.add(idx);d['alignment'][-1]['applied']=True
+            before=[r.split('\t')[0] for r in original.splitlines() if r and not r.startswith('!!')]
+            after=[r.split('\t')[0] for r in rows if r and not r.startswith('!!')]
+            assert before==after
+            d['melody_preserved']=True;d['baseline_sha256']=hashlib.sha256(original.encode()).hexdigest()
+            text='\n'.join(rows)+'\n'
+        else:
+            d['melody_preserved']=None;d['blocking_failure']='Enlarged Audiveris baseline unavailable; melody not transcribed. Output is an incomplete harmony-only container, not a complete prediction.'
+            rows=['!! INCOMPLETE: fixed Audiveris melody unavailable; chord timing unaudited','**kern\t**mxhm']
+            for item in d['accepted']:
+                rows.append('.\t'+item['harmony'])
+                d['alignment'].append({'bbox':item['bbox_original_pixels'],'proposed_event_index':None,'uncertain':True,'method':'left-to-right order only; no musical onset assigned','applied':False})
+            rows.append('*-\t*-');text='\n'.join(rows)+'\n'
+        (out/(src.stem+'.krn')).write_text(text)
+        try:d['two_spine_structural_check']=structural_check(text)
+        except Exception as e:d['two_spine_structural_check']=repr(e)
+        try:
+            from music21 import converter
+            parsed=converter.parseData(text,format='humdrum')
+            d['music21_parse']={'passed':True,'melody_note_or_rest_count':len(list(parsed.recurse().notesAndRests)),'limitation':'Parser acceptance does not validate mxhm semantics or transcription completeness'}
+        except Exception as e:d['music21_parse']={'passed':False,'error':repr(e)}
+        (diag/(src.stem+'.json')).write_text(json.dumps(d,indent=2));reports.append(d)
+    report={'status':'goal unmet','tests':tests,'images':len(reports),'outputs':len(reports),'accepted_OCR_chords':sum(len(d['accepted']) for d in reports),'missing_baselines':sum(d['melody_preserved'] is None for d in reports),'baseline_reported_metrics':{'chord_errors':30,'chord_matches':8,'melody_errors':87,'melody_reference_count':130},'new_measured_transcription_metrics':None,'comparison':'Unavailable: no protected scorer or reference labels; accepted OCR count is not correct matches. Missing baseline prevents melody non-regression verification.','timing':'unaudited','release':'Not ready; incomplete melody outputs must count as failures.'}
+    (diag/'report.json').write_text(json.dumps(report,indent=2));print(json.dumps(report,indent=2))
+if __name__=='__main__':main()
+
+JAVA_SOURCE rty(KEY) == null) {
+            System.setProperty(KEY, "true");
+        }
+    }
+
+    //--------------------//
+    // enableHiDpiScaling //
+    //--------------------//
+    private static void enableHiDpiScaling ()
+    {
+        if (!LINUX || System.getProperty("sun.java2d.uiScale") != null) {
+            return;
+        }
+
+        // Manual override via GDK_SCALE
+        String gdkScale = System.getenv("GDK_SCALE");
+        if (gdkScale != null && !gdkScale.isEmpty()) {
+            try {
+                System.setProperty("sun.java2d.uiScale", gdkScale);
+                return;
+            } catch (Exception ignored) {
+            }
+        }
+
+        // Auto-detect monitor scaling via GDK
+        try {
+            int scale = getGdkMaxScale();
+            if (scale > 1) {
+                System.setProperty("sun.java2d.uiScale", String.valueOf(scale));
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    //------------------//
+    // getGdkMaxScale   //
+    //------------------//
+    private static int getGdkMaxScale ()
+    {
+        try {
+            // Load GTK library via JNA
+            com.sun.jna.Native.register("gtk-3");
+
+            // Initialize GTK (required before any GTK/GDK calls)
+            if (!gtk_init_check(null, null)) {
+                return 0;
+            }
+
+            // Get default display
+            com.sun.jna.Pointer display = gdk_display_get_default();
+            if (display == null) {
+                return 0;
+            }
+
+            // Get number of monitors and find maximum scale
+            int nMonitors = gdk_display_get_n_monitors(display);
+            int maxScale = 0;
+
+            for (int i = 0; i < nMonitors; i++) {
+                com.sun.jna.Pointer monitor = gdk_display_get_monitor(display, i);
+                if (monitor != null) {
+                    int scale = gdk_monitor_get_scale_factor(monitor);
+                    if (scale > maxScale) {
+                        maxScale = scale;
+                    }
+                }
+            }
+
+            return maxScale;
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
+
+    // GTK/GDK native function declarations
+    private static native boolean gtk_init_check(com.sun.jna.ptr.IntByReference argc, com.sun.jna.ptr.PointerByReference argv);
+    private static native com.sun.jna.Pointer gdk_display_get_default();
+    private static native int gdk_display_get_n_monitors(com.sun.jna.Pointer display);
+    private static native com.sun.jna.Pointer gdk_display_get_monitor(com.sun.jna.Pointer display, int num);
+    private static native int gdk_monitor_get_scale_factor(com.sun.jna.Pointer monitor);
+
+    //--------------//
+    // ensureLoaded 
+JAVA_SOURCE g.valueOf(scale));
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    //------------------//
+    // getGdkMaxScale   //
+    //------------------//
+    private static int getGdkMaxScale ()
+    {
+        try {
+            // Load GTK library via JNA
+            com.sun.jna.Native.register("gtk-3");
+
+            // Initialize GTK (required before any GTK/GDK calls)
+            if (!gtk_init_check(null, null)) {
+                return 0;
+            }
+
+            // Get default display
+            com.sun.jna.Pointer display = gdk_display_get_default();
+            if (display == null) {
+                return 0;
+            }
+
+            // Get number of monitors and find maximum scale
+            int nMonitors = gdk_display_get_n_monitors(display);
+            int maxScale = 0;
+
+            for (int i = 0; i < nMonitors; i++) {
+                com.sun.jna.Pointer monitor = gdk_display_get_monitor(display, i);
+                if (monitor != null) {
+                    int scale = gdk_monitor_get_scale_factor(monitor);
+                    if (scale > maxScale) {
+                        maxScale = scale;
+                    }
+                }
+            }
+
+            return maxScale;
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
+
+    // GTK/GDK native function declarations
+    private static native boolean gtk_init_check(com.sun.jna.ptr.IntByReference argc, com.sun.jna.ptr.PointerByReference argv);
+    private static native com.sun.jna.Pointer gdk_display_get_default();
+    private static native int gdk_display_get_n_monitors(com.sun.jna.Pointer display);
+    private static native com.sun.jna.Pointer gdk_display_get_monitor(com.sun.jna.Pointer display, int num);
+    private static native int gdk_monitor_get_scale_factor(com.sun.jna.Pointer monitor);
+
+    //--------------//
+    // ensureLoaded //
+    //--------------//
+    /**
+     * Make sure this class is loaded.
+     */
+    public static void ensureLoaded ()
+    {
+    }
+
+    //-------------------//
+    // getClassContainer //
+    //-------------------//
+    private static URI getClassContainer ()
+    {
+        return toURI(WellKnowns.class.getProtectionDomain().getCodeSource().getLocation());
+    }
+
+    //-----------------//
+    // getFileEncoding //
+    //-----------------//
+    private static String getFileEncoding ()
+    {
+        final String ENCODING_KEY = "file.encoding";
+        final String ENCODING_VALUE = "UTF-8";
+
+        System.setProperty(ENCODING_KEY, ENCODING_VALUE);
+
+        return ENCODING_VALUE;
+    }
+
+    //-----------//
+    // getFolder //
+    //-----------//
+    private static Path getFolder (FolderKind kind)
+    {
+        if (WINDOWS) {
+     
+INPUTS ['inputs/sample-017.png', 'inputs/sample-029.png', 'inputs/sample-001.png', 'inputs/sample-006.png', 'inputs/sample-012.png', 'inputs/sample-023.png', 'inputs/sample-019.png']
+ENLARGED ['/workspace/enlarged/sample-017.png', '/workspace/enlarged/sample-029.png', '/workspace/enlarged/sample-001.png', '/workspace/enlarged/sample-006.png', '/workspace/enlarged/sample-012.png', '/workspace/enlarged/sample-023.png', '/workspace/enlarged/sample-019.png']
+COMMAND_FILES [('diagnostics/recognition-command.json', '[\n  "/workspace/tmp/java25/zulu25.38.107-ca-jre25.0.5-linux_aarch64/bin/java",\n  "-Xmx1100m",\n  "-Djava.awt.headless=true",\n  "-Djava.io.tmpdir=/workspace/tmp/native",\n  "-Djna.tmpdir=/workspace/tmp/native",\n  "-Dorg.bytedeco.javacpp.cachedir=/workspace/tmp/javacpp",\n  "-Duser.home=/workspace/tmp/home",\n  "--add-exports=java.desktop/sun.awt.image=ALL-UNNAMED",\n  "--enable-native-access=ALL-UNNAMED",\n  "-cp",\n  "/workspace/tmp/audiveris-root/opt/audiveris/lib/app/*",\n  "Audiveris",\n  "-batch",\n  "-export",\n  "-output",\n  "/workspace/recognition",\n  "--",\n  "/workspace/enlarged/sample-001.png",\n  "/workspace/enlarged/sample-006.png",\n  "/workspace/enlarged/sample-012.png",\n  "/workspace/enlarg')]

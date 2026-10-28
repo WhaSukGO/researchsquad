@@ -1,0 +1,25 @@
+{
+  "id": "사랑하셔서_1",
+  "engine": "audiveris-enlarged",
+  "source_image": "research/data/사랑하셔서_1.png",
+  "source_image_sha256": "a18b3002935f808e29d96f6c604e2df8188be0291b26452091f2e9511555e620",
+  "input_sha256": "497871b93d5a9286bfa075b6d23c58a5b4000440c9223dd9b972fe53a06fa3e0",
+  "started_unix": 1793066981.226082,
+  "reference_access": false,
+  "runner_sha256": "ab8fa3e423930b13d2c94b4c190d1ac7f8d9c7975dcdaef8e10ebf6347e240b5",
+  "exit_code": 0,
+  "status": "ok",
+  "output": "runs/first-benchmark/audiveris-enlarged/sample-019/input.mxl",
+  "command": [
+    "/Users/geegle/development/whasuk/researchagent/.cache/audiveris-mount/Audiveris.app/Contents/MacOS/Audiveris",
+    "-batch",
+    "-transcribe",
+    "-export",
+    "-output",
+    "/Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-019",
+    "--",
+    "/Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-019/input.png"
+  ],
+  "elapsed_seconds": 8.272290458999578,
+  "output_sha256": "aedfaeaf66e58f00d32d9813742eb8705e9acc20bfabc4c02cd1f764de874a12"
+}

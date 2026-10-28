@@ -1,0 +1,37 @@
+[
+  {
+    "id": "case-001",
+    "candidate_sha256": "8b39eae54d3cd5ec5a9a7672b011606d95927b516ad03d4a71f82eb86337bc26",
+    "image_sha256": "0d8d864f885c302aafb273d9d5e2febb3dc768ee65faca53a9c82dccf877a3a1"
+  },
+  {
+    "id": "case-002",
+    "candidate_sha256": "73655c58d1a45c510e35168c0a4711a2d0ced2f896a2ed3ea9b4971a18aa586e",
+    "image_sha256": "972a47424b1a0536164c5ebc9affb1cbb7f0c1ccb94aee25d0f619395be1a2d0"
+  },
+  {
+    "id": "case-003",
+    "candidate_sha256": "a8fa1531414acb6e85f14d08b8b611a14002a4196531ba5d70e15e7b45d63b16",
+    "image_sha256": "f3ce5694398cf0f340183c13db0939fe7679217b4f410e8e5bd7219b42a1367e"
+  },
+  {
+    "id": "case-004",
+    "candidate_sha256": "7325584ded8b4a92ee6cd6aefd0bc7f0696fc7043c429ecddce0216dc083f8a0",
+    "image_sha256": "8f13d1617a03312ecad7f3db34d729e4b8625d2419082d32d1117d70a50bc455"
+  },
+  {
+    "id": "case-005",
+    "candidate_sha256": "57c0d7cc0a671b25481aee4c397b4c74b2a87fb54a6ca6c35ea7798742da62dc",
+    "image_sha256": "a18b3002935f808e29d96f6c604e2df8188be0291b26452091f2e9511555e620"
+  },
+  {
+    "id": "case-006",
+    "candidate_sha256": "2c2a878ef7ac8faf39b067e3848af58b103a450c71ef62b86f15868d6e1242e3",
+    "image_sha256": "f5cfddb59f9af825ec9afc53e29094299e61d0669317d83eed8e7f3e7e50a9e5"
+  },
+  {
+    "id": "case-007",
+    "candidate_sha256": "aa4eb58b1c96db756e93f2631512f5529d2b70dcec101ae178366774b120d268",
+    "image_sha256": "d5f7503b2990726b767c11babf0c0ebe06aa462d0317baf54e82d3233668bf26"
+  }
+]

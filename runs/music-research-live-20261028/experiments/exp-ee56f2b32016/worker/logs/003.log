@@ -1,0 +1,109 @@
+/workspace
+total 28
+drwxr-xr-x 7  501 dialout  224 Oct 28 02:53 .
+drwxr-xr-x 1 root root    4096 Oct 28 02:54 ..
+drwxr-xr-x 3  501 dialout   96 Oct 28 02:53 diagnostics
+drwxr-xr-x 9  501 dialout  288 Oct 28 02:53 inputs
+-rw-r--r-- 1  501 dialout 8924 Oct 28 02:53 integrate.py
+drwxr-xr-x 2  501 dialout   64 Oct 28 02:53 output
+-rw-r--r-- 1  501 dialout 9717 Oct 28 02:53 parent_chord_ocr.py
+[
+  "/workspace/tmp/java25/zulu25.38.107-ca-jre25.0.5-linux_aarch64/bin/java",
+  "-Xmx1100m",
+  "-Djava.awt.headless=true",
+  "-Djava.io.tmpdir=/workspace/tmp/native",
+  "-Djna.tmpdir=/workspace/tmp/native",
+  "-Dorg.bytedeco.javacpp.cachedir=/workspace/tmp/javacpp",
+  "-Duser.home=/workspace/tmp/home",
+  "--add-exports=java.desktop/sun.awt.image=ALL-UNNAMED",
+  "--enable-native-access=ALL-UNNAMED",
+  "-cp",
+  "/workspace/tmp/audiveris-root/opt/audiveris/lib/app/*",
+  "Audiveris",
+  "-batch",
+  "-export",
+  "-output",
+  "/workspace/recognition",
+  "--",
+  "/workspace/enlarged/sample-001.png",
+  "/workspace/enlarged/sample-006.png",
+  "/workspace/enlarged/sample-012.png",
+  "/workspace/enlarged/sample-017.png",
+  "/workspace/enlarged/sample-019.png",
+  "/workspace/enlarged/sample-023.png",
+  "/workspace/enlarged/sample-029.png"
+]import os,sys,json,subprocess,traceback,shutil,re,time
+from pathlib import Path
+from fractions import Fraction
+sys.path.insert(0,'/workspace/vendor')
+from music21 import converter,note,chord,stream
+ROOT=Path('/workspace');os.chdir(ROOT)
+D=ROOT/'diagnostics';D.mkdir(exist_ok=True)
+O=ROOT/'output';O.mkdir(exist_ok=True)
+report={'limits':['No reference labels available; protected melody and chord errors cannot be measured locally.','Chord onset alignment unaudited.','Structural transposition checks do not establish transcription correctness.'],'samples':{}}
+# Keep the existing OCR implementation intact, including its thresholds.
+candidates=[]
+for base,dirs,files in os.walk(ROOT):
+ dirs[:]=[d for d in dirs if d not in ('vendor','tmp','.git','__pycache__')]
+ for f in files:
+  if f.endswith('.py') and f!='integrate.py':
+   p=Path(base)/f
+   try:
+    txt=p.read_text()
+    if 'def parse_chord' in txt and 'baseline-dir' in txt:candidates.append((p,txt))
+   except Exception:pass
+parent=None
+if candidates:
+ parent,src=candidates[0];(ROOT/'parent_chord_ocr.py').write_text(src)
+ report['parent_source']=str(parent)
+ report['serializer_audit']={'source_retained':'parent_chord_ocr.py','finding':'A syntax-only row check and a synthetic melody parse do not validate complete generated files. Missing baseline melody must be treated as recognition failure; null-only melody cannot demonstrate a parsed transcription. Exact protected-reader failure is unavailable.'}
+ try:
+  env=os.environ.copy();env['PYTHONPATH']='/workspace/vendor'
+  p=subprocess.run([sys.executable,str(ROOT/'parent_chord_ocr.py'),'--baseline-dir','/workspace/fresh-baseline'],env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=22)
+  (D/'parent-ocr-run.log').write_text(p.stdout);report['parent_ocr_returncode']=p.returncode
+ except Exception as e:report['parent_ocr_error']=repr(e)
+else:report['parent_source_error']='Original OCR implementation not located; thresholds will not be reconstructed or changed.'
+# Retain original OCR artifacts before replacing any output.
+old={p.stem:p.read_text() for p in O.glob('*.krn')}
+archive=D/'parent-output';archive.mkdir(exist_ok=True)
+for name,text in old.items():(archive/(name+'.krn')).write_text(text)
+cmd=json.loads((D/'recognition-command.json').read_text())
+cmd[1:1]=['-Dsun.java2d.uiScale=1','-Dsun.java2d.uiScale.enabled=false']
+(D/'final-recognition-command.json').write_text(json.dumps(cmd,indent=2))
+try:
+ with (D/'final-recognition.log').open('w') as log:
+  p=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=80)
+ report['recognition_returncode']=p.returncode
+except Exception as e:report['recognition_error']=repr(e)
+print('RECOGNITION_LOG_TAIL', (D/'final-recognition.log').read_text()[-6000:])
+# Serialize only actual MusicXML events. Reject overlapping/polyphonic results instead of inventing melody.
+def reciprocal(q):
+ q=Fraction(q).limit_denominator(4096)
+ if q<=0:raise ValueError('Nonpositive duration')
+ for dots in range(4):
+  factor=Fraction(2**(dots+1)-1,2**dots)
+  r=4*factor/q
+  if r.denominator==1 and r>0:return str(r.numerator)+'.'*dots
+ r=4/q
+ return str(r.numerator)+'%'+str(r.denominator)
+def pitch_token(p):
+ octv=p.octave
+ if octv is None:raise ValueError('Missing octave')
+ s=p.step.lower()*(octv-3) if octv>=4 else p.step.upper()*(4-octv)
+ a=p.accidental.alter if p.accidental else 0
+ if a!=int(a):raise ValueError('Microtonal pitch unsupported')
+ return s+('#'*int(a) if a>0 else '-'*int(-a))
+def token(n):
+ if n.duration.isGrace:raise ValueError('Grace event requires explicit handling')
+ s=reciprocal(n.duration.quarterLength)
+ if n.isRest:return s+'r'
+diagnostics/recognition-command.json
+tail: cannot open 'diagnostics/final-recognition.log' for reading: No such file or directory
+total 28
+drwxr-xr-x 7  501 dialout  224 Oct 28 02:53 .
+drwxr-xr-x 1 root root    4096 Oct 28 02:54 ..
+drwxr-xr-x 3  501 dialout   96 Oct 28 02:53 diagnostics
+drwxr-xr-x 9  501 dialout  288 Oct 28 02:53 inputs
+-rw-r--r-- 1  501 dialout 8924 Oct 28 02:53 integrate.py
+drwxr-xr-x 2  501 dialout   64 Oct 28 02:53 output
+-rw-r--r-- 1  501 dialout 9717 Oct 28 02:53 parent_chord_ocr.py

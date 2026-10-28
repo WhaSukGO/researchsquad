@@ -1,0 +1,29 @@
+{
+  "status": "ok",
+  "answer": {
+    "verdict": "keep",
+    "kern": "**kern\t**mxhm\n*clefG2\t*\n*k[]\t*\n*M4/4\t*\n8G\tC:maj\n16G\t.\n[16G\t.\n8G]\t.\n16c\t.\n[16c\t.\n8c]\t.\n16r\t.\n16G\t.\n8G\t.\n(16c\t.\n16d)\t.\n=\t=\n2d\tD:min/C\n8r\t.\n16r\t.\n16G\t.\n8G\t.\n8e\t.\n=\t=\n4.e\tC:maj\n16d\t.\n[16c\t.\n8c]\t.\n16r\t.\n16e\t.\n8e\t.\n16c\t.\n[16f\t.\n=\t=\n4.f]\tF:min6/C\n16e\t.\n16f\t.\n4r\t.\n=\t=\n*-\t*-",
+    "findings": [],
+    "uncertainties": []
+  },
+  "metadata": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "elapsed_seconds": 83.8627906669999,
+    "exit_code": 0,
+    "usage": {
+      "input_tokens": 14704,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1456,
+      "reasoning_output_tokens": 1206
+    },
+    "prompt_sha256": "890583d83cd5e0fcd8d1f3f3580b59fdddb1a077418a3e9616705a86dc40c1a7",
+    "image_sha256": "a18b3002935f808e29d96f6c604e2df8188be0291b26452091f2e9511555e620",
+    "context_isolation": "fresh temporary directory outside the project; only explicit prompt, schema and optional image",
+    "os_read_isolation": false,
+    "unexpected_tool_events": [],
+    "billing": "Uses existing Codex account; monetary cost unavailable"
+  }
+}

@@ -1,0 +1,11 @@
+Filesystem            Size  Used Avail Use% Mounted on
+/run/host_mark/Users  927G  669G  258G  73% /workspace
+tmpfs                 256M     0  256M   0% /tmp
+372K	/workspace/inputs
+0	/workspace/output
+/usr/bin/apt-get
+PIL False
+numpy False
+music21 False
+pytesseract False
+/tmp []

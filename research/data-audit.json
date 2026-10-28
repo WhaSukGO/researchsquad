@@ -1,0 +1,292 @@
+{
+  "pairs": 32,
+  "keys": {
+    "*k[]": 32
+  },
+  "headers": {
+    "**kern\t**mxhm": 32
+  },
+  "meters": 8,
+  "melody_events": 653,
+  "chord_events": 200,
+  "chord_only_rows": [
+    {
+      "id": "내입술로_5",
+      "line": 31,
+      "chord": "G:7"
+    },
+    {
+      "id": "능력의_1",
+      "line": 17,
+      "chord": "C:7"
+    },
+    {
+      "id": "능력의_1",
+      "line": 30,
+      "chord": "D:min"
+    },
+    {
+      "id": "사랑하셔서_2",
+      "line": 9,
+      "chord": "F:maj"
+    }
+  ],
+  "missing_meter": [
+    "내이름으로_2",
+    "내이름으로_3",
+    "내이름으로_4",
+    "내이름으로_5",
+    "내입술로_3",
+    "내입술로_4",
+    "내입술로_5",
+    "내입술로_6",
+    "내입술의_2",
+    "내입술의_3",
+    "내입술의_4",
+    "내입술의_5",
+    "능력의_2",
+    "사랑하셔서_2",
+    "사랑하셔서_3",
+    "사랑하셔서_4",
+    "성령이여_2",
+    "성령이여_3",
+    "성령이여_4",
+    "성령이여_5",
+    "성령이여_6",
+    "주품에_2",
+    "주품에_3",
+    "주품에_4"
+  ],
+  "open_tie_boundaries": [
+    {
+      "id": "성령이여_4",
+      "kind": "tie_continues_beyond_excerpt"
+    },
+    {
+      "id": "성령이여_5",
+      "line": 5,
+      "kind": "tie_end_without_local_start"
+    },
+    {
+      "id": "성령이여_6",
+      "line": 5,
+      "kind": "tie_end_without_local_start"
+    },
+    {
+      "id": "주품에_4",
+      "line": 5,
+      "kind": "tie_end_without_local_start"
+    }
+  ],
+  "measure_sums": {
+    "내이름으로_1": [
+      "4",
+      "4",
+      "4",
+      "3"
+    ],
+    "내이름으로_2": [
+      "1",
+      "4",
+      "4",
+      "4",
+      "3"
+    ],
+    "내이름으로_3": [
+      "1",
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "내이름으로_4": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "내이름으로_5": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "내입술로_1": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "내입술로_2": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "내입술로_3": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "내입술로_4": [
+      "4",
+      "4",
+      "4",
+      "3"
+    ],
+    "내입술로_5": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "내입술로_6": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "내입술의_1": [
+      "1/2",
+      "4",
+      "4",
+      "4",
+      "7/2"
+    ],
+    "내입술의_2": [
+      "1/2",
+      "4",
+      "4",
+      "4",
+      "3"
+    ],
+    "내입술의_3": [
+      "1",
+      "4",
+      "4",
+      "4",
+      "3"
+    ],
+    "내입술의_4": [
+      "1",
+      "4",
+      "3"
+    ],
+    "내입술의_5": [
+      "1",
+      "4",
+      "4",
+      "7/2"
+    ],
+    "능력의_1": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "능력의_2": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "사랑하셔서_1": [
+      "4",
+      "4",
+      "4",
+      "3"
+    ],
+    "사랑하셔서_2": [
+      "1",
+      "4",
+      "4",
+      "4",
+      "2"
+    ],
+    "사랑하셔서_3": [
+      "2",
+      "4",
+      "4",
+      "4",
+      "3"
+    ],
+    "사랑하셔서_4": [
+      "1",
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "성령이여_1": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "성령이여_2": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "성령이여_3": [
+      "4",
+      "4",
+      "4",
+      "4",
+      "2"
+    ],
+    "성령이여_4": [
+      "2",
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "성령이여_5": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "성령이여_6": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "주품에_1": [
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "주품에_2": [
+      "4",
+      "4",
+      "4",
+      "2"
+    ],
+    "주품에_3": [
+      "2",
+      "4",
+      "4",
+      "4",
+      "2"
+    ],
+    "주품에_4": [
+      "4",
+      "4",
+      "9/2"
+    ]
+  },
+  "methodology": {
+    "scope": "Descriptive audit of the supplied two-spine references, not a complete Humdrum validator or visual ground-truth audit.",
+    "melody_events": "Non-null data tokens in the kern spine, including notes and rests.",
+    "chord_events": "Non-null mxhm data tokens, not a guarantee of correct chord onset timing.",
+    "measure_sums": "Quarter-note units from reciprocal durations and augmentation dots; partial measures, grace notes, repeat endings and cross-excerpt context need separate review.",
+    "open_tie_boundaries": "Local bracket scan; these are review candidates, not confirmed annotation errors.",
+    "key_signature": "Empty key signature is not sufficient to conclude C major."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "sample_index": 23,
+  "id": "성령이여_1",
+  "kind": "audiveris_text_harmony",
+  "reference_access": false,
+  "source_image_sha256": "f5cfddb59f9af825ec9afc53e29094299e61d0669317d83eed8e7f3e7e50a9e5",
+  "output": "runs/goal-agent-001-checked/experiments/exp-33c9e801b310/sample-023/prediction.musicxml",
+  "status": "ok",
+  "recovered_words": [],
+  "source_prediction_sha256": "02721b122610317284ce450d66a8ce7bc8289dd1ddd5aa64a49fee40b87ab619",
+  "timing_audited": false,
+  "elapsed_seconds": 0.001674834000368719,
+  "output_sha256": "bcd65ca836b9dd80c26cd07c7d6f236bb8c98febbfa2559269f4fe79be3073b6"
+}

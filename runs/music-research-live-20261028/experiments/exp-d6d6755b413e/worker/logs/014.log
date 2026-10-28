@@ -1,0 +1,139 @@
+RECOGNITION_LOG_TAIL INFO  []                      Main 259  | Running in batch mode
+INFO  []              TesseractOCR 137  | Creating OCR folder /tmp/.config/AudiverisLtd/audiveris/tessdata
+WARN  []                 Languages 142  | *** No installed OCR languages ***
+INFO  []             AliasPatterns 146  | Alias patterns: [(IMSLP[0-9]*)-.*]
+INFO  []                      Main 194  | Submitting 7 task(s) in sequence:
+    Input "/workspace/enlarged/sample-001.png"
+    Input "/workspace/enlarged/sample-006.png"
+    Input "/workspace/enlarged/sample-012.png"
+    Input "/workspace/enlarged/sample-017.png"
+    Input "/workspace/enlarged/sample-019.png"
+    Input "/workspace/enlarged/sample-023.png"
+    Input "/workspace/enlarged/sample-029.png"
+Exception in thread "main" java.lang.ExceptionInInitializerError
+	at org.audiveris.omr.sheet.Params$BookParams.setParents(Params.java:268)
+	at org.audiveris.omr.sheet.Book.setParamParents(Book.java:2322)
+	at org.audiveris.omr.sheet.Book.initTransients(Book.java:1521)
+	at org.audiveris.omr.sheet.Book.<init>(Book.java:332)
+	at org.audiveris.omr.sheet.BookManager.loadInput(BookManager.java:271)
+	at org.audiveris.omr.CLI$InputTask.loadBook(CLI.java:564)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:510)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:370)
+	at org.audiveris.omr.Main.main(Main.java:272)
+	at Audiveris.main(Audiveris.java:50)
+Caused by: java.lang.RuntimeException: Fontconfig head is null, check your fonts or fonts configuration
+	at java.desktop/sun.awt.FontConfiguration.getVersion(Unknown Source)
+	at java.desktop/sun.awt.FontConfiguration.readFontConfigFile(Unknown Source)
+	at java.desktop/sun.awt.FontConfiguration.init(Unknown Source)
+	at java.desktop/sun.awt.X11FontManager.createFontConfiguration(Unknown Source)
+	at java.desktop/sun.font.SunFontManager.<init>(Unknown Source)
+	at java.desktop/sun.awt.FcFontManager.<init>(Unknown Source)
+	at java.desktop/sun.awt.X11FontManager.<init>(Unknown Source)
+	at java.desktop/sun.font.PlatformFontInfo.createFontManager(Unknown Source)
+	at java.desktop/sun.font.FontManagerFactory.getInstance(Unknown Source)
+	at java.desktop/java.awt.Font.getFont2D(Unknown Source)
+	at java.desktop/java.awt.Font.getFamily(Unknown Source)
+	at java.desktop/java.awt.Font.getFamily_NoClientCode(Unknown Source)
+	at java.desktop/java.awt.Font.getFamily(Unknown Source)
+	at org.audiveris.omr.ui.symbol.OmrFont.createFont(OmrFont.java:327)
+	at org.audiveris.omr.ui.symbol.OmrFont.getFont(OmrFont.java:411)
+	at org.audiveris.omr.ui.symbol.OmrFont.<init>(OmrFont.java:128)
+	at org.audiveris.omr.ui.symbol.TextFont.<init>(TextFont.java:113)
+	at org.audiveris.omr.ui.symbol.TextFont.<init>(TextFont.java:95)
+	at org.audiveris.omr.ui.symbol.TextFont.<clinit>(TextFont.java:59)
+	... 10 more
+
+{
+  "limits": [
+    "No reference labels available; protected melody and chord errors cannot be measured locally.",
+    "Chord onset alignment unaudited.",
+    "Structural transposition checks do not establish transcription correctness."
+  ],
+  "samples": {
+    "sample-001": {
+      "recognition": "failed",
+      "conversion": "not attempted",
+      "independent_parse": "not attempted",
+      "chord_timing_audited": false,
+      "raw_exports": [],
+      "failure": "RuntimeError('No actual Audiveris MusicXML export; no melody substituted')",
+      "traceback": "Traceback (most recent call last):\n  File \"/workspace/integrate.py\", line 91, in <module>\n    if not exports:raise RuntimeError('No actual Audiveris MusicXML export; no melody substituted')\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: No actual Audiveris MusicXML export; no melody substituted\n",
+      "output_is_failure_placeholder": true
+    },
+    "sample-006": {
+      "recognition": "failed",
+      "conversion": "not attempted",
+      "independent_parse": "not attempted",
+      "chord_timing_audited": false,
+      "raw_exports": [],
+      "failure": "RuntimeError('No actual Audiveris MusicXML export; no melody substituted')",
+      "traceback": "Traceback (most recent call last):\n  File \"/workspace/integrate.py\", line 91, in <module>\n    if not exports:raise RuntimeError('No actual Audiveris MusicXML export; no melody substituted')\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: No actual Audiveris MusicXML export; no melody substituted\n",
+      "output_is_failure_placeholder": true
+    },
+    "sample-012": {
+      "recognition": "failed",
+      "conversion": "not attempted",
+      "independent_parse": "not attempted",
+      "chord_timing_audited": false,
+      "raw_exports": [],
+      "failure": "RuntimeError('No actual Audiveris MusicXML export; no melody substituted')",
+      "traceback": "Traceback (most recent call last):\n  File \"/workspace/integrate.py\", line 91, in <module>\n    if not exports:raise RuntimeError('No actual Audiveris MusicXML export; no melody substituted')\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: No actual Audiveris MusicXML export; no melody substituted\n",
+      "output_is_failure_placeholder": true
+    },
+    "sample-017": {
+      "recognition": "failed",
+      "conversion": "not attempted",
+      "independent_parse": "not attempted",
+      "chord_timing_audited": false,
+      "raw_exports": [],
+      "failure": "RuntimeError('No actual Audiveris MusicXML export; no melody substituted')",
+      "traceback": "Traceback (most recent call last):\n  File \"/workspace/integrate.py\", line 91, in <module>\n    if not exports:raise RuntimeError('No actual Audiveris MusicXML export; no melody substituted')\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: No actual Audiveris MusicXML export; no melody substituted\n",
+      "output_is_failure_placeholder": true
+    },
+    "sample-019": {
+      "recognition": "failed",
+      "conversion": "not attempted",
+      "independent_parse": "not attempted",
+      "chord_timing_audited": false,
+      "raw_exports": [],
+      "failure": "RuntimeError('No actual Audiveris MusicXML export; no melody substituted')",
+      "traceback": "Traceback (most recent call last):\n  File \"/workspace/integrate.py\", line 91, in <module>\n    if not exports:raise RuntimeError('No actual Audiveris MusicXML export; no melody substituted')\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: No actual Audiveris MusicXML export; no melody substituted\n",
+      "output_is_failure_placeholder": true
+    },
+    "sample-023": {
+      "recognition": "failed",
+      "conversion": "not attempted",
+      "independent_parse": "not attempted",
+      "chord_timing_audited": false,
+      "raw_exports": [],
+      "failure": "RuntimeError('No actual Audiveris MusicXML export; no melody substituted')",
+      "traceback": "Traceback (most recent call last):\n  File \"/workspace/integrate.py\", line 91, in <module>\n    if not exports:raise RuntimeError('No actual Audiveris MusicXML export; no melody substituted')\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: No actual Audiveris MusicXML export; no melody substituted\n",
+      "output_is_failure_placeholder": true
+    },
+    "sample-029": {
+      "recognition": "failed",
+      "conversion": "not attempted",
+      "independent_parse": "not attempted",
+      "chord_timing_audited": false,
+      "raw_exports": [],
+      "failure": "RuntimeError('No actual Audiveris MusicXML export; no melody substituted')",
+      "traceback": "Traceback (most recent call last):\n  File \"/workspace/integrate.py\", line 91, in <module>\n    if not exports:raise RuntimeError('No actual Audiveris MusicXML export; no melody substituted')\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: No actual Audiveris MusicXML export; no melody substituted\n",
+      "output_is_failure_placeholder": true
+    }
+  },
+  "parent_source": "/workspace/parent.py",
+  "serializer_audit": {
+    "source_retained": "parent_chord_ocr.py",
+    "finding": "A syntax-only row check and a synthetic melody parse do not validate complete generated files. Missing baseline melody must be treated as recognition failure; null-only melody cannot demonstrate a parsed transcription. Exact protected-reader failure is unavailable."
+  },
+  "parent_ocr_returncode": 0,
+  "recognition_returncode": 1,
+  "parseable_complete_melodies": 0,
+  "protected_comparisons": {
+    "current": "unavailable; must be scored independently",
+    "parent_chord_errors": "25/38",
+    "baseline_chord_errors": "30/38",
+    "baseline_melody_errors": "87/130",
+    "regression_claim": "No claim possible without protected evaluation"
+  }
+}

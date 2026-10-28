@@ -1,0 +1,11 @@
+{
+  "sample_index": 23,
+  "id": "성령이여_1",
+  "kind": "worker",
+  "reference_access": false,
+  "status": "ok",
+  "error": null,
+  "output": "/Users/geegle/development/whasuk/researchagent/runs/music-research-live-20261028/experiments/exp-d6d6755b413e/sample-023/prediction.krn",
+  "output_sha256": "a38e1454be5d56158d13d69c245e9e03b15801cea439706a0f2323befeed42f6",
+  "source_image_sha256": "f5cfddb59f9af825ec9afc53e29094299e61d0669317d83eed8e7f3e7e50a9e5"
+}

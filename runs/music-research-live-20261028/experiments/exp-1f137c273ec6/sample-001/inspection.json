@@ -1,0 +1,28 @@
+{
+  "events": [],
+  "chords": [
+    [
+      "E",
+      "major",
+      "E",
+      []
+    ],
+    [
+      "D",
+      "minor",
+      "D",
+      []
+    ],
+    [
+      "G",
+      "major",
+      "G",
+      []
+    ]
+  ],
+  "parse_ok": false,
+  "render_ok": false,
+  "errors": [
+    "melody: ValueError('Parsed score contains no musical events')"
+  ]
+}

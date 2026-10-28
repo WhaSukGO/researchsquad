@@ -1,0 +1,51 @@
+[
+  {
+    "id": "내이름으로_1",
+    "greedy_errors": 12,
+    "beam_errors": 24,
+    "reference_count": 12,
+    "beam_status": "ok"
+  },
+  {
+    "id": "내입술로_1",
+    "greedy_errors": 8,
+    "beam_errors": 18,
+    "reference_count": 17,
+    "beam_status": "ok"
+  },
+  {
+    "id": "내입술의_1",
+    "greedy_errors": 27,
+    "beam_errors": 28,
+    "reference_count": 27,
+    "beam_status": "ok"
+  },
+  {
+    "id": "능력의_1",
+    "greedy_errors": 505,
+    "beam_errors": 24,
+    "reference_count": 19,
+    "beam_status": "ok"
+  },
+  {
+    "id": "사랑하셔서_1",
+    "greedy_errors": 0,
+    "beam_errors": 0,
+    "reference_count": 27,
+    "beam_status": "ok"
+  },
+  {
+    "id": "성령이여_1",
+    "greedy_errors": 0,
+    "beam_errors": 0,
+    "reference_count": 20,
+    "beam_status": "ok"
+  },
+  {
+    "id": "주품에_1",
+    "greedy_errors": 12,
+    "beam_errors": 10,
+    "reference_count": 8,
+    "beam_status": "ok"
+  }
+]

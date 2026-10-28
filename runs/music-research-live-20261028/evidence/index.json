@@ -1,0 +1,136 @@
+[
+  {
+    "record": "evidence/001-c13a20906e83.json",
+    "id": "dataset",
+    "tool": "inspect_dataset",
+    "hypothesis": "Dataset structure and image quality may reveal constraints that determine which recognition failure is useful to test first.",
+    "evidence_ids": [
+      "goal"
+    ]
+  },
+  {
+    "record": "evidence/002-5f5d9b0c3ae9.json",
+    "id": "baseline",
+    "tool": "baseline_summary",
+    "hypothesis": "Baseline errors will identify whether melody recognition, chord timing, or transposition is the most informative first target.",
+    "evidence_ids": [
+      "goal",
+      "dataset"
+    ]
+  },
+  {
+    "record": "evidence/003-2f17a8aad629.json",
+    "id": "source-catalog",
+    "tool": "discover_evidence",
+    "hypothesis": "Image preprocessing plus separate chord recognition, or constrained neural decoding, may address the observed failures more effectively than unrestricted greedy transcription.",
+    "evidence_ids": [
+      "dataset",
+      "baseline"
+    ]
+  },
+  {
+    "record": "evidence/004-3a5e63f29ca0.json",
+    "id": "evidence-82fd3c08",
+    "tool": "read_evidence",
+    "hypothesis": "The benchmark audit can distinguish recognition failures from serialization or extraction failures, enabling a narrowly targeted first experiment.",
+    "evidence_ids": [
+      "dataset",
+      "baseline",
+      "source-catalog"
+    ]
+  },
+  {
+    "record": "evidence/005-1f0bca12179d.json",
+    "id": "exp-1f137c273ec6",
+    "tool": "run_experiment",
+    "hypothesis": "Some missing chords are legible image text that can be recovered through a separate constrained recognition stage without changing melody transcription.",
+    "evidence_ids": [
+      "dataset",
+      "baseline",
+      "evidence-82fd3c08"
+    ]
+  },
+  {
+    "record": "evidence/006-aa7188fcc70e.json",
+    "id": "exp-1f137c273ec6-evaluation",
+    "tool": "evaluate_experiment",
+    "hypothesis": "The OCR stage may recover additional chord matches, but missing melody predictions will prevent this candidate from improving the complete workflow.",
+    "evidence_ids": [
+      "exp-1f137c273ec6",
+      "baseline",
+      "evidence-82fd3c08"
+    ]
+  },
+  {
+    "record": "evidence/007-e0ba8c3dde08.json",
+    "id": "decision-error-7",
+    "tool": null,
+    "hypothesis": null,
+    "evidence_ids": []
+  },
+  {
+    "record": "evidence/008-5aa5269047b7.json",
+    "id": "exp-d6d6755b413e",
+    "tool": "run_experiment",
+    "hypothesis": "Fresh melody recognition plus independently validated serialization can recover the baseline's melody performance while retaining some of the parent's measured chord improvement.",
+    "evidence_ids": [
+      "dataset",
+      "baseline",
+      "evidence-82fd3c08",
+      "exp-1f137c273ec6",
+      "exp-1f137c273ec6-evaluation",
+      "decision-error-7"
+    ]
+  },
+  {
+    "record": "evidence/009-6a88c6383aa3.json",
+    "id": "exp-d6d6755b413e-evaluation",
+    "tool": "evaluate_experiment",
+    "hypothesis": "Audiveris startup failures prevented melody recovery and complete parseable transcriptions; retaining the chord OCR may preserve some ordered chord recognition, but does not establish a usable workflow.",
+    "evidence_ids": [
+      "exp-d6d6755b413e",
+      "exp-1f137c273ec6-evaluation",
+      "baseline"
+    ]
+  },
+  {
+    "record": "evidence/010-83f0ba0b1266.json",
+    "id": "exp-ee56f2b32016",
+    "tool": "run_experiment",
+    "hypothesis": "The immediate parent's total failure is primarily a repairable runtime dependency problem; resolving it will enable actual melody recognition and reveal whether its unchanged OCR gains survive complete-file integration.",
+    "evidence_ids": [
+      "baseline",
+      "evidence-82fd3c08",
+      "exp-1f137c273ec6-evaluation",
+      "exp-d6d6755b413e",
+      "exp-d6d6755b413e-evaluation"
+    ]
+  },
+  {
+    "record": "evidence/011-311a9ceb0c01.json",
+    "id": "exp-431cde96831a",
+    "tool": "run_experiment",
+    "hypothesis": "Missing GTK 3 is the immediate blocker to fresh Audiveris export; resolving it may enable measurable melody recognition, although subsequent runtime or transcription failures remain possible.",
+    "evidence_ids": [
+      "exp-ee56f2b32016",
+      "exp-d6d6755b413e-evaluation",
+      "exp-1f137c273ec6-evaluation",
+      "baseline",
+      "evidence-82fd3c08"
+    ]
+  },
+  {
+    "record": "evidence/012-7d08d4bc20e0.json",
+    "id": "final",
+    "tool": "finish",
+    "hypothesis": "The initial OCR stage offers a limited chord-label improvement, but no tested approach establishes a usable image-to-editable-kern workflow.",
+    "evidence_ids": [
+      "baseline",
+      "music-benchmark",
+      "exp-1f137c273ec6-evaluation",
+      "exp-d6d6755b413e-evaluation",
+      "exp-ee56f2b32016",
+      "exp-431cde96831a"
+    ]
+  }
+]

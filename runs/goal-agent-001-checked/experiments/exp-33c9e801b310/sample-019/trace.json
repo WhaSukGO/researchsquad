@@ -1,0 +1,14 @@
+{
+  "sample_index": 19,
+  "id": "사랑하셔서_1",
+  "kind": "audiveris_text_harmony",
+  "reference_access": false,
+  "source_image_sha256": "a18b3002935f808e29d96f6c604e2df8188be0291b26452091f2e9511555e620",
+  "output": "runs/goal-agent-001-checked/experiments/exp-33c9e801b310/sample-019/prediction.musicxml",
+  "status": "ok",
+  "recovered_words": [],
+  "source_prediction_sha256": "aedfaeaf66e58f00d32d9813742eb8705e9acc20bfabc4c02cd1f764de874a12",
+  "timing_audited": false,
+  "elapsed_seconds": 0.0018602079999254784,
+  "output_sha256": "0630573c9606dba1e4c932ffc50a9e8193c97e3b5ee61c3d8ce8b47339423c79"
+}

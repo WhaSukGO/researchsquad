@@ -1,0 +1,25 @@
+{
+  "id": "성령이여_4",
+  "engine": "audiveris-enlarged",
+  "source_image": "research/data/성령이여_4.png",
+  "source_image_sha256": "d4090f2cf407ee2f8a93c50cbba4ab89e910b1905629b9987dc42da2a3808bf5",
+  "input_sha256": "0ce051c872cd0b28b6ccb7089e831c7991e0cb77ad7166fd33ba5fd384830354",
+  "started_unix": 1793067031.257785,
+  "reference_access": false,
+  "runner_sha256": "ab8fa3e423930b13d2c94b4c190d1ac7f8d9c7975dcdaef8e10ebf6347e240b5",
+  "exit_code": 0,
+  "status": "ok",
+  "output": "runs/first-benchmark/audiveris-enlarged/sample-026/input.mxl",
+  "command": [
+    "/Users/geegle/development/whasuk/researchagent/.cache/audiveris-mount/Audiveris.app/Contents/MacOS/Audiveris",
+    "-batch",
+    "-transcribe",
+    "-export",
+    "-output",
+    "/Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-026",
+    "--",
+    "/Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-026/input.png"
+  ],
+  "elapsed_seconds": 5.227045292000184,
+  "output_sha256": "3261fae7a8a2066e3084285ee1701314c1f80adc5f220c797531ca18a9ebd435"
+}

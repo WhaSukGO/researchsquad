@@ -1,0 +1,130 @@
+{
+  "events": [
+    [
+      [
+        "F4"
+      ],
+      "1"
+    ],
+    [
+      [
+        "A4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "G4"
+      ],
+      "3/2"
+    ],
+    [
+      [
+        "F4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "F4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "E4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "F4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "G4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "C5"
+      ],
+      "5/2"
+    ],
+    [
+      [
+        "A4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "A4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "A4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "A4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "A4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "B4"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "C5"
+      ],
+      "1/2"
+    ],
+    [
+      [
+        "D5"
+      ],
+      "9/2"
+    ],
+    [
+      [
+        "REST"
+      ],
+      "4"
+    ],
+    [
+      [
+        "REST"
+      ],
+      "4"
+    ]
+  ],
+  "chords": [],
+  "parse_ok": true,
+  "render_ok": true,
+  "raw_render_ok": false,
+  "adapter_actions": [
+    "Restore canonical kern header and final terminator; musical tokens unchanged"
+  ],
+  "errors": [],
+  "raw_has_header": false,
+  "parser_warnings": "",
+  "render_pages": 1,
+  "renderer_log": ""
+}

@@ -1,0 +1,54 @@
+{
+  "type": "live_run_process_audit",
+  "status": "goal_unmet",
+  "goal_met": false,
+  "checks": {
+    "all_executed_decisions_schema_and_citations_valid": true,
+    "completion_gate_consistent": true,
+    "steps_within_budget": true,
+    "model_calls_within_budget": true,
+    "experiments_within_budget": true,
+    "original_files_unchanged": true,
+    "no_unexpected_model_side_tools": true,
+    "protected_research_artifacts_intact": true
+  },
+  "all_checks_passed": true,
+  "decisions": 12,
+  "invalid_decision_attempts": 1,
+  "tool_error_observations": 1,
+  "model_calls_reserved_or_attempted": 68,
+  "completed_model_receipts": 68,
+  "tokens": {
+    "input_tokens": 1353610,
+    "cached_input_tokens": 336640,
+    "output_tokens": 37676,
+    "reasoning_output_tokens": 7955
+  },
+  "active_seconds": 1954.1786155829996,
+  "evaluated_experiments": 2,
+  "limits": [
+    "Process checks do not prove musical correctness or calibrated confidence.",
+    "Citation IDs are checked, not semantic support of every claim.",
+    "Reserved calls can exceed completed receipts after failure. Monetary billing unavailable."
+  ],
+  "code_sha256": {
+    "goalagent/worker.py": "e56233e29ca4d299d935cb465191f4c768bc6eada999facceba1d558668c66d0",
+    "goalagent/coordinator.py": "36f14ea4f2f5d66d0f76d33f59d507618cde3b956d328364605ccbd502ae0b8a",
+    "goalagent/diagnostic_report.py": "b2bffe3a979dad0614c7d6a367b523f5f6013cd813827ac5afdd9ac40ae69f37",
+    "goalagent/runner.py": "01ec607afe077acd76f4209f69fdc42434f81364baf1d050a05b152bc046b30e",
+    "goalagent/audit.py": "1ff4505c97ff2f93d836ac238efe2575a333e1f4618a860694cc2c326817bc6e",
+    "goalagent/provider.py": "c50454f83f70857a4ac1915f8016d508be964fe88ccb75af1e9025f42a31ee45",
+    "goalagent/research.py": "7a4e06e6337d2960017101458185eda583950cf7f2da8eb4cf58889799ad896f",
+    "goalagent/roles.py": "8cce3698cade79be604d4d681fb1e303e557b1e0e998bf13d4d98b8e1efb0673",
+    "goalagent/fork.py": "344e46d3ba40f9a67d05dc8ed20d2a1895c90c91c18407f0ed796b56e88c78a8",
+    "goalagent/__init__.py": "25b51115269bca15b84c0ee18eae5e9d7a167c69cfbb91ee493653d658375ad8",
+    "goalagent/music.py": "232c26c4a8cbc52094c6db3e1aec5d80d9b39172abfd6f2ea3c9d474c60fcaa9",
+    "goalagent/sandbox.py": "9166fcd2ada32f0b2755656170f74390b7d658837911e1ea63df5d2df22f99ec",
+    "goalagent/inspect.py": "366dd43e5d6cf3e332d5a2eb761fef001e9816aedf87e822159089373f2950f1",
+    "goalagent/timing.py": "c7bf347db226e259ae344f6fadf38751ebd3fbde00d9293654044de71489c0c3",
+    "goalagent/blind_review.py": "8f6a060ee7a57728c0eb8d5dafc3462108e7cc3f1802c1fdb1c13f850691e712",
+    "goalagent/contracts.py": "6ff9c1b8a7637540166b827cd7be1470ea00d4f47c928fe54acae89258307bda",
+    "goalagent/blind_audit.py": "bf0677a1e0dace625ba22683a089b28537fdb2139c260231e05c3faa006d9451",
+    "goalagent/report.py": "5ed026d48ed5f49b834cffeeb471e1aa2b2333c32d4d4223f88bd2bd59a20274"
+  }
+}

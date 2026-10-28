@@ -1,0 +1,78 @@
+[
+  {
+    "id": "langchain_architecture",
+    "url": "https://www.youtube.com/watch?v=fqvbxkgU6vE",
+    "title": "Choosing the Right Multi-Agent Architecture",
+    "publisher": "LangChain",
+    "access": "YouTube captions",
+    "reviewed": "Entire retrieved transcript, 00:00 to 06:04",
+    "local_file": "fqvbxkgU6vE.json",
+    "takeaway": "Start with a single agent and well-designed tools; choose additional coordination only for demonstrated needs.",
+    "retrieved": "2026-10-27",
+    "sha256": "931cd34b75ddd1734d7a7a90ed29b653a45d72ace8604272476efe6b834a02fd",
+    "limitations": [
+      "Transcripts can contain recognition errors.",
+      "Video frames and on-screen demonstrations were not visually reviewed.",
+      "Speaker experience and product claims are not independent proof of performance on the supplied scores."
+    ],
+    "published": "2026-01-15T10:01:00-08:00",
+    "date_type": "YouTube publishDate and uploadDate metadata, verified 2026-10-27"
+  },
+  {
+    "id": "aie_factory",
+    "url": "https://www.youtube.com/watch?v=ow1we5PzK-o",
+    "title": "The Multi-Agent Architecture That Actually Ships — Luke Alvoeiro, Factory",
+    "publisher": "AI Engineer",
+    "access": "YouTube captions",
+    "reviewed": "Entire retrieved transcript, approximately 18 minutes",
+    "local_file": "ow1we5PzK-o.json",
+    "takeaway": "Define validation contracts before implementation; preserve structured handoffs; isolate behavior validation; coordinate shared edits serially.",
+    "retrieved": "2026-10-27",
+    "sha256": "a29932294e0f4d533def6bad7c305ca7183fe7859c908ab384b0ed36c552c051",
+    "limitations": [
+      "Transcripts can contain recognition errors.",
+      "Video frames and on-screen demonstrations were not visually reviewed.",
+      "Speaker experience and product claims are not independent proof of performance on the supplied scores."
+    ],
+    "published": "2026-05-06T08:00:06-07:00",
+    "date_type": "YouTube publishDate and uploadDate metadata, verified 2026-10-27"
+  },
+  {
+    "id": "aie_arize",
+    "url": "https://ai.engineer/nyc/2026/talks/arize",
+    "title": "What does an AI engineer do?",
+    "publisher": "AI Engineer",
+    "published": "2026-10-13",
+    "access": "Publisher-hosted transcript",
+    "reviewed": "Entire session transcript, livestream 01:00:44 to 01:15:51",
+    "local_file": "aie_arize.txt",
+    "takeaway": "Save traces and durable progress; compare models; evaluate automated judges against human judgments.",
+    "retrieved": "2026-10-27",
+    "sha256": "5e578910054ff307313e410ad288794f4ac0bdf43e8af14de59ff0e8b3de9f98",
+    "limitations": [
+      "Transcripts can contain recognition errors.",
+      "Video frames and on-screen demonstrations were not visually reviewed.",
+      "Speaker experience and product claims are not independent proof of performance on the supplied scores."
+    ],
+    "date_type": "Session date shown by the official conference page; not a separately verified YouTube upload date"
+  },
+  {
+    "id": "aie_voss",
+    "url": "https://www.youtube.com/watch?v=qZj7sqmidqA",
+    "title": "From Vibes to Production: Evaluating and Shipping AI Agents That Work 101 — Laurie Voss, Arize AI",
+    "publisher": "AI Engineer",
+    "access": "YouTube captions",
+    "reviewed": "Selected sections only: 07:20–11:10, 37:30–45:30, 47:30–51:20. Not a full workshop review.",
+    "local_file": "qZj7sqmidqA.json",
+    "takeaway": "Inspect failures before automating evaluators; use code checks for objective conditions. The speaker labels one illustrated error table as random demonstration data, so it must not be treated as empirical evidence.",
+    "retrieved": "2026-10-27",
+    "sha256": "43a5d7e2d0ebfd49254895a58108324f350dee0d65c7a639e473d57aea207a9d",
+    "limitations": [
+      "Transcripts can contain recognition errors.",
+      "Video frames and on-screen demonstrations were not visually reviewed.",
+      "Speaker experience and product claims are not independent proof of performance on the supplied scores."
+    ],
+    "published": "2026-10-05T15:00:36-07:00",
+    "date_type": "YouTube publishDate and uploadDate metadata, verified 2026-10-27"
+  }
+]

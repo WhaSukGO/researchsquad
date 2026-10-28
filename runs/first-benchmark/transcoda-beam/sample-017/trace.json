@@ -1,0 +1,25 @@
+{
+  "id": "능력의_1",
+  "engine": "transcoda-beam",
+  "source_image": "research/data/능력의_1.png",
+  "source_image_sha256": "8f13d1617a03312ecad7f3db34d729e4b8625d2419082d32d1117d70a50bc455",
+  "input_sha256": "f0b203b1c07cd96b55da8fbe23e34e1f35f151ae27bc8af976d30c5ee1a9bada",
+  "started_unix": 1793067474.972735,
+  "reference_access": false,
+  "runner_sha256": "fb381ab520608799849a59640fd52d510ad52bf57b91f78d8d670d9aabbd5141",
+  "status": "ok",
+  "output": "runs/first-benchmark/transcoda-beam/sample-017/prediction.krn",
+  "device": "mps",
+  "tokens": 122,
+  "eos_reached": true,
+  "settings": {
+    "num_beams": 3,
+    "max_length": 2048,
+    "max_time": 120,
+    "repetition_penalty": 1.1,
+    "do_sample": false,
+    "revision": "b529f8aa5d996d9224df3395b5b92d0867343c91"
+  },
+  "elapsed_seconds": 5.685653375000129,
+  "output_sha256": "edb9f537a7983af8a1fd8c3186ed01ec7238f6028139b88fcab3011bc2b5e489"
+}

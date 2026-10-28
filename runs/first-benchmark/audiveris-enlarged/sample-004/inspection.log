@@ -1,0 +1,16 @@
+[Error] Adding 'beam' to a 'chord'
+[Error] MusicXML import: Chord starting point has not been found
+[Warning] tie with @xml:id p14wrg6t will not get rendered as it has identical values in @startid and @endid
+[Warning] tie 'p14wrg6t' is ignored, since start 'otpse11' does not occur temporally before end 'otpse11'.
+[Warning] In HumdrumInput::removeBeam: Error removing beam
+[Warning]    Element stack: 
+[Warning]       2:	tuplet
+[Warning]       1:	beam
+[Warning]       0:	layer
+[Warning] In HumdrumInput::removeTuplet: Error removing tuplet
+[Warning]    Last element is: beam
+[Warning]    Element stack: 
+[Warning]       3:	beam
+[Warning]       2:	tuplet
+[Warning]       1:	beam
+[Warning]       0:	layer

@@ -1,0 +1,88 @@
+{
+  "type": "post_run_human_readable_assessment",
+  "model": "gpt-6-astra",
+  "live_model_calls": true,
+  "active_minutes": 32.569643593049996,
+  "model_calls_attempted": 68,
+  "goal_met": false,
+  "scope": "Same seven development excerpts; 130 reference melody events and 38 chord labels. Not held-out.",
+  "baseline": "audiveris-enlarged",
+  "baseline_melody_error_rate": 0.6692307692307692,
+  "baseline_chord_error_rate": 0.7894736842105263,
+  "experiments": [
+    {
+      "name": "Chord OCR with fixed-melody assumption",
+      "experiment_id": "exp-1f137c273ec6",
+      "mode": "explore",
+      "parent": null,
+      "worker_steps": 16,
+      "predictions_present": 7,
+      "parseable": 0,
+      "melody_errors": 130,
+      "melody_error_rate": 1.0,
+      "chord_errors": 25,
+      "chord_matches": 13,
+      "chord_error_rate": 0.6578947368421053,
+      "worker_summary": "Implemented and ran conservative enlarged-image chord OCR with strict harmony conversion. Seven outputs contain 15 accepted OCR chord candidates; these are not verified matches. All seven enlarged Audiveris melody baselines were unavailable, so melody preservation and non-regression could not be verified; incomplete outputs count as failures. Synthetic chord round-trip, root/slash-bass transposition, kern parsing and melody transposition checks passed. Protected transcription metrics were unavailable, so improvement over baseline is unmeasured. Timing remains unaudited. Goal unmet."
+    },
+    {
+      "name": "Fresh Audiveris + chord integration",
+      "experiment_id": "exp-d6d6755b413e",
+      "mode": "improve",
+      "parent": "exp-1f137c273ec6",
+      "worker_steps": 15,
+      "predictions_present": 7,
+      "parseable": 0,
+      "melody_errors": 130,
+      "melody_error_rate": 1.0,
+      "chord_errors": 38,
+      "chord_matches": 0,
+      "chord_error_rate": 1.0,
+      "worker_summary": "Integration failed within budget. Retained parent chord OCR unchanged and implemented fresh Audiveris execution, melody conversion and validation paths. Java/native-library startup failures prevented MusicXML exports for all seven images; all seven outputs are explicitly marked failure placeholders, with no invented melody. Complete-file parsing and transposition on recognized melody could not be tested. Per-image diagnostics record these failures. Parent checks validated syntax and synthetic examples rather than complete generated transcriptions; the exact protected-reader failure remains unconfirmed. Chord onset alignment remains unaudited. Protected error comparisons are unavailable, so no improvement or non-regression is claimed. Goal unmet."
+    },
+    {
+      "name": "Bounded Java/native-library repair",
+      "experiment_id": "exp-ee56f2b32016",
+      "mode": "improve",
+      "parent": "exp-d6d6755b413e",
+      "worker_steps": 11,
+      "predictions_present": 0,
+      "parseable": null,
+      "melody_errors": null,
+      "melody_error_rate": null,
+      "chord_errors": null,
+      "chord_matches": null,
+      "chord_error_rate": null,
+      "worker_summary": "Preflight failed: restoring Java 25.0.5 and Audiveris 5.11.0 exposed java.lang.UnsatisfiedLinkError: Unable to load library 'gtk-3'; libgtk-3.so was missing. No MusicXML export or predictions were produced. Preserved launch commands, runtime diagnostics and exact exception. OCR thresholds and melody conversion remain unchanged. Complete-file parsing and transposition of actual notes, chord roots and slash basses remain untested; chord timing remains unaudited. Goal unmet; no musical improvement claimed."
+    },
+    {
+      "name": "Targeted GTK repair",
+      "experiment_id": "exp-431cde96831a",
+      "mode": "debug",
+      "parent": "exp-ee56f2b32016",
+      "worker_steps": 14,
+      "predictions_present": 0,
+      "parseable": null,
+      "melody_errors": null,
+      "melody_error_rate": null,
+      "chord_errors": null,
+      "chord_matches": null,
+      "chord_error_rate": null,
+      "worker_summary": "GTK native loading succeeded after rootless extraction of Debian 13 arm64 packages: libgtk-3-0t64 and libgtk-3-common 3.24.49-3, with libglib2.0-0t64 2.84.4-3~deb13u5. A fresh Python process loaded libgtk-3.so.0 and queried its runtime version. System installation was blocked by apt lock-directory permissions. The export wrapper then raised subprocess.TimeoutExpired after its remaining 3.4308305588069743 seconds; the original 240-second deadline expired at 240.016 seconds. No MusicXML export or kern predictions were produced. This verifies native loading through ctypes, not successful Java/Audiveris integration; no subsequent native blocker was established. Existing Java 25/Audiveris 5.11 configuration, OCR thresholds and melody conversion were retained. All seven required predictions remain missing and count as failures. Complete-output parsing and actual-output major-second transposition checks for melody, chord roots and slash basses remain untested. Chord timing remains unaudited. No musical improvement or regression rate was measured; the transcription goal remains unmet."
+    }
+  ],
+  "findings": {
+    "measurement_informed_assignment_changes": true,
+    "fundamentally_different_recognition_method_tested": false,
+    "end_to_end_transcription_improved": false,
+    "partial_chord_label_improvement": "Errors 30 -> 25; matches 8 -> 13, but melody regressed and 0/7 files parsed.",
+    "integrity_audit_passed": true
+  },
+  "observed_limitations": [
+    "Initial worker assignment required baseline melody artifacts that were not supplied.",
+    "Child branches inherited source/configuration but not installed runtimes, dependencies or all diagnostics.",
+    "Repeated runtime repairs consumed all four experiment slots; no alternate recognition family was tested.",
+    "Local syntax/synthetic checks initially failed to detect missing melody; protected evaluation rejected the result."
+  ],
+  "interpretation": "The coordinator reacted to measured failures and narrowed assignments, but this run does not establish successful self-improvement or a useful end-to-end transcription system."
+}

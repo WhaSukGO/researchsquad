@@ -1,0 +1,11 @@
+{
+  "sample_index": 29,
+  "id": "주품에_1",
+  "kind": "worker",
+  "reference_access": false,
+  "status": "missing_or_invalid",
+  "error": "[Errno 2] No such file or directory: '/Users/geegle/development/whasuk/researchagent/runs/music-research-live-20261028/experiments/exp-ee56f2b32016/worker/workspace/output/sample-029.krn'",
+  "output": "/Users/geegle/development/whasuk/researchagent/runs/music-research-live-20261028/experiments/exp-ee56f2b32016/sample-029/prediction.krn",
+  "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "source_image_sha256": "d5f7503b2990726b767c11babf0c0ebe06aa462d0317baf54e82d3233668bf26"
+}

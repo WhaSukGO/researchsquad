@@ -1,0 +1,11 @@
+{
+  "sample_index": 1,
+  "id": "내이름으로_1",
+  "kind": "worker",
+  "reference_access": false,
+  "status": "ok",
+  "error": null,
+  "output": "/Users/geegle/development/whasuk/researchagent/runs/music-research-live-20261028/experiments/exp-1f137c273ec6/sample-001/prediction.krn",
+  "output_sha256": "0485686bafd62dfaa34b8f6b071a7951a2f42f1fed1c96fe149f461db0f3b7fd",
+  "source_image_sha256": "0d8d864f885c302aafb273d9d5e2febb3dc768ee65faca53a9c82dccf877a3a1"
+}

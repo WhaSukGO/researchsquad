@@ -1,0 +1,85 @@
+APT_LIST_FILES ['/workspace/apt-lists/deb.debian.org_debian_dists_trixie-updates_main_binary-arm64_Packages.lz4', '/workspace/apt-lists/partial', '/workspace/apt-lists/deb.debian.org_debian-security_dists_trixie-security_InRelease', '/workspace/apt-lists/deb.debian.org_debian-security_dists_trixie-security_main_binary-arm64_Packages.lz4', '/workspace/apt-lists/lock', '/workspace/apt-lists/deb.debian.org_debian_dists_trixie-updates_InRelease', '/workspace/apt-lists/auxfiles', '/workspace/apt-lists/deb.debian.org_debian_dists_trixie_InRelease', '/workspace/apt-lists/deb.debian.org_debian_dists_trixie_main_binary-arm64_Packages.lz4']
+OCR_STATUS 0 tesseract 5.5.0
+ leptonica-1.84.1
+  libgif 5.2.2 : libjpeg 6b (libjpeg-turbo 2.1.5) : libpng 1.6.48 : libtiff 4.7.0 : zlib 1.3.1 : libwebp 1.5.0 : libopenjp2 2.5.3
+ Found NEON
+ Found OpenMP 201511
+ Fo 
+sample-001-chord-crop.png PSM 6 WORDS 5	1	1	1	1	1	103	104	47	64	31.005672	eo
+5	1	1	1	1	2	367	67	58	75	0.000000	Cc
+5	1	1	1	1	3	977	34	86	134	72.981491	Fin
+5	1	1	1	1	4	1775	37	106	119	93.671631	Dm
+5	1	1	1	1	5	2135	42	91	100	66.013161	G’
+5	1	1	1	1	6	2559	67	56	76	59.110912	Cc
+sample-001-chord-crop.png PSM 11 WORDS 5	1	1	1	1	1	977	63	38	72	92.627457	E
+5	1	2	1	1	1	2135	67	59	75	93.285515	G
+5	1	3	1	1	1	2198	42	28	51	95.173729	7
+5	1	4	1	1	1	2559	67	56	76	64.966591	G
+sample-006-chord-crop.png PSM 6 WORDS 5	1	1	1	1	1	0	75	97	129	33.359318	7
+sample-006-chord-crop.png PSM 11 WORDS 
+sample-012-chord-crop.png PSM 6 WORDS 5	1	1	1	1	1	53	150	47	46	0.000000	.
+5	1	1	1	1	2	520	78	68	81	91.264160	C
+5	1	1	1	1	3	1023	78	179	94	96.014076	G/B
+5	1	1	1	1	4	1456	72	195	85	57.695908	Am/
+5	1	1	1	1	5	2279	68	265	116	81.823883	Fmaj’
+5	1	1	1	1	6	2888	78	179	95	95.613945	C/G
+5	1	1	1	1	7	3303	78	74	81	92.007690	G
+sample-012-chord-crop.png PSM 11 WORDS 5	1	1	1	1	1	520	78	68	81	89.277740	C
+5	1	2	1	1	1	1023	78	180	94	96.248184	G/B
+5	1	3	1	1	1	1456	72	195	85	65.503670	Am/
+5	1	4	1	1	1	2279	72	265	108	88.914124	Fmaj’
+5	1	5	1	1	1	2888	78	179	95	95.969688	C/G
+5	1	6	1	1	1	3303	78	74	81	92.939682	G
+sample-017-chord-crop.png PSM 6 WORDS 5	1	1	1	1	1	92	124	59	44	0.000000	~~
+5	1	1	1	1	2	299	80	165	88	21.430492	CC.
+5	1	1	1	1	3	551	159	110	9	80.613197	...
+5	1	1	1	1	4	718	55	243	113	49.365467	GG’
+5	1	1	1	1	5	1067	56	159	98	43.789116	Faro
+5	1	1	1	1	6	1306	55	330	101	13.351240	CBC’
+5	1	1	1	1	7	1691	81	146	87	20.435852	fF
+5	1	1	1	1	8	1929	54	482	114	0.000000	—GeG
+5	1	1	1	1	9	2472	79	192	89	57.975269	Ce
+5	1	1	1	1	10	2761	55	232	113	13.152380	DaG’
+sample-017-chord-crop.png PSM 11 WORDS 5	1	1	1	1	1	299	80	55	75	74.588379	C
+5	1	2	1	1	1	355	149	111	19	14.422255	»-qioio\t\'
+5	1	2	1	1	2	551	149	113	19	37.603088	=’
+5	1	3	1	1	1	718	55	243	113	44.218567	GurG’
+5	1	3	1	1	2	1067	56	159	98	30.068445	Foc
+5	1	3	1	1	3	1306	55	330	101	55.663918	CBIcC’
+5	1	3	1	1	4	1691	81	146	87	33.030022	Fo
+5	1	3	1	1	5	1933	137	70	31	15.217209	—
+5	1	3	1	1	6	2070	56	143	112	75.730392	Ga
+5	1	3	1	1	7	2262	54	149	114	10.261726	G’
+5	1	3	1	1	8	2472	79	192	89	36.866531	Ce
+5	1	3	1	1	9	2761	55	232	113	36.866531	 DmG’
+sample-019-chord-crop.png PSM 6 WORDS 5	1	1	1	1	1	333	43	67	77	78.972763	C
+5	1	1	1	1	2	1594	44	257	95	87.850166	Dm/C
+5	1	1	1	1	3	2220	43	62	77	87.219269	C
+5	1	1	1	1	4	3205	41	276	98	8.641615	Fm7/C
+5	1	1	1	2	1	22	158	3748	58	18.387337	A
+sample-019-chord-crop.png PSM 11 WORDS 5	1	1	1	1	1	2220	43	65	77	0.000000	#
+5	1	2	1	1	1	1594	44	257	95	84.026291	Dm/C
+5	1	3	1	1	1	3205	41	276	98	71.064781	Fm°/C
+sample-023-chord-crop.png PSM 6 WORDS 5	1	1	1	1	1	63	121	39	39	17.615833	~_
+5	1	1	1	1	2	277	63	55	66	16.504717	©
+5	1	1	1	1	3	1108	63	148	77	94.814888	G/B
+5	1	1	1	1	4	1536	64	127	65	96.908646	Am
+5	1	1	1	1	5	2414	63	213	78	78.191368	Em/G
+sample-023-chord-crop.png PSM 11 WORDS 5	1	1	1	1	1	1108	63	148	77	96.480621	G/B
+5	1	2	1	1	1	1536	64	127	65	96.694763	Am
+5	1	3	1	1	1	2414	63	213	78	42.707985	EmM/G
+sample-029-chord-crop.png PSM 6 WORDS 5	1	1	1	1	1	99	105	43	63	63.545769	P
+5	1	1	1	1	2	398	32	58	111	91.871216	C
+5	1	1	1	1	3	593	68	133	100	56.788658	GR
+5	1	1	1	1	4	920	45	104	96	65.812469	Ad
+5	1	1	1	1	5	1664	69	98	99	58.692478	F,
+5	1	1	1	1	6	1978	69	163	73	61.445381	Dre
+5	1	1	1	1	7	2306	46	139	97	49.080738	Gas
+sample-029-chord-crop.png PSM 11 WORDS 5	1	1	1	1	1	433	32	23	6	69.096512	—
+5	1	2	1	1	1	99	105	45	63	10.810833	P
+5	1	2	1	1	2	398	68	55	75	86.038437	C
+5	1	2	1	1	3	593	68	133	100	58.778206	Ge
+5	1	2	1	1	4	920	45	104	96	62.130894	Am
+5	1	2	1	1	5	1664	69	35	72	43.256836	F
+5	1	2	1	1	6	1978	69	163	73	64.095520	Dire
+5	1	2	1	1	7	2306	46	139	97	59.442932	Gar

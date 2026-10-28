@@ -1,0 +1,25 @@
+{
+  "id": "내이름으로_1",
+  "engine": "transcoda-beam",
+  "source_image": "research/data/내이름으로_1.png",
+  "source_image_sha256": "0d8d864f885c302aafb273d9d5e2febb3dc768ee65faca53a9c82dccf877a3a1",
+  "input_sha256": "204af9a02a775620bfab96a214f2950621deeab62f58b6c615c31f23147d9ae7",
+  "started_unix": 1793067449.445295,
+  "reference_access": false,
+  "runner_sha256": "fb381ab520608799849a59640fd52d510ad52bf57b91f78d8d670d9aabbd5141",
+  "status": "ok",
+  "output": "runs/first-benchmark/transcoda-beam/sample-001/prediction.krn",
+  "device": "mps",
+  "tokens": 85,
+  "eos_reached": true,
+  "settings": {
+    "num_beams": 3,
+    "max_length": 2048,
+    "max_time": 120,
+    "repetition_penalty": 1.1,
+    "do_sample": false,
+    "revision": "b529f8aa5d996d9224df3395b5b92d0867343c91"
+  },
+  "elapsed_seconds": 11.465785249999954,
+  "output_sha256": "69900fb93e9a21183c9eae8d912ba0a018129fd4bdeb0534e9c5f02c4c479878"
+}

@@ -1,0 +1,16 @@
+{
+  "status": "ok",
+  "output": "runs/control/prediction.krn",
+  "device": "mps",
+  "tokens": 203,
+  "eos_reached": true,
+  "settings": {
+    "num_beams": 1,
+    "max_length": 2048,
+    "max_time": 120,
+    "repetition_penalty": 1.1,
+    "do_sample": false,
+    "revision": "b529f8aa5d996d9224df3395b5b92d0867343c91"
+  },
+  "elapsed_seconds": 7.7107776249999915
+}

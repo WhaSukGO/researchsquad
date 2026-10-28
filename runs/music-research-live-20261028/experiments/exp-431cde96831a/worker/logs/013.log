@@ -1,0 +1,138 @@
+
+FILE diagnostics/gtk-rootless-verification.log
+{"loaded": true, "gtk_version": [3, 24, 49]}
+
+
+FILE diagnostics/gtk-export-preflight.log
+
+
+FILE diagnostics/gtk-export-preflight.json
+MISSING
+
+PREFLIGHT COMMAND RECEIPTS
+3a1.8.2-1_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-libxi6_2%3a1.8.2-1_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/libxinerama1_2%3a1.1.4-3+b4_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-libxinerama1_2%3a1.1.4-3+b4_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/libxkbcommon0_1.7.0-2_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-libxkbcommon0_1.7.0-2_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/libxml2_2.12.7+dfsg+really2.9.14-2.1+deb13u3_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-libxml2_2.12.7+dfsg+really2.9.14-2.1+deb13u3_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/libxrandr2_2%3a1.5.4-1+b3_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-libxrandr2_2%3a1.5.4-1+b3_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/libxrender1_1%3a0.9.12-1_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-libxrender1_1%3a0.9.12-1_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/procps_2%3a4.0.4-9_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-procps_2%3a4.0.4-9_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/shared-mime-info_2.4-5+b2_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-shared-mime-info_2.4-5+b2_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/systemd-sysv_257.13-1~deb13u1_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-systemd-sysv_257.13-1~deb13u1_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/systemd_257.13-1~deb13u1_arm64.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-systemd_257.13-1~deb13u1_arm64.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "dpkg-deb",
+      "-x",
+      "/workspace/tmp/gtk-rootless/cache/archives/xkb-data_2.42-1_all.deb",
+      "/workspace/tmp/gtk-rootless/root"
+    ],
+    "log": "/workspace/diagnostics/gtk-extract-xkb-data_2.42-1_all.deb.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/usr/local/bin/python",
+      "-c",
+      "import ctypes,json;g=ctypes.CDLL('libgtk-3.so.0');print(json.dumps({'loaded':True,'gtk_version':[g.gtk_get_major_version(),g.gtk_get_minor_version(),g.gtk_get_micro_version()]}))"
+    ],
+    "log": "/workspace/diagnostics/gtk-rootless-verification.log",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/usr/local/bin/python",
+      "/workspace/gtk_export_preflight.py"
+    ],
+    "log": "/workspace/diagnostics/gtk-export-preflight.log",
+    "exception": "Traceback (most recent call last):\n  File \"/workspace/gtk_rootless_preflight.py\", line 13, in run\n    p=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,timeout=remaining(),env=env);entry['returncode']=p.returncode\n      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 1209, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 2141, in _communicate\n    self.wait(timeout=self._remaining_time(endtime))\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 1264, in wait\n    return self._wait(timeout=timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 2045, in _wait\n    raise TimeoutExpired(self.args, timeout)\nsubprocess.TimeoutExpired: Command '['/usr/local/bin/python', '/workspace/gtk_export_preflight.py']' timed out after 3.4308305588069743 seconds\n"
+  }
+]
+
+EXPORTS []

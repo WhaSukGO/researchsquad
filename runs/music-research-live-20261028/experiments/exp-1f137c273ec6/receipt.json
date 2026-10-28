@@ -1,0 +1,27 @@
+{
+  "id": "exp-1f137c273ec6",
+  "config": {
+    "mode": "explore",
+    "parent": null,
+    "approach": "Keep enlarged Audiveris melody recognition fixed and add a conservative image-derived chord-text recognition and structured harmony conversion stage.",
+    "objective": "On the seven first-per-song pilot excerpts, recover missing printed chord symbols from the region above the staff using enlarged-image OCR and a strict chord grammar. Convert roots, qualities, explicit extensions and slash basses into a parseable editable kern harmony spine. Preserve existing melody events; record chord bounding boxes and proposed onset alignment separately, marking ambiguous timing for review. Do not infer absent symbols from musical plausibility or consult references.",
+    "success_criteria": "Produce sealed parseable predictions for all seven pilot images, source code and per-image diagnostics distinguishing OCR failures, unsupported chord syntax and uncertain onset alignment. Compare protected chord edit error and matches with enlarged Audiveris baseline (30/38 errors, 8 matches), and verify melody error does not increase from 87/130 errors. Include round-trip parse checks and synthetic transposition checks for melody, chord roots and slash basses; distinguish these checks from measured transcription correctness. Report timing as unaudited."
+  },
+  "samples": 7,
+  "statuses": {
+    "ok": 7,
+    "missing_or_invalid": 0
+  },
+  "worker": {
+    "status": "submitted",
+    "steps": 16,
+    "last_observation": {
+      "summary": "Implemented and ran conservative enlarged-image chord OCR with strict harmony conversion. Seven outputs contain 15 accepted OCR chord candidates; these are not verified matches. All seven enlarged Audiveris melody baselines were unavailable, so melody preservation and non-regression could not be verified; incomplete outputs count as failures. Synthetic chord round-trip, root/slash-bass transposition, kern parsing and melody transposition checks passed. Protected transcription metrics were unavailable, so improvement over baseline is unmeasured. Timing remains unaudited. Goal unmet.",
+      "source_files": [
+        "main.py"
+      ]
+    }
+  },
+  "evaluated": false,
+  "note": "Frozen worker output; only protected evaluation measures accuracy."
+}

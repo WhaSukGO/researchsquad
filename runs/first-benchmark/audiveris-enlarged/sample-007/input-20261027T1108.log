@@ -1,0 +1,56 @@
+2026-10-27 11:08:25,147 INFO [input]                 Book.java:560  | 1 sheet in /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-007/input.png
+2026-10-27 11:08:25,233 INFO []                 Book.java:2565 | Stored /book.xml
+2026-10-27 11:08:25,233 INFO []                 Book.java:2525 | Book stored as /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-007/input.omr
+2026-10-27 11:08:25,237 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-10-27 11:08:25,238 INFO [input]       StepMonitoring.java:98   | LOAD
+2026-10-27 11:08:25,284 INFO [input]            SheetStub.java:1278 | Loaded image #1 1620x336 from /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-007/input.png
+2026-10-27 11:08:25,286 INFO [input]            ImageUtil.java:152  | Converting max RGB to gray
+2026-10-27 11:08:25,306 INFO [input]       StepMonitoring.java:98   | BINARY
+2026-10-27 11:08:25,369 INFO [input]       StepMonitoring.java:98   | SCALE
+2026-10-27 11:08:25,375 INFO [input]         ScaleBuilder.java:254  | Beam  guessed height: 11 -- 0.25 of [9..17] range
+2026-10-27 11:08:25,375 INFO [input]         ScaleBuilder.java:271  | Beam measured height: 16 -- 0.88 of [9..17] range at 513% of needed quorum
+2026-10-27 11:08:25,375 INFO [input]         ScaleBuilder.java:401  | Normalized black jitter: 15.79 %
+2026-10-27 11:08:25,376 INFO [input]            ScaleStep.java:65   | Scale{ interline(17,19,20) line(4,6,7) beam(16)}
+2026-10-27 11:08:25,376 INFO [input]       StepMonitoring.java:98   | GRID
+2026-10-27 11:08:25,480 INFO [input]       LinesRetriever.java:1508 | Global slope: 0.00000
+2026-10-27 11:08:25,492 INFO [input]    ClustersRetriever.java:326  | Retrieved raw line clusters: 1 of sizes [5] with interline(17,19,20)
+2026-10-27 11:08:25,521 INFO [input]            PeakGraph.java:310  | Systems: #1[1]
+2026-10-27 11:08:25,576 INFO [input]        SystemManager.java:800  | 1 part along 1 system
+2026-10-27 11:08:25,577 INFO [input]                 Book.java:543  | Created scores: [{Score 1}]
+2026-10-27 11:08:25,577 INFO [input]       StepMonitoring.java:98   | HEADERS
+2026-10-27 11:08:26,431 INFO [input]       StepMonitoring.java:98   | STEM_SEEDS
+2026-10-27 11:08:26,440 INFO [input]        StemSeedsStep.java:86   | stem(6 max:7)
+2026-10-27 11:08:26,457 INFO [input]       StepMonitoring.java:98   | BEAMS
+2026-10-27 11:08:26,914 INFO [input]       StepMonitoring.java:98   | LEDGERS
+2026-10-27 11:08:26,948 INFO [input]       StepMonitoring.java:98   | HEADS
+2026-10-27 11:08:27,359 INFO [input]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:-0.3,R:0.1]}
+2026-10-27 11:08:27,359 INFO [input]       StepMonitoring.java:98   | STEMS
+2026-10-27 11:08:27,605 INFO [input]       StepMonitoring.java:98   | REDUCTION
+2026-10-27 11:08:27,677 INFO [input]        ReductionStep.java:105  | Stems free length median value: 68 pixels, 3.6 interlines
+2026-10-27 11:08:27,679 INFO [input]       StepMonitoring.java:98   | CUE_BEAMS
+2026-10-27 11:08:27,679 INFO [input]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2026-10-27 11:08:27,679 INFO [input]       StepMonitoring.java:98   | TEXTS
+2026-10-27 11:08:27,813 INFO [input]       StepMonitoring.java:98   | MEASURES
+2026-10-27 11:08:27,816 INFO [input]                 Page.java:307  | 4 raw measures: [4 in system#1]
+2026-10-27 11:08:27,817 INFO [input]       StepMonitoring.java:98   | CHORDS
+2026-10-27 11:08:27,822 INFO [input]       StepMonitoring.java:98   | CURVES
+2026-10-27 11:08:27,973 INFO [input]         SlursBuilder.java:240  | Slurs: 5
+2026-10-27 11:08:27,982 INFO [input]      SegmentsBuilder.java:155  | Segments: 1
+2026-10-27 11:08:27,988 INFO [input]       StepMonitoring.java:98   | SYMBOLS
+2026-10-27 11:08:28,194 INFO [input]       StepMonitoring.java:98   | LINKS
+2026-10-27 11:08:28,200 INFO [input]             KeyInter.java:1198 | No effective key before AlterInter#1810{(0.144) staff:1 NATURAL pitch:-2.0}
+2026-10-27 11:08:28,210 INFO [input]       StepMonitoring.java:98   | RHYTHMS
+2026-10-27 11:08:28,238 INFO [input]       StepMonitoring.java:98   | PAGE
+2026-10-27 11:08:28,242 WARN [input]         MeasureFixer.java:343  | System#1 No target duration for measures local IDs [1, 2, 3, 4], please check time signatures
+2026-10-27 11:08:28,243 INFO [input]                 Book.java:2584 | Book{input} storing
+2026-10-27 11:08:28,265 INFO [input]                 Book.java:2565 | Stored /book.xml
+2026-10-27 11:08:28,280 INFO [input]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-10-27 11:08:28,500 INFO [input]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-10-27 11:08:28,500 INFO [input]                 Book.java:2525 | Book stored as /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-007/input.omr
+2026-10-27 11:08:28,501 INFO [input]            SheetStub.java:1655 | Sheet disposed
+2026-10-27 11:08:28,519 INFO [input]                 Book.java:2050 | End of Stub#1
+2026-10-27 11:08:28,520 INFO [input]                 Book.java:2057 | End of Book{input}
+2026-10-27 11:08:28,586 INFO [input]            SheetStub.java:1000 | Loaded /sheet#1/sheet#1.xml
+2026-10-27 11:08:28,831 INFO [input]      PartwiseBuilder.java:2707 | Exporting sheet(s): [#1]
+2026-10-27 11:08:28,862 INFO [input]        ScoreExporter.java:164  | Score input exported to /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-007/input.mxl
+2026-10-27 11:08:28,884 INFO [input]                Score.java:181  | Closing {Score 1}

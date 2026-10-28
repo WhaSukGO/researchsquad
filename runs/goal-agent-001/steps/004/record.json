@@ -1,0 +1,47 @@
+{
+  "step": 4,
+  "decision": {
+    "tool": "read_evidence",
+    "argument": "music-benchmark",
+    "why": "Read the domain-specific format audit before choosing an experiment targeting the enlarged Audiveris baseline’s 66.9% melody error and 30 missing pilot chords.",
+    "hypothesis": "The audit may identify whether omitted chord symbols remain available as OCR text and whether symbolic-format failures contribute to melody errors.",
+    "expected_observation": "Evidence about recoverable chord text and notation conversion limitations; absent or corrupted OCR chord text would weaken the case for text-to-harmony extraction.",
+    "evidence_ids": [
+      "dataset",
+      "baseline",
+      "source-catalog"
+    ]
+  },
+  "observation": {
+    "id": "evidence-82fd3c08",
+    "sources": [
+      {
+        "id": "music-benchmark",
+        "domain": "optical_music_recognition",
+        "title": "Supplied-score benchmark and format audit",
+        "claim": "32 development excerpts, seven songs. Enlarged Audiveris recovers 47/200 structured chords; Transcoda omits the chord spine and sometimes repeats notes. Plain OCR words are not yet promoted to harmony. Some outputs fail parsing.",
+        "application": "Separate image/model failures from output-format and text-to-harmony integration. Compare fixed paired inputs.",
+        "limit": "References unaudited; chord timing and human correction time unmeasured. No agent comparison.",
+        "url": "runs/first-benchmark/results.json"
+      }
+    ]
+  },
+  "elapsed_seconds": 0.015283499998986372,
+  "model_metadata": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "low",
+    "elapsed_seconds": 8.979744583000866,
+    "exit_code": 0,
+    "usage": {
+      "input_tokens": 14386,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 128,
+      "reasoning_output_tokens": 0
+    },
+    "prompt_sha256": "63dc53c2c6b932f1188ce4383170a0bb1e8d7b7569fe2193964cf237ad3fd670",
+    "unexpected_tool_events": [],
+    "billing": "Uses existing Codex account; monetary cost unavailable"
+  }
+}

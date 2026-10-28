@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-28",
+  "scope": "Postmortem of the 32-image baseline and seven-image vision pilot; blind-review experiment is a separate frozen development run.",
+  "findings": [
+    {
+      "id": "small-staff",
+      "status": "confirmed execution failure",
+      "what": "Audiveris rejected 31/32 original crops; logs report staff spacing of roughly 6–10 pixels as too low. Enlarging and padding allowed all 32 to emit output.",
+      "why": "Its scale-estimation assumptions reject small staff geometry before recognition. This is an input compatibility failure, not evidence that the song is unreadable.",
+      "evidence": [
+        "runs/first-benchmark/audiveris-raw/sample-008/engine.log",
+        "runs/first-benchmark/results.json"
+      ],
+      "next_test": "Separate enlargement from padding on fixed inputs if continuing with Audiveris."
+    },
+    {
+      "id": "text-recovery",
+      "status": "confirmed null intervention",
+      "what": "None of seven enlarged Audiveris outputs contained a whole OCR word matching the chord grammar. Five had no OCR words; two had garbled text. The adapter promoted zero chords.",
+      "why": "An adapter cannot recover chord text that the upstream recognizer never emitted. The earlier hypothesis failed at its prerequisite.",
+      "evidence": [
+        "runs/goal-agent-001-checked/experiments/exp-33c9e801b310"
+      ],
+      "next_test": "Use a recognizer trained for lead-sheet harmony or read chord image regions directly."
+    },
+    {
+      "id": "vision-pitches",
+      "status": "observed error; internal model cause unproven",
+      "what": "In 내입술로_1 the candidate changes an F4 eighth note to G4. In 내입술의_1 it changes the second of two C4 sixteenth notes to D4.",
+      "why": "These are one-step staff-position errors in small raster images. Pattern completion or limited spatial discrimination are hypotheses, not established internal causes. The first candidate reported no uncertainty.",
+      "evidence": [
+        "research/data/내입술로_1.png",
+        "research/data/내입술의_1.png",
+        "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-006/prediction.krn",
+        "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-012/prediction.krn"
+      ],
+      "next_test": "Blind review across every pilot case; subsequently compare higher-resolution/cropped inputs while holding prompt/model fixed."
+    },
+    {
+      "id": "curve-endpoints",
+      "status": "observed notation reconstruction error",
+      "what": "In 내입술의_1 an E4–D4 slur becomes a D4–D4 tie; the next half note is merged with the preceding sixteenth note.",
+      "why": "The curve was assigned the wrong endpoints and meaning. A syntactically valid tie then changes playback and the normalized event count. Four edit-distance operations across the pilot arise from three local recognition mistakes, not necessarily four independent causes.",
+      "evidence": [
+        "research/data/내입술의_1.krn",
+        "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-012/prediction.krn"
+      ],
+      "next_test": "Check visible curve endpoints independently; do not repair based on musical plausibility alone."
+    },
+    {
+      "id": "chord-timing",
+      "status": "confirmed metric blind spot",
+      "what": "The G/B label in 내입술의_1 is correct but placed at elapsed beat 5/2 instead of 7/2: one quarter-note beat early.",
+      "why": "The old chord metric discarded onset time. Matching all 38 labels did not establish correct chord placement.",
+      "evidence": [
+        "goalagent/timing.py",
+        "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-012/prediction.krn"
+      ],
+      "next_test": "Add label-plus-onset scoring; mark null-melody chord rows unscorable rather than guess their times."
+    },
+    {
+      "id": "transpose-check",
+      "status": "previously fixed evaluator bug",
+      "what": "The checker treated octave-free chord labels as octave-specific pitches. B to C# looked like minus ten semitones.",
+      "why": "Chord roots and bass labels need pitch-class arithmetic modulo 12, while melody notes need absolute-pitch checks.",
+      "evidence": [
+        "research/evaluator-correction.json",
+        "tests/test_goalagent.py"
+      ],
+      "next_test": "Keep independent hand-calculated boundary tests and preserve old evaluator versions."
+    },
+    {
+      "id": "neural-domain",
+      "status": "coverage failure confirmed; domain-shift explanation is a hypothesis",
+      "what": "Transcoda emitted no harmony spine and sometimes repeated invented note sequences; four outputs reached the generation limit.",
+      "why": "The tested output path does not cover the required chord symbols. Its full-page synthetic-training regime differs from short church lead-sheet crops; this may contribute to repetition, but has not been isolated causally. A publisher-sample control worked.",
+      "evidence": [
+        "runs/first-benchmark/results.json",
+        "research/renderer-audit.json"
+      ],
+      "next_test": "Test a lead-sheet model with chord-capable tokenization before considering more orchestration."
+    }
+  ],
+  "answer_separation": {
+    "previous_state": "Recognition prompts did not include reference text. The controller received development scores to choose later experiments. This was not a held-out evaluation and the CLI read-only sandbox did not make reference files unreadable at OS level.",
+    "new_controls": [
+      "Explicit role goals and allowlisted model-input fields",
+      "Fresh tool-disabled reviewer context with only image and candidate",
+      "Temporary working directory outside the project",
+      "Every case reviewed, without revealing which cases failed",
+      "Whole batch sealed before the separate scorer opens labels",
+      "Hashes checked before scoring; no reviewer calls after sealing",
+      "No score-directed selection or retries inside this run"
+    ],
+    "limits": [
+      "Blindness prevents one leakage route; it does not guarantee correct analysis.",
+      "All 32 supplied excerpts were already used in development; none can be rebranded as untouched test data.",
+      "Fresh test songs and independent musician adjudication are needed for generalization and label quality.",
+      "For tool-using agents, use a separate container/service with no reference mount and separate credentials; current CLI isolation is application-level, not a hostile-process security boundary."
+    ]
+  }
+}

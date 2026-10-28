@@ -1,0 +1,1 @@
+{"type": "object", "properties": {"kern": {"type": "string"}, "uncertainties": {"type": "array", "items": {"type": "string"}}}, "required": ["kern", "uncertainties"], "additionalProperties": false}

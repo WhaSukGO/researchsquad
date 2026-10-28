@@ -1,0 +1,28 @@
+Reading package lists...
+E: Could not open lock file /var/lib/apt/lists/lock - open (13: Permission denied)
+E: Unable to lock directory /var/lib/apt/lists/
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+DEBIAN_VERSION_FULL=13.7
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+Filesystem            Size  Used Avail Use% Mounted on
+overlay              1007G   39G  918G   5% /
+tmpfs                 256M     0  256M   0% /tmp
+/run/host_mark/Users  927G  669G  258G  73% /workspace
+Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main arm64 Packages [9614 kB]
+Get:5 http://deb.debian.org/debian trixie-updates/main arm64 Packages [720 B]
+Get:6 http://deb.debian.org/debian-security trixie-security/main arm64 Packages [271 kB]
+rm: cannot remove '/var/cache/apt/archives/partial/*.deb': Permission denied
+Fetched 10.1 MB in 2s (6607 kB/s)
+Reading package lists...
+E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?

@@ -1,0 +1,63 @@
+INFO  []                      Main 259  | Running in batch mode
+INFO  []                 Languages 138  | Installed OCR languages: eng
+INFO  []             AliasPatterns 146  | Alias patterns: [(IMSLP[0-9]*)-.*]
+INFO  []                      Main 194  | Submitting 1 task(s) in sequence:
+    Input "/Users/geegle/development/whasuk/researchagent/runs/pilot/enlarged/sample.png"
+INFO  [sample]                      Book 560  | 1 sheet in /Users/geegle/development/whasuk/researchagent/runs/pilot/enlarged/sample.png
+INFO  []                      Book 2565 | Stored /book.xml
+INFO  []                      Book 2525 | Book stored as runs/pilot/enlarged/sample.omr
+INFO  []                      Book 1929 | Book reaching PAGE on sheets:[#1]
+INFO  [sample]            StepMonitoring 98   | LOAD
+INFO  [sample]                 SheetStub 1278 | Loaded image #1 2355x438 from /Users/geegle/development/whasuk/researchagent/runs/pilot/enlarged/sample.png
+INFO  [sample]                 ImageUtil 152  | Converting max RGB to gray
+INFO  [sample]            StepMonitoring 98   | BINARY
+INFO  [sample]            StepMonitoring 98   | SCALE
+INFO  [sample]              ScaleBuilder 254  | Beam  guessed height: 15 -- 0.25 of [13..23] range
+INFO  [sample]              ScaleBuilder 271  | Beam measured height: 16 -- 0.30 of [13..23] range at 104% of needed quorum
+INFO  [sample]              ScaleBuilder 401  | Normalized black jitter: 7.14 %
+INFO  [sample]                 ScaleStep 65   | Scale{ interline(27,28,29) line(11,12,13) beam(16)}
+INFO  [sample]            StepMonitoring 98   | GRID
+INFO  [sample]            LinesRetriever 1508 | Global slope: 0.00000
+INFO  [sample]         ClustersRetriever 326  | Retrieved raw line clusters: 1 of sizes [5] with interline(27,28,29)
+INFO  [sample]                 PeakGraph 310  | Systems: #1[1]
+INFO  [sample]             SystemManager 800  | 1 part along 1 system
+INFO  [sample]                      Book 543  | Created scores: [{Score 1}]
+INFO  [sample]            StepMonitoring 98   | HEADERS
+WARN  [sample]               ClefBuilder 658  | Staff#1 no recognized header clef.
+INFO  [sample]            StepMonitoring 98   | STEM_SEEDS
+INFO  [sample]             StemSeedsStep 86   | stem(9 max:11)
+INFO  [sample]            StepMonitoring 98   | BEAMS
+INFO  [sample]            StepMonitoring 98   | LEDGERS
+INFO  [sample]            StepMonitoring 98   | HEADS
+INFO  [sample]             HeadSeedTally 235  | Scale information: HeadSeeds{}
+INFO  [sample]            StepMonitoring 98   | STEMS
+INFO  [sample]            StepMonitoring 98   | REDUCTION
+INFO  [sample]             ReductionStep 105  | Stems free length median value: 115 pixels, 4.1 interlines
+INFO  [sample]            StepMonitoring 98   | CUE_BEAMS
+INFO  [sample]              CueBeamsStep 81   | Step CUE_BEAMS is skipped because small heads switch is off
+INFO  [sample]            StepMonitoring 98   | TEXTS
+Estimating resolution as 727
+INFO  [sample]            StepMonitoring 98   | MEASURES
+INFO  [sample]                      Page 307  | 5 raw measures: [5 in system#1]
+INFO  [sample]            StepMonitoring 98   | CHORDS
+INFO  [sample]            StepMonitoring 98   | CURVES
+INFO  [sample]              SlursBuilder 240  | Slurs: 0
+INFO  [sample]           SegmentsBuilder 155  | Segments: 0
+INFO  [sample]            StepMonitoring 98   | SYMBOLS
+INFO  [sample]            StepMonitoring 98   | LINKS
+INFO  [sample]             SentenceInter 483  | No chord below ChordNameInter#429{(0.537) staff:1 TEXT "F" font:B-80 root:F ChordKind{MAJOR}}
+INFO  [sample]             SentenceInter 463  | No chord near SentenceInter#430{(0.712) staff:1 mFont:BC-61 Direction} G/
+INFO  [sample]            StepMonitoring 98   | RHYTHMS
+INFO  [sample]            StepMonitoring 98   | PAGE
+INFO  [sample]                      Book 2584 | Book{sample} storing
+INFO  [sample]                      Book 2565 | Stored /book.xml
+INFO  [sample]                DataHolder 348  | Stored /sheet#1/BINARY.png
+INFO  [sample]                     Sheet 1583 | Stored /sheet#1/sheet#1.xml
+INFO  [sample]                      Book 2525 | Book stored as runs/pilot/enlarged/sample.omr
+INFO  [sample]                 SheetStub 1655 | Sheet disposed
+INFO  [sample]                      Book 2050 | End of Stub#1
+INFO  [sample]                      Book 2057 | End of Book{sample}
+INFO  [sample]                 SheetStub 1000 | Loaded /sheet#1/sheet#1.xml
+INFO  [sample]           PartwiseBuilder 2707 | Exporting sheet(s): [#1]
+INFO  [sample]             ScoreExporter 164  | Score sample exported to runs/pilot/enlarged/sample.mxl
+INFO  [sample]                     Score 181  | Closing {Score 1}

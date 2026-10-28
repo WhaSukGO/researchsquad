@@ -1,0 +1,51 @@
+2026-10-27 11:07:36,600 INFO [input]                 Book.java:560  | 1 sheet in /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-raw/sample-017/input.png
+2026-10-27 11:07:36,686 INFO []                 Book.java:2565 | Stored /book.xml
+2026-10-27 11:07:36,687 INFO []                 Book.java:2525 | Book stored as /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-raw/sample-017/input.omr
+2026-10-27 11:07:36,691 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-10-27 11:07:36,692 INFO [input]       StepMonitoring.java:98   | LOAD
+2026-10-27 11:07:36,719 INFO [input]            SheetStub.java:1278 | Loaded image #1 750x107 from /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-raw/sample-017/input.png
+2026-10-27 11:07:36,722 INFO [input]            ImageUtil.java:152  | Converting max RGB to gray
+2026-10-27 11:07:36,732 INFO [input]       StepMonitoring.java:98   | BINARY
+2026-10-27 11:07:36,779 INFO [input]       StepMonitoring.java:98   | SCALE
+2026-10-27 11:07:36,783 WARN [input]            SheetStub.java:411  | input   With a too low interline value of 9 pixels,  either this sheet contains no multi-line staves,  or the picture resolution is too low (try 300 DPI).   This interline value is NOT RELIABLE!
+2026-10-27 11:07:36,784 INFO [input]                 Book.java:543  | Created scores: []
+2026-10-27 11:07:36,784 INFO [input]            SheetStub.java:1194 | Sheet input flagged as invalid.
+2026-10-27 11:07:36,784 WARN [input]                 Book.java:2044 | Error processing stub org.audiveris.omr.step.StepException: Sheet ignored
+java.util.concurrent.ExecutionException: org.audiveris.omr.step.StepException: Sheet ignored
+	at java.base/java.util.concurrent.FutureTask.report(Unknown Source)
+	at java.base/java.util.concurrent.FutureTask.get(Unknown Source)
+	at org.audiveris.omr.sheet.SheetStub.doOneStep(SheetStub.java:519)
+	at org.audiveris.omr.sheet.SheetStub.reachStep(SheetStub.java:1405)
+	at org.audiveris.omr.sheet.Book.reachBookStep(Book.java:2035)
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:885)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:513)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:370)
+	at org.audiveris.omr.Main.main(Main.java:272)
+	at Audiveris.main(Audiveris.java:50)
+Caused by: org.audiveris.omr.step.StepException: Sheet ignored
+	at org.audiveris.omr.sheet.SheetStub.decideOnRemoval(SheetStub.java:425)
+	at org.audiveris.omr.sheet.ScaleBuilder.checkResolution(ScaleBuilder.java:187)
+	at org.audiveris.omr.sheet.ScaleBuilder.doRetrieveScale(ScaleBuilder.java:380)
+	at org.audiveris.omr.sheet.ScaleBuilder.retrieveScale(ScaleBuilder.java:445)
+	at org.audiveris.omr.step.ScaleStep.doit(ScaleStep.java:64)
+	at org.audiveris.omr.step.OmrStep.doit(OmrStep.java:138)
+	at org.audiveris.omr.sheet.SheetStub.lambda$doOneStep$0(SheetStub.java:503)
+	at java.base/java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2026-10-27 11:07:36,785 INFO [input]                 Book.java:2584 | Book{input} storing
+2026-10-27 11:07:36,794 INFO [input]                 Book.java:2565 | Stored /book.xml
+2026-10-27 11:07:36,800 INFO [input]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-10-27 11:07:36,911 INFO [input]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-10-27 11:07:36,911 INFO [input]                 Book.java:2525 | Book stored as /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-raw/sample-017/input.omr
+2026-10-27 11:07:36,912 INFO [input]            SheetStub.java:1655 | Sheet disposed
+2026-10-27 11:07:36,920 INFO [input]                 Book.java:2050 | End of Stub#1
+2026-10-27 11:07:36,920 INFO [input]                 Book.java:2057 | End of Book{input}
+2026-10-27 11:07:36,920 WARN [input]                  CLI.java:956  | Exception occurred java.lang.Exception: Error in reaching step PAGE
+java.lang.Exception: Error in reaching step PAGE
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:893)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:513)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:370)
+	at org.audiveris.omr.Main.main(Main.java:272)
+	at Audiveris.main(Audiveris.java:50)

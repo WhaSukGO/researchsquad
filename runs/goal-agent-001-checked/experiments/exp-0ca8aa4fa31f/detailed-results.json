@@ -1,0 +1,1585 @@
+[
+  {
+    "id": "내이름으로_1",
+    "song": "내이름으로",
+    "sample_index": 1,
+    "trace": {
+      "sample_index": 1,
+      "id": "내이름으로_1",
+      "kind": "vision_kern",
+      "reference_access": false,
+      "source_image_sha256": "0d8d864f885c302aafb273d9d5e2febb3dc768ee65faca53a9c82dccf877a3a1",
+      "output": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-001/prediction.krn",
+      "status": "ok",
+      "uncertainties": [],
+      "model": {
+        "provider": "codex-cli",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "high",
+        "elapsed_seconds": 29.630879042000743,
+        "exit_code": 0,
+        "usage": {
+          "input_tokens": 14354,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 643,
+          "reasoning_output_tokens": 508
+        },
+        "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+        "unexpected_tool_events": [],
+        "billing": "Uses existing Codex account; monetary cost unavailable"
+      },
+      "elapsed_seconds": 29.633145292000336,
+      "output_sha256": "8b39eae54d3cd5ec5a9a7672b011606d95927b516ad03d4a71f82eb86337bc26",
+      "transposed": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-001/transposed-M2.krn"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "E4"
+          ],
+          "3"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3"
+        ]
+      ],
+      "chords": [
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "E",
+          "minor",
+          "E",
+          []
+        ],
+        [
+          "D",
+          "minor",
+          "D",
+          []
+        ],
+        [
+          "G",
+          "dominant",
+          "G",
+          []
+        ],
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "errors": [],
+      "parser_warnings": ""
+    },
+    "melody": {
+      "reference_count": 12,
+      "prediction_count": 12,
+      "matches": 12,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    },
+    "chords": {
+      "reference_count": 5,
+      "prediction_count": 5,
+      "matches": 5,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    }
+  },
+  {
+    "id": "내입술로_1",
+    "song": "내입술로",
+    "sample_index": 6,
+    "trace": {
+      "sample_index": 6,
+      "id": "내입술로_1",
+      "kind": "vision_kern",
+      "reference_access": false,
+      "source_image_sha256": "972a47424b1a0536164c5ebc9affb1cbb7f0c1ccb94aee25d0f619395be1a2d0",
+      "output": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-006/prediction.krn",
+      "status": "ok",
+      "uncertainties": [],
+      "model": {
+        "provider": "codex-cli",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "high",
+        "elapsed_seconds": 79.79116741600046,
+        "exit_code": 0,
+        "usage": {
+          "input_tokens": 11702,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1553,
+          "reasoning_output_tokens": 1363
+        },
+        "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+        "unexpected_tool_events": [],
+        "billing": "Uses existing Codex account; monetary cost unavailable"
+      },
+      "elapsed_seconds": 79.79547966600148,
+      "output_sha256": "73655c58d1a45c510e35168c0a4711a2d0ced2f896a2ed3ea9b4971a18aa586e",
+      "transposed": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-006/transposed-M2.krn"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "REST"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "9/4"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "7/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "A4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "A4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "17/4"
+        ]
+      ],
+      "chords": [],
+      "parse_ok": true,
+      "render_ok": true,
+      "errors": [],
+      "parser_warnings": ""
+    },
+    "melody": {
+      "reference_count": 17,
+      "prediction_count": 17,
+      "matches": 16,
+      "substitutions": 1,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 1,
+      "error_rate": 0.058823529411764705,
+      "precision": 0.9411764705882353,
+      "recall": 0.9411764705882353,
+      "f1": 0.9411764705882353,
+      "edits": [
+        {
+          "operation": "replace",
+          "reference_index": 13,
+          "prediction_index": 13,
+          "expected": [
+            [
+              "F4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "G4"
+            ],
+            "1/2"
+          ]
+        }
+      ]
+    },
+    "chords": {
+      "reference_count": 0,
+      "prediction_count": 0,
+      "matches": 0,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    }
+  },
+  {
+    "id": "내입술의_1",
+    "song": "내입술의",
+    "sample_index": 12,
+    "trace": {
+      "sample_index": 12,
+      "id": "내입술의_1",
+      "kind": "vision_kern",
+      "reference_access": false,
+      "source_image_sha256": "f3ce5694398cf0f340183c13db0939fe7679217b4f410e8e5bd7219b42a1367e",
+      "output": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-012/prediction.krn",
+      "status": "ok",
+      "uncertainties": [
+        "The final G chord label is horizontally ambiguous; it is assigned to the final dotted-quarter D. The image ends without a closing barline."
+      ],
+      "model": {
+        "provider": "codex-cli",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "high",
+        "elapsed_seconds": 81.56648883399976,
+        "exit_code": 0,
+        "usage": {
+          "input_tokens": 14368,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1839,
+          "reasoning_output_tokens": 1552
+        },
+        "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+        "unexpected_tool_events": [],
+        "billing": "Uses existing Codex account; monetary cost unavailable"
+      },
+      "elapsed_seconds": 81.5687426250006,
+      "output_sha256": "a8fa1531414acb6e85f14d08b8b611a14002a4196531ba5d70e15e7b45d63b16",
+      "transposed": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-012/transposed-M2.krn"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "5/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "5/4"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "9/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "3/2"
+        ]
+      ],
+      "chords": [
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "G",
+          "major",
+          "B",
+          []
+        ],
+        [
+          "A",
+          "minor-seventh",
+          "A",
+          []
+        ],
+        [
+          "F",
+          "major-seventh",
+          "F",
+          []
+        ],
+        [
+          "C",
+          "major",
+          "G",
+          []
+        ],
+        [
+          "G",
+          "major",
+          "G",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "errors": [],
+      "parser_warnings": ""
+    },
+    "melody": {
+      "reference_count": 27,
+      "prediction_count": 26,
+      "matches": 24,
+      "substitutions": 2,
+      "deletions": 1,
+      "insertions": 0,
+      "errors": 3,
+      "error_rate": 0.1111111111111111,
+      "precision": 0.9230769230769231,
+      "recall": 0.8888888888888888,
+      "f1": 0.9056603773584906,
+      "edits": [
+        {
+          "operation": "replace",
+          "reference_index": 16,
+          "prediction_index": 16,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/4"
+          ],
+          "actual": [
+            [
+              "D4"
+            ],
+            "1/4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 20,
+          "prediction_index": 20,
+          "expected": [
+            [
+              "D4"
+            ],
+            "1/4"
+          ],
+          "actual": [
+            [
+              "D4"
+            ],
+            "9/4"
+          ]
+        },
+        {
+          "operation": "delete",
+          "reference_index": 21,
+          "prediction_index": 21,
+          "expected": [
+            [
+              "D4"
+            ],
+            "2"
+          ],
+          "actual": null
+        }
+      ]
+    },
+    "chords": {
+      "reference_count": 6,
+      "prediction_count": 6,
+      "matches": 6,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    }
+  },
+  {
+    "id": "능력의_1",
+    "song": "능력의",
+    "sample_index": 17,
+    "trace": {
+      "sample_index": 17,
+      "id": "능력의_1",
+      "kind": "vision_kern",
+      "reference_access": false,
+      "source_image_sha256": "8f13d1617a03312ecad7f3db34d729e4b8625d2419082d32d1117d70a50bc455",
+      "output": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-017/prediction.krn",
+      "status": "ok",
+      "uncertainties": [
+        "The small chord symbol at the start of the second measure is read as F:min6/C."
+      ],
+      "model": {
+        "provider": "codex-cli",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "high",
+        "elapsed_seconds": 130.26440729200112,
+        "exit_code": 0,
+        "usage": {
+          "input_tokens": 14354,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2821,
+          "reasoning_output_tokens": 2588
+        },
+        "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+        "unexpected_tool_events": [],
+        "billing": "Uses existing Codex account; monetary cost unavailable"
+      },
+      "elapsed_seconds": 130.26669437499913,
+      "output_sha256": "7325584ded8b4a92ee6cd6aefd0bc7f0696fc7043c429ecddce0216dc083f8a0",
+      "transposed": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-017/transposed-M2.krn"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "2"
+        ],
+        [
+          [
+            "A4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "A4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "A4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "A4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "3/2"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "2"
+        ]
+      ],
+      "chords": [
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "G",
+          "suspended-fourth",
+          "G",
+          []
+        ],
+        [
+          "G",
+          "dominant",
+          "G",
+          []
+        ],
+        [
+          "F",
+          "minor-sixth",
+          "C",
+          []
+        ],
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "Bb",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "C",
+          "dominant",
+          "C",
+          []
+        ],
+        [
+          "F",
+          "major",
+          "F",
+          []
+        ],
+        [
+          "G",
+          "suspended-fourth",
+          "G",
+          []
+        ],
+        [
+          "G",
+          "dominant",
+          "G",
+          []
+        ],
+        [
+          "C",
+          "major",
+          "E",
+          []
+        ],
+        [
+          "D",
+          "minor",
+          "D",
+          []
+        ],
+        [
+          "G",
+          "dominant",
+          "G",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "errors": [],
+      "parser_warnings": ""
+    },
+    "melody": {
+      "reference_count": 19,
+      "prediction_count": 19,
+      "matches": 19,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    },
+    "chords": {
+      "reference_count": 13,
+      "prediction_count": 13,
+      "matches": 13,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    }
+  },
+  {
+    "id": "사랑하셔서_1",
+    "song": "사랑하셔서",
+    "sample_index": 19,
+    "trace": {
+      "sample_index": 19,
+      "id": "사랑하셔서_1",
+      "kind": "vision_kern",
+      "reference_access": false,
+      "source_image_sha256": "a18b3002935f808e29d96f6c604e2df8188be0291b26452091f2e9511555e620",
+      "output": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-019/prediction.krn",
+      "status": "ok",
+      "uncertainties": [
+        "The final visible measure appears to contain only three quarter-note beats; its displayed durations are preserved without adding a beat."
+      ],
+      "model": {
+        "provider": "codex-cli",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "high",
+        "elapsed_seconds": 91.32021916599842,
+        "exit_code": 0,
+        "usage": {
+          "input_tokens": 11729,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2335,
+          "reasoning_output_tokens": 2070
+        },
+        "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+        "unexpected_tool_events": [],
+        "billing": "Uses existing Codex account; monetary cost unavailable"
+      },
+      "elapsed_seconds": 91.32240741700116,
+      "output_sha256": "57c0d7cc0a671b25481aee4c397b4c74b2a87fb54a6ca6c35ea7798742da62dc",
+      "transposed": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-019/transposed-M2.krn"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "G3"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/2"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "7/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1"
+        ]
+      ],
+      "chords": [
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "D",
+          "minor",
+          "C",
+          []
+        ],
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "F",
+          "minor-sixth",
+          "C",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "errors": [],
+      "parser_warnings": ""
+    },
+    "melody": {
+      "reference_count": 27,
+      "prediction_count": 27,
+      "matches": 27,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    },
+    "chords": {
+      "reference_count": 4,
+      "prediction_count": 4,
+      "matches": 4,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    }
+  },
+  {
+    "id": "성령이여_1",
+    "song": "성령이여",
+    "sample_index": 23,
+    "trace": {
+      "sample_index": 23,
+      "id": "성령이여_1",
+      "kind": "vision_kern",
+      "reference_access": false,
+      "source_image_sha256": "f5cfddb59f9af825ec9afc53e29094299e61d0669317d83eed8e7f3e7e50a9e5",
+      "output": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-023/prediction.krn",
+      "status": "ok",
+      "uncertainties": [],
+      "model": {
+        "provider": "codex-cli",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "high",
+        "elapsed_seconds": 29.876850250000643,
+        "exit_code": 0,
+        "usage": {
+          "input_tokens": 14349,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 659,
+          "reasoning_output_tokens": 470
+        },
+        "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+        "unexpected_tool_events": [],
+        "billing": "Uses existing Codex account; monetary cost unavailable"
+      },
+      "elapsed_seconds": 29.8787980420002,
+      "output_sha256": "2c2a878ef7ac8faf39b067e3848af58b103a450c71ef62b86f15868d6e1242e3",
+      "transposed": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-023/transposed-M2.krn"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "7/2"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "7/2"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ]
+      ],
+      "chords": [
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "G",
+          "major",
+          "B",
+          []
+        ],
+        [
+          "A",
+          "minor",
+          "A",
+          []
+        ],
+        [
+          "E",
+          "minor",
+          "G",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "errors": [],
+      "parser_warnings": ""
+    },
+    "melody": {
+      "reference_count": 20,
+      "prediction_count": 20,
+      "matches": 20,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    },
+    "chords": {
+      "reference_count": 4,
+      "prediction_count": 4,
+      "matches": 4,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    }
+  },
+  {
+    "id": "주품에_1",
+    "song": "주품에",
+    "sample_index": 29,
+    "trace": {
+      "sample_index": 29,
+      "id": "주품에_1",
+      "kind": "vision_kern",
+      "reference_access": false,
+      "source_image_sha256": "d5f7503b2990726b767c11babf0c0ebe06aa462d0317baf54e82d3233668bf26",
+      "output": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-029/prediction.krn",
+      "status": "ok",
+      "uncertainties": [],
+      "model": {
+        "provider": "codex-cli",
+        "model": "gpt-6-astra",
+        "reasoning_effort": "high",
+        "elapsed_seconds": 42.3101659999993,
+        "exit_code": 0,
+        "usage": {
+          "input_tokens": 11664,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 807,
+          "reasoning_output_tokens": 685
+        },
+        "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+        "unexpected_tool_events": [],
+        "billing": "Uses existing Codex account; monetary cost unavailable"
+      },
+      "elapsed_seconds": 42.31238412499988,
+      "output_sha256": "aa4eb58b1c96db756e93f2631512f5529d2b70dcec101ae178366774b120d268",
+      "transposed": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-029/transposed-M2.krn"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "E4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "3"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "A4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "4"
+        ]
+      ],
+      "chords": [
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "G",
+          "major",
+          "B",
+          []
+        ],
+        [
+          "A",
+          "minor-seventh",
+          "A",
+          []
+        ],
+        [
+          "F",
+          "major",
+          "F",
+          []
+        ],
+        [
+          "D",
+          "major",
+          "F#",
+          []
+        ],
+        [
+          "G",
+          "suspended-fourth",
+          "G",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "errors": [],
+      "parser_warnings": ""
+    },
+    "melody": {
+      "reference_count": 8,
+      "prediction_count": 8,
+      "matches": 8,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    },
+    "chords": {
+      "reference_count": 6,
+      "prediction_count": 6,
+      "matches": 6,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    }
+  }
+]

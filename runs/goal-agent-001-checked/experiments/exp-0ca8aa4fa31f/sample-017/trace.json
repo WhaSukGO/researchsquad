@@ -1,0 +1,31 @@
+{
+  "sample_index": 17,
+  "id": "능력의_1",
+  "kind": "vision_kern",
+  "reference_access": false,
+  "source_image_sha256": "8f13d1617a03312ecad7f3db34d729e4b8625d2419082d32d1117d70a50bc455",
+  "output": "runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f/sample-017/prediction.krn",
+  "status": "ok",
+  "uncertainties": [
+    "The small chord symbol at the start of the second measure is read as F:min6/C."
+  ],
+  "model": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "elapsed_seconds": 130.26440729200112,
+    "exit_code": 0,
+    "usage": {
+      "input_tokens": 14354,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2821,
+      "reasoning_output_tokens": 2588
+    },
+    "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+    "unexpected_tool_events": [],
+    "billing": "Uses existing Codex account; monetary cost unavailable"
+  },
+  "elapsed_seconds": 130.26669437499913,
+  "output_sha256": "7325584ded8b4a92ee6cd6aefd0bc7f0696fc7043c429ecddce0216dc083f8a0"
+}

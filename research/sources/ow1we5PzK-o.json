@@ -1,0 +1,2672 @@
+[
+  {
+    "text": "[music]",
+    "start": 7.205,
+    "duration": 2.02
+  },
+  {
+    "text": ">> Hi everyone. My name is Luke and my goal",
+    "start": 15.04,
+    "duration": 5.0
+  },
+  {
+    "text": "is that 20 minutes from now you'll be",
+    "start": 18.24,
+    "duration": 3.92
+  },
+  {
+    "text": "able to assemble agent teams that can",
+    "start": 20.04,
+    "duration": 4.12
+  },
+  {
+    "text": "complete tasks orders of magnitude",
+    "start": 22.16,
+    "duration": 3.52
+  },
+  {
+    "text": "harder than what you can complete with a",
+    "start": 24.16,
+    "duration": 3.44
+  },
+  {
+    "text": "single agent today.",
+    "start": 25.68,
+    "duration": 4.52
+  },
+  {
+    "text": "A little bit about me. So",
+    "start": 27.6,
+    "duration": 4.88
+  },
+  {
+    "text": "I come from a background in dev tools.",
+    "start": 30.2,
+    "duration": 4.4
+  },
+  {
+    "text": "About 2 and 1/2 years ago I started a",
+    "start": 32.48,
+    "duration": 3.72
+  },
+  {
+    "text": "project at Block which is where I was",
+    "start": 34.6,
+    "duration": 3.88
+  },
+  {
+    "text": "working at the time. And that project",
+    "start": 36.2,
+    "duration": 4.04
+  },
+  {
+    "text": "evolved into Goose.",
+    "start": 38.48,
+    "duration": 4.56
+  },
+  {
+    "text": "Goose is now one of the leading coding",
+    "start": 40.24,
+    "duration": 5.28
+  },
+  {
+    "text": "agents is open source",
+    "start": 43.04,
+    "duration": 4.92
+  },
+  {
+    "text": "and it's recently was was donated to the",
+    "start": 45.52,
+    "duration": 3.44
+  },
+  {
+    "text": "AI",
+    "start": 47.96,
+    "duration": 3.6
+  },
+  {
+    "text": "agentic AI Foundation. So it's been",
+    "start": 48.96,
+    "duration": 3.92
+  },
+  {
+    "text": "really cool to see.",
+    "start": 51.56,
+    "duration": 4.08
+  },
+  {
+    "text": "Now nowadays I work at Factory where I",
+    "start": 52.88,
+    "duration": 4.6
+  },
+  {
+    "text": "lead our core agent harness and",
+    "start": 55.64,
+    "duration": 4.04
+  },
+  {
+    "text": "Factory's mission is to",
+    "start": 57.48,
+    "duration": 4.0
+  },
+  {
+    "text": "bring autonomy to the entire software",
+    "start": 59.68,
+    "duration": 4.76
+  },
+  {
+    "text": "development life cycle.",
+    "start": 61.48,
+    "duration": 4.76
+  },
+  {
+    "text": "So I want to start off with a claim.",
+    "start": 64.44,
+    "duration": 3.28
+  },
+  {
+    "text": "The bottleneck in software engineering",
+    "start": 66.24,
+    "duration": 4.64
+  },
+  {
+    "text": "nowadays is not intelligence. It's now",
+    "start": 67.72,
+    "duration": 5.24
+  },
+  {
+    "text": "limited by human attention.",
+    "start": 70.88,
+    "duration": 3.56
+  },
+  {
+    "text": "Even the best engineers can only",
+    "start": 72.96,
+    "duration": 4.44
+  },
+  {
+    "text": "complete a couple of tasks at a time.",
+    "start": 74.44,
+    "duration": 5.08
+  },
+  {
+    "text": "They may have a backlog of 50 features",
+    "start": 77.4,
+    "duration": 3.84
+  },
+  {
+    "text": "but they can only drive a few forward",
+    "start": 79.52,
+    "duration": 3.92
+  },
+  {
+    "text": "per day because every task requires",
+    "start": 81.24,
+    "duration": 3.76
+  },
+  {
+    "text": "their attention. Every commit needs",
+    "start": 83.44,
+    "duration": 3.2
+  },
+  {
+    "text": "their review.",
+    "start": 85.0,
+    "duration": 3.08
+  },
+  {
+    "text": "Today's models are smart enough to",
+    "start": 86.64,
+    "duration": 4.04
+  },
+  {
+    "text": "figure out all 50 of these tasks but",
+    "start": 88.08,
+    "duration": 5.2
+  },
+  {
+    "text": "there's not enough uh just bandwidth to",
+    "start": 90.68,
+    "duration": 5.68
+  },
+  {
+    "text": "supervise their implementation.",
+    "start": 93.28,
+    "duration": 6.04
+  },
+  {
+    "text": "So we kept asking ourselves what if a",
+    "start": 96.36,
+    "duration": 4.76
+  },
+  {
+    "text": "human decides what to build and then a",
+    "start": 99.32,
+    "duration": 4.16
+  },
+  {
+    "text": "system figures out how to do so. Right?",
+    "start": 101.12,
+    "duration": 3.88
+  },
+  {
+    "text": "An agent could just work for hours for",
+    "start": 103.48,
+    "duration": 4.12
+  },
+  {
+    "text": "days and you come back to finish work.",
+    "start": 105.0,
+    "duration": 5.6
+  },
+  {
+    "text": "So that's what I'm here to talk about.",
+    "start": 107.6,
+    "duration": 5.12
+  },
+  {
+    "text": "When you start researching multi-agent",
+    "start": 110.6,
+    "duration": 3.68
+  },
+  {
+    "text": "frameworks and systems you quickly",
+    "start": 112.72,
+    "duration": 2.92
+  },
+  {
+    "text": "realize that the field's a bit of a",
+    "start": 114.28,
+    "duration": 3.88
+  },
+  {
+    "text": "mess. Everyone has their own framework,",
+    "start": 115.64,
+    "duration": 5.08
+  },
+  {
+    "text": "their own terminology, their own",
+    "start": 118.16,
+    "duration": 4.56
+  },
+  {
+    "text": "opinions of what works and doesn't work.",
+    "start": 120.72,
+    "duration": 3.28
+  },
+  {
+    "text": "And so I want to propose a simple",
+    "start": 122.72,
+    "duration": 3.28
+  },
+  {
+    "text": "taxonomy. There's five frontier",
+    "start": 124.0,
+    "duration": 3.72
+  },
+  {
+    "text": "multi-agent frameworks.",
+    "start": 126.0,
+    "duration": 3.679
+  },
+  {
+    "text": "One is delegation. Right? This is where",
+    "start": 127.72,
+    "duration": 4.52
+  },
+  {
+    "text": "one agent spawns another agent and the",
+    "start": 129.679,
+    "duration": 4.641
+  },
+  {
+    "text": "parent agent may say go figure out the",
+    "start": 132.24,
+    "duration": 4.08
+  },
+  {
+    "text": "database schema and then gets a response",
+    "start": 134.32,
+    "duration": 3.52
+  },
+  {
+    "text": "back.",
+    "start": 136.32,
+    "duration": 3.04
+  },
+  {
+    "text": "This is the simplest form of multi-agent",
+    "start": 137.84,
+    "duration": 3.76
+  },
+  {
+    "text": "communication as what most people",
+    "start": 139.36,
+    "duration": 5.32
+  },
+  {
+    "text": "implement first. You have you know sub",
+    "start": 141.6,
+    "duration": 4.68
+  },
+  {
+    "text": "agents and coding tools are the most",
+    "start": 144.68,
+    "duration": 4.0
+  },
+  {
+    "text": "common example.",
+    "start": 146.28,
+    "duration": 4.36
+  },
+  {
+    "text": "The other one is creator verifier.",
+    "start": 148.68,
+    "duration": 3.68
+  },
+  {
+    "text": "Right? Where one agent builds something",
+    "start": 150.64,
+    "duration": 3.12
+  },
+  {
+    "text": "and then you have another agent that",
+    "start": 152.36,
+    "duration": 3.28
+  },
+  {
+    "text": "checks that work.",
+    "start": 153.76,
+    "duration": 3.56
+  },
+  {
+    "text": "And the key here is like a separation of",
+    "start": 155.64,
+    "duration": 4.04
+  },
+  {
+    "text": "concerns. The parent the the agent that",
+    "start": 157.32,
+    "duration": 4.76
+  },
+  {
+    "text": "implemented the the code is has some",
+    "start": 159.68,
+    "duration": 4.04
+  },
+  {
+    "text": "cost bias. Right? Wants that code to",
+    "start": 162.08,
+    "duration": 2.96
+  },
+  {
+    "text": "work.",
+    "start": 163.72,
+    "duration": 3.0
+  },
+  {
+    "text": "A fresh agent with fresh context is way",
+    "start": 165.04,
+    "duration": 3.36
+  },
+  {
+    "text": "more likely to find issues and this is",
+    "start": 166.72,
+    "duration": 5.36
+  },
+  {
+    "text": "why we do code review as humans as well.",
+    "start": 168.4,
+    "duration": 5.84
+  },
+  {
+    "text": "Another one is direct communication.",
+    "start": 172.08,
+    "duration": 4.08
+  },
+  {
+    "text": "This is when agents communicate without",
+    "start": 174.24,
+    "duration": 3.44
+  },
+  {
+    "text": "a central coordinator. Right? It's the",
+    "start": 176.16,
+    "duration": 4.16
+  },
+  {
+    "text": "kind of like DMing each other.",
+    "start": 177.68,
+    "duration": 4.68
+  },
+  {
+    "text": "It's hard to get right though because",
+    "start": 180.32,
+    "duration": 4.2
+  },
+  {
+    "text": "state fragments across conversations",
+    "start": 182.36,
+    "duration": 4.72
+  },
+  {
+    "text": "without that coordinator and there's no",
+    "start": 184.52,
+    "duration": 4.96
+  },
+  {
+    "text": "single source of truth.",
+    "start": 187.08,
+    "duration": 4.48
+  },
+  {
+    "text": "The next one is negotiation. Right?",
+    "start": 189.48,
+    "duration": 5.68
+  },
+  {
+    "text": "Negotiation is when agents communicate",
+    "start": 191.56,
+    "duration": 5.52
+  },
+  {
+    "text": "but over a shared resource. So that may",
+    "start": 195.16,
+    "duration": 3.4
+  },
+  {
+    "text": "be you know they want to use the same",
+    "start": 197.08,
+    "duration": 4.04
+  },
+  {
+    "text": "API. They want to modify the same",
+    "start": 198.56,
+    "duration": 4.68
+  },
+  {
+    "text": "portion of the code base.",
+    "start": 201.12,
+    "duration": 3.6
+  },
+  {
+    "text": "But negotiation doesn't need to be",
+    "start": 203.24,
+    "duration": 3.6
+  },
+  {
+    "text": "adversarial. In fact the best use case",
+    "start": 204.72,
+    "duration": 3.92
+  },
+  {
+    "text": "is when there is",
+    "start": 206.84,
+    "duration": 3.88
+  },
+  {
+    "text": "net positive sum trading. Right? And",
+    "start": 208.64,
+    "duration": 3.84
+  },
+  {
+    "text": "that's",
+    "start": 210.72,
+    "duration": 3.44
+  },
+  {
+    "text": "when agents have like a potential",
+    "start": 212.48,
+    "duration": 4.52
+  },
+  {
+    "text": "win-win situation while interacting. And",
+    "start": 214.16,
+    "duration": 4.84
+  },
+  {
+    "text": "then the last one is broadcast and that",
+    "start": 217.0,
+    "duration": 3.72
+  },
+  {
+    "text": "is when one agent sends information to",
+    "start": 219.0,
+    "duration": 2.64
+  },
+  {
+    "text": "many.",
+    "start": 220.72,
+    "duration": 2.92
+  },
+  {
+    "text": "Think of it like you know status",
+    "start": 221.64,
+    "duration": 4.4
+  },
+  {
+    "text": "updates, new context that applies to",
+    "start": 223.64,
+    "duration": 5.2
+  },
+  {
+    "text": "everyone, you shared constraints.",
+    "start": 226.04,
+    "duration": 5.76
+  },
+  {
+    "text": "It's a bit less flashy than the other",
+    "start": 228.84,
+    "duration": 4.6
+  },
+  {
+    "text": "ones but it's critical for maintaining",
+    "start": 231.8,
+    "duration": 4.76
+  },
+  {
+    "text": "coherence over long-running tasks.",
+    "start": 233.44,
+    "duration": 4.4
+  },
+  {
+    "text": "And so when you have all of these",
+    "start": 236.56,
+    "duration": 3.44
+  },
+  {
+    "text": "different building blocks how do you",
+    "start": 237.84,
+    "duration": 4.2
+  },
+  {
+    "text": "assemble that into a system that can run",
+    "start": 240.0,
+    "duration": 3.8
+  },
+  {
+    "text": "for many days?",
+    "start": 242.04,
+    "duration": 4.24
+  },
+  {
+    "text": "So missions is our answer. It's a system",
+    "start": 243.8,
+    "duration": 5.04
+  },
+  {
+    "text": "that combines four of those. Delegation,",
+    "start": 246.28,
+    "duration": 4.24
+  },
+  {
+    "text": "creator verifier,",
+    "start": 248.84,
+    "duration": 4.12
+  },
+  {
+    "text": "broadcast and negotiation",
+    "start": 250.52,
+    "duration": 4.68
+  },
+  {
+    "text": "into a single workflow. You describe a",
+    "start": 252.96,
+    "duration": 3.32
+  },
+  {
+    "text": "goal.",
+    "start": 255.2,
+    "duration": 3.28
+  },
+  {
+    "text": "You scope that through a conversation.",
+    "start": 256.28,
+    "duration": 4.56
+  },
+  {
+    "text": "You approve a plan and then the system",
+    "start": 258.48,
+    "duration": 5.12
+  },
+  {
+    "text": "handles execution for hours or days and",
+    "start": 260.84,
+    "duration": 4.44
+  },
+  {
+    "text": "that enables you to focus on something",
+    "start": 263.6,
+    "duration": 3.56
+  },
+  {
+    "text": "else.",
+    "start": 265.28,
+    "duration": 3.8
+  },
+  {
+    "text": "Notably a mission is not a single agent",
+    "start": 267.16,
+    "duration": 4.48
+  },
+  {
+    "text": "session. It's an ecosystem of agents",
+    "start": 269.08,
+    "duration": 4.6
+  },
+  {
+    "text": "that communicate through structured",
+    "start": 271.64,
+    "duration": 4.64
+  },
+  {
+    "text": "handoffs and shared state.",
+    "start": 273.68,
+    "duration": 4.84
+  },
+  {
+    "text": "It uses a three-role architecture.",
+    "start": 276.28,
+    "duration": 4.48
+  },
+  {
+    "text": "There's orchestrator, there's workers",
+    "start": 278.52,
+    "duration": 4.12
+  },
+  {
+    "text": "and then there's validators.",
+    "start": 280.76,
+    "duration": 3.84
+  },
+  {
+    "text": "The orchestrator handles planning. When",
+    "start": 282.64,
+    "duration": 3.0
+  },
+  {
+    "text": "you describe what you want the",
+    "start": 284.6,
+    "duration": 2.08
+  },
+  {
+    "text": "orchestrator is kind of like your",
+    "start": 285.64,
+    "duration": 2.68
+  },
+  {
+    "text": "sounding board. Ask you the right",
+    "start": 286.68,
+    "duration": 4.64
+  },
+  {
+    "text": "strategic questions. It",
+    "start": 288.32,
+    "duration": 3.96
+  },
+  {
+    "text": "you know",
+    "start": 291.32,
+    "duration": 2.84
+  },
+  {
+    "text": "checks out if there's any unclear",
+    "start": 292.28,
+    "duration": 4.44
+  },
+  {
+    "text": "requirements in in the problem space and",
+    "start": 294.16,
+    "duration": 4.28
+  },
+  {
+    "text": "then it eventually produces a plan that",
+    "start": 296.72,
+    "duration": 3.84
+  },
+  {
+    "text": "includes features, milestones and then",
+    "start": 298.44,
+    "duration": 3.52
+  },
+  {
+    "text": "something that's called a validation",
+    "start": 300.56,
+    "duration": 3.8
+  },
+  {
+    "text": "contract. And that validation contract",
+    "start": 301.96,
+    "duration": 5.12
+  },
+  {
+    "text": "defines what done sort of means before",
+    "start": 304.36,
+    "duration": 4.76
+  },
+  {
+    "text": "any coding is done.",
+    "start": 307.08,
+    "duration": 3.8
+  },
+  {
+    "text": "And I'll come back to why that matters",
+    "start": 309.12,
+    "duration": 2.68
+  },
+  {
+    "text": "because it turns out to be really",
+    "start": 310.88,
+    "duration": 3.0
+  },
+  {
+    "text": "important to the system.",
+    "start": 311.8,
+    "duration": 4.28
+  },
+  {
+    "text": "The next role are workers. They handle",
+    "start": 313.88,
+    "duration": 3.96
+  },
+  {
+    "text": "implementation.",
+    "start": 316.08,
+    "duration": 4.12
+  },
+  {
+    "text": "When a feature is assigned to a worker",
+    "start": 317.84,
+    "duration": 4.56
+  },
+  {
+    "text": "that worker has clean context, no",
+    "start": 320.2,
+    "duration": 3.92
+  },
+  {
+    "text": "accumulated baggage, no degraded",
+    "start": 322.4,
+    "duration": 3.64
+  },
+  {
+    "text": "attention. Right? The worker reads its",
+    "start": 324.12,
+    "duration": 4.48
+  },
+  {
+    "text": "spec. It implements the feature and then",
+    "start": 326.04,
+    "duration": 4.0
+  },
+  {
+    "text": "commits",
+    "start": 328.6,
+    "duration": 3.52
+  },
+  {
+    "text": "by Git allowing the next worker to",
+    "start": 330.04,
+    "duration": 3.96
+  },
+  {
+    "text": "inherit a clean slate and a working code",
+    "start": 332.12,
+    "duration": 3.56
+  },
+  {
+    "text": "base. And then the last role are",
+    "start": 334.0,
+    "duration": 4.6
+  },
+  {
+    "text": "validators. They handle verification.",
+    "start": 335.68,
+    "duration": 5.24
+  },
+  {
+    "text": "And so most systems validate by maybe",
+    "start": 338.6,
+    "duration": 5.24
+  },
+  {
+    "text": "running lint, type check, tests. Maybe",
+    "start": 340.92,
+    "duration": 4.56
+  },
+  {
+    "text": "they do code review.",
+    "start": 343.84,
+    "duration": 3.64
+  },
+  {
+    "text": "Missions does all of that but we also",
+    "start": 345.48,
+    "duration": 3.8
+  },
+  {
+    "text": "validate behavior. Instead of just",
+    "start": 347.48,
+    "duration": 3.56
+  },
+  {
+    "text": "asking you know does the code look",
+    "start": 349.28,
+    "duration": 4.2
+  },
+  {
+    "text": "right? We wonder does this work end to",
+    "start": 351.04,
+    "duration": 4.96
+  },
+  {
+    "text": "end? That's the difference that lets",
+    "start": 353.48,
+    "duration": 5.0
+  },
+  {
+    "text": "lets missions run for many hours, many",
+    "start": 356.0,
+    "duration": 4.6
+  },
+  {
+    "text": "days in a row without drifting. And",
+    "start": 358.48,
+    "duration": 5.32
+  },
+  {
+    "text": "making it work had to involve sort of",
+    "start": 360.6,
+    "duration": 5.92
+  },
+  {
+    "text": "rethinking validation entirely.",
+    "start": 363.8,
+    "duration": 3.72
+  },
+  {
+    "text": "So",
+    "start": 366.52,
+    "duration": 2.48
+  },
+  {
+    "text": "when you've worked with coding agents",
+    "start": 367.52,
+    "duration": 3.52
+  },
+  {
+    "text": "before you've probably seen this pattern",
+    "start": 369.0,
+    "duration": 4.28
+  },
+  {
+    "text": "where an agent builds a feature.",
+    "start": 371.04,
+    "duration": 4.92
+  },
+  {
+    "text": "It writes some tests. The tests pass.",
+    "start": 373.28,
+    "duration": 4.24
+  },
+  {
+    "text": "There's full coverage.",
+    "start": 375.96,
+    "duration": 3.28
+  },
+  {
+    "text": "But the tests were sort of shaped by the",
+    "start": 377.52,
+    "duration": 4.08
+  },
+  {
+    "text": "code not by what the code was attempting",
+    "start": 379.24,
+    "duration": 4.32
+  },
+  {
+    "text": "to actually do.",
+    "start": 381.6,
+    "duration": 4.16
+  },
+  {
+    "text": "Tests written after implementation don't",
+    "start": 383.56,
+    "duration": 5.16
+  },
+  {
+    "text": "catch bugs. They confirm decisions. So",
+    "start": 385.76,
+    "duration": 5.24
+  },
+  {
+    "text": "if you rely on validation like that your",
+    "start": 388.72,
+    "duration": 5.76
+  },
+  {
+    "text": "system will eventually drift.",
+    "start": 391.0,
+    "duration": 4.92
+  },
+  {
+    "text": "That's why this validation contract",
+    "start": 394.48,
+    "duration": 3.64
+  },
+  {
+    "text": "exists. It's written during planning",
+    "start": 395.92,
+    "duration": 4.12
+  },
+  {
+    "text": "before any code and it defines",
+    "start": 398.12,
+    "duration": 3.48
+  },
+  {
+    "text": "correctness independently of",
+    "start": 400.04,
+    "duration": 4.8
+  },
+  {
+    "text": "implementation. So for a complex project",
+    "start": 401.6,
+    "duration": 5.52
+  },
+  {
+    "text": "this can be hundreds of assertions and",
+    "start": 404.84,
+    "duration": 4.12
+  },
+  {
+    "text": "each feature is assigned one or more",
+    "start": 407.12,
+    "duration": 3.84
+  },
+  {
+    "text": "assertions that it must satisfy.",
+    "start": 408.96,
+    "duration": 4.84
+  },
+  {
+    "text": "The sum of all features must mean that",
+    "start": 410.96,
+    "duration": 6.12
+  },
+  {
+    "text": "every assertion is covered.",
+    "start": 413.8,
+    "duration": 3.28
+  },
+  {
+    "text": "After each after each milestone of",
+    "start": 417.96,
+    "duration": 4.2
+  },
+  {
+    "text": "features we have two types of validators",
+    "start": 419.8,
+    "duration": 3.4
+  },
+  {
+    "text": "that run.",
+    "start": 422.16,
+    "duration": 3.16
+  },
+  {
+    "text": "So you have the scrutiny validator and",
+    "start": 423.2,
+    "duration": 3.88
+  },
+  {
+    "text": "the user testing validator. The first",
+    "start": 425.32,
+    "duration": 2.8
+  },
+  {
+    "text": "one",
+    "start": 427.08,
+    "duration": 2.56
+  },
+  {
+    "text": "is more traditional. It runs the test",
+    "start": 428.12,
+    "duration": 3.56
+  },
+  {
+    "text": "suite, type checking, lints and",
+    "start": 429.64,
+    "duration": 3.6
+  },
+  {
+    "text": "critically it spawns",
+    "start": 431.68,
+    "duration": 3.68
+  },
+  {
+    "text": "dedicated code review agents for each",
+    "start": 433.24,
+    "duration": 4.56
+  },
+  {
+    "text": "completed feature within the milestone.",
+    "start": 435.36,
+    "duration": 4.04
+  },
+  {
+    "text": "And then the second one which is the",
+    "start": 437.8,
+    "duration": 3.2
+  },
+  {
+    "text": "user testing validator is more",
+    "start": 439.4,
+    "duration": 3.28
+  },
+  {
+    "text": "interesting. It kind of acts like a QA",
+    "start": 441.0,
+    "duration": 4.72
+  },
+  {
+    "text": "engineer. It spawns the application. It",
+    "start": 442.68,
+    "duration": 5.2
+  },
+  {
+    "text": "interacts with it through computer use",
+    "start": 445.72,
+    "duration": 4.68
+  },
+  {
+    "text": "or something similar to that. It fills",
+    "start": 447.88,
+    "duration": 4.12
+  },
+  {
+    "text": "out forms, you know,",
+    "start": 450.4,
+    "duration": 3.76
+  },
+  {
+    "text": "checks that pages render correctly,",
+    "start": 452.0,
+    "duration": 4.48
+  },
+  {
+    "text": "clicks buttons and ensures that",
+    "start": 454.16,
+    "duration": 4.64
+  },
+  {
+    "text": "functional flows work holistically.",
+    "start": 456.48,
+    "duration": 4.64
+  },
+  {
+    "text": "So this step takes significantly longer",
+    "start": 458.8,
+    "duration": 4.96
+  },
+  {
+    "text": "than the previous one of the scrutiny",
+    "start": 461.12,
+    "duration": 3.84
+  },
+  {
+    "text": "validator",
+    "start": 463.76,
+    "duration": 2.84
+  },
+  {
+    "text": "because the the system is interacting",
+    "start": 464.96,
+    "duration": 3.72
+  },
+  {
+    "text": "with a live application. And what we've",
+    "start": 466.6,
+    "duration": 4.24
+  },
+  {
+    "text": "noticed is that missions most of the",
+    "start": 468.68,
+    "duration": 3.52
+  },
+  {
+    "text": "missions wall clock time is actually",
+    "start": 470.84,
+    "duration": 3.64
+  },
+  {
+    "text": "spent here waiting for this like real",
+    "start": 472.2,
+    "duration": 4.28
+  },
+  {
+    "text": "world execution to occur instead of",
+    "start": 474.48,
+    "duration": 5.08
+  },
+  {
+    "text": "generating tokens.",
+    "start": 476.48,
+    "duration": 3.08
+  },
+  {
+    "text": "Critically neither validator has seen",
+    "start": 479.64,
+    "duration": 3.52
+  },
+  {
+    "text": "the code before.",
+    "start": 481.84,
+    "duration": 2.32
+  },
+  {
+    "text": "They're not invested in the",
+    "start": 483.16,
+    "duration": 3.2
+  },
+  {
+    "text": "implementation and so validation is",
+    "start": 484.16,
+    "duration": 5.44
+  },
+  {
+    "text": "adversarial by design.",
+    "start": 486.36,
+    "duration": 5.48
+  },
+  {
+    "text": "Okay. So then validation catches bugs.",
+    "start": 489.6,
+    "duration": 4.68
+  },
+  {
+    "text": "Right? But for a system that runs for",
+    "start": 491.84,
+    "duration": 3.96
+  },
+  {
+    "text": "many days you also need to make sure",
+    "start": 494.28,
+    "duration": 3.8
+  },
+  {
+    "text": "that context isn't lost between the",
+    "start": 495.8,
+    "duration": 3.8
+  },
+  {
+    "text": "agents.",
+    "start": 498.08,
+    "duration": 3.04
+  },
+  {
+    "text": "When a worker finishes a feature it",
+    "start": 499.6,
+    "duration": 3.56
+  },
+  {
+    "text": "doesn't just say I'm done.",
+    "start": 501.12,
+    "duration": 3.8
+  },
+  {
+    "text": "It fills out a structured handoff",
+    "start": 503.16,
+    "duration": 4.4
+  },
+  {
+    "text": "detailing what was completed, what was",
+    "start": 504.92,
+    "duration": 4.96
+  },
+  {
+    "text": "left undone, what commands were run",
+    "start": 507.56,
+    "duration": 4.56
+  },
+  {
+    "text": "throughout that that agent loop and what",
+    "start": 509.88,
+    "duration": 3.68
+  },
+  {
+    "text": "were the the exit codes of those",
+    "start": 512.12,
+    "duration": 3.359
+  },
+  {
+    "text": "commands.",
+    "start": 513.56,
+    "duration": 3.479
+  },
+  {
+    "text": "What issues were discovered and did it",
+    "start": 515.479,
+    "duration": 4.24
+  },
+  {
+    "text": "abide by the procedures that the",
+    "start": 517.039,
+    "duration": 6.721
+  },
+  {
+    "text": "orchestrator defined for that worker?",
+    "start": 519.719,
+    "duration": 4.041
+  },
+  {
+    "text": "That's how we catch issues and how the",
+    "start": 523.96,
+    "duration": 4.0
+  },
+  {
+    "text": "system self-heals.",
+    "start": 525.72,
+    "duration": 3.52
+  },
+  {
+    "text": "The errors get caught at milestone",
+    "start": 527.96,
+    "duration": 3.96
+  },
+  {
+    "text": "boundaries. Corrective work gets scoped",
+    "start": 529.24,
+    "duration": 4.08
+  },
+  {
+    "text": "and the mission sort of like pulls",
+    "start": 531.92,
+    "duration": 4.04
+  },
+  {
+    "text": "itself back on track. Not by hoping that",
+    "start": 533.32,
+    "duration": 4.48
+  },
+  {
+    "text": "agents remember what happened but by",
+    "start": 535.96,
+    "duration": 4.6
+  },
+  {
+    "text": "forcing them to write it down and then",
+    "start": 537.8,
+    "duration": 6.0
+  },
+  {
+    "text": "actually address issues and I'll I'll",
+    "start": 540.56,
+    "duration": 5.64
+  },
+  {
+    "text": "present on that in just a sec.",
+    "start": 543.8,
+    "duration": 5.04
+  },
+  {
+    "text": "Our longest mission ran for 16 days",
+    "start": 546.2,
+    "duration": 4.2
+  },
+  {
+    "text": "which is much longer than a full sprint",
+    "start": 548.84,
+    "duration": 4.36
+  },
+  {
+    "text": "and we believe that they can run for 30.",
+    "start": 550.4,
+    "duration": 4.56
+  },
+  {
+    "text": "That's only possible because of the",
+    "start": 553.2,
+    "duration": 4.24
+  },
+  {
+    "text": "structure.",
+    "start": 554.96,
+    "duration": 3.76
+  },
+  {
+    "text": "So once we had this architecture the",
+    "start": 557.44,
+    "duration": 3.68
+  },
+  {
+    "text": "next question became became how do we",
+    "start": 558.72,
+    "duration": 5.16
+  },
+  {
+    "text": "actually run it? Right?",
+    "start": 561.12,
+    "duration": 4.32
+  },
+  {
+    "text": "The most obvious choice is like",
+    "start": 563.88,
+    "duration": 3.64
+  },
+  {
+    "text": "parallelism. If you have 10 agents",
+    "start": 565.44,
+    "duration": 4.28
+  },
+  {
+    "text": "running at one point in time then you",
+    "start": 567.52,
+    "duration": 4.52
+  },
+  {
+    "text": "have 10 times the throughput. But we",
+    "start": 569.72,
+    "duration": 3.96
+  },
+  {
+    "text": "tried that and it doesn't really work",
+    "start": 572.04,
+    "duration": 3.36
+  },
+  {
+    "text": "for tasks in the like software dev",
+    "start": 573.68,
+    "duration": 3.84
+  },
+  {
+    "text": "domain because agents conflict. They",
+    "start": 575.4,
+    "duration": 3.8
+  },
+  {
+    "text": "step on each other's changes. They",
+    "start": 577.52,
+    "duration": 3.96
+  },
+  {
+    "text": "duplicate work. They make inconsistent",
+    "start": 579.2,
+    "duration": 4.8
+  },
+  {
+    "text": "architectural decisions. And so the",
+    "start": 581.48,
+    "duration": 5.04
+  },
+  {
+    "text": "coordination overhead ends up",
+    "start": 584.0,
+    "duration": 4.44
+  },
+  {
+    "text": "eating up the speed gains all the while",
+    "start": 586.52,
+    "duration": 3.92
+  },
+  {
+    "text": "you're burning tokens.",
+    "start": 588.44,
+    "duration": 3.52
+  },
+  {
+    "text": "The difference with missions is that we",
+    "start": 590.44,
+    "duration": 3.44
+  },
+  {
+    "text": "run features serially.",
+    "start": 591.96,
+    "duration": 4.24
+  },
+  {
+    "text": "So there's only one worker or validator",
+    "start": 593.88,
+    "duration": 4.44
+  },
+  {
+    "text": "running at any given point in time.",
+    "start": 596.2,
+    "duration": 3.96
+  },
+  {
+    "text": "Within a feature, we allow for",
+    "start": 598.32,
+    "duration": 4.92
+  },
+  {
+    "text": "parallelization on read-only operations.",
+    "start": 600.16,
+    "duration": 5.56
+  },
+  {
+    "text": "So, you have something like",
+    "start": 603.24,
+    "duration": 3.64
+  },
+  {
+    "text": "searching through the code base or",
+    "start": 605.72,
+    "duration": 2.96
+  },
+  {
+    "text": "researching APIs, all that gets",
+    "start": 606.88,
+    "duration": 4.88
+  },
+  {
+    "text": "parallelized. Within validators, we also",
+    "start": 608.68,
+    "duration": 4.64
+  },
+  {
+    "text": "parallelize read-only operations such as",
+    "start": 611.76,
+    "duration": 3.48
+  },
+  {
+    "text": "code review.",
+    "start": 613.32,
+    "duration": 4.24
+  },
+  {
+    "text": "This is serial execution with with",
+    "start": 615.24,
+    "duration": 4.44
+  },
+  {
+    "text": "targeted internal parallelization. It",
+    "start": 617.56,
+    "duration": 4.12
+  },
+  {
+    "text": "seems slower on paper, but the error",
+    "start": 619.68,
+    "duration": 4.08
+  },
+  {
+    "text": "rate drops dramatically, and when you",
+    "start": 621.68,
+    "duration": 3.92
+  },
+  {
+    "text": "have tasks that run for many days, this",
+    "start": 623.76,
+    "duration": 5.4
+  },
+  {
+    "text": "sort of correctness compounds.",
+    "start": 625.6,
+    "duration": 3.56
+  },
+  {
+    "text": "Now,",
+    "start": 629.92,
+    "duration": 2.72
+  },
+  {
+    "text": "your your standard chat interface",
+    "start": 630.96,
+    "duration": 3.2
+  },
+  {
+    "text": "doesn't really work for something that",
+    "start": 632.64,
+    "duration": 3.52
+  },
+  {
+    "text": "lasts many days. At a quick glance, you",
+    "start": 634.16,
+    "duration": 3.48
+  },
+  {
+    "text": "need to be able to be able to see how",
+    "start": 636.16,
+    "duration": 3.56
+  },
+  {
+    "text": "much of the project have you completed,",
+    "start": 637.64,
+    "duration": 4.24
+  },
+  {
+    "text": "and what's what amount of the budget",
+    "start": 639.72,
+    "duration": 3.96
+  },
+  {
+    "text": "that you originally like set off with",
+    "start": 641.88,
+    "duration": 3.28
+  },
+  {
+    "text": "have you burned through.",
+    "start": 643.68,
+    "duration": 3.6
+  },
+  {
+    "text": "So, using a mission actually, we built",
+    "start": 645.16,
+    "duration": 4.0
+  },
+  {
+    "text": "mission control, which is a dedicated",
+    "start": 647.28,
+    "duration": 4.4
+  },
+  {
+    "text": "view for this. You can see what does",
+    "start": 649.16,
+    "duration": 4.68
+  },
+  {
+    "text": "what is active worker doing right now,",
+    "start": 651.68,
+    "duration": 3.56
+  },
+  {
+    "text": "uh read off handoff summary is that",
+    "start": 653.84,
+    "duration": 3.08
+  },
+  {
+    "text": "detail. What did the worker the",
+    "start": 655.24,
+    "duration": 3.44
+  },
+  {
+    "text": "validator discover,",
+    "start": 656.92,
+    "duration": 3.84
+  },
+  {
+    "text": "um how it's going to sort of like alter",
+    "start": 658.68,
+    "duration": 4.36
+  },
+  {
+    "text": "its course moving forward.",
+    "start": 660.76,
+    "duration": 3.52
+  },
+  {
+    "text": "Or,",
+    "start": 663.04,
+    "duration": 3.16
+  },
+  {
+    "text": "you could just, you know,",
+    "start": 664.28,
+    "duration": 3.92
+  },
+  {
+    "text": "go check out, um",
+    "start": 666.2,
+    "duration": 3.24
+  },
+  {
+    "text": "go hang out with your friends that",
+    "start": 668.2,
+    "duration": 3.36
+  },
+  {
+    "text": "night. This entire view lets you just",
+    "start": 669.44,
+    "duration": 4.36
+  },
+  {
+    "text": "run missions asynchronously, and you",
+    "start": 671.56,
+    "duration": 4.08
+  },
+  {
+    "text": "could be plugged in as a project manager",
+    "start": 673.8,
+    "duration": 3.8
+  },
+  {
+    "text": "overseeing implementation, or you could",
+    "start": 675.64,
+    "duration": 4.48
+  },
+  {
+    "text": "just, you know, go and and uh hang out",
+    "start": 677.6,
+    "duration": 4.84
+  },
+  {
+    "text": "with your friends.",
+    "start": 680.12,
+    "duration": 4.84
+  },
+  {
+    "text": "Okay. So, the right model in each role.",
+    "start": 682.44,
+    "duration": 4.16
+  },
+  {
+    "text": "Um",
+    "start": 684.96,
+    "duration": 3.56
+  },
+  {
+    "text": "everything here sort of assumes one",
+    "start": 686.6,
+    "duration": 3.72
+  },
+  {
+    "text": "thing, and that is that you're using the",
+    "start": 688.52,
+    "duration": 3.92
+  },
+  {
+    "text": "right model in each role. Planning",
+    "start": 690.32,
+    "duration": 4.68
+  },
+  {
+    "text": "benefits from slow, careful reasoning,",
+    "start": 692.44,
+    "duration": 4.64
+  },
+  {
+    "text": "implementation from fast code fluency",
+    "start": 695.0,
+    "duration": 5.24
+  },
+  {
+    "text": "and creativity, validation benefits from",
+    "start": 697.08,
+    "duration": 5.0
+  },
+  {
+    "text": "uh precise instruction following, right?",
+    "start": 700.24,
+    "duration": 4.12
+  },
+  {
+    "text": "And so, no single model nor model",
+    "start": 702.08,
+    "duration": 5.759
+  },
+  {
+    "text": "provider is best at all three of these.",
+    "start": 704.36,
+    "duration": 5.2
+  },
+  {
+    "text": "Using systems like missions requires the",
+    "start": 707.839,
+    "duration": 3.201
+  },
+  {
+    "text": "development of a new skill, which",
+    "start": 709.56,
+    "duration": 2.84
+  },
+  {
+    "text": "internally we've been calling droid",
+    "start": 711.04,
+    "duration": 2.6
+  },
+  {
+    "text": "whispering,",
+    "start": 712.4,
+    "duration": 2.36
+  },
+  {
+    "text": "but it's this idea that you need to be",
+    "start": 713.64,
+    "duration": 3.36
+  },
+  {
+    "text": "able to mentally model how different",
+    "start": 714.76,
+    "duration": 4.72
+  },
+  {
+    "text": "LLMs interact, where they fail, how",
+    "start": 717.0,
+    "duration": 4.56
+  },
+  {
+    "text": "those failures compound over a multi-day",
+    "start": 719.48,
+    "duration": 3.0
+  },
+  {
+    "text": "run,",
+    "start": 721.56,
+    "duration": 2.04
+  },
+  {
+    "text": "and then you need to make a deliberate",
+    "start": 722.48,
+    "duration": 2.72
+  },
+  {
+    "text": "choice as to which model sits in which",
+    "start": 723.6,
+    "duration": 2.8
+  },
+  {
+    "text": "seat.",
+    "start": 725.2,
+    "duration": 2.96
+  },
+  {
+    "text": "Theo, the engineer who built our",
+    "start": 726.4,
+    "duration": 4.12
+  },
+  {
+    "text": "missions prototype, came up with our our",
+    "start": 728.16,
+    "duration": 4.36
+  },
+  {
+    "text": "model defaults, but we really encourage",
+    "start": 730.52,
+    "duration": 4.12
+  },
+  {
+    "text": "people to make these uh their own and",
+    "start": 732.52,
+    "duration": 3.44
+  },
+  {
+    "text": "customize them to the needs of their",
+    "start": 734.64,
+    "duration": 2.72
+  },
+  {
+    "text": "project.",
+    "start": 735.96,
+    "duration": 3.4
+  },
+  {
+    "text": "So, for example, validation might use a",
+    "start": 737.36,
+    "duration": 4.08
+  },
+  {
+    "text": "different model provider entirely to",
+    "start": 739.36,
+    "duration": 3.52
+  },
+  {
+    "text": "make sure that it's not biased by the",
+    "start": 741.44,
+    "duration": 3.48
+  },
+  {
+    "text": "same training data.",
+    "start": 742.88,
+    "duration": 3.8
+  },
+  {
+    "text": "This is a structural advantage of a",
+    "start": 744.92,
+    "duration": 3.84
+  },
+  {
+    "text": "model-agnostic architecture.",
+    "start": 746.68,
+    "duration": 3.56
+  },
+  {
+    "text": "You're only as strong as your weakest",
+    "start": 748.76,
+    "duration": 3.2
+  },
+  {
+    "text": "link. And if you're locked into one",
+    "start": 750.24,
+    "duration": 3.8
+  },
+  {
+    "text": "model provider, then you're constrained",
+    "start": 751.96,
+    "duration": 4.72
+  },
+  {
+    "text": "by that family's weakest capability.",
+    "start": 754.04,
+    "duration": 5.2
+  },
+  {
+    "text": "As models continue to specialize,",
+    "start": 756.68,
+    "duration": 4.0
+  },
+  {
+    "text": "the ability to put the right model in",
+    "start": 759.24,
+    "duration": 2.96
+  },
+  {
+    "text": "the right seat becomes a compounding",
+    "start": 760.68,
+    "duration": 3.48
+  },
+  {
+    "text": "advantage.",
+    "start": 762.2,
+    "duration": 3.72
+  },
+  {
+    "text": "It works in the other direction, too. If",
+    "start": 764.16,
+    "duration": 3.88
+  },
+  {
+    "text": "you're using missions, the structure of",
+    "start": 765.92,
+    "duration": 4.76
+  },
+  {
+    "text": "that can compensate for models that are",
+    "start": 768.04,
+    "duration": 4.16
+  },
+  {
+    "text": "not quite at like the frontier level",
+    "start": 770.68,
+    "duration": 4.2
+  },
+  {
+    "text": "performance. So, the validation",
+    "start": 772.2,
+    "duration": 4.84
+  },
+  {
+    "text": "contracts, the milestone checkpoints,",
+    "start": 774.88,
+    "duration": 4.48
+  },
+  {
+    "text": "they allow you to run missions very very",
+    "start": 777.04,
+    "duration": 4.04
+  },
+  {
+    "text": "successfully even using open-weight",
+    "start": 779.36,
+    "duration": 4.24
+  },
+  {
+    "text": "models.",
+    "start": 781.08,
+    "duration": 2.52
+  },
+  {
+    "text": "Now, this all sounds quite theoretical.",
+    "start": 784.04,
+    "duration": 3.12
+  },
+  {
+    "text": "What does it actually look like in",
+    "start": 786.24,
+    "duration": 2.08
+  },
+  {
+    "text": "production?",
+    "start": 787.16,
+    "duration": 3.44
+  },
+  {
+    "text": "I've got an example of building a clone",
+    "start": 788.32,
+    "duration": 4.44
+  },
+  {
+    "text": "of Slack right here. This slide has a",
+    "start": 790.6,
+    "duration": 4.32
+  },
+  {
+    "text": "ton of info, but I'll walk you through",
+    "start": 792.76,
+    "duration": 3.2
+  },
+  {
+    "text": "just a few things that I want to call",
+    "start": 794.92,
+    "duration": 1.96
+  },
+  {
+    "text": "out.",
+    "start": 795.96,
+    "duration": 3.04
+  },
+  {
+    "text": "60% of our time is spent on",
+    "start": 796.88,
+    "duration": 3.56
+  },
+  {
+    "text": "implementation,",
+    "start": 799.0,
+    "duration": 4.4
+  },
+  {
+    "text": "and 60% of our tokens as well.",
+    "start": 800.44,
+    "duration": 5.399
+  },
+  {
+    "text": "Notice how validation never succeeds on",
+    "start": 803.4,
+    "duration": 5.16
+  },
+  {
+    "text": "the first go. That's in the mission",
+    "start": 805.839,
+    "duration": 3.961
+  },
+  {
+    "text": "What's it?",
+    "start": 808.56,
+    "duration": 3.68
+  },
+  {
+    "text": "The one on the bottom left. Um we almost",
+    "start": 809.8,
+    "duration": 3.6
+  },
+  {
+    "text": "always have to create follow-up",
+    "start": 812.24,
+    "duration": 2.92
+  },
+  {
+    "text": "features. So, it really demonstrates",
+    "start": 813.4,
+    "duration": 3.76
+  },
+  {
+    "text": "like the value of a system that does",
+    "start": 815.16,
+    "duration": 3.76
+  },
+  {
+    "text": "this QA loop.",
+    "start": 817.16,
+    "duration": 4.24
+  },
+  {
+    "text": "You end up with with 50% of your lines",
+    "start": 818.92,
+    "duration": 3.919
+  },
+  {
+    "text": "of code at the very end, in the bottom",
+    "start": 821.4,
+    "duration": 5.2
+  },
+  {
+    "text": "right, being tests, and 90% of your uh",
+    "start": 822.839,
+    "duration": 6.401
+  },
+  {
+    "text": "code is covered by those tests.",
+    "start": 826.6,
+    "duration": 4.64
+  },
+  {
+    "text": "And lastly, we take advantage of prompt",
+    "start": 829.24,
+    "duration": 3.92
+  },
+  {
+    "text": "caching heavily to make sure that we're",
+    "start": 831.24,
+    "duration": 3.56
+  },
+  {
+    "text": "sort of offsetting",
+    "start": 833.16,
+    "duration": 2.24
+  },
+  {
+    "text": "um",
+    "start": 834.8,
+    "duration": 2.6
+  },
+  {
+    "text": "the the price of running such a long",
+    "start": 835.4,
+    "duration": 4.6
+  },
+  {
+    "text": "task.",
+    "start": 837.4,
+    "duration": 2.6
+  },
+  {
+    "text": "People have really taken to missions,",
+    "start": 840.12,
+    "duration": 3.68
+  },
+  {
+    "text": "and it's been awesome to see what folks",
+    "start": 841.68,
+    "duration": 4.44
+  },
+  {
+    "text": "have been building with them. Um some",
+    "start": 843.8,
+    "duration": 3.88
+  },
+  {
+    "text": "examples I've included in this slide,",
+    "start": 846.12,
+    "duration": 3.719
+  },
+  {
+    "text": "but ones that I want to call out are",
+    "start": 847.68,
+    "duration": 3.6
+  },
+  {
+    "text": "specifically in the enterprise setting,",
+    "start": 849.839,
+    "duration": 3.841
+  },
+  {
+    "text": "which is where Factory really shines. Um",
+    "start": 851.28,
+    "duration": 4.24
+  },
+  {
+    "text": "they've been used to prototype new ideas",
+    "start": 853.68,
+    "duration": 4.6
+  },
+  {
+    "text": "and features overnight, to um",
+    "start": 855.52,
+    "duration": 4.8
+  },
+  {
+    "text": "make sure that people can uh build",
+    "start": 858.28,
+    "duration": 3.92
+  },
+  {
+    "text": "internal tools at increasingly rapid",
+    "start": 860.32,
+    "duration": 3.92
+  },
+  {
+    "text": "rates, to run huge refactors and",
+    "start": 862.2,
+    "duration": 5.08
+  },
+  {
+    "text": "migrations, for ML search uh research,",
+    "start": 864.24,
+    "duration": 5.96
+  },
+  {
+    "text": "sorry, and to modernize uh codebases so",
+    "start": 867.28,
+    "duration": 6.48
+  },
+  {
+    "text": "that agents are more productive in them.",
+    "start": 870.2,
+    "duration": 3.56
+  },
+  {
+    "text": "Um one thing that I wanted to talk about",
+    "start": 873.959,
+    "duration": 4.561
+  },
+  {
+    "text": "was also this concept of like the bitter",
+    "start": 875.76,
+    "duration": 5.079
+  },
+  {
+    "text": "lesson, because every person building",
+    "start": 878.52,
+    "duration": 4.84
+  },
+  {
+    "text": "multi-agent systems has this fear of the",
+    "start": 880.839,
+    "duration": 4.441
+  },
+  {
+    "text": "next model release sort of like making",
+    "start": 883.36,
+    "duration": 3.76
+  },
+  {
+    "text": "their their architecture obsolete",
+    "start": 885.28,
+    "duration": 3.08
+  },
+  {
+    "text": "overnight.",
+    "start": 887.12,
+    "duration": 3.04
+  },
+  {
+    "text": "Um so,",
+    "start": 888.36,
+    "duration": 3.32
+  },
+  {
+    "text": "when we were building missions, we",
+    "start": 890.16,
+    "duration": 3.799
+  },
+  {
+    "text": "decided we had to make this system get",
+    "start": 891.68,
+    "duration": 5.0
+  },
+  {
+    "text": "better with every model improvement.",
+    "start": 893.959,
+    "duration": 4.241
+  },
+  {
+    "text": "This means that almost all of the",
+    "start": 896.68,
+    "duration": 3.279
+  },
+  {
+    "text": "orchestration logic is defined in",
+    "start": 898.2,
+    "duration": 3.44
+  },
+  {
+    "text": "prompts and skills,",
+    "start": 899.959,
+    "duration": 3.161
+  },
+  {
+    "text": "um instead of like a hard-coded state",
+    "start": 901.64,
+    "duration": 2.56
+  },
+  {
+    "text": "machine.",
+    "start": 903.12,
+    "duration": 4.12
+  },
+  {
+    "text": "How it decomposes failures and um",
+    "start": 904.2,
+    "duration": 4.6
+  },
+  {
+    "text": "or decomposes features and handles",
+    "start": 907.24,
+    "duration": 4.36
+  },
+  {
+    "text": "failures is all in about like 700 lines",
+    "start": 908.8,
+    "duration": 5.56
+  },
+  {
+    "text": "of text, and four sentences of this can",
+    "start": 911.6,
+    "duration": 4.479
+  },
+  {
+    "text": "alter the execution strategy pretty",
+    "start": 914.36,
+    "duration": 3.56
+  },
+  {
+    "text": "dramatically.",
+    "start": 916.079,
+    "duration": 3.88
+  },
+  {
+    "text": "Worker behavior is driven by skills that",
+    "start": 917.92,
+    "duration": 3.919
+  },
+  {
+    "text": "the orchestrator defines per mission, so",
+    "start": 919.959,
+    "duration": 4.161
+  },
+  {
+    "text": "you get very customized behavior,",
+    "start": 921.839,
+    "duration": 4.881
+  },
+  {
+    "text": "and the only deterministic logic is very",
+    "start": 924.12,
+    "duration": 4.32
+  },
+  {
+    "text": "thin, and it's focused on enabling",
+    "start": 926.72,
+    "duration": 3.88
+  },
+  {
+    "text": "models to do what they do best while the",
+    "start": 928.44,
+    "duration": 3.88
+  },
+  {
+    "text": "system handles like the bookkeeping,",
+    "start": 930.6,
+    "duration": 3.8
+  },
+  {
+    "text": "right? Stuff like running validation and",
+    "start": 932.32,
+    "duration": 3.759
+  },
+  {
+    "text": "ensuring that progress is blocked when",
+    "start": 934.4,
+    "duration": 3.439
+  },
+  {
+    "text": "there are some handoff issues that are",
+    "start": 936.079,
+    "duration": 3.241
+  },
+  {
+    "text": "not addressed.",
+    "start": 937.839,
+    "duration": 3.081
+  },
+  {
+    "text": "So, missions sort of ensure the the",
+    "start": 939.32,
+    "duration": 3.8
+  },
+  {
+    "text": "discipline, and the models provide the",
+    "start": 940.92,
+    "duration": 4.56
+  },
+  {
+    "text": "intelligence uh using primitives that",
+    "start": 943.12,
+    "duration": 4.16
+  },
+  {
+    "text": "they're already familiar with, like",
+    "start": 945.48,
+    "duration": 5.64
+  },
+  {
+    "text": "agents.md, skills, etc.",
+    "start": 947.28,
+    "duration": 5.96
+  },
+  {
+    "text": "So, what does this unlock?",
+    "start": 951.12,
+    "duration": 3.4
+  },
+  {
+    "text": "Remember the bottleneck that I started",
+    "start": 953.24,
+    "duration": 3.28
+  },
+  {
+    "text": "off with? Human attention.",
+    "start": 954.52,
+    "duration": 3.6
+  },
+  {
+    "text": "The economics are sort of changing.",
+    "start": 956.52,
+    "duration": 3.24
+  },
+  {
+    "text": "Before, a team of five engineers might",
+    "start": 958.12,
+    "duration": 2.839
+  },
+  {
+    "text": "be able to",
+    "start": 959.76,
+    "duration": 3.56
+  },
+  {
+    "text": "uh work on 10 work streams at any given",
+    "start": 960.959,
+    "duration": 3.681
+  },
+  {
+    "text": "point in time.",
+    "start": 963.32,
+    "duration": 2.8
+  },
+  {
+    "text": "Now, maybe with missions, we can bring",
+    "start": 964.64,
+    "duration": 3.319
+  },
+  {
+    "text": "that up to 30.",
+    "start": 966.12,
+    "duration": 3.64
+  },
+  {
+    "text": "The team can focus on interesting",
+    "start": 967.959,
+    "duration": 3.241
+  },
+  {
+    "text": "problems such as",
+    "start": 969.76,
+    "duration": 3.88
+  },
+  {
+    "text": "uh the architecture, product decisions,",
+    "start": 971.2,
+    "duration": 4.72
+  },
+  {
+    "text": "um instead of uh worrying about the",
+    "start": 973.64,
+    "duration": 4.0
+  },
+  {
+    "text": "execution per se.",
+    "start": 975.92,
+    "duration": 4.08
+  },
+  {
+    "text": "And the important thing is the codebase",
+    "start": 977.64,
+    "duration": 4.92
+  },
+  {
+    "text": "ends up cleaner than when you started.",
+    "start": 980.0,
+    "duration": 4.76
+  },
+  {
+    "text": "The end-to-end tests, the unit tests,",
+    "start": 982.56,
+    "duration": 4.2
+  },
+  {
+    "text": "the skills, the structure that missions",
+    "start": 984.76,
+    "duration": 4.92
+  },
+  {
+    "text": "provide uh means that agents and humans",
+    "start": 986.76,
+    "duration": 4.48
+  },
+  {
+    "text": "are more productive in that environment",
+    "start": 989.68,
+    "duration": 3.96
+  },
+  {
+    "text": "moving forward.",
+    "start": 991.24,
+    "duration": 4.4
+  },
+  {
+    "text": "So, now that you understand how missions",
+    "start": 993.64,
+    "duration": 3.319
+  },
+  {
+    "text": "are structured and how they actually",
+    "start": 995.64,
+    "duration": 2.96
+  },
+  {
+    "text": "work, you can see that they're really a",
+    "start": 996.959,
+    "duration": 4.481
+  },
+  {
+    "text": "composition of those original um",
+    "start": 998.6,
+    "duration": 4.68
+  },
+  {
+    "text": "strategies, right? Delegation shows up",
+    "start": 1001.44,
+    "duration": 4.16
+  },
+  {
+    "text": "everywhere in how the orchestrator",
+    "start": 1003.28,
+    "duration": 4.84
+  },
+  {
+    "text": "spawns workers and how we spawn research",
+    "start": 1005.6,
+    "duration": 4.52
+  },
+  {
+    "text": "sub-agents. Creator-verifier is",
+    "start": 1008.12,
+    "duration": 3.68
+  },
+  {
+    "text": "fundamental in that validation and",
+    "start": 1010.12,
+    "duration": 3.16
+  },
+  {
+    "text": "implementation are always separate",
+    "start": 1011.8,
+    "duration": 3.96
+  },
+  {
+    "text": "agents with separate context. Broadcast",
+    "start": 1013.28,
+    "duration": 4.48
+  },
+  {
+    "text": "runs through the shared mission state",
+    "start": 1015.76,
+    "duration": 3.8
+  },
+  {
+    "text": "that every agent references, and",
+    "start": 1017.76,
+    "duration": 3.319
+  },
+  {
+    "text": "negotiation shows up at milestone",
+    "start": 1019.56,
+    "duration": 3.12
+  },
+  {
+    "text": "boundaries, where the orchestrator",
+    "start": 1021.079,
+    "duration": 3.721
+  },
+  {
+    "text": "defines, you know, does this does this",
+    "start": 1022.68,
+    "duration": 3.68
+  },
+  {
+    "text": "handoff summary sort of like look",
+    "start": 1024.8,
+    "duration": 3.399
+  },
+  {
+    "text": "correct? Do we need to create follow-up",
+    "start": 1026.36,
+    "duration": 5.079
+  },
+  {
+    "text": "features, rescope, etc.",
+    "start": 1028.199,
+    "duration": 4.921
+  },
+  {
+    "text": "But strategies aren't enough. You need",
+    "start": 1031.439,
+    "duration": 4.321
+  },
+  {
+    "text": "the connective tissue. You need uh these",
+    "start": 1033.12,
+    "duration": 4.12
+  },
+  {
+    "text": "structured handoffs so that agents don't",
+    "start": 1035.76,
+    "duration": 3.36
+  },
+  {
+    "text": "lose context, you need the right model",
+    "start": 1037.24,
+    "duration": 3.32
+  },
+  {
+    "text": "in each role, and you need an",
+    "start": 1039.12,
+    "duration": 3.319
+  },
+  {
+    "text": "architecture that will improve with each",
+    "start": 1040.56,
+    "duration": 3.879
+  },
+  {
+    "text": "model improvement.",
+    "start": 1042.439,
+    "duration": 3.361
+  },
+  {
+    "text": "So,",
+    "start": 1044.439,
+    "duration": 3.0
+  },
+  {
+    "text": "what I like to think about is that",
+    "start": 1045.8,
+    "duration": 3.0
+  },
+  {
+    "text": "people in this room who are thinking in",
+    "start": 1047.439,
+    "duration": 3.561
+  },
+  {
+    "text": "terms of agent ecosystems, who develop",
+    "start": 1048.8,
+    "duration": 3.8
+  },
+  {
+    "text": "an intuition for how different models",
+    "start": 1051.0,
+    "duration": 4.2
+  },
+  {
+    "text": "compose under pressure, um that those",
+    "start": 1052.6,
+    "duration": 3.84
+  },
+  {
+    "text": "folks are going to be really shipping",
+    "start": 1055.2,
+    "duration": 3.76
+  },
+  {
+    "text": "the next generation of innovation.",
+    "start": 1056.44,
+    "duration": 4.36
+  },
+  {
+    "text": "Uh there's a lot of open questions",
+    "start": 1058.96,
+    "duration": 3.96
+  },
+  {
+    "text": "still, right? Um how do we further",
+    "start": 1060.8,
+    "duration": 3.56
+  },
+  {
+    "text": "parallelize the workload of missions so",
+    "start": 1062.92,
+    "duration": 3.68
+  },
+  {
+    "text": "that they run faster? How do we start",
+    "start": 1064.36,
+    "duration": 4.08
+  },
+  {
+    "text": "orchestrating missions themselves into",
+    "start": 1066.6,
+    "duration": 3.88
+  },
+  {
+    "text": "even more complex workflows?",
+    "start": 1068.44,
+    "duration": 3.52
+  },
+  {
+    "text": "Uh but the data from production missions",
+    "start": 1070.48,
+    "duration": 4.44
+  },
+  {
+    "text": "is clear. This works on real projects at",
+    "start": 1071.96,
+    "duration": 4.76
+  },
+  {
+    "text": "scale today.",
+    "start": 1074.92,
+    "duration": 2.88
+  },
+  {
+    "text": "So,",
+    "start": 1076.72,
+    "duration": 2.64
+  },
+  {
+    "text": "this is what I'll leave you with. Open",
+    "start": 1077.8,
+    "duration": 2.6
+  },
+  {
+    "text": "Droid,",
+    "start": 1079.36,
+    "duration": 3.72
+  },
+  {
+    "text": "try running /missions,",
+    "start": 1080.4,
+    "duration": 3.92
+  },
+  {
+    "text": "argue with the orchestrator about the",
+    "start": 1083.08,
+    "duration": 2.32
+  },
+  {
+    "text": "scope,",
+    "start": 1084.32,
+    "duration": 2.68
+  },
+  {
+    "text": "approve the plan, and then go do",
+    "start": 1085.4,
+    "duration": 3.2
+  },
+  {
+    "text": "something else.",
+    "start": 1087.0,
+    "duration": 3.12
+  },
+  {
+    "text": "I'm excited to see what you guys build,",
+    "start": 1088.6,
+    "duration": 2.64
+  },
+  {
+    "text": "and I'll be around to answer any",
+    "start": 1090.12,
+    "duration": 3.24
+  },
+  {
+    "text": "questions uh for the rest of the day.",
+    "start": 1091.24,
+    "duration": 3.277
+  },
+  {
+    "text": "Thanks.",
+    "start": 1093.36,
+    "duration": 3.177
+  },
+  {
+    "text": ">> [applause]",
+    "start": 1094.517,
+    "duration": 2.02
+  },
+  {
+    "text": "[music]",
+    "start": 1098.447,
+    "duration": 2.02
+  }
+]

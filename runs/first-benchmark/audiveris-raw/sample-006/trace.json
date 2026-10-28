@@ -1,0 +1,25 @@
+{
+  "id": "내입술로_1",
+  "engine": "audiveris-raw",
+  "source_image": "research/data/내입술로_1.png",
+  "source_image_sha256": "972a47424b1a0536164c5ebc9affb1cbb7f0c1ccb94aee25d0f619395be1a2d0",
+  "input_sha256": "26ab4c4e4bc0ee057e5d99fde3f70f932a36a8321504f7a141c8488d59cafb1d",
+  "started_unix": 1793066836.623635,
+  "reference_access": false,
+  "runner_sha256": "ab8fa3e423930b13d2c94b4c190d1ac7f8d9c7975dcdaef8e10ebf6347e240b5",
+  "exit_code": 0,
+  "status": "ok",
+  "output": "runs/first-benchmark/audiveris-raw/sample-006/input.mxl",
+  "command": [
+    "/Users/geegle/development/whasuk/researchagent/.cache/audiveris-mount/Audiveris.app/Contents/MacOS/Audiveris",
+    "-batch",
+    "-transcribe",
+    "-export",
+    "-output",
+    "/Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-raw/sample-006",
+    "--",
+    "/Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-raw/sample-006/input.png"
+  ],
+  "elapsed_seconds": 3.5342856250003933,
+  "output_sha256": "cd660e94ac9b7f5cdf144c31a1a2e362e3a82a38d53a8d5705ab47d2c399956a"
+}

@@ -1,0 +1,37 @@
+[Error] Adding 'beam' to a 'chord'
+[Error] MusicXML import: Chord starting point has not been found
+[Warning] Time spanning element 'slur' with @xml:id 'f62wwk6', @startid '#e11zixqa', and @endid '#gcbw0t7' could not be matched.
+[Warning] Insufficient space to draw mixed beam, starting at 'b13ypkiy'. Drawing 'above' instead.
+[Warning] Insufficient space to draw mixed beam, starting at 'b13ypkiy'. Drawing 'above' instead.
+[Warning] Insufficient space to draw mixed beam, starting at 'b13ypkiy'. Drawing 'above' instead.
+[Warning] Insufficient space to draw mixed beam, starting at 'b13ypkiy'. Drawing 'above' instead.
+[Warning] Insufficient space to draw mixed beam, starting at 'b13ypkiy'. Drawing 'above' instead.
+[Warning] Insufficient space to draw mixed beam, starting at 'b13ypkiy'. Drawing 'above' instead.
+[Warning] Insufficient space to draw mixed beam, starting at 'b13ypkiy'. Drawing 'above' instead.
+[Warning] Insufficient space to draw mixed beam, starting at 'b13ypkiy'. Drawing 'above' instead.
+[Warning] Insufficient space to draw mixed beam, starting at 'b13ypkiy'. Drawing 'above' instead.
+(v0:) "2B" (v0:) "8B 8d" (v0:) "8dL 8f" (v0:) ".ZZZ8dL 8f" (v0:) "(8dJ" (v0:) "4c)" (v0:) "4cc" (v0:) "4d' 4dd" [Warning] GRID STAFF:  [] 
+Warning, replacing existing token: 2B with a null token around time 2 in layerindex 0
+GRID STAFF:  [] 
+Warning, replacing existing token: 8B 8d with a null token around time 1/2 in layerindex 0
+GRID STAFF:  [] 
+Warning, replacing existing token: 8dL 8f with a null token around time 1/2 in layerindex 0
+GRID STAFF:  [] 
+Warning, replacing existing token: .ZZZ8dL 8f with a null token around time 1/2 in layerindex 0
+GRID STAFF:  [] 
+Warning, replacing existing token: (8dJ with a null token around time 1/2 in layerindex 0
+GRID STAFF:  [] 
+Warning, replacing existing token: 4c) with a null token around time 1 in layerindex 0
+GRID STAFF:  [] 
+Warning, replacing existing token: 4cc with a null token around time 1 in layerindex 0
+GRID STAFF:  [] 
+Warning, replacing existing token: 4d' 4dd with a null token around time -1/2 in layerindex 0
+Cannot deal with this slice addition case yet for invisible rests...
+	TIMESTAMP = 13/2	>	6
+Cannot deal with this slice addition case yet for invisible rests...
+	TIMESTAMP = 11/2	>	19/4
+Cannot deal with this slice addition case yet for invisible rests...
+	TIMESTAMP = 9/2	>	17/4
+Cannot deal with this slice addition case yet for invisible rests...
+	TIMESTAMP = 4	>	15/4
+

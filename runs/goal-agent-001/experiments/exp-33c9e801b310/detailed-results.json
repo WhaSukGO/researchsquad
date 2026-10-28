@@ -1,0 +1,2887 @@
+[
+  {
+    "id": "내이름으로_1",
+    "song": "내이름으로",
+    "sample_index": 1,
+    "trace": {
+      "sample_index": 1,
+      "id": "내이름으로_1",
+      "kind": "audiveris_text_harmony",
+      "reference_access": false,
+      "source_image_sha256": "0d8d864f885c302aafb273d9d5e2febb3dc768ee65faca53a9c82dccf877a3a1",
+      "output": "runs/goal-agent-001/experiments/exp-33c9e801b310/sample-001/prediction.musicxml",
+      "status": "ok",
+      "recovered_words": [],
+      "source_prediction_sha256": "8c0e279cbc1c8a7ffa9e9742f1533554e340c357246a5d57d9f35d3988ce187d",
+      "timing_audited": false,
+      "elapsed_seconds": 0.0023830000009184005,
+      "output_sha256": "6f4ab45dba736dea4506838cf6fd24f4a246ae7a9eec468d2a8f0dd090edd1eb"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "C4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A4",
+            "F4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "E5"
+          ],
+          "1"
+        ],
+        [
+          [
+            "F4",
+            "F5"
+          ],
+          "1"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "B3",
+            "D4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "B3",
+            "D4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "4"
+        ]
+      ],
+      "chords": [],
+      "parse_ok": true,
+      "render_ok": true,
+      "raw_render_ok": true,
+      "adapter_actions": [],
+      "errors": [],
+      "parser_warnings": "",
+      "render_pages": 1,
+      "renderer_log": "",
+      "kern_export": true
+    },
+    "melody": {
+      "reference_count": 12,
+      "prediction_count": 9,
+      "matches": 2,
+      "substitutions": 7,
+      "deletions": 3,
+      "insertions": 0,
+      "errors": 10,
+      "error_rate": 0.8333333333333334,
+      "precision": 0.2222222222222222,
+      "recall": 0.16666666666666666,
+      "f1": 0.19047619047619047,
+      "edits": [
+        {
+          "operation": "replace",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "E4"
+            ],
+            "3"
+          ],
+          "actual": [
+            [
+              "C4"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 1,
+          "prediction_index": 1,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A4",
+              "F4"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 2,
+          "prediction_index": 2,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "E5"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 3,
+          "prediction_index": 3,
+          "expected": [
+            [
+              "G4"
+            ],
+            "1"
+          ],
+          "actual": [
+            [
+              "F4",
+              "F5"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "delete",
+          "reference_index": 4,
+          "prediction_index": 4,
+          "expected": [
+            [
+              "G4"
+            ],
+            "2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 5,
+          "prediction_index": 4,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 6,
+          "prediction_index": 4,
+          "expected": [
+            [
+              "G4"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "replace",
+          "reference_index": 8,
+          "prediction_index": 5,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1"
+          ],
+          "actual": [
+            [
+              "B3",
+              "D4"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 9,
+          "prediction_index": 6,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1"
+          ],
+          "actual": [
+            [
+              "B3",
+              "D4"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 11,
+          "prediction_index": 8,
+          "expected": [
+            [
+              "E4"
+            ],
+            "3"
+          ],
+          "actual": [
+            [
+              "REST"
+            ],
+            "4"
+          ]
+        }
+      ]
+    },
+    "chords": {
+      "reference_count": 5,
+      "prediction_count": 0,
+      "matches": 0,
+      "substitutions": 0,
+      "deletions": 5,
+      "insertions": 0,
+      "errors": 5,
+      "error_rate": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "edits": [
+        {
+          "operation": "delete",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": [
+            "C",
+            "major",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 1,
+          "prediction_index": 0,
+          "expected": [
+            "E",
+            "minor",
+            "E",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 2,
+          "prediction_index": 0,
+          "expected": [
+            "D",
+            "minor",
+            "D",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 3,
+          "prediction_index": 0,
+          "expected": [
+            "G",
+            "dominant",
+            "G",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 4,
+          "prediction_index": 0,
+          "expected": [
+            "C",
+            "major",
+            "C",
+            []
+          ],
+          "actual": null
+        }
+      ]
+    }
+  },
+  {
+    "id": "내입술로_1",
+    "song": "내입술로",
+    "sample_index": 6,
+    "trace": {
+      "sample_index": 6,
+      "id": "내입술로_1",
+      "kind": "audiveris_text_harmony",
+      "reference_access": false,
+      "source_image_sha256": "972a47424b1a0536164c5ebc9affb1cbb7f0c1ccb94aee25d0f619395be1a2d0",
+      "output": "runs/goal-agent-001/experiments/exp-33c9e801b310/sample-006/prediction.musicxml",
+      "status": "ok",
+      "recovered_words": [],
+      "source_prediction_sha256": "db1111fb7112eb9ee8a7cdadfaeb119be0e0332b658d74c0657dfb3e9bcaa286",
+      "timing_audited": false,
+      "elapsed_seconds": 0.002064250000330503,
+      "output_sha256": "652cb63ba4f3c8c77c1956250370e3503f4fb790c42f343e3a2724f05c36b8b7"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "B2"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G2"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "A2"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "B2"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "B2"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "A2",
+            "F2"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "A2"
+          ],
+          "7/4"
+        ],
+        [
+          [
+            "E3"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "B2"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C3"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D3"
+          ],
+          "1/4"
+        ]
+      ],
+      "chords": [],
+      "parse_ok": true,
+      "render_ok": true,
+      "raw_render_ok": true,
+      "adapter_actions": [],
+      "errors": [],
+      "parser_warnings": "",
+      "render_pages": 1,
+      "renderer_log": "",
+      "kern_export": true
+    },
+    "melody": {
+      "reference_count": 17,
+      "prediction_count": 14,
+      "matches": 0,
+      "substitutions": 14,
+      "deletions": 3,
+      "insertions": 0,
+      "errors": 17,
+      "error_rate": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "edits": [
+        {
+          "operation": "replace",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "REST"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "B2"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 1,
+          "prediction_index": 1,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "G2"
+            ],
+            "1/4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 2,
+          "prediction_index": 2,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2"
+            ],
+            "1/4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 3,
+          "prediction_index": 3,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/4"
+          ],
+          "actual": [
+            [
+              "B2"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 4,
+          "prediction_index": 4,
+          "expected": [
+            [
+              "D4"
+            ],
+            "9/4"
+          ],
+          "actual": [
+            [
+              "B2"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 5,
+          "prediction_index": 5,
+          "expected": [
+            [
+              "REST"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2",
+              "F2"
+            ],
+            "1/4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 6,
+          "prediction_index": 6,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2"
+            ],
+            "7/4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 7,
+          "prediction_index": 7,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "E3"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 8,
+          "prediction_index": 8,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/4"
+          ],
+          "actual": [
+            [
+              "E3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 9,
+          "prediction_index": 9,
+          "expected": [
+            [
+              "D4"
+            ],
+            "7/4"
+          ],
+          "actual": [
+            [
+              "D4"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 10,
+          "prediction_index": 10,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 11,
+          "prediction_index": 11,
+          "expected": [
+            [
+              "A4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "B2"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 12,
+          "prediction_index": 12,
+          "expected": [
+            [
+              "A4"
+            ],
+            "2"
+          ],
+          "actual": [
+            [
+              "C3"
+            ],
+            "1/4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 13,
+          "prediction_index": 13,
+          "expected": [
+            [
+              "F4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "D3"
+            ],
+            "1/4"
+          ]
+        },
+        {
+          "operation": "delete",
+          "reference_index": 14,
+          "prediction_index": 14,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 15,
+          "prediction_index": 14,
+          "expected": [
+            [
+              "F4"
+            ],
+            "1/4"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 16,
+          "prediction_index": 14,
+          "expected": [
+            [
+              "G4"
+            ],
+            "17/4"
+          ],
+          "actual": null
+        }
+      ]
+    },
+    "chords": {
+      "reference_count": 0,
+      "prediction_count": 0,
+      "matches": 0,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    }
+  },
+  {
+    "id": "내입술의_1",
+    "song": "내입술의",
+    "sample_index": 12,
+    "trace": {
+      "sample_index": 12,
+      "id": "내입술의_1",
+      "kind": "audiveris_text_harmony",
+      "reference_access": false,
+      "source_image_sha256": "f3ce5694398cf0f340183c13db0939fe7679217b4f410e8e5bd7219b42a1367e",
+      "output": "runs/goal-agent-001/experiments/exp-33c9e801b310/sample-012/prediction.musicxml",
+      "status": "ok",
+      "recovered_words": [],
+      "source_prediction_sha256": "6032d6c5d27db33d10a169b8812e1a2515b9cc4203e27ad9b7c57e8e9ce89fa4",
+      "timing_audited": false,
+      "elapsed_seconds": 0.0029561249994003447,
+      "output_sha256": "d760b3e9882dce24b530cb5cc31fbfdc89d82522173a5bca4182ade425648ebd"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "5/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "5/4"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "3/2"
+        ]
+      ],
+      "chords": [
+        [
+          "G",
+          "major",
+          "B",
+          []
+        ],
+        [
+          "A",
+          "minor-seventh",
+          "A",
+          []
+        ],
+        [
+          "F",
+          "major-seventh",
+          "F",
+          []
+        ],
+        [
+          "C",
+          "major",
+          "G",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "raw_render_ok": true,
+      "adapter_actions": [],
+      "errors": [],
+      "parser_warnings": "",
+      "render_pages": 1,
+      "renderer_log": "",
+      "kern_export": true
+    },
+    "melody": {
+      "reference_count": 27,
+      "prediction_count": 27,
+      "matches": 27,
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "errors": 0,
+      "error_rate": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "edits": []
+    },
+    "chords": {
+      "reference_count": 6,
+      "prediction_count": 4,
+      "matches": 4,
+      "substitutions": 0,
+      "deletions": 2,
+      "insertions": 0,
+      "errors": 2,
+      "error_rate": 0.3333333333333333,
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1": 0.8,
+      "edits": [
+        {
+          "operation": "delete",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": [
+            "C",
+            "major",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 5,
+          "prediction_index": 4,
+          "expected": [
+            "G",
+            "major",
+            "G",
+            []
+          ],
+          "actual": null
+        }
+      ]
+    }
+  },
+  {
+    "id": "능력의_1",
+    "song": "능력의",
+    "sample_index": 17,
+    "trace": {
+      "sample_index": 17,
+      "id": "능력의_1",
+      "kind": "audiveris_text_harmony",
+      "reference_access": false,
+      "source_image_sha256": "8f13d1617a03312ecad7f3db34d729e4b8625d2419082d32d1117d70a50bc455",
+      "output": "runs/goal-agent-001/experiments/exp-33c9e801b310/sample-017/prediction.musicxml",
+      "status": "ok",
+      "recovered_words": [],
+      "source_prediction_sha256": "7a6407f808cda1b622097ed292a530d9dd8357acbd852c422d19a727aace07d9",
+      "timing_audited": false,
+      "elapsed_seconds": 0.0028654170000663726,
+      "output_sha256": "d851317054f02c00d0f1c5887b791f6afad311a9f10879b43c5e167aab7fad32"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "A2",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2",
+            "A3",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2",
+            "A3",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "A2"
+          ],
+          "1"
+        ],
+        [
+          [
+            "E3",
+            "G2"
+          ],
+          "1"
+        ],
+        [
+          [
+            "G2"
+          ],
+          "1"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "2"
+        ],
+        [
+          [
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "B3",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "B3",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2",
+            "C3",
+            "D4"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2",
+            "A3",
+            "C3",
+            "F3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "A2",
+            "A3",
+            "C3"
+          ],
+          "1"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "2"
+        ]
+      ],
+      "chords": [
+        [
+          "C",
+          "major",
+          "C",
+          []
+        ],
+        [
+          "C",
+          "major",
+          "E",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "raw_render_ok": true,
+      "adapter_actions": [],
+      "errors": [],
+      "parser_warnings": "",
+      "render_pages": 1,
+      "renderer_log": "",
+      "kern_export": true
+    },
+    "melody": {
+      "reference_count": 19,
+      "prediction_count": 22,
+      "matches": 2,
+      "substitutions": 17,
+      "deletions": 0,
+      "insertions": 3,
+      "errors": 20,
+      "error_rate": 1.0526315789473684,
+      "precision": 0.09090909090909091,
+      "recall": 0.10526315789473684,
+      "f1": 0.0975609756097561,
+      "edits": [
+        {
+          "operation": "insert",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": null,
+          "actual": [
+            [
+              "A2",
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 0,
+          "prediction_index": 1,
+          "expected": [
+            [
+              "G4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2",
+              "A3",
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 1,
+          "prediction_index": 2,
+          "expected": [
+            [
+              "G4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2",
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 2,
+          "prediction_index": 3,
+          "expected": [
+            [
+              "G4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2",
+              "A3",
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 3,
+          "prediction_index": 4,
+          "expected": [
+            [
+              "G4"
+            ],
+            "2"
+          ],
+          "actual": [
+            [
+              "A2",
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 4,
+          "prediction_index": 5,
+          "expected": [
+            [
+              "F4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 5,
+          "prediction_index": 6,
+          "expected": [
+            [
+              "F4"
+            ],
+            "3/4"
+          ],
+          "actual": [
+            [
+              "A2"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 6,
+          "prediction_index": 7,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/4"
+          ],
+          "actual": [
+            [
+              "E3",
+              "G2"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 7,
+          "prediction_index": 8,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1"
+          ],
+          "actual": [
+            [
+              "G2"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "insert",
+          "reference_index": 9,
+          "prediction_index": 10,
+          "expected": null,
+          "actual": [
+            [
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "insert",
+          "reference_index": 9,
+          "prediction_index": 11,
+          "expected": null,
+          "actual": [
+            [
+              "B3",
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 9,
+          "prediction_index": 12,
+          "expected": [
+            [
+              "A4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 10,
+          "prediction_index": 13,
+          "expected": [
+            [
+              "A4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "B3",
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 11,
+          "prediction_index": 14,
+          "expected": [
+            [
+              "A4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2",
+              "C3",
+              "D4"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 12,
+          "prediction_index": 15,
+          "expected": [
+            [
+              "A4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 13,
+          "prediction_index": 16,
+          "expected": [
+            [
+              "G4"
+            ],
+            "3/2"
+          ],
+          "actual": [
+            [
+              "A2",
+              "A3",
+              "C3",
+              "F3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 14,
+          "prediction_index": 17,
+          "expected": [
+            [
+              "F4"
+            ],
+            "1/4"
+          ],
+          "actual": [
+            [
+              "A2",
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 15,
+          "prediction_index": 18,
+          "expected": [
+            [
+              "G4"
+            ],
+            "3/4"
+          ],
+          "actual": [
+            [
+              "REST"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 16,
+          "prediction_index": 19,
+          "expected": [
+            [
+              "G4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "A2",
+              "C3"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 17,
+          "prediction_index": 20,
+          "expected": [
+            [
+              "G4"
+            ],
+            "1"
+          ],
+          "actual": [
+            [
+              "A2",
+              "A3",
+              "C3"
+            ],
+            "1"
+          ]
+        }
+      ]
+    },
+    "chords": {
+      "reference_count": 13,
+      "prediction_count": 2,
+      "matches": 2,
+      "substitutions": 0,
+      "deletions": 11,
+      "insertions": 0,
+      "errors": 11,
+      "error_rate": 0.8461538461538461,
+      "precision": 1.0,
+      "recall": 0.15384615384615385,
+      "f1": 0.26666666666666666,
+      "edits": [
+        {
+          "operation": "delete",
+          "reference_index": 1,
+          "prediction_index": 1,
+          "expected": [
+            "G",
+            "suspended-fourth",
+            "G",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 2,
+          "prediction_index": 1,
+          "expected": [
+            "G",
+            "dominant",
+            "G",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 3,
+          "prediction_index": 1,
+          "expected": [
+            "F",
+            "minor-sixth",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 4,
+          "prediction_index": 1,
+          "expected": [
+            "C",
+            "major",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 5,
+          "prediction_index": 1,
+          "expected": [
+            "Bb",
+            "major",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 6,
+          "prediction_index": 1,
+          "expected": [
+            "C",
+            "dominant",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 7,
+          "prediction_index": 1,
+          "expected": [
+            "F",
+            "major",
+            "F",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 8,
+          "prediction_index": 1,
+          "expected": [
+            "G",
+            "suspended-fourth",
+            "G",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 9,
+          "prediction_index": 1,
+          "expected": [
+            "G",
+            "dominant",
+            "G",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 11,
+          "prediction_index": 2,
+          "expected": [
+            "D",
+            "minor",
+            "D",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 12,
+          "prediction_index": 2,
+          "expected": [
+            "G",
+            "dominant",
+            "G",
+            []
+          ],
+          "actual": null
+        }
+      ]
+    }
+  },
+  {
+    "id": "사랑하셔서_1",
+    "song": "사랑하셔서",
+    "sample_index": 19,
+    "trace": {
+      "sample_index": 19,
+      "id": "사랑하셔서_1",
+      "kind": "audiveris_text_harmony",
+      "reference_access": false,
+      "source_image_sha256": "a18b3002935f808e29d96f6c604e2df8188be0291b26452091f2e9511555e620",
+      "output": "runs/goal-agent-001/experiments/exp-33c9e801b310/sample-019/prediction.musicxml",
+      "status": "ok",
+      "recovered_words": [],
+      "source_prediction_sha256": "aedfaeaf66e58f00d32d9813742eb8705e9acc20bfabc4c02cd1f764de874a12",
+      "timing_audited": false,
+      "elapsed_seconds": 0.0018602079999254784,
+      "output_sha256": "0630573c9606dba1e4c932ffc50a9e8193c97e3b5ee61c3d8ce8b47339423c79"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "G3"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "3/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "5/4"
+        ],
+        [
+          [
+            "A4"
+          ],
+          "4"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "2"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "G3"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "3/2"
+        ],
+        [
+          [
+            "D4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "C4"
+          ],
+          "5/4"
+        ],
+        [
+          [
+            "A4"
+          ],
+          "4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "3/2"
+        ],
+        [
+          [
+            "E4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "F4"
+          ],
+          "1/4"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "1"
+        ]
+      ],
+      "chords": [
+        [
+          "D",
+          "minor",
+          "C",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "raw_render_ok": true,
+      "adapter_actions": [],
+      "errors": [],
+      "parser_warnings": "",
+      "render_pages": 1,
+      "renderer_log": "",
+      "kern_export": true
+    },
+    "melody": {
+      "reference_count": 27,
+      "prediction_count": 20,
+      "matches": 15,
+      "substitutions": 5,
+      "deletions": 7,
+      "insertions": 0,
+      "errors": 12,
+      "error_rate": 0.4444444444444444,
+      "precision": 0.75,
+      "recall": 0.5555555555555556,
+      "f1": 0.6382978723404256,
+      "edits": [
+        {
+          "operation": "replace",
+          "reference_index": 4,
+          "prediction_index": 4,
+          "expected": [
+            [
+              "C4"
+            ],
+            "3/4"
+          ],
+          "actual": [
+            [
+              "C4"
+            ],
+            "5/4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 5,
+          "prediction_index": 5,
+          "expected": [
+            [
+              "REST"
+            ],
+            "1/4"
+          ],
+          "actual": [
+            [
+              "A4"
+            ],
+            "4"
+          ]
+        },
+        {
+          "operation": "delete",
+          "reference_index": 6,
+          "prediction_index": 6,
+          "expected": [
+            [
+              "G3"
+            ],
+            "1/4"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 7,
+          "prediction_index": 6,
+          "expected": [
+            [
+              "G3"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 8,
+          "prediction_index": 6,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/4"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 9,
+          "prediction_index": 6,
+          "expected": [
+            [
+              "D4"
+            ],
+            "1/4"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "replace",
+          "reference_index": 18,
+          "prediction_index": 14,
+          "expected": [
+            [
+              "C4"
+            ],
+            "3/4"
+          ],
+          "actual": [
+            [
+              "C4"
+            ],
+            "5/4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 19,
+          "prediction_index": 15,
+          "expected": [
+            [
+              "REST"
+            ],
+            "1/4"
+          ],
+          "actual": [
+            [
+              "A4"
+            ],
+            "4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 20,
+          "prediction_index": 16,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/4"
+          ],
+          "actual": [
+            [
+              "F4"
+            ],
+            "3/2"
+          ]
+        },
+        {
+          "operation": "delete",
+          "reference_index": 21,
+          "prediction_index": 17,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 22,
+          "prediction_index": 17,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/4"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 23,
+          "prediction_index": 17,
+          "expected": [
+            [
+              "F4"
+            ],
+            "7/4"
+          ],
+          "actual": null
+        }
+      ]
+    },
+    "chords": {
+      "reference_count": 4,
+      "prediction_count": 1,
+      "matches": 1,
+      "substitutions": 0,
+      "deletions": 3,
+      "insertions": 0,
+      "errors": 3,
+      "error_rate": 0.75,
+      "precision": 1.0,
+      "recall": 0.25,
+      "f1": 0.4,
+      "edits": [
+        {
+          "operation": "delete",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": [
+            "C",
+            "major",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 2,
+          "prediction_index": 1,
+          "expected": [
+            "C",
+            "major",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 3,
+          "prediction_index": 1,
+          "expected": [
+            "F",
+            "minor-sixth",
+            "C",
+            []
+          ],
+          "actual": null
+        }
+      ]
+    }
+  },
+  {
+    "id": "성령이여_1",
+    "song": "성령이여",
+    "sample_index": 23,
+    "trace": {
+      "sample_index": 23,
+      "id": "성령이여_1",
+      "kind": "audiveris_text_harmony",
+      "reference_access": false,
+      "source_image_sha256": "f5cfddb59f9af825ec9afc53e29094299e61d0669317d83eed8e7f3e7e50a9e5",
+      "output": "runs/goal-agent-001/experiments/exp-33c9e801b310/sample-023/prediction.musicxml",
+      "status": "ok",
+      "recovered_words": [],
+      "source_prediction_sha256": "02721b122610317284ce450d66a8ce7bc8289dd1ddd5aa64a49fee40b87ab619",
+      "timing_audited": false,
+      "elapsed_seconds": 0.001674834000368719,
+      "output_sha256": "bcd65ca836b9dd80c26cd07c7d6f236bb8c98febbfa2559269f4fe79be3073b6"
+    },
+    "inspection": {
+      "events": [
+        [
+          [
+            "E5"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E5"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E5"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E5"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "E5"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "F5"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G5"
+          ],
+          "1/2"
+        ],
+        [
+          [
+            "G5"
+          ],
+          "7/2"
+        ],
+        [
+          [
+            "B6"
+          ],
+          "4"
+        ],
+        [
+          [
+            "C5"
+          ],
+          "1"
+        ],
+        [
+          [
+            "REST"
+          ],
+          "4"
+        ],
+        [
+          [
+            "C5"
+          ],
+          "1"
+        ],
+        [
+          [
+            "C5"
+          ],
+          "1"
+        ],
+        [
+          [
+            "C5"
+          ],
+          "1"
+        ],
+        [
+          [
+            "E5"
+          ],
+          "3"
+        ],
+        [
+          [
+            "E5"
+          ],
+          "1/2"
+        ]
+      ],
+      "chords": [
+        [
+          "A",
+          "minor",
+          "A",
+          []
+        ]
+      ],
+      "parse_ok": true,
+      "render_ok": true,
+      "raw_render_ok": true,
+      "adapter_actions": [],
+      "errors": [],
+      "parser_warnings": "",
+      "render_pages": 1,
+      "renderer_log": "",
+      "kern_export": true
+    },
+    "melody": {
+      "reference_count": 20,
+      "prediction_count": 16,
+      "matches": 0,
+      "substitutions": 16,
+      "deletions": 4,
+      "insertions": 0,
+      "errors": 20,
+      "error_rate": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "edits": [
+        {
+          "operation": "replace",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "E5"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 1,
+          "prediction_index": 1,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "E5"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 2,
+          "prediction_index": 2,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "E5"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 3,
+          "prediction_index": 3,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "E5"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 4,
+          "prediction_index": 4,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "E5"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 5,
+          "prediction_index": 5,
+          "expected": [
+            [
+              "F4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "F5"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 6,
+          "prediction_index": 6,
+          "expected": [
+            [
+              "G4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "G5"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 7,
+          "prediction_index": 7,
+          "expected": [
+            [
+              "G4"
+            ],
+            "7/2"
+          ],
+          "actual": [
+            [
+              "G5"
+            ],
+            "7/2"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 8,
+          "prediction_index": 8,
+          "expected": [
+            [
+              "REST"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "B6"
+            ],
+            "4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 9,
+          "prediction_index": 9,
+          "expected": [
+            [
+              "D4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "C5"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 10,
+          "prediction_index": 10,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "REST"
+            ],
+            "4"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 11,
+          "prediction_index": 11,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "C5"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 12,
+          "prediction_index": 12,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "C5"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 13,
+          "prediction_index": 13,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "C5"
+            ],
+            "1"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 14,
+          "prediction_index": 14,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "E5"
+            ],
+            "3"
+          ]
+        },
+        {
+          "operation": "replace",
+          "reference_index": 15,
+          "prediction_index": 15,
+          "expected": [
+            [
+              "D4"
+            ],
+            "1/2"
+          ],
+          "actual": [
+            [
+              "E5"
+            ],
+            "1/2"
+          ]
+        },
+        {
+          "operation": "delete",
+          "reference_index": 16,
+          "prediction_index": 16,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 17,
+          "prediction_index": 16,
+          "expected": [
+            [
+              "E4"
+            ],
+            "7/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 18,
+          "prediction_index": 16,
+          "expected": [
+            [
+              "REST"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 19,
+          "prediction_index": 16,
+          "expected": [
+            [
+              "E4"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        }
+      ]
+    },
+    "chords": {
+      "reference_count": 4,
+      "prediction_count": 1,
+      "matches": 1,
+      "substitutions": 0,
+      "deletions": 3,
+      "insertions": 0,
+      "errors": 3,
+      "error_rate": 0.75,
+      "precision": 1.0,
+      "recall": 0.25,
+      "f1": 0.4,
+      "edits": [
+        {
+          "operation": "delete",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": [
+            "C",
+            "major",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 1,
+          "prediction_index": 0,
+          "expected": [
+            "G",
+            "major",
+            "B",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 3,
+          "prediction_index": 1,
+          "expected": [
+            "E",
+            "minor",
+            "G",
+            []
+          ],
+          "actual": null
+        }
+      ]
+    }
+  },
+  {
+    "id": "주품에_1",
+    "song": "주품에",
+    "sample_index": 29,
+    "trace": {
+      "sample_index": 29,
+      "id": "주품에_1",
+      "kind": "audiveris_text_harmony",
+      "reference_access": false,
+      "source_image_sha256": "d5f7503b2990726b767c11babf0c0ebe06aa462d0317baf54e82d3233668bf26",
+      "output": "runs/goal-agent-001/experiments/exp-33c9e801b310/sample-029/prediction.musicxml",
+      "status": "ok",
+      "recovered_words": [],
+      "source_prediction_sha256": "f41d190a8bb5366e17f74b9ff924aa227ab0f22d2d053f0d2bd2dff753bfc3be",
+      "timing_audited": false,
+      "elapsed_seconds": 0.0009840420007094508,
+      "output_sha256": "534e0e61d0fa076cae4b15fc0cabdfdb7aa72b0dfeb850069e29d097dd724b4b"
+    },
+    "inspection": {
+      "events": [],
+      "chords": [],
+      "parse_ok": false,
+      "render_ok": true,
+      "raw_render_ok": true,
+      "adapter_actions": [],
+      "errors": [
+        "parse: ZeroDivisionError('float division by zero')"
+      ],
+      "render_pages": 1,
+      "renderer_log": ""
+    },
+    "melody": {
+      "reference_count": 8,
+      "prediction_count": 0,
+      "matches": 0,
+      "substitutions": 0,
+      "deletions": 8,
+      "insertions": 0,
+      "errors": 8,
+      "error_rate": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "edits": [
+        {
+          "operation": "delete",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "E4"
+            ],
+            "2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 1,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "G4"
+            ],
+            "2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 2,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "C4"
+            ],
+            "3"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 3,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "REST"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 4,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "C4"
+            ],
+            "1/2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 5,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "A4"
+            ],
+            "2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 6,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "D4"
+            ],
+            "2"
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 7,
+          "prediction_index": 0,
+          "expected": [
+            [
+              "D4"
+            ],
+            "4"
+          ],
+          "actual": null
+        }
+      ]
+    },
+    "chords": {
+      "reference_count": 6,
+      "prediction_count": 0,
+      "matches": 0,
+      "substitutions": 0,
+      "deletions": 6,
+      "insertions": 0,
+      "errors": 6,
+      "error_rate": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "edits": [
+        {
+          "operation": "delete",
+          "reference_index": 0,
+          "prediction_index": 0,
+          "expected": [
+            "C",
+            "major",
+            "C",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 1,
+          "prediction_index": 0,
+          "expected": [
+            "G",
+            "major",
+            "B",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 2,
+          "prediction_index": 0,
+          "expected": [
+            "A",
+            "minor-seventh",
+            "A",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 3,
+          "prediction_index": 0,
+          "expected": [
+            "F",
+            "major",
+            "F",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 4,
+          "prediction_index": 0,
+          "expected": [
+            "D",
+            "major",
+            "F#",
+            []
+          ],
+          "actual": null
+        },
+        {
+          "operation": "delete",
+          "reference_index": 5,
+          "prediction_index": 0,
+          "expected": [
+            "G",
+            "suspended-fourth",
+            "G",
+            []
+          ],
+          "actual": null
+        }
+      ]
+    }
+  }
+]

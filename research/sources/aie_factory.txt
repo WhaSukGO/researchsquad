@@ -1,0 +1,2969 @@
+The Multi-Agent Architecture That Actually Ships — Luke Alvoeiro, Factory | AI Engineer
+Now playing
+Transcript
+0:00
+· comment
+Add context or a different take
+View discussion on YouTube ↗
+Comment starter
+Optional starter…
+Add context…
+One caveat is…
+A wrinkle here is…
+What changed my mind was…
+In practice, this means…
+Include
+0:00
+timestamp
+Open YouTube comments ↗
+Slide chapters
+22
+slide and demo groups · Timestamps are approximate.
+1 additional group was omitted from this pass.
+←
+→
++
+All slides
+Assembling agent teams
+Luke Alvoeiro aims to show how to assemble agent teams for harder tasks. His title slide puts the gap at
+15x
+compared with a single agent.
+Text in image
+Assembling agent teams that solve problems 15x harder than single agents can
+
+Luke Alvoeiro - Factory
+
+Interface text:
+AI Engineer EUROPE
+Google DeepMind
+0:21
+Assembling agent teams
+Luke Alvoeiro sets out to show how agent teams can solve problems
+15x harder
+than single agents can. He leads Factory’s core agent harness.
+Text in image
+Assembling agent teams that solve problems 15x harder than single agents can
+
+Luke Alvoeiro - Factory
+
+AI Engineer EUROPE
+PRESENTED BY
+Google DeepMind
+
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+0:41
+The bottleneck is no longer intelligence
+Alvoeiro argues that engineers lack the bandwidth to supervise every task, even as models become capable of tackling their backlog. He proposes letting humans decide
+what to build
+while a system works out how.
+Text in image
+AGENT TEAMS
+The bottleneck is no longer intelligence
+
+The best engineers can only focus on a couple things at a time. They have a backlog of 50 features but can only drive a few forward per day. Today's models are smart enough to build all 50.
+
+What if the human decides what to build, and the system figures out how?
+
+AI Engineer - Factory
+2026
+1
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+1:34
+Five multi-agent strategies
+Direct communication connects agents peer-to-peer without a coordinator, risking fragmented state. Broadcast sends shared updates from one agent to many to maintain coherence.
+Text in image
+AGENT TEAMS
+Five multi-agent strategies
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+
+Interface text:
+AI Engineer EUROPE
+Engineering the future of AI
+1:54
+Completed build
+Show
+2
+builds
+1:48
+Five cards describe delegation, creator-verifier, direct communication, negotiation, and broadcast.
+Text in image
+AGENT TEAMS
+Five multi-agent strategies
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+1:54
+Slide describing delegation, creator-verifier, direct communication, negotiation, and broadcast.
+Text in image
+AGENT TEAMS
+Five multi-agent strategies
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+
+Interface text:
+AI Engineer EUROPE
+Engineering the future of AI
+Five multi-agent strategies
+Agents delegate tasks, separate building from checking, negotiate shared resources, or broadcast context. Direct peer communication skips a coordinator but can fragment state.
+Text in image
+Five multi-agent strategies
+
+AGENT TEAMS
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+2:07
+Introducing Missions
+After a user describes a software goal, scopes it through conversation, and approves a plan, Missions coordinates agents through
+structured handoffs and shared state
+to execute over hours or days.
+Text in image
+INTRODUCING MISSIONS
+
+Missions – a system that combines delegation, creator-verifier, broadcast, and negotiation into a single workflow
+
+HOW TO USE THEM
+1. Describe a software goal.
+2. Scope it through conversation.
+3. Approve the plan
+4. Missions handles execution
+
+A mission is not a single agent session that runs for a long time. It's an ecosystem of agents coordinating through structured handoffs and shared state.
+
+AI Engineer - Factory
+2026
+3
+
+Interface text:
+AI Engineer EUROPE
+Google DeepMind
+4:27
+Completed build
+Show
+2
+builds
+4:14
+A four-step Missions workflow leads from describing a software goal to execution; agents coordinate through structured handoffs and shared state.
+Text in image
+INTRODUCING MISSIONS
+
+Missions – a system that combines delegation, creator-verifier, broadcast, and negotiation into a single workflow
+
+HOW TO USE THEM
+1. Describe a software goal.
+2. Scope it through conversation.
+3. Approve the plan
+4. Missions handles execution
+
+A mission is not a single agent session that runs for a long time. It's an ecosystem of agents coordinating through structured handoffs and shared state.
+
+AI Engineer - Factory
+2026
+3
+
+Interface text:
+AI Engineer EUROPE
+Google DeepMind
+4:27
+Missions combines agent coordination patterns into a workflow from describing a goal through execution.
+Text in image
+INTRODUCING MISSIONS
+
+Missions – a system that combines delegation, creator-verifier, broadcast, and negotiation into a single workflow
+
+HOW TO USE THEM
+1. Describe a software goal.
+2. Scope it through conversation.
+3. Approve the plan
+4. Missions handles execution
+
+A mission is not a single agent session that runs for a long time. It's an ecosystem of agents coordinating through structured handoffs and shared state.
+
+AI Engineer - Factory
+2026
+3
+
+Interface text:
+AI Engineer EUROPE
+Google DeepMind
+The validation loop
+Before coding, the orchestrator defines correctness in a
+validation contract
+. After each milestone, one validator checks code and tests while another exercises the
+live app
+; neither has seen the code before.
+Text in image
+HOW THEY WORK
+The validation loop
+Tests written after implementation don't catch bugs. They confirm decisions.
+
+PLANNING PHASE
+Validation Contract
+Written by orchestrator during planning, before any code. Hundreds of assertions define correctness independently of implementation.
+
+After each milestone...
+
+</>
+Scrutiny Validator
+Runs tests, typechecking, linting. Spawns code review agents for each completed feature.
+
+</>
+User-Testing Validator
+Acts like a QA engineer. Launches the app, navigates via computer-use & verifies flows end-to-end.
+
+Neither validator has ever seen the code. Validation is adversarial by design.
+
+AI Engineer - Factory
+2026
+5
+6:56
+Structured handoffs
+When a worker finishes a feature, it records what happened in a
+structured handoff
+. The system uses these reports to preserve context across agents and scope corrective work at milestone boundaries.
+Text in image
+HOW THEY WORK
+Structured handoffs
+How agents stay coherent over days, not just minutes.
+
+Every worker reports
+• What was implemented
+• What was left undone
+• Commands run + exit codes
+• Issues discovered
+• Whether procedures were followed
+
+New Task
+Execute
+Observe
+Learn
+Encode Skill
+CONTINUOUS LEARNING
+
+AI Engineer - Factory
+2026
+6
+
+Interface text:
+AI Engineer EUROPE
+together.ai
+Engineering the future of AI
+8:54
+Completed build
+Show
+2
+builds
+8:07
+Workers report completed and unfinished work, commands and exit codes, issues, and whether procedures were followed, alongside a continuous learning loop.
+Text in image
+HOW THEY WORK
+Structured handoffs
+How agents stay coherent over days, not just minutes.
+
+Every worker reports
+• What was implemented
+• What was left undone
+• Commands run + exit codes
+• Issues discovered
+• Whether procedures were followed
+
+New Task
+Execute
+Observe
+Learn
+CONTINUOUS LEARNING
+
+AI Engineer - Factory
+2026
+6
+8:54
+Handoff reports list completed and unfinished work, commands and exit codes, issues, and procedure compliance, alongside a continuous learning cycle.
+Text in image
+HOW THEY WORK
+Structured handoffs
+How agents stay coherent over days, not just minutes.
+
+Every worker reports
+• What was implemented
+• What was left undone
+• Commands run + exit codes
+• Issues discovered
+• Whether procedures were followed
+
+New Task
+Execute
+Observe
+Learn
+Encode Skill
+CONTINUOUS LEARNING
+
+AI Engineer - Factory
+2026
+6
+
+Interface text:
+AI Engineer EUROPE
+together.ai
+Engineering the future of AI
+Why serial beats parallel (mostly)
+Factory runs Mission features serially, with one worker or validator at a time. In software development, parallel agents conflicted and duplicated work, while coordination costs ate into speed gains.
+Text in image
+Why serial beats parallel (mostly)
+HOW THEY WORK
+The next question, how should this execute...
+
+AI Engineer - Factory
+2026
+7
+
+Interface text:
+AI Engineer EUROPE
+OpenAI
+SENTRY
+PRESENTED BY
+Google DeepMind
+9:14
+Why serial beats parallel (mostly)
+Factory found that parallel software agents can step on each other’s changes, duplicate work and make inconsistent architecture decisions. Coordination overhead eats into speed gains, and conflicts burn tokens.
+Text in image
+HOW THEY WORK
+Why serial beats parallel (mostly)
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+AI Engineer - Factory
+2026
+7
+
+Interface text:
+AI Engineer EUROPE
+PRESENTED BY
+Google DeepMind
+9:23
+Why serial beats parallel (mostly)
+Factory runs
+features serially
+after parallel agents conflicted, duplicated work and lost speed to coordination. Read-only code search, API research and reviews can still run in parallel.
+Text in image
+HOW THEY WORK
+Why serial beats parallel (mostly)
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+AI Engineer - Factory
+2026
+7
+
+Other visible text:
+AI Engineer EUROPE
+OpenAI
+SENTRY
+DeepMind
+Braintrust
+WorkOS
+9:34
+Why serial beats parallel (mostly)
+Missions runs
+one feature at a time
+, passing the codebase through git. It parallelizes read-only research and reviews to avoid conflicting changes.
+Text in image
+Why serial beats parallel (mostly)
+HOW THEY WORK
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+WHAT ACTUALLY WORKS
+Serial Execution
+Features execute one at a time. Each worker inherits the full codebase from the last through git
+
+Parallelism is reserved for work that can't conflict: codebase exploration, API research, documentation reads, and validation reviews.
+
+Slower on paper. But for multi-day runs, correctness compounds.
+
+AI Engineer - Factory
+2026
+7
+10:05
+Completed build
+Show
+2
+builds
+9:54
+A comparison of parallelism drawbacks with serial feature execution and parallel exploration, research, documentation, and reviews.
+Text in image
+Why serial beats parallel (mostly)
+HOW THEY WORK
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+WHAT ACTUALLY WORKS
+Serial Execution
+Features execute one at a time. Each worker inherits the full codebase from the last through git
+
+Parallelism is reserved for work that can't conflict: codebase exploration, API research, documentation reads, and validation reviews.
+
+Slower on paper. But for multi-day runs, correctness compounds.
+
+AI Engineer - Factory
+2026
+7
+
+Interface text:
+AI Engineer EUROPE
+OpenAI
+SENTRY
+DeepMind
+Engineering the future of AI
+10:05
+Two panels contrast conflicts in parallel work with serial execution and targeted parallel research.
+Text in image
+Why serial beats parallel (mostly)
+HOW THEY WORK
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+WHAT ACTUALLY WORKS
+Serial Execution
+Features execute one at a time. Each worker inherits the full codebase from the last through git
+
+Parallelism is reserved for work that can't conflict: codebase exploration, API research, documentation reads, and validation reviews.
+
+Slower on paper. But for multi-day runs, correctness compounds.
+
+AI Engineer - Factory
+2026
+7
+Mission Control overview
+Mission Control brings the
+active feature, progress log, and worker output
+together so a project manager can monitor a multi-day mission at a glance.
+Text in image
+USING MISSIONS
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Monitor from a bird's eye view
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control  ~/Development/note-tracker
+TIME 56m 54s  Input 324.0K  Cached 16.8M  Output 111.0K
+RUNNING  3/17 [+6]
+
+Active Feature  scrutiny-validator-app-shell
+skill scrutiny-validator
+milestone app-shell
+
+Preconditions
+- All implementation features for milestone "app-shell" are complete
+
+Expected Behavior
+- Validators pass (test, typecheck, lint)
+- Review subagents spawned for each feature
+- Findings synthesized into scrutiny report
+
+Description
+Scrutiny validation for milestone "app-shell". Runs test suite, typecheck, and lint. Spawns review subagents for each completed feature. Synthesizes findings. Always returns to orchestrator.
+
+Features  3/11
+✓ bootstrap-tauri-workspace
+✓ menu-bar-shell-and-lifecycle
+✓ quick-note-save-and-main-list
+● scrutiny-validator-app-shell
+○ user-testing-validator-app-shell
+○ categories-and-tagging-experience
+○ due-date-parsing-and-note-metadata
+○ google-calendar-auth-and-secure-storage
++3 more
+
+Progress Log  1-9 of 10
+<1m ago  #95fb1b2d started [scrutiny-validator-app-shell]
+<1m ago  Milestone validation: app-shell
+<1m ago  #d1b6b4a7 completed [quick-note-save-and-main-list] ✓
+5m ago  #d1b6b4a7 started [quick-note-save-and-main-list]
+5m ago  #afc827a8 completed [menu-bar-shell-and-lifecycle] ✓
+13m ago  #afc827a8 started [menu-bar-shell-and-lifecycle]
+13m ago  #1963e245 completed [bootstrap-tauri-workspace] ✓
+21m ago  #1963e245 started [bootstrap-tauri-workspace]
+21m ago  Run started: Mission artifacts authored, repo scaffold...
+
+Active Worker  #1  scrutiny-validator-app-shell  Duration 7s
+> ## Your Assigned Feature ```json { "id": "scrutiny-validator-app-shell", "description": "Scrutiny validation for milestone \"app-shell\". Runs test suite, typecheck, and lint. Spawns review subagents for each completed feature. Synthesizes findings. Always returns to orchestrato...
+
+F Features  W Workers  M Models  P Pause  D Mission Dir  Ctrl+T Back To Orchestrator
+10:26
+Demo milestone
+Inspecting workers
+Mission Control lists four workers: one running and three completed. The view lets the user inspect individual workers during a multi-day mission.
+Text in image
+USING MISSIONS
+
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Inspect all the workers
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control  ~/Development/note-tracker
+TIME 56m 54s  Input 324.[illegible]K  Cached 16.8M  Output 111.0K
+
+Workers (4)
+All (4) | Active (1) | Completed (3) | Failed (0)
+
+#  Session  Start  Duration  Status  Input  Cached  Output  Feature
+1  95fb1b2d  15:08  10s  Running  -  -  -  scrutiny-validator-app-shell
+4  d1b6b4a7  15:02  5m 47s  Success  40  2.0M  18.0K  quick-note-save-and-main-list
+3  afc827a8  14:54  7m 36s  Success  60  7.3M  21.0K  menu-bar-shell-and-lifecycle
+2  1963e245  14:46  8m 1s  Success  54  5.0M  15.1K  bootstrap-tauri-workspace
+
+↑↓ Select  Enter View  T Filter  Esc Back  F Features  M Models
+10:31
+Demo milestone
+Reading worker handoffs
+Mission Control opens a
+completed worker’s session
+, showing its plan, commands, and completion status. Alvoeiro says handoff summaries capture discoveries and how work may change course.
+Text in image
+USING MISSIONS
+
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Worker Session
+Session: [illegible]
+Feature: quick-note-save-and-main-list
+Model: Opus 4.6 (High)
+Status: Success · Duration: 5m 47s
+Tokens: Input 40 · Cached 2.0M · Output 18.0K
+
+↑93 more above
+Plan 1. [completed] Run baseline tests (pnpm test + cargo test) 2. [completed] Add SQLite dependency and create note persistence layer in Rust...
+→TODO List Updated
+
+Execute cd /Users/luke/Development/note-tracker && git status
+→On branch main Changes not staged for commit: [illegible]
+Execute cd /Users/luke/Development/note-tracker && git add -A && git commit -m "Add note persistence with SQLite and quick-note save path - Ad...
+→[illegible]
+Execute cd /Users/luke/Development/note-tracker && git status && git rev-parse HEAD
+→On branch main nothing to commit, working tree clean [illegible] [Process exited with code 0]
+
+Clean working tree. Now let me call EndFeatureRun:
+
+End Feature Run success
+→[illegible]
+
+Read the handoffs
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control ~/Development/note-tracker
+TIME 56m 54s · Input 324.0K · Cached 16.8M · Output 111.0K
+↑↓ Scroll   [] Density   g Top   G Bottom   s Interrupt/Chat   h Handoff   Esc Back
+10:35
+Demo milestone
+The right model in each role
+Missions can use different models for
+planning, implementation, and validation
+. A separate validation provider may reduce shared training-data bias, while model-agnostic design lets each role use a specialized model.
+Text in image
+USING MISSIONS
+
+The right model in each role
+
+No single model is best at planning, implementation, and validation.
+
+PLANNING
+Slow, careful reasoning.
+Strategic questions, constraint analysis.
+
+IMPLEMENTATION
+Code fluency and creativity.
+Fast generation, tool use.
+
+VALIDATION
+Strict instruction following.
+Different provider avoids training-data bias.
+
+Model-agnostic architecture = compounding advantage as models specialize
+
+You're only as strong as your weakest link. If locked into one model family, you're constrained by that family's weakest capability.
+
+AI Engineer - Factory
+2026
+9
+12:24
+Breaking down a real mission
+A Slack-clone mission ran for
+16.5 hours
+, with 60.5% spent on implementation. Its milestone waterfall shows repeated implementation and validation; tests made up 52.5% of the code, with
+89.25% statement coverage
+.
+Text in image
+USING MISSIONS
+Breaking down a real mission
+Building a clone of Slack
+
+TIME
+Total runtime — 16.5 h
+Orchestration 0.38 h · 2.3%
+Implementation 9.98 h · 60.5%
+Validation 6.14 h · 37.2%
+
+MILESTONE WATERFALL
+Legend: impl, val
+Timeline: 0h, 2h, 4h, 6h, 8h, 10h, 12h, 14h, 16h
+Foundation
+Channels & messaging
+Conversations
+Interactions
+Rich features
+Real-time polish
+
+AGENT RUNS
+185 total runs
+subagents
+Y-axis ticks: 3, 6, 9, 12
+Timeline: 0h, 2h, 4h, 6h, 8h, 10h, 12h, 14h, 16h
+Orchestration 1 · 12 subagents
+Workers 63
+Validators 27 · 82 subagents
+
+TOKENS
+778.5M total tokens
+BY TYPE
+Input 30.3M
+Cache read 744.9M
+Output 3.4M
+BY ROLE
+Orchestration 29.2M
+Implementation 485.5M
+Validation 263.8M
+
+CODE
+38.8k lines — 52.5% tests
+CODE SPLIT
+Source 18.5k lines
+Tests 20.4k lines
+STATEMENT COVERAGE
+Covered 89.25%
+Uncovered 10.75%
+
+AI Engineer - Factory
+2026
+10
+13:02
+What have people built
+A home visualization sits beside a restaurant network connecting people, restaurants, and groups. The selected Danny Meyer view lists founding and training links. Enterprise uses include overnight prototypes and codebase modernization.
+Text in image
+USING MISSIONS
+
+What have people built
+
+Prototypes & large features, internal tools, refactors & migrations, agent readiness
+
+Interface text:
+The sun sets
+BEDROOM
+68° Partly Cloudy
+
+NYC Restaurant Network
+
+RELATIONSHIP FILTERS
+Trained Under
+Founded
+Worked At
+Part Of
+Spun Off
+Invested In
+Succeeded
+Collaborated
+
+LEGEND
+Person
+Restaurant
+Restaurant Group
+
+SHORTEST PATH
+From...
+To...
+Find Path
+Clear
+
+TIMELINE
+1800
+2025
+
+65 people
+86 restaurants
+9 groups
+
+Danny Meyer
+PERSON
+Danny Meyer
+Role: Restaurateur
+Active: 1985–present
+Founder of Union Square Hospitality Group. Pioneered “enlightened hospitality” philosophy.
+
+CONNECTIONS (9)
+Union Square Hospitality Group — Founded (1985)
+Union Square Cafe — Founded (1985)
+Gramercy Tavern — Founded (1994)
+Eleven Madison Park — Founded (1998)
+Shake Shack — Founded (2004)
+Michael Anthony — Trained Under
+Floyd Cardoz — Trained Under
+Daniel Humm — Trained Under
+Will Guidara — Trained Under
+13:58
+Demo milestone
+Designed to not be made obsolete
+Missions puts orchestration in
+prompts and per-mission skills
+so model improvements can carry through. A
+thin deterministic layer
+runs validation and blocks progress on unresolved handoffs.
+Text in image
+USING MISSIONS
+
+Designed to not be made obsolete
+
+When the next model drops, does the system get better or break?
+
+Almost all orchestration logic lives in prompts and skills.
+• How it decomposes features
+• How it handles failures
+• When it escalates
+
+Worker behavior is driven by skills that the orchestrator defines per-mission.
+
+When a better model drops, the system just gets smarter. No code changes needed.
+
+THE THIN DETERMINISTIC LAYER
+
+Hardcoded to handle bookkeeping
+• Triggering validation
+• Blocking progress when handoff issues aren't addressed
+
+Missions ensure discipline.
+The models provide intelligence.
+
+AI Engineer - Factory
+2026
+11
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+Google DeepMind
+15:21
+Completed build
+Show
+2
+builds
+14:31
+Slide describing orchestration through prompts and mission-specific skills.
+Text in image
+USING MISSIONS
+
+Designed to not be made obsolete
+
+When the next model drops, does the system get better or break?
+
+Almost all orchestration logic lives in prompts and skills.
+• How it decomposes features
+• How it handles failures
+• When it escalates
+
+Worker behavior is driven by skills that the orchestrator defines per-mission.
+
+When a better model drops, the system just gets smarter. No code changes needed.
+
+AI Engineer - Factory
+2026
+11
+15:21
+Slide explaining that orchestration lives in prompts and skills, while a thin deterministic layer handles validation and bookkeeping.
+Text in image
+USING MISSIONS
+
+Designed to not be made obsolete
+
+When the next model drops, does the system get better or break?
+
+Almost all orchestration logic lives in prompts and skills.
+• How it decomposes features
+• How it handles failures
+• When it escalates
+
+Worker behavior is driven by skills that the orchestrator defines per-mission.
+
+When a better model drops, the system just gets smarter. No code changes needed.
+
+THE THIN DETERMINISTIC LAYER
+
+Hardcoded to handle bookkeeping
+• Triggering validation
+• Blocking progress when handoff issues aren't addressed
+
+Missions ensure discipline.
+The models provide intelligence.
+
+AI Engineer - Factory
+2026
+11
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+Google DeepMind
+What this unlocks
+Alvoeiro suggests Missions could increase a five-engineer team’s concurrent workstreams from
+10 to 30
+, freeing engineers to focus on architecture and product decisions. He also calls for leaving the codebase better.
+Text in image
+LOOKING FORWARD
+What this unlocks
+
+10 → 30
+concurrent workstreams with a team of 5 engineers
+
+Engineers focus on architecture, product decisions, and the genuinely hard problems.
+
+Leave your codebase in a better place than when you started
+• E2E Tests
+• Unit tests
+• Skills
+• setup.yaml
+• Agents.md
+• ... more!
+
+AI Engineer - Factory
+2026
+12
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+15:49
+Missions are a composition
+The orchestrator delegates work to agents, while separate validators check implementation. Agents reference shared state and use
+structured handoffs
+to preserve context.
+Text in image
+LOOKING FORWARD
+Missions are a composition
+
+The connective tissue:
+• Structured handoffs so agents don't lose context
+• Validation separate from implementation
+• The right model in each role
+• Architecture that improves as models improve
+
+THE ORCHESTRATOR
+
+MILESTONE
+Feature #1 → Feature #2 … → Feature #N
+Workers
+Scrutiny Validator + User-Testing Validator
+Validators
+
+Research / Readonly Subagent
+Research / Readonly Subagent
+
+Shared State
+features.json
+handoffs.jsonl
+validation-contract.md
+Agent Skills
++7 more files...
+
+AI Engineer - Factory
+2026
+13
+16:35
+Try it today
+Open Droid and run
+/missions
+. Describe the goal, discuss scope with the orchestrator, and approve the plan before moving on to something else.
+Text in image
+Try it today
+
+/missions
+
+Describe what you want.
+Argue with the orchestrator about scope.
+Approve the plan.
+Then go do something else.
+17:56
+←
+→
+Close
+At a glance
+Ideas worth remembering
+→
+Treat
+human attention
+as the limiting resource: let people set goals and approve scope while a structured agent system manages extended execution.
+0:15
+→
+Separate
+orchestration, implementation, and validation
+so planning, coding, and independent review do not share the same responsibilities or implementation bias.
+4:27
+→
+Write a
+validation contract before coding
+, then combine conventional scrutiny with live end-to-end user testing at milestone boundaries.
+5:34
+→
+Use
+structured handoffs
+to preserve completed work, unfinished tasks, command results, discovered issues, and procedural compliance across agents.
+7:38
+→
+Keep code-changing execution
+serial
+, reserving parallelism for read-only research and review to reduce conflicts and coordination overhead.
+8:43
+→
+Assign models according to role-specific strengths and keep orchestration in adaptable
+prompts and skills
+, with deterministic code enforcing essential operational safeguards.
+10:45
+01
+0:15
+↗
+The real bottleneck is human attention
+Open full source frame
+The real bottleneck is human attention
+Luke Alvoeiro frames modern software development as a problem of
+human attention
+, not simply model intelligence. Engineers may face dozens of potential features but can advance only a handful because implementation, supervision, and review all compete for their time. The architectural question is whether a person can specify what should be built while an agent system determines how to execute it over extended periods.
+0:15
+To organize the fragmented landscape of multi-agent systems, Alvoeiro identifies five interaction patterns.
+Delegation
+lets one agent assign work to another;
+creator-verifier
+separates implementation from independent review;
+direct communication
+enables agent-to-agent exchanges without a central coordinator;
+negotiation
+coordinates access to shared resources; and
+broadcast
+distributes information or constraints across a group. Each pattern addresses a different coordination problem.
+1:17
+These patterns carry different tradeoffs. Direct communication can fragment state when no coordinator maintains a single source of truth, while negotiation can produce mutually beneficial coordination rather than adversarial competition. Factory’s
+Missions
+combines delegation, creator-verifier, negotiation, and broadcast into a workflow in which a person discusses scope, approves a plan, and then allows the system to handle extended execution.
+2:22
+•
+Human attention limits software delivery because implementation supervision and commit review compete across tasks.
+•
+Five coordination patterns address distinct needs: delegation, creator-verifier, direct communication, negotiation, and broadcast.
+•
+Direct communication can fragment shared state, while broadcast distributes updates and constraints across agents.
+•
+Missions combines delegation, creator-verifier, negotiation, and broadcast after a human scopes and approves the plan.
+Add a thought
+Suggest correction
+Correction for “
+The real bottleneck is human attention
+”
+This note stays in this page until you copy or download it. Nothing is submitted; reloading clears the draft.
+Copy correction note
+Download note
+0:15
+· section reference included
+02
+2:22
+↗
+Three roles turn an assignment into a managed mission
+Open full source frame
+Three roles turn an assignment into a managed mission
+A mission is not one uninterrupted agent conversation. It is an
+ecosystem of agents
+linked by shared state and structured handoffs, with three distinct roles: orchestrator, worker, and validator. The
+orchestrator
+clarifies requirements, asks strategic questions, and produces a plan containing features, milestones, and a validation contract that establishes what completion means before implementation begins.
+4:27
+Workers
+implement individual features with clean context rather than carrying the accumulated history and degraded attention of a single prolonged session. Each worker reads its specification, makes the required changes, and commits through Git, allowing the next worker to begin from a working codebase without inheriting the previous agent’s full conversational baggage.
+4:27
+Validators
+remain separate from the agents that created the implementation. Beyond conventional linting, type checking, testing, and code review, they examine whether the software actually works end to end. This separation is designed to reduce the bias of an implementation agent evaluating its own decisions and to prevent a long-running mission from drifting away from its intended behavior.
+2:22
+•
+Orchestrators clarify requirements and define features, milestones, and a validation contract before coding begins.
+•
+Workers implement assigned specifications with clean context and commit through Git for subsequent workers.
+•
+Independent validators combine conventional checks with end-to-end behavioral verification.
+•
+Separating implementation from verification reduces sunk-cost bias and preserves independent review.
+Three-role mission execution
+defines
+precedes
+implementation
+implementation then
+verification
+Orchestrator
+Clarifies requirements and creates the mission plan.
+Validation contract
+Defines completion before coding begins.
+Worker
+Implements features with clean context and Git commits.
+Validator
+Checks code quality and end-to-end behavior.
+Planning establishes correctness before implementation and independent verification.
+Read the diagram as text
+Orchestrator
+.
+Clarifies requirements and creates the mission plan.
+Validation contract
+.
+Defines completion before coding begins.
+Worker
+.
+Implements features with clean context and Git commits.
+Validator
+.
+Checks code quality and end-to-end behavior.
+Orchestrator
+→
+Validation contract
+:
+defines
+.
+Validation contract
+→
+Worker
+:
+precedes implementation
+.
+Worker
+→
+Validator
+:
+implementation then verification
+.
+Add a thought
+Suggest correction
+Correction for “
+Three roles turn an assignment into a managed mission
+”
+This note stays in this page until you copy or download it. Nothing is submitted; reloading clears the draft.
+Copy correction note
+Download note
+2:22
+· section reference included
+03
+5:34
+↗
+Define correctness before writing code
+Open full source frame
+Define correctness before writing code
+The central safeguard is the
+validation contract
+, written during planning before any implementation exists. Alvoeiro argues that tests written after code can mirror the choices already embedded in that implementation instead of independently checking its intended purpose. By specifying correctness first, the mission gives later validators a standard that does not originate from the code they are evaluating.
+5:34
+A complex project may require hundreds of assertions, with every feature assigned one or more assertions and the complete feature set collectively covering the contract. At each milestone, a
+scrutiny validator
+runs the test suite, type checks, linting, and dedicated code-review agents for completed features. A separate
+user testing validator
+launches the application and exercises practical flows by interacting with forms, rendered pages, buttons, and other application behavior.
+6:42
+Behavioral validation has a significant cost: interacting with a live application takes longer than conventional scrutiny, and Alvoeiro reports that much of a mission’s wall-clock time can be spent waiting for real-world execution rather than generating tokens. The benefit is independent, adversarial verification by agents that have not previously seen the implementation and are not invested in defending it.
+7:38
+When work fails validation, the system relies on
+structured handoffs
+rather than agent memory. Workers record completed and unfinished work, executed commands and their exit codes, discovered issues, and compliance with orchestrator-defined procedures. Milestone boundaries then become opportunities to identify errors, scope corrective features, and return execution to the original plan.
+7:38
+•
+Validation contracts define correctness before implementation and assign assertions across all planned features.
+•
+Scrutiny validators run tests, type checks, lint, and dedicated code reviews; user testing validators exercise live application flows.
+•
+Live behavioral validation is slower than scrutiny and can dominate mission wall-clock time.
+•
+Structured handoffs record completed work, outstanding issues, commands, exit codes, and procedural compliance to support corrective work.
+Milestone validation and correction loop
+worker records results
+documented issues
+reviewed at milestones
+caught errors are
+scoped
+corrective work
+restores progress
+Feature implementation
+Work progresses toward milestone assertions.
+Structured handoff
+Records outcomes, commands, exit codes, and issues.
+Milestone validation
+Scrutiny and live user testing inspect completed work.
+Corrective work
+Detected issues become scoped follow-up work.
+Independent milestone checks expose issues, scope corrective work, and restore alignment with the mission.
+Read the diagram as text
+Feature implementation
+.
+Work progresses toward milestone assertions.
+Structured handoff
+.
+Records outcomes, commands, exit codes, and issues.
+Milestone validation
+.
+Scrutiny and live user testing inspect completed work.
+Corrective work
+.
+Detected issues become scoped follow-up work.
+Feature implementation
+→
+Structured handoff
+:
+worker records results
+.
+Structured handoff
+→
+Milestone validation
+:
+documented issues reviewed at milestones
+.
+Milestone validation
+→
+Corrective work
+:
+caught errors are scoped
+.
+Corrective work
+→
+Feature implementation
+:
+corrective work restores progress
+.
+Add a thought
+Suggest correction
+Correction for “
+Define correctness before writing code
+”
+This note stays in this page until you copy or download it. Nothing is submitted; reloading clears the draft.
+Copy correction note
+Download note
+5:34
+· section reference included
+04
+8:43
+↗
+Serialize code changes and parallelize safe research
+Open full source frame
+Serialize code changes and parallelize safe research
+Alvoeiro challenges the assumption that adding more simultaneously active agents automatically increases software-delivery throughput. Factory found that concurrent implementation agents could overwrite or conflict with one another’s changes, duplicate work, and make incompatible architectural decisions. In that setting, coordination overhead consumed the expected speed gains while also increasing token expenditure.
+8:43
+Missions therefore executes features
+serially
+, with only one worker or validator active at a time. Parallelism is reserved for
+read-only operations
+inside a feature or validation step, such as searching a codebase, researching APIs, or conducting independent code reviews. Although this can appear slower in a simplified throughput calculation, Alvoeiro argues that fewer errors compound into an advantage across tasks lasting many days.
+9:50
+Because extended autonomous execution cannot be understood effectively through a conventional chat transcript alone, Factory built
+Mission Control
+as a dedicated operational view. It exposes project progress, budget consumption, the currently active worker, and handoff summaries describing discoveries and course corrections. The interface supports both active oversight and asynchronous supervision without requiring a human to monitor every implementation step.
+9:50
+The architecture has demonstrated extended duration, but its boundaries remain explicit. Alvoeiro says Factory’s longest mission ran for
+16 days
+and expresses a belief that missions could reach 30 days; the latter is presented as an expectation, not an observed result. He also identifies greater workload parallelization and orchestration across multiple missions as unresolved questions.
+8:43
+•
+Concurrent implementation agents can conflict, duplicate work, and make inconsistent architectural decisions.
+•
+Missions runs one worker or validator at a time while parallelizing read-only code search, API research, and code review.
+•
+Mission Control tracks project progress, budget consumption, active work, and handoff summaries for asynchronous oversight.
+•
+The longest reported mission ran 16 days; 30-day missions remain an expectation, and broader parallelization remains unresolved.
+Add a thought
+Suggest correction
+Correction for “
+Serialize code changes and parallelize safe research
+”
+This note stays in this page until you copy or download it. Nothing is submitted; reloading clears the draft.
+Copy correction note
+Download note
+8:43
+· section reference included
+05
+10:45
+↗
+Match models to roles and keep orchestration adaptable
+Open full source frame
+Match models to roles and keep orchestration adaptable
+The three roles impose different demands on underlying models. Planning benefits from careful reasoning, implementation from fast coding fluency and creativity, and validation from precise instruction following. Alvoeiro describes the emerging operational skill of choosing among these capabilities as
+Droid whispering
+: understanding how different models behave, where they fail, and how those failures interact across a multi-day workflow.
+10:45
+A
+model-agnostic architecture
+allows different models or providers to occupy different roles, including using a separate provider for validation to reduce the risk of shared biases. Conversely, validation contracts and milestone checkpoints can compensate for less capable individual models, which Alvoeiro says allows missions to run successfully even with open weight models. His argument is not that any model works equally well, but that system structure and deliberate role assignment can improve reliability.
+11:42
+In an example involving a Slack clone, Alvoeiro reports that implementation accounted for
+60% of time and 60% of tokens
+, validation did not succeed on the first attempt, and follow-up features were needed. He also describes a final codebase in which approximately
+50% of lines were tests
+and
+90% of code was covered by those tests
+, with prompt caching used to mitigate the cost of long-running execution. These figures describe the presented example rather than a guaranteed outcome for every mission.
+12:45
+To avoid making the architecture obsolete when models improve, Factory places most orchestration behavior in
+prompts and skills
+rather than a rigid hard-coded state machine. Alvoeiro describes roughly 700 lines of text governing feature decomposition and failure handling, mission-specific worker skills, and a thin deterministic layer responsible for bookkeeping, validation, and blocking progress when handoff issues remain unresolved. The intended division is straightforward: the system supplies operational discipline while models supply adaptable intelligence.
+14:34
+Returning to the opening human-attention bottleneck, Alvoeiro argues that Missions lets teams focus on architecture and product decisions while the system manages execution. He also says the accumulated end-to-end tests, unit tests, skills, and structure leave the codebase cleaner than it began, making both humans and agents more productive in subsequent work.
+•
+Assign models by role: careful reasoning for planning, coding fluency and creativity for implementation, and precise instruction following for validation.
+•
+Model-agnostic orchestration supports different validation providers, while contracts and checkpoints can improve outcomes with open weight models.
+•
+In the Slack-clone example, implementation consumed 60% of time and tokens; tests represented 50% of code and covered 90% of the codebase.
+•
+Prompts and mission-specific skills govern orchestration, while a thin deterministic layer handles bookkeeping, validation, and unresolved handoff blockers.
+Add a thought
+Suggest correction
+Correction for “
+Match models to roles and keep orchestration adaptable
+”
+This note stays in this page until you copy or download it. Nothing is submitted; reloading clears the draft.
+Copy correction note
+Download note
+10:45
+· section reference included
+→
+Read the complete timestamped transcript
+18
+slide groups
+· 4 demo milestones
+. Extracted from the recording; expand builds to follow changes. Timestamps are approximate.
+1 additional group was omitted from this pass.
+0:00
+[upbeat music] Hi, everyone.
+0:16
+Uh, my name is Luke, and my goal is that twenty minutes from now, you'll be able to assemble agent teams that can complete tasks orders of magnitude harder than what you can complete with a single agent today.
+Assembling agent teams
+Luke Alvoeiro aims to show how to assemble agent teams for harder tasks. His title slide puts the gap at
+15x
+compared with a single agent.
+Text in image
+Assembling agent teams that solve problems 15x harder than single agents can
+
+Luke Alvoeiro - Factory
+
+Interface text:
+AI Engineer EUROPE
+Google DeepMind
+0:21
+0:27
+Um, a little bit about me. So, um, I come from a background in dev tools. About two and a half years ago, I started a project at Block, which is where I was working at the time, um, and that project evolved into Goose.
+0:40
+Goose, um, is now one of the leading coding agents, is open source, um, and it's recently was, was donated to the AI, um, Agentic AI Foundation. So it's been really cool to see.
+Assembling agent teams
+Luke Alvoeiro sets out to show how agent teams can solve problems
+15x harder
+than single agents can. He leads Factory’s core agent harness.
+Text in image
+Assembling agent teams that solve problems 15x harder than single agents can
+
+Luke Alvoeiro - Factory
+
+AI Engineer EUROPE
+PRESENTED BY
+Google DeepMind
+
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+0:41
+0:53
+Now, um, nowadays, I work at Factory, where I lead our core agent harness, and Factory's mission is to bring autonomy to the entire software development life cycle.
+1:04
+So I wanna start off with a claim. Uh, the bottleneck in software engineering nowadays is not intelligence. It's now limited by human attention. Uh, even the best engineers can only complete a couple of tasks at a time.
+1:17
+Um, they may have a backlog of fifty features, but they can only drive a few forward per day because every task requires their attention, every commit needs their review.
+1:26
+Today's models are smart enough to figure out all fifty of these tasks, but there's not enough, uh, just bandwidth to supervise their implementation.
+The bottleneck is no longer intelligence
+Alvoeiro argues that engineers lack the bandwidth to supervise every task, even as models become capable of tackling their backlog. He proposes letting humans decide
+what to build
+while a system works out how.
+Text in image
+AGENT TEAMS
+The bottleneck is no longer intelligence
+
+The best engineers can only focus on a couple things at a time. They have a backlog of 50 features but can only drive a few forward per day. Today's models are smart enough to build all 50.
+
+What if the human decides what to build, and the system figures out how?
+
+AI Engineer - Factory
+2026
+1
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+1:34
+1:36
+So we kept asking ourselves, what if a human decides what to build and then a system figures out how to do so, right? An agent could just work for hours, for days, and you come back to finished work.
+1:47
+So that's what I'm here to talk about.
+Five multi-agent strategies
+Direct communication connects agents peer-to-peer without a coordinator, risking fragmented state. Broadcast sends shared updates from one agent to many to maintain coherence.
+Text in image
+AGENT TEAMS
+Five multi-agent strategies
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+1:48
+Show
+2
+builds
+1:48
+Five cards describe delegation, creator-verifier, direct communication, negotiation, and broadcast.
+Text in image
+AGENT TEAMS
+Five multi-agent strategies
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+1:54
+Slide describing delegation, creator-verifier, direct communication, negotiation, and broadcast.
+Text in image
+AGENT TEAMS
+Five multi-agent strategies
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+
+Interface text:
+AI Engineer EUROPE
+Engineering the future of AI
+1:50
+Um, when you start researching multi-agent frameworks and systems, you quickly realize that the field's a bit of a mess. Everyone has their own framework, their own terminology, their own, uh, opinions of what works and doesn't work.
+2:02
+And so I wanna propose a simple taxonomy. There's five frontier multi-agent frameworks. One is delegation, right? This is where one agent spawns another agent, and the parent agent may say, "Go figure out the database schema," and then gets a response back.
+Five multi-agent strategies
+Agents delegate tasks, separate building from checking, negotiate shared resources, or broadcast context. Direct peer communication skips a coordinator but can fragment state.
+Text in image
+Five multi-agent strategies
+
+AGENT TEAMS
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+2:07
+2:17
+This is the simplest form of multi-agent communication, and it's what, what most people implement first. Um, you have, you know, sub-agents in coding tools are the most common example.
+2:28
+Um, the, the other one is creator verifier, right? Where one agent builds something, and then you have another agent that checks that work. And the key here is, like, a separation of concerns.
+2:38
+The par-- the, the agent that implemented the, the code is, has sunk cost bias, right? It wants that code to work. Um, a fresh agent with fresh context is way more likely to find issues, and this is why we do code review as humans as well.
+2:51
+Um, another one is direct communication. This is when agents communicate without a central coordinator, right? It's a kind of like DM-ing each other.
+3:00
+It's hard to get right though because state fragments across conversations without that coordinator, and there's no single source of truth. Um, the next one is negotiation, right? Negotiation is when agents communicate, um, but over a shared resource.
+3:16
+So that might be, you know, they wanna use the same API, they wanna modify the same portion of the code base. Uh, but negotiation doesn't need to be adversarial.
+3:25
+In fact, the best use case is when there's, uh, net pos-- net positive sum trading, right? And that's, um, when agents have, like, a potential win-win situation while interacting.
+Five multi-agent strategies
+Direct communication connects agents peer-to-peer without a coordinator, risking fragmented state. Broadcast sends shared updates from one agent to many to maintain coherence.
+Text in image
+AGENT TEAMS
+Five multi-agent strategies
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+3:34
+Show
+2
+builds
+1:48
+Five cards describe delegation, creator-verifier, direct communication, negotiation, and broadcast.
+Text in image
+AGENT TEAMS
+Five multi-agent strategies
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+1:54
+Slide describing delegation, creator-verifier, direct communication, negotiation, and broadcast.
+Text in image
+AGENT TEAMS
+Five multi-agent strategies
+
+Delegation
+One agent spawns another for a subtask. The simplest multi-agent pattern.
+
+Creator-Verifier
+One agent builds, a different agent checks. Separation of concerns removes sunk-cost bias.
+
+Direct Communication
+Agents talking peer-to-peer without a coordinator. Hard to get right: state fragments.
+
+Negotiation
+Two agents coordinate over shared resources. Best when there's a possible win-win.
+
+Broadcast
+One agent sends status updates and shared context to many. Critical for coherence.
+
+AI Engineer - Factory
+2026
+2
+
+Interface text:
+AI Engineer EUROPE
+Engineering the future of AI
+3:37
+And then the last one is broadcast, and that is when one agent sends information to many. Uh, think of it like, you know, status updates, uh, new context that applies to everyone, new shared constraints.
+3:48
+Um, it's a bit less, uh, flashy than the other ones, but it's critical for maintaining coherence over long-running tasks. And so when you have all of these different building blocks, how do you assemble that into a system that can run for many days?
+4:03
+So Missions is our answer. It's a system that combines four of those: delegation, creator verifier, uh, broadcast, and negotiation into a single workflow. You describe a goal, you scope that through a conversation, you approve a plan, and then the system handles execution for hours or days, and that enables you to focus on something else.
+Introducing Missions
+After a user describes a software goal, scopes it through conversation, and approves a plan, Missions coordinates agents through
+structured handoffs and shared state
+to execute over hours or days.
+Text in image
+INTRODUCING MISSIONS
+
+Missions – a system that combines delegation, creator-verifier, broadcast, and negotiation into a single workflow
+
+HOW TO USE THEM
+1. Describe a software goal.
+2. Scope it through conversation.
+3. Approve the plan
+4. Missions handles execution
+
+A mission is not a single agent session that runs for a long time. It's an ecosystem of agents coordinating through structured handoffs and shared state.
+
+AI Engineer - Factory
+2026
+3
+
+Interface text:
+AI Engineer EUROPE
+Google DeepMind
+4:14
+Show
+2
+builds
+4:14
+A four-step Missions workflow leads from describing a software goal to execution; agents coordinate through structured handoffs and shared state.
+Text in image
+INTRODUCING MISSIONS
+
+Missions – a system that combines delegation, creator-verifier, broadcast, and negotiation into a single workflow
+
+HOW TO USE THEM
+1. Describe a software goal.
+2. Scope it through conversation.
+3. Approve the plan
+4. Missions handles execution
+
+A mission is not a single agent session that runs for a long time. It's an ecosystem of agents coordinating through structured handoffs and shared state.
+
+AI Engineer - Factory
+2026
+3
+
+Interface text:
+AI Engineer EUROPE
+Google DeepMind
+4:27
+Missions combines agent coordination patterns into a workflow from describing a goal through execution.
+Text in image
+INTRODUCING MISSIONS
+
+Missions – a system that combines delegation, creator-verifier, broadcast, and negotiation into a single workflow
+
+HOW TO USE THEM
+1. Describe a software goal.
+2. Scope it through conversation.
+3. Approve the plan
+4. Missions handles execution
+
+A mission is not a single agent session that runs for a long time. It's an ecosystem of agents coordinating through structured handoffs and shared state.
+
+AI Engineer - Factory
+2026
+3
+
+Interface text:
+AI Engineer EUROPE
+Google DeepMind
+4:27
+Notably, a mission is not a single agent session. It's an ecosystem of agents that communicate through structured handoffs and shared state.
+4:36
+It uses a three-role architecture. There's orchestrator, there's workers, and then there's validators. The orchestrator handles planning. When you describe what you want, the orchestrator is kind of like your sounding board.
+4:47
+It asks you the right strategic questions. It, um, you know, checks out if there's any unclear requirements in, in the problem space, and then it eventually produces a plan that includes features, milestones, and then something that's called a validation contract.
+5:03
+And that validation contract defines what done sort of means before any coding is done. And I'll come back to why that matters because it turns out to be really important to the system.
+5:14
+The next role are workers. They handle implementation. Um, when a feature is assigned to a worker, that worker has clean context, no accumulated baggage, no degraded attention, right? The worker reads its spec, it implements the feature, and then commits, um, via Git, allowing the next worker to inherit a clean slate and a working code base.
+5:35
+And then the last role are validators. They handle verification. And so most systems validate by maybe running lint, type checks, tests, maybe they do code review. Missions does all of that, but we also validate behavior.
+5:48
+Instead of just asking, you know, does the code look right? We wonder, does this work end to end? That's the difference that lets, lets Missions run for many hours, many days in a row without drifting.
+6:00
+And making it work had to involve sort of rethinking validation entirely. So when you've worked with coding agents before, you've probably seen this pattern where an agent builds a feature, it writes some tests, the tests pass, there's full coverage.
+6:17
+But the tests were sort of shaped by the code, not by what the code was attempting to actually do.
+6:23
+Tests written after implementation don't catch bugs. They confirm decisions. So if you rely on validation like that, your system will eventually drift.
+6:34
+That's why this validation contract exists. It's written during planning, before any code, and it defines correctness independently of implementation. So for a complex project, this can be hundreds of assertions, and each feature is assigned one or more assertions that it must satisfy.
+6:51
+The sum of all features must mean that every assertion is covered.
+The validation loop
+Before coding, the orchestrator defines correctness in a
+validation contract
+. After each milestone, one validator checks code and tests while another exercises the
+live app
+; neither has seen the code before.
+Text in image
+HOW THEY WORK
+The validation loop
+Tests written after implementation don't catch bugs. They confirm decisions.
+
+PLANNING PHASE
+Validation Contract
+Written by orchestrator during planning, before any code. Hundreds of assertions define correctness independently of implementation.
+
+After each milestone...
+
+</>
+Scrutiny Validator
+Runs tests, typechecking, linting. Spawns code review agents for each completed feature.
+
+</>
+User-Testing Validator
+Acts like a QA engineer. Launches the app, navigates via computer-use & verifies flows end-to-end.
+
+Neither validator has ever seen the code. Validation is adversarial by design.
+
+AI Engineer - Factory
+2026
+5
+6:56
+6:58
+After each of-- after each milestone of features, we have, uh, two types of validators that run. So you have the scrutiny validator and the user testing validator. The first one is more traditional.
+7:09
+It runs the test suite, type-checking, lints, and critically, it spawns, uh, dedicated code review agents for each completed feature within the milestone. And then the second one, which is the user testing validator, is more interesting.
+7:21
+It kind of acts like a QA engineer. It spawns the application, it interacts with it through computer use or something similar to that. It, uh, fills out forms, you know, uh, checks that pages render correctly, clicks buttons, and ensures that functional flows work holistically.
+7:38
+So this step takes significantly longer than the previous one of, of the scrutiny validator, uh, because the, the system is interacting with a live application. And what we've noticed is that Missions, most of the Missions wall clock time is actually spent here waiting for this, like, real-world execution to occur instead of generating tokens.
+7:59
+Critically, neither validator has seen the code before. They are not invested in the implementation, and so validation is adversarial by design.
+Structured handoffs
+When a worker finishes a feature, it records what happened in a
+structured handoff
+. The system uses these reports to preserve context across agents and scope corrective work at milestone boundaries.
+Text in image
+HOW THEY WORK
+Structured handoffs
+How agents stay coherent over days, not just minutes.
+
+Every worker reports
+• What was implemented
+• What was left undone
+• Commands run + exit codes
+• Issues discovered
+• Whether procedures were followed
+
+New Task
+Execute
+Observe
+Learn
+CONTINUOUS LEARNING
+
+AI Engineer - Factory
+2026
+6
+8:07
+8:09
+Okay, so then validation catches bugs, right? But for a system that runs for many days, you also need to make sure that context isn't lost between the agents. When a worker finishes a feature, it doesn't just say, "I'm done."
+8:23
+It fills out a structured handoff detailing what was completed, what was left undone, what commands were run throughout that, that, uh, agent loop, and what were the c- the exit codes of those commands, um, what issues were discovered, and did it abide by the procedures that the orchestrator defined for that worker.
+8:44
+That's how we catch issues and how the system self-heals.
+8:48
+The errors get caught at milestone boundaries, corrective work gets scoped, and the Mission sort of, like, pulls itself back on track, not by hoping that agents remember what happened, but by forcing them to write it down and then actually address issues, and I'll, I'll present on that in just a sec.
+Structured handoffs
+When a worker finishes a feature, it records what happened in a
+structured handoff
+. The system uses these reports to preserve context across agents and scope corrective work at milestone boundaries.
+Text in image
+HOW THEY WORK
+Structured handoffs
+How agents stay coherent over days, not just minutes.
+
+Every worker reports
+• What was implemented
+• What was left undone
+• Commands run + exit codes
+• Issues discovered
+• Whether procedures were followed
+
+New Task
+Execute
+Observe
+Learn
+Encode Skill
+CONTINUOUS LEARNING
+
+AI Engineer - Factory
+2026
+6
+
+Interface text:
+AI Engineer EUROPE
+together.ai
+Engineering the future of AI
+8:54
+9:06
+Um, our longest Mission ran for sixteen days, which is much longer than a full sprint, and we believe that they can run for thirty. That's only possible because of this structure.
+Why serial beats parallel (mostly)
+Factory runs Mission features serially, with one worker or validator at a time. In software development, parallel agents conflicted and duplicated work, while coordination costs ate into speed gains.
+Text in image
+Why serial beats parallel (mostly)
+HOW THEY WORK
+The next question, how should this execute...
+
+AI Engineer - Factory
+2026
+7
+
+Interface text:
+AI Engineer EUROPE
+OpenAI
+SENTRY
+PRESENTED BY
+Google DeepMind
+9:14
+9:17
+So once we had this architecture, the next question beame- became, um, how do we actually run it, right? Um, the most obvious choice is, like, parallelism. If you have ten agents running at one point in time, then you have ten times the throughput.
+Why serial beats parallel (mostly)
+Factory found that parallel software agents can step on each other’s changes, duplicate work and make inconsistent architecture decisions. Coordination overhead eats into speed gains, and conflicts burn tokens.
+Text in image
+HOW THEY WORK
+Why serial beats parallel (mostly)
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+AI Engineer - Factory
+2026
+7
+
+Interface text:
+AI Engineer EUROPE
+PRESENTED BY
+Google DeepMind
+9:23
+Why serial beats parallel (mostly)
+Factory runs Mission features serially, with one worker or validator at a time. In software development, parallel agents conflicted and duplicated work, while coordination costs ate into speed gains.
+Text in image
+Why serial beats parallel (mostly)
+HOW THEY WORK
+The next question, how should this execute...
+
+AI Engineer - Factory
+2026
+7
+
+Interface text:
+AI Engineer EUROPE
+OpenAI
+SENTRY
+PRESENTED BY
+Google DeepMind
+9:24
+9:31
+But we tried that, and it doesn't really work for tasks in the, like, software dev domain because agents conflict. They step on each other's changes, they duplicate work, they make inconsistent architectural decisions.
+Why serial beats parallel (mostly)
+Factory runs
+features serially
+after parallel agents conflicted, duplicated work and lost speed to coordination. Read-only code search, API research and reviews can still run in parallel.
+Text in image
+HOW THEY WORK
+Why serial beats parallel (mostly)
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+AI Engineer - Factory
+2026
+7
+
+Other visible text:
+AI Engineer EUROPE
+OpenAI
+SENTRY
+DeepMind
+Braintrust
+WorkOS
+9:34
+9:43
+And so the coordination overhead ends up eating up the speed gains all the while you're burning tokens. The difference with Missions is that we run features serially. So there's only one worker or validator running at any given point in time.
+Why serial beats parallel (mostly)
+Missions runs
+one feature at a time
+, passing the codebase through git. It parallelizes read-only research and reviews to avoid conflicting changes.
+Text in image
+Why serial beats parallel (mostly)
+HOW THEY WORK
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+WHAT ACTUALLY WORKS
+Serial Execution
+Features execute one at a time. Each worker inherits the full codebase from the last through git
+
+Parallelism is reserved for work that can't conflict: codebase exploration, API research, documentation reads, and validation reviews.
+
+Slower on paper. But for multi-day runs, correctness compounds.
+
+AI Engineer - Factory
+2026
+7
+
+Interface text:
+AI Engineer EUROPE
+OpenAI
+SENTRY
+DeepMind
+Engineering the future of AI
+9:54
+Show
+2
+builds
+9:54
+A comparison of parallelism drawbacks with serial feature execution and parallel exploration, research, documentation, and reviews.
+Text in image
+Why serial beats parallel (mostly)
+HOW THEY WORK
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+WHAT ACTUALLY WORKS
+Serial Execution
+Features execute one at a time. Each worker inherits the full codebase from the last through git
+
+Parallelism is reserved for work that can't conflict: codebase exploration, API research, documentation reads, and validation reviews.
+
+Slower on paper. But for multi-day runs, correctness compounds.
+
+AI Engineer - Factory
+2026
+7
+
+Interface text:
+AI Engineer EUROPE
+OpenAI
+SENTRY
+DeepMind
+Engineering the future of AI
+10:05
+Two panels contrast conflicts in parallel work with serial execution and targeted parallel research.
+Text in image
+Why serial beats parallel (mostly)
+HOW THEY WORK
+The next question, how should this execute...
+
+WHAT PEOPLE EXPECT
+Parallelism
+• Agents conflict and step on each other
+• Duplicate work and inconsistent architecture
+• Coordination overhead eats speed gains
+• Every conflict burns tokens
+
+WHAT ACTUALLY WORKS
+Serial Execution
+Features execute one at a time. Each worker inherits the full codebase from the last through git
+
+Parallelism is reserved for work that can't conflict: codebase exploration, API research, documentation reads, and validation reviews.
+
+Slower on paper. But for multi-day runs, correctness compounds.
+
+AI Engineer - Factory
+2026
+7
+9:58
+Within a feature, we allow for parallelization on read-only operations. So you have something like, uh, searching through the code base or researching APIs, all that gets parallelized. Within validators, we also parallelize read-only operations such as code review.
+10:15
+This is serial execution with int-- with targeted internal parallelization. It seems slower on paper, but the error rate drops dramatically, and when you have tasks that run for many days, this sort of correctness compounds.
+Mission Control overview
+Mission Control brings the
+active feature, progress log, and worker output
+together so a project manager can monitor a multi-day mission at a glance.
+Text in image
+USING MISSIONS
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Monitor from a bird's eye view
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control  ~/Development/note-tracker
+TIME 56m 54s  Input 324.0K  Cached 16.8M  Output 111.0K
+RUNNING  3/17 [+6]
+
+Active Feature  scrutiny-validator-app-shell
+skill scrutiny-validator
+milestone app-shell
+
+Preconditions
+- All implementation features for milestone "app-shell" are complete
+
+Expected Behavior
+- Validators pass (test, typecheck, lint)
+- Review subagents spawned for each feature
+- Findings synthesized into scrutiny report
+
+Description
+Scrutiny validation for milestone "app-shell". Runs test suite, typecheck, and lint. Spawns review subagents for each completed feature. Synthesizes findings. Always returns to orchestrator.
+
+Features  3/11
+✓ bootstrap-tauri-workspace
+✓ menu-bar-shell-and-lifecycle
+✓ quick-note-save-and-main-list
+● scrutiny-validator-app-shell
+○ user-testing-validator-app-shell
+○ categories-and-tagging-experience
+○ due-date-parsing-and-note-metadata
+○ google-calendar-auth-and-secure-storage
++3 more
+
+Progress Log  1-9 of 10
+<1m ago  #95fb1b2d started [scrutiny-validator-app-shell]
+<1m ago  Milestone validation: app-shell
+<1m ago  #d1b6b4a7 completed [quick-note-save-and-main-list] ✓
+5m ago  #d1b6b4a7 started [quick-note-save-and-main-list]
+5m ago  #afc827a8 completed [menu-bar-shell-and-lifecycle] ✓
+13m ago  #afc827a8 started [menu-bar-shell-and-lifecycle]
+13m ago  #1963e245 completed [bootstrap-tauri-workspace] ✓
+21m ago  #1963e245 started [bootstrap-tauri-workspace]
+21m ago  Run started: Mission artifacts authored, repo scaffold...
+
+Active Worker  #1  scrutiny-validator-app-shell  Duration 7s
+> ## Your Assigned Feature ```json { "id": "scrutiny-validator-app-shell", "description": "Scrutiny validation for milestone \"app-shell\". Runs test suite, typecheck, and lint. Spawns review subagents for each completed feature. Synthesizes findings. Always returns to orchestrato...
+
+F Features  W Workers  M Models  P Pause  D Mission Dir  Ctrl+T Back To Orchestrator
+10:26
+Demo milestone
+10:30
+Now, your, your standard chat interface doesn't really work for something that lasts many days. At a quick glance, you need to be, be able to see how much of the project have you completed and what's, what amount of the budget that you originally, like, set off with have you burned through.
+Inspecting workers
+Mission Control lists four workers: one running and three completed. The view lets the user inspect individual workers during a multi-day mission.
+Text in image
+USING MISSIONS
+
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Inspect all the workers
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control  ~/Development/note-tracker
+TIME 56m 54s  Input 324.[illegible]K  Cached 16.8M  Output 111.0K
+
+Workers (4)
+All (4) | Active (1) | Completed (3) | Failed (0)
+
+#  Session  Start  Duration  Status  Input  Cached  Output  Feature
+1  95fb1b2d  15:08  10s  Running  -  -  -  scrutiny-validator-app-shell
+4  d1b6b4a7  15:02  5m 47s  Success  40  2.0M  18.0K  quick-note-save-and-main-list
+3  afc827a8  14:54  7m 36s  Success  60  7.3M  21.0K  menu-bar-shell-and-lifecycle
+2  1963e245  14:46  8m 1s  Success  54  5.0M  15.1K  bootstrap-tauri-workspace
+
+↑↓ Select  Enter View  T Filter  Esc Back  F Features  M Models
+10:31
+Demo milestone
+Reading worker handoffs
+Mission Control opens a
+completed worker’s session
+, showing its plan, commands, and completion status. Alvoeiro says handoff summaries capture discoveries and how work may change course.
+Text in image
+USING MISSIONS
+
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Worker Session
+Session: [illegible]
+Feature: quick-note-save-and-main-list
+Model: Opus 4.6 (High)
+Status: Success · Duration: 5m 47s
+Tokens: Input 40 · Cached 2.0M · Output 18.0K
+
+↑93 more above
+Plan 1. [completed] Run baseline tests (pnpm test + cargo test) 2. [completed] Add SQLite dependency and create note persistence layer in Rust...
+→TODO List Updated
+
+Execute cd /Users/luke/Development/note-tracker && git status
+→On branch main Changes not staged for commit: [illegible]
+Execute cd /Users/luke/Development/note-tracker && git add -A && git commit -m "Add note persistence with SQLite and quick-note save path - Ad...
+→[illegible]
+Execute cd /Users/luke/Development/note-tracker && git status && git rev-parse HEAD
+→On branch main nothing to commit, working tree clean [illegible] [Process exited with code 0]
+
+Clean working tree. Now let me call EndFeatureRun:
+
+End Feature Run success
+→[illegible]
+
+Read the handoffs
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control ~/Development/note-tracker
+TIME 56m 54s · Input 324.0K · Cached 16.8M · Output 111.0K
+↑↓ Scroll   [] Density   g Top   G Bottom   s Interrupt/Chat   h Handoff   Esc Back
+10:35
+Demo milestone
+10:45
+So using a Mission, actually, we built Mission Control, which is a dedicated view for this. You can see what is, what is active worker doing right now, uh, read off handoff summaries that detail what did the worker or the validator discover, um, how it's cl- gonna sort of like alter its course, uh, moving forward.
+Inspecting workers
+Mission Control lists four workers: one running and three completed. The view lets the user inspect individual workers during a multi-day mission.
+Text in image
+USING MISSIONS
+
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Inspect all the workers
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control  ~/Development/note-tracker
+TIME 56m 54s  Input 324.[illegible]K  Cached 16.8M  Output 111.0K
+
+Workers (4)
+All (4) | Active (1) | Completed (3) | Failed (0)
+
+#  Session  Start  Duration  Status  Input  Cached  Output  Feature
+1  95fb1b2d  15:08  10s  Running  -  -  -  scrutiny-validator-app-shell
+4  d1b6b4a7  15:02  5m 47s  Success  40  2.0M  18.0K  quick-note-save-and-main-list
+3  afc827a8  14:54  7m 36s  Success  60  7.3M  21.0K  menu-bar-shell-and-lifecycle
+2  1963e245  14:46  8m 1s  Success  54  5.0M  15.1K  bootstrap-tauri-workspace
+
+↑↓ Select  Enter View  T Filter  Esc Back  F Features  M Models
+10:45
+Demo milestone
+Mission Control overview
+Mission Control brings the
+active feature, progress log, and worker output
+together so a project manager can monitor a multi-day mission at a glance.
+Text in image
+USING MISSIONS
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Monitor from a bird's eye view
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control  ~/Development/note-tracker
+TIME 56m 54s  Input 324.0K  Cached 16.8M  Output 111.0K
+RUNNING  3/17 [+6]
+
+Active Feature  scrutiny-validator-app-shell
+skill scrutiny-validator
+milestone app-shell
+
+Preconditions
+- All implementation features for milestone "app-shell" are complete
+
+Expected Behavior
+- Validators pass (test, typecheck, lint)
+- Review subagents spawned for each feature
+- Findings synthesized into scrutiny report
+
+Description
+Scrutiny validation for milestone "app-shell". Runs test suite, typecheck, and lint. Spawns review subagents for each completed feature. Synthesizes findings. Always returns to orchestrator.
+
+Features  3/11
+✓ bootstrap-tauri-workspace
+✓ menu-bar-shell-and-lifecycle
+✓ quick-note-save-and-main-list
+● scrutiny-validator-app-shell
+○ user-testing-validator-app-shell
+○ categories-and-tagging-experience
+○ due-date-parsing-and-note-metadata
+○ google-calendar-auth-and-secure-storage
++3 more
+
+Progress Log  1-9 of 10
+<1m ago  #95fb1b2d started [scrutiny-validator-app-shell]
+<1m ago  Milestone validation: app-shell
+<1m ago  #d1b6b4a7 completed [quick-note-save-and-main-list] ✓
+5m ago  #d1b6b4a7 started [quick-note-save-and-main-list]
+5m ago  #afc827a8 completed [menu-bar-shell-and-lifecycle] ✓
+13m ago  #afc827a8 started [menu-bar-shell-and-lifecycle]
+13m ago  #1963e245 completed [bootstrap-tauri-workspace] ✓
+21m ago  #1963e245 started [bootstrap-tauri-workspace]
+21m ago  Run started: Mission artifacts authored, repo scaffold...
+
+Active Worker  #1  scrutiny-validator-app-shell  Duration 7s
+> ## Your Assigned Feature ```json { "id": "scrutiny-validator-app-shell", "description": "Scrutiny validation for milestone \"app-shell\". Runs test suite, typecheck, and lint. Spawns review subagents for each completed feature. Synthesizes findings. Always returns to orchestrato...
+
+F Features  W Workers  M Models  P Pause  D Mission Dir  Ctrl+T Back To Orchestrator
+10:50
+Demo milestone
+Inspecting workers
+Mission Control lists four workers: one running and three completed. The view lets the user inspect individual workers during a multi-day mission.
+Text in image
+USING MISSIONS
+
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Inspect all the workers
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control  ~/Development/note-tracker
+TIME 56m 54s  Input 324.[illegible]K  Cached 16.8M  Output 111.0K
+
+Workers (4)
+All (4) | Active (1) | Completed (3) | Failed (0)
+
+#  Session  Start  Duration  Status  Input  Cached  Output  Feature
+1  95fb1b2d  15:08  10s  Running  -  -  -  scrutiny-validator-app-shell
+4  d1b6b4a7  15:02  5m 47s  Success  40  2.0M  18.0K  quick-note-save-and-main-list
+3  afc827a8  14:54  7m 36s  Success  60  7.3M  21.0K  menu-bar-shell-and-lifecycle
+2  1963e245  14:46  8m 1s  Success  54  5.0M  15.1K  bootstrap-tauri-workspace
+
+↑↓ Select  Enter View  T Filter  Esc Back  F Features  M Models
+10:55
+Demo milestone
+Reading worker handoffs
+Mission Control opens a
+completed worker’s session
+, showing its plan, commands, and completion status. Alvoeiro says handoff summaries capture discoveries and how work may change course.
+Text in image
+USING MISSIONS
+
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Worker Session
+Session: [illegible]
+Feature: quick-note-save-and-main-list
+Model: Opus 4.6 (High)
+Status: Success · Duration: 5m 47s
+Tokens: Input 40 · Cached 2.0M · Output 18.0K
+
+↑93 more above
+Plan 1. [completed] Run baseline tests (pnpm test + cargo test) 2. [completed] Add SQLite dependency and create note persistence layer in Rust...
+→TODO List Updated
+
+Execute cd /Users/luke/Development/note-tracker && git status
+→On branch main Changes not staged for commit: [illegible]
+Execute cd /Users/luke/Development/note-tracker && git add -A && git commit -m "Add note persistence with SQLite and quick-note save path - Ad...
+→[illegible]
+Execute cd /Users/luke/Development/note-tracker && git status && git rev-parse HEAD
+→On branch main nothing to commit, working tree clean [illegible] [Process exited with code 0]
+
+Clean working tree. Now let me call EndFeatureRun:
+
+End Feature Run success
+→[illegible]
+
+Read the handoffs
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control ~/Development/note-tracker
+TIME 56m 54s · Input 324.0K · Cached 16.8M · Output 111.0K
+↑↓ Scroll   [] Density   g Top   G Bottom   s Interrupt/Chat   h Handoff   Esc Back
+10:59
+Demo milestone
+11:03
+Or you could just, you know, go check out, um, you know, go hang out with your friends that night. This entire view lets you just run Missions asynchronously, and you could be plugged in as a project manager overseeing the implementation, or you could just, you know, go and, and, uh, hang out with your friends.
+Inspecting workers
+Mission Control lists four workers: one running and three completed. The view lets the user inspect individual workers during a multi-day mission.
+Text in image
+USING MISSIONS
+
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Inspect all the workers
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control  ~/Development/note-tracker
+TIME 56m 54s  Input 324.[illegible]K  Cached 16.8M  Output 111.0K
+
+Workers (4)
+All (4) | Active (1) | Completed (3) | Failed (0)
+
+#  Session  Start  Duration  Status  Input  Cached  Output  Feature
+1  95fb1b2d  15:08  10s  Running  -  -  -  scrutiny-validator-app-shell
+4  d1b6b4a7  15:02  5m 47s  Success  40  2.0M  18.0K  quick-note-save-and-main-list
+3  afc827a8  14:54  7m 36s  Success  60  7.3M  21.0K  menu-bar-shell-and-lifecycle
+2  1963e245  14:46  8m 1s  Success  54  5.0M  15.1K  bootstrap-tauri-workspace
+
+↑↓ Select  Enter View  T Filter  Esc Back  F Features  M Models
+11:09
+Demo milestone
+Mission Control overview
+Mission Control brings the
+active feature, progress log, and worker output
+together so a project manager can monitor a multi-day mission at a glance.
+Text in image
+USING MISSIONS
+Mission Control
+
+A dedicated view for multi-day autonomous work. Monitor, redirect, or close your laptop and come back tomorrow.
+
+Monitor from a bird's eye view
+
+AI Engineer - Factory
+2026
+8
+
+Interface text:
+Droid
+Mission Control  ~/Development/note-tracker
+TIME 56m 54s  Input 324.0K  Cached 16.8M  Output 111.0K
+RUNNING  3/17 [+6]
+
+Active Feature  scrutiny-validator-app-shell
+skill scrutiny-validator
+milestone app-shell
+
+Preconditions
+- All implementation features for milestone "app-shell" are complete
+
+Expected Behavior
+- Validators pass (test, typecheck, lint)
+- Review subagents spawned for each feature
+- Findings synthesized into scrutiny report
+
+Description
+Scrutiny validation for milestone "app-shell". Runs test suite, typecheck, and lint. Spawns review subagents for each completed feature. Synthesizes findings. Always returns to orchestrator.
+
+Features  3/11
+✓ bootstrap-tauri-workspace
+✓ menu-bar-shell-and-lifecycle
+✓ quick-note-save-and-main-list
+● scrutiny-validator-app-shell
+○ user-testing-validator-app-shell
+○ categories-and-tagging-experience
+○ due-date-parsing-and-note-metadata
+○ google-calendar-auth-and-secure-storage
++3 more
+
+Progress Log  1-9 of 10
+<1m ago  #95fb1b2d started [scrutiny-validator-app-shell]
+<1m ago  Milestone validation: app-shell
+<1m ago  #d1b6b4a7 completed [quick-note-save-and-main-list] ✓
+5m ago  #d1b6b4a7 started [quick-note-save-and-main-list]
+5m ago  #afc827a8 completed [menu-bar-shell-and-lifecycle] ✓
+13m ago  #afc827a8 started [menu-bar-shell-and-lifecycle]
+13m ago  #1963e245 completed [bootstrap-tauri-workspace] ✓
+21m ago  #1963e245 started [bootstrap-tauri-workspace]
+21m ago  Run started: Mission artifacts authored, repo scaffold...
+
+Active Worker  #1  scrutiny-validator-app-shell  Duration 7s
+> ## Your Assigned Feature ```json { "id": "scrutiny-validator-app-shell", "description": "Scrutiny validation for milestone \"app-shell\". Runs test suite, typecheck, and lint. Spawns review subagents for each completed feature. Synthesizes findings. Always returns to orchestrato...
+
+F Features  W Workers  M Models  P Pause  D Mission Dir  Ctrl+T Back To Orchestrator
+11:14
+Demo milestone
+11:22
+Okay, so the right model in each role. Uh,
+11:26
+everything here sort of assum- assumes one thing, and that is that you're using the right model in each role. Planning benefits from slow, careful reasoning, implementation from fast code fluency and creativity, validation benefits from, uh, precise instruction following, right?
+11:42
+And so no single model nor model provider is best at all three of these. Using systems like Missions requires the development of a new skill, which internally we've been calling Droid whispering.
+11:53
+But it's this idea that you need to be able to mentally model how different LLMs interact, where they fail, how those failures compound over a multi-day run, and then you need to make a deliberate choice as to which model sits in which seat.
+12:06
+Theo, the engineer who built our Missions prototype, came up with our, our model defaults, but we really encourage people to make these, uh, their own and customize them to the needs of their project.
+12:17
+So, for example, validation might use a different model provider entirely to make sure that it's not biased by the same training data.
+The right model in each role
+Missions can use different models for
+planning, implementation, and validation
+. A separate validation provider may reduce shared training-data bias, while model-agnostic design lets each role use a specialized model.
+Text in image
+USING MISSIONS
+
+The right model in each role
+
+No single model is best at planning, implementation, and validation.
+
+PLANNING
+Slow, careful reasoning.
+Strategic questions, constraint analysis.
+
+IMPLEMENTATION
+Code fluency and creativity.
+Fast generation, tool use.
+
+VALIDATION
+Strict instruction following.
+Different provider avoids training-data bias.
+
+Model-agnostic architecture = compounding advantage as models specialize
+
+You're only as strong as your weakest link. If locked into one model family, you're constrained by that family's weakest capability.
+
+AI Engineer - Factory
+2026
+9
+12:24
+12:24
+This is a structural advantage of a model-agnostic architecture. You're only as strong as your weakest link, and if you're locked into one model provider, then you're constrained by that family's weakest capability.
+12:36
+As models continue to specialize, the ability to put the right model in the right seat becomes a compounding advantage.
+12:44
+It works in the other direction, too. If you're using Missions, the structure of that can compensate for models that are not quite at like the frontier level performance. So the validation contracts, the milestone checkpoints, they allow you to run Missions very, very successfully, even using open weight models.
+Breaking down a real mission
+A Slack-clone mission ran for
+16.5 hours
+, with 60.5% spent on implementation. Its milestone waterfall shows repeated implementation and validation; tests made up 52.5% of the code, with
+89.25% statement coverage
+.
+Text in image
+USING MISSIONS
+Breaking down a real mission
+Building a clone of Slack
+
+TIME
+Total runtime — 16.5 h
+Orchestration 0.38 h · 2.3%
+Implementation 9.98 h · 60.5%
+Validation 6.14 h · 37.2%
+
+MILESTONE WATERFALL
+Legend: impl, val
+Timeline: 0h, 2h, 4h, 6h, 8h, 10h, 12h, 14h, 16h
+Foundation
+Channels & messaging
+Conversations
+Interactions
+Rich features
+Real-time polish
+
+AGENT RUNS
+185 total runs
+subagents
+Y-axis ticks: 3, 6, 9, 12
+Timeline: 0h, 2h, 4h, 6h, 8h, 10h, 12h, 14h, 16h
+Orchestration 1 · 12 subagents
+Workers 63
+Validators 27 · 82 subagents
+
+TOKENS
+778.5M total tokens
+BY TYPE
+Input 30.3M
+Cache read 744.9M
+Output 3.4M
+BY ROLE
+Orchestration 29.2M
+Implementation 485.5M
+Validation 263.8M
+
+CODE
+38.8k lines — 52.5% tests
+CODE SPLIT
+Source 18.5k lines
+Tests 20.4k lines
+STATEMENT COVERAGE
+Covered 89.25%
+Uncovered 10.75%
+
+AI Engineer - Factory
+2026
+10
+13:02
+13:04
+Now, this all sounds quite theoretical. What does it actually look like in production? I wrote an example of building a clone of Slack right here. This slide has a ton of info, but I'll walk you through just a few things that I wanna call out.
+13:17
+Sixty percent of our time is spent on implementation and sixty percent of our tokens as well. Notice how validation never succeeds on the first go. That's in the Mission, um, what's it?
+13:29
+The one on the bottom left. Um, we almost always have to create follow-up features. So it really demonstrates like the value of a system that does this QA loop.
+13:39
+You end up with sev-- with fifty percent of your lines of code at the very end in the bottom right being tests, and ninety percent of your, uh, code is covered by those tests.
+13:49
+And lastly, we take advantage of prompt caching heavily to make sure that we're sort of offsetting, um, the, the price of running such a long task.
+What have people built
+A home visualization sits beside a restaurant network connecting people, restaurants, and groups. The selected Danny Meyer view lists founding and training links. Enterprise uses include overnight prototypes and codebase modernization.
+Text in image
+USING MISSIONS
+
+What have people built
+
+Prototypes & large features, internal tools, refactors & migrations, agent readiness
+
+Interface text:
+The sun sets
+BEDROOM
+68° Partly Cloudy
+
+NYC Restaurant Network
+
+RELATIONSHIP FILTERS
+Trained Under
+Founded
+Worked At
+Part Of
+Spun Off
+Invested In
+Succeeded
+Collaborated
+
+LEGEND
+Person
+Restaurant
+Restaurant Group
+
+SHORTEST PATH
+From...
+To...
+Find Path
+Clear
+
+TIMELINE
+1800
+2025
+
+65 people
+86 restaurants
+9 groups
+
+Danny Meyer
+PERSON
+Danny Meyer
+Role: Restaurateur
+Active: 1985–present
+Founder of Union Square Hospitality Group. Pioneered “enlightened hospitality” philosophy.
+
+CONNECTIONS (9)
+Union Square Hospitality Group — Founded (1985)
+Union Square Cafe — Founded (1985)
+Gramercy Tavern — Founded (1994)
+Eleven Madison Park — Founded (1998)
+Shake Shack — Founded (2004)
+Michael Anthony — Trained Under
+Floyd Cardoz — Trained Under
+Daniel Humm — Trained Under
+Will Guidara — Trained Under
+13:58
+Demo milestone
+14:00
+People have really taken to Missions, and it's been awesome to see what folks have been building with them. Um, some examples I've included in this slide, but ones that I wanna call out are specifically in the enterprise setting, which is where Factory really shines.
+14:13
+Um, they've been used to prototyping new ideas and features overnight to, um, make sure that people can, uh, build internal tools at increasingly rapid rates to run huge refactors and migrations for ML search, or research, sorry, and to modernize, uh, code bases so that agents are more productive in them.
+What have people built
+A home visualization sits beside a restaurant network connecting people, restaurants, and groups. The selected Danny Meyer view lists founding and training links. Enterprise uses include overnight prototypes and codebase modernization.
+Text in image
+USING MISSIONS
+
+What have people built
+
+Prototypes & large features, internal tools, refactors & migrations, agent readiness
+
+Interface text:
+The sun sets
+BEDROOM
+68° Partly Cloudy
+
+NYC Restaurant Network
+
+RELATIONSHIP FILTERS
+Trained Under
+Founded
+Worked At
+Part Of
+Spun Off
+Invested In
+Succeeded
+Collaborated
+
+LEGEND
+Person
+Restaurant
+Restaurant Group
+
+SHORTEST PATH
+From...
+To...
+Find Path
+Clear
+
+TIMELINE
+1800
+2025
+
+65 people
+86 restaurants
+9 groups
+
+Danny Meyer
+PERSON
+Danny Meyer
+Role: Restaurateur
+Active: 1985–present
+Founder of Union Square Hospitality Group. Pioneered “enlightened hospitality” philosophy.
+
+CONNECTIONS (9)
+Union Square Hospitality Group — Founded (1985)
+Union Square Cafe — Founded (1985)
+Gramercy Tavern — Founded (1994)
+Eleven Madison Park — Founded (1998)
+Shake Shack — Founded (2004)
+Michael Anthony — Trained Under
+Floyd Cardoz — Trained Under
+Daniel Humm — Trained Under
+Will Guidara — Trained Under
+14:21
+Demo milestone
+Designed to not be made obsolete
+Missions puts orchestration in
+prompts and per-mission skills
+so model improvements can carry through. A
+thin deterministic layer
+runs validation and blocks progress on unresolved handoffs.
+Text in image
+USING MISSIONS
+
+Designed to not be made obsolete
+
+When the next model drops, does the system get better or break?
+
+Almost all orchestration logic lives in prompts and skills.
+• How it decomposes features
+• How it handles failures
+• When it escalates
+
+Worker behavior is driven by skills that the orchestrator defines per-mission.
+
+When a better model drops, the system just gets smarter. No code changes needed.
+
+AI Engineer - Factory
+2026
+11
+14:31
+Show
+2
+builds
+14:31
+Slide describing orchestration through prompts and mission-specific skills.
+Text in image
+USING MISSIONS
+
+Designed to not be made obsolete
+
+When the next model drops, does the system get better or break?
+
+Almost all orchestration logic lives in prompts and skills.
+• How it decomposes features
+• How it handles failures
+• When it escalates
+
+Worker behavior is driven by skills that the orchestrator defines per-mission.
+
+When a better model drops, the system just gets smarter. No code changes needed.
+
+AI Engineer - Factory
+2026
+11
+15:21
+Slide explaining that orchestration lives in prompts and skills, while a thin deterministic layer handles validation and bookkeeping.
+Text in image
+USING MISSIONS
+
+Designed to not be made obsolete
+
+When the next model drops, does the system get better or break?
+
+Almost all orchestration logic lives in prompts and skills.
+• How it decomposes features
+• How it handles failures
+• When it escalates
+
+Worker behavior is driven by skills that the orchestrator defines per-mission.
+
+When a better model drops, the system just gets smarter. No code changes needed.
+
+THE THIN DETERMINISTIC LAYER
+
+Hardcoded to handle bookkeeping
+• Triggering validation
+• Blocking progress when handoff issues aren't addressed
+
+Missions ensure discipline.
+The models provide intelligence.
+
+AI Engineer - Factory
+2026
+11
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+Google DeepMind
+14:34
+Um, one thing that I wanted to talk about was also this concept of like the bitter lesson. Because every person building multi-agent systems has this fear of the next model release sort of like making their ob-- their architecture obsolete overnight.
+14:48
+Um, so when we were building Missions, we decided we had to make this system get better with every model improvement. This means that almost all of the orchestration logic is defined in prompts and skills, um, instead of like a hard-coded state machine.
+15:04
+How it decomposes failures and, um, or ha- or decomposes features and handles failures is all in about like seven hundred lines of text, and four sentences of this can alter the execution strategy pretty dramatically.
+15:18
+Worker behavior is driven by skills that the orchestrator defines per mission, so you get very customized behavior. And the only deterministic logic is very thin, and it's focused on enabling models to do what they do best while the system handles like the bookkeeping, right?
+15:32
+Stuff like running validation and ensuring that progress is blocked when there are some handoff issues that are not addressed. So Missions sort of ensure the, the discipline, and the models provide the intelligence, uh, using primitives that they're already familiar with, like AGENTS.md, skills, et cetera.
+What this unlocks
+Alvoeiro suggests Missions could increase a five-engineer team’s concurrent workstreams from
+10 to 30
+, freeing engineers to focus on architecture and product decisions. He also calls for leaving the codebase better.
+Text in image
+LOOKING FORWARD
+What this unlocks
+
+10 → 30
+concurrent workstreams with a team of 5 engineers
+
+Engineers focus on architecture, product decisions, and the genuinely hard problems.
+
+Leave your codebase in a better place than when you started
+• E2E Tests
+• Unit tests
+• Skills
+• setup.yaml
+• Agents.md
+• ... more!
+
+AI Engineer - Factory
+2026
+12
+
+Interface text:
+AI Engineer EUROPE
+Braintrust
+WorkOS
+OpenAI
+15:49
+15:51
+So what does this unlock? Remember the bottleneck that I started off with, human attention. The economics are sort of changing. Before, a team of five engineers might be able to, uh, work on ten work streams at any given point in time.
+16:04
+Now, maybe with Missions, we can bring that up to thirty. The team can focus on interesting problems such as, uh, the architecture, product decisions, um, instead of, uh, worrying about the execution per se.
+16:17
+And the important thing is the code base ends up cleaner than when you started. The end-to-end tests, the unit tests, the skills, the structure that Missions provide, uh, means that agents and humans are more productive in that environment moving forward.
+16:33
+So now that you understand how Missions are structured and how they actually work, you can see that they're really a composition of those original, um, strategies, right? Delegation shows up everywhere in how the orchestrator spawns workers and, uh, how we spawn research sub-agents.
+Missions are a composition
+The orchestrator delegates work to agents, while separate validators check implementation. Agents reference shared state and use
+structured handoffs
+to preserve context.
+Text in image
+LOOKING FORWARD
+Missions are a composition
+
+The connective tissue:
+• Structured handoffs so agents don't lose context
+• Validation separate from implementation
+• The right model in each role
+• Architecture that improves as models improve
+
+THE ORCHESTRATOR
+
+MILESTONE
+Feature #1 → Feature #2 … → Feature #N
+Workers
+Scrutiny Validator + User-Testing Validator
+Validators
+
+Research / Readonly Subagent
+Research / Readonly Subagent
+
+Shared State
+features.json
+handoffs.jsonl
+validation-contract.md
+Agent Skills
++7 more files...
+
+AI Engineer - Factory
+2026
+13
+16:35
+16:49
+Creator Verifier is fundamental in that validation and implementation are always separate agents with separate context. Broadcast runs through the shared, uh, Mission state that every agent references. And negotiation shows up at milestone boundaries where the orchestrator decides, you know, does this, does this h-hand-off summary sort of like look correct?
+17:07
+Do we need to create follow-up features, rescope, et cetera?
+17:11
+But strategies aren't enough. You need the connective tissue. You need, uh, these structured handoffs so that agents don't lose context. You need the right model in each role, and you need an architecture that will improve with each model improvement.
+17:24
+So what I like to think about is that people in this room who are thinking in terms of agent ecosystems, who develop an intuition for how different models compose under pressure, um, that those folks are gonna be really shipping the next generation of innovation.
+17:39
+Uh, there's a lot of open questions still, right? Um, how do we further parallelize the workload of Missions so that they run faster? How do we start orchestrating Missions themselves into even more complex workflows?
+17:50
+Uh, but the data from production Missions is clear. This works on real projects at scale today. So this is what I'll leave you with. Open Droid, try running /missions, argue with the orchestrator about the scope, approve the plan, and then go do something else.
+Try it today
+Open Droid and run
+/missions
+. Describe the goal, discuss scope with the orchestrator, and approve the plan before moving on to something else.
+Text in image
+Try it today
+
+/missions
+
+Describe what you want.
+Argue with the orchestrator about scope.
+Approve the plan.
+Then go do something else.
+17:56
+18:08
+I'm excited to see what you guys build, and I'll be around to answer any questions, uh, for the rest of the day. Thanks. [applauding] [upbeat music]
+←
+→
+Close
+Related talks
+Building Effective AI Agents: When to Use Them and How to Build Them
+Barry Zhang
+More in Agent engineering
+·
+15:09
+Building Agents with Model Context Protocol - Full Workshop with Mahesh Murag of Anthropic
+Mahesh Murag
+More in Agent engineering
+·
+1:44:12
+12-Factor Agents: Patterns of reliable LLM applications — Dex Horthy, HumanLayer
+Dex Horthy
+More in Agent engineering
+·
+17:06
+All talks ↗

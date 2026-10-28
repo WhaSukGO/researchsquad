@@ -1,0 +1,11 @@
+{
+  "id": "checker-correction-v2",
+  "type": "versioned_evaluator_correction",
+  "source": "Host implementation review and two new independent regression cases",
+  "finding": "The original transpose checker incorrectly used an absolute default octave for chord roots and slash basses. Chord labels have pitch classes: B to C# and Bb to C are upward major seconds modulo 12, even though their default-octave MIDI differences are -10.",
+  "change": "Keep absolute semitone checks for melody notes; use modulo-12 interval checks for chord roots and basses. Rhythm, quality and extension checks are unchanged.",
+  "verification": "32 unit/regression tests pass, including explicit B4-to-C#5 melody with G/B-to-A/C# slash bass and Bb-to-C chord root cases.",
+  "affected_measurement": "Four previously reported vision-candidate transposition failures are suspected checker false positives. Cached evaluations in this fork are invalidated and require reinspection with the corrected checker. Original measurements and decisions are preserved in the parent run.",
+  "unchanged": "Recognition predictions, reference labels, goal acceptance and budgets are unchanged. No recognition calls need rerunning. Melody/chord timing and musician acceptance remain separate questions.",
+  "instruction_boundary": "This is evidence about a tool defect, not permission to weaken acceptance or claim success."
+}

@@ -1,0 +1,403 @@
+What does an AI engineer do? | AI Engineer NYC 2026
+Watch "
+What does an AI engineer do? — conference livestream
+" on YouTube
+Watch
+From the conference livestream ·
+1:00:43
+–
+1:15:53
+on YouTube
+.
+The player starts and stops at this session’s boundaries.
+1:00:49
+↗
+Build the loop that builds the feature
+Using an assistant to write a feature and operating agents that keep improving the product are different engineering jobs. The first gives a developer another way to produce code. The second requires a system that can decide what work needs doing, propose a change, and tell whether the change helped.
+Aparna Dhinakaran starts with the gap between those ways of working. As engineers manage more agents, they need to build review systems and turn telemetry—the record of what the application did—into something an agent can investigate.
+Arize’s Signal is her concrete example. It reads traces, identifies recurring issues, and—when given repository access—can propose a fix or a pull request. The interesting engineering lies in making that cycle repeat without losing context, leaking access, or mistaking every pattern for a real problem.
+Watch the shift at 1:03:07
+.
+1:04:33
+↗
+Give every run a beginning and an end
+Signal begins by reading a configurable volume of traces on a cadence. It needs to remember issues it has already found. It also needs to recognize when something that previously looked unimportant has become a pattern worth investigating as more evidence arrives.
+This changes the role of observability. The primary consumer may be an agent rather than a person scanning a dashboard. Telemetry can also become the trigger that wakes the agent. A scheduled run might inspect recent traces every few hours; an event, a metric, or a user complaint in Slack can provide another starting point.
+Once triggered, the run needs a defined environment. Signal gathers trace context, relevant application-performance data, repository access, and the credentials required for the job into an isolated sandbox. A single proxy controls information moving in and out. The run itself is traced, and its outputs are saved separately.
+The run diagram at
+1:07:21
+distinguishes the short-lived workspace from the outputs that survive it.
+At completion, useful state remains: identified issues, the history of the agent’s work, and any learned skills saved to the repository. The sandbox, credentials, and repository access are torn down. Persisting the right information means the next run does not start from nothing, while the temporary execution environment does not become an indefinitely privileged machine.
+Failure needs the same separation. If a sandbox or harness fails partway through, state outside the sandbox allows a replacement to resume from the failed step. The system’s continuity comes from that saved progress, rather than from assuming one process will stay alive forever.
+1:09:47
+↗
+Define good behavior before automating more of it
+Dhinakaran describes Signal as independent of any single model or coding harness. That flexibility makes it possible to compare quality and cost: a stronger model may produce better proposed fixes, but the team wants to know whether a less expensive configuration can preserve the quality that matters.
+Evaluations answer that question only if they measure the right thing. A basic regression test can compare outputs for a known set of inputs. More difficult judgments—whether an issue is real, whether a proposed change addresses it, whether the agent’s diagnosis is useful—need alignment with human judgment.
+Much of the engineering work is learning to make those judgments repeatable. Reviewing traces alongside the agent exposes recurring errors; those errors become test cases. Each useful case saves the next reviewer from having to rediscover what a bad diagnosis looks like.
+An evaluator also needs evaluation. Arize builds datasets with human judgments, checks the evaluator against those judgments, and works to align them before shipping a new judge. Trust in the evaluator should come from its agreement on meaningful cases, rather than from the evaluator’s confident wording.
+The same evaluation can play different roles before and after deployment. Offline tests assess a proposed change. Online evaluations inspect behavior in production, where new cases and patterns appear.
+1:13:20
+↗
+Trace the agents that build the agents
+The final loop extends observability to the development machinery itself. Tracing the deployed agent is useful, but it leaves out the coding agents that created or changed it. Their tool calls, edits, and proposed fixes also belong in the record of how the product evolved.
+Production traces and online evaluation results then become the next input to Signal. The system collects data, evaluates behavior, runs agents over that evidence, identifies gaps, and proposes improvements. Each cycle creates the evidence for the next.
+Business data is messier than the constrained cases an agent may handle well in a lab. Dhinakaran’s answer is to keep that mess inside the learning loop: trace the failure, turn it into a useful evaluation, and give the next agent run enough evidence to propose a better fix. That continuing process becomes part of the product the AI engineer builds.
+Full transcript
+176
+timestamped passages
+Machine transcription with reviewed terminology and names. Some recognition errors may remain. Timestamps refer to the livestream; subtitle downloads are timed to the session clips.
+1:00:44
+Hey, New York.
+1:00:46
+Awesome.
+1:00:46
+Well, welcome to AI Engineer.
+1:00:50
+I thought given we're at AI Engineer New York, we'd kind of revisit the question of what
+1:00:55
+does an AI engineer do?
+1:00:57
+I feel like every year we have an idea of what an AI engineer does, and that definition
+1:01:03
+kind of changes.
+1:01:05
+And as I was putting this talk together, it was super timely because Karpathy actually
+1:01:09
+just tweeted something this weekend where he kind of talks about this growing gap between
+1:01:16
+basically folks at the frontier who are running thousands of agents and swarms of always-on agents,
+1:01:24
+and he really kind of drops this funnel where 6 billion-plus users have maybe touched or
+1:01:29
+interfaced with an LLM, 1 to 2 billion are maybe like casual free-tier users, 20 million are
+1:01:36
+professionals who have maybe started using it for more, taking some piece of work that
+1:01:41
+would have taken weeks down to days.
+1:01:44
+But really, those at the Frontier Labs, which is a super small percentage, it's like 5,000
+1:01:51
+users, are the ones who are running thousands and thousands of agents at once.
+1:01:58
+And as I look at this, it really is, I mean, he's kind of dropped a bit of the funnel.
+1:02:03
+I mean, the first question anyone looks at this is that, where am I on this?
+1:02:07
+And, you know, he's kind of drawn out a bit of a roadmap of how does everyone get to, in the next couple of years, one of those 5,000 users who are running thousands of agents.
+1:02:18
+And this has been happening, I'd say, for a couple of decades now, where the abstraction layer has gotten higher and higher.
+1:02:25
+I mean, definitely faster in the last couple of years, but we've gone from engineers writing higher level abstraction languages to, I mean, just copy pasting code, using local agents to using cloud agents to really the expectation now is how do all of us start running a team of agents or factories of agents internally and build toward that?
+1:02:52
+And what this has led to is essentially what is the then and now of what an AI engineer
+1:02:56
+is.
+1:02:57
+And this is a bit, I think, of a roadmap for some, but I think internally this is what
+1:03:05
+we've already started to kind of push towards.
+1:03:07
+As an AI engineer, your job is no longer to just write the feature, write an AI feature,
+1:03:12
+it's about how do you build the loop to write that feature.
+1:03:15
+It's no longer about just reading the diff and actually doing code review.
+1:03:21
+It's actually how do you set up systems and agents to
+1:03:23
+do the code reviews?
+1:03:24
+And how do you write evals to actually do the non-deterministic, to review those non-deterministic tasks?
+1:03:31
+It's actually no longer even about just setting up metrics and software kind of telemetry, but it's actually how do you have agents go through and read the observability data,
+1:03:42
+and have agents actually consume that telemetry to find patterns?
+1:03:46
+And so this loop that we've kind of been talking about, which is the build, the eval, ship, you monitor, you improve it, well, the AI engineer is now actually responsible not just for doing each of those steps, but how do you build the loop that actually does each of those steps?
+1:04:04
+And at Arize, one of the things we've rolled out in our product, and I'm going to talk about a bit of what we've learned in building this, is we built Signal to actually run this loop for AI engineers.
+1:04:14
+What Signal does is that Signal actually looks at all of the traces, it reads the telemetry,
+1:04:20
+it identifies patterns in that telemetry, and it can actually put up a fix or a PR if
+1:04:27
+it has access to the repo.
+1:04:29
+And Signal is an always-on agent.
+1:04:33
+So this is an example of how Signal starts, but it actually starts off by just reading
+1:04:38
+the traces.
+1:04:39
+Super simple example, but it goes through, reads,
+1:04:43
+and all of this is configurable,
+1:04:44
+but a certain volume of traces that came in in some cadence,
+1:04:49
+it reads it, and then the goal is to actually identify issues
+1:04:53
+from that telemetry data.
+1:04:55
+It has to keep track of issues that it's previously seen.
+1:04:59
+So we have to consider the memory of,
+1:05:02
+it see something before that it thought was an issue?
+1:05:05
+Did something seem like an issue, but it wasn't actually captured,
+1:05:08
+and now as it collects more data, it actually thinks it's much more of a critical issue.
+1:05:13
+And so Signal actually starts off by reading the traces to identify problems.
+1:05:19
+so one of the first things that we realized was that the future of who's actually consuming telemetry data
+1:05:27
+has really changed.
+1:05:28
+It's no longer about humans consuming telemetry data.
+1:05:33
+It's not even about humans consuming it and agents kind of taking on the task,
+1:05:37
+but it really is how do you set up your telemetry data
+1:05:40
+so that agents are the primary consumers of that data.
+1:05:44
+And what that does is that that observability data
+1:05:46
+can become the trigger for actually running
+1:05:49
+and triggering these always-on agents.
+1:05:53
+And so the first thing that if you're building a team of,
+1:05:56
+you know, a factory of really always-on agents
+1:05:58
+is what triggers these agents to wake up or start.
+1:06:02
+And there can be a variety of triggers.
+1:06:05
+For signal, for us, it's configurable to run on an ongoing cadence.
+1:06:10
+So every three hours, six hours, go pull the last X amount of traces, read them, identify problems.
+1:06:18
+It can also be triggered by events.
+1:06:21
+So Slack messages, if some user complains about something, it can be a metric-based trigger.
+1:06:28
+But these are essentially triggers to kick up the agent actually starting.
+1:06:34
+Once the agent actually starts, we have to spend some time figuring out, well, what does
+1:06:38
+an agent run actually look like?
+1:06:40
+For us, we actually pull in all of the context of the traces, any additional third-party
+1:06:47
+data, so we allow collecting to APM logs, APM metrics, but all of the third-party telemetry
+1:06:54
+data that we want to pull in, access to the repo, access to any keys that are needed to
+1:07:06
+actually run this agent.
+1:07:08
+But all of this information is put inside of a sandbox, and this is actually what's started
+1:07:15
+up every time the agent wakes up.
+1:07:18
+And so the agent's triggered.
+1:07:20
+We build a sandbox.
+1:07:21
+We put everything that we need inside of that sandbox.
+1:07:23
+There's a proxy.
+1:07:24
+The only way to get information in and out of the sandbox is by the single proxy.
+1:07:28
+And everything that happens inside of that sandbox is actually already getting traced.
+1:07:33
+And every output, so the issues that are generated and created are all getting saved to some kind of memory.
+1:07:40
+And so this happens every single time the agent actually runs.
+1:07:44
+Every time the agent finishes running, so it's sweeped through all of the traces,
+1:07:50
+it either found something or it didn't.
+1:07:52
+there's what actually stays and what actually gets thrown away what stays is
+1:07:58
+that if it found any issues all of the output is actually saved off in some
+1:08:03
+kind of memory so that the next time an agent gets spun up it doesn't have to
+1:08:06
+start from ground zero it has a history of what are the issues that it actually
+1:08:10
+found the agents are traced so all of the telemetry data of what the agent
+1:08:17
+called you know if it actually put up a PR all of those things are actually
+1:08:22
+traced, and any skills that it may have learned while actually doing a run can also get saved
+1:08:28
+to the actual repo.
+1:08:29
+But the things that go away is the sandbox gets torn down, any credentials obviously
+1:08:35
+get removed, the repo access is removed, and so all of the stuff that doesn't need to be
+1:08:42
+saved kind of gets torn down after the run of Signal.
+1:08:46
+And we've designed Signal in a way to actually keep this agent durable.
+1:08:51
+So that means that either if the sandbox fails or if the harness fails, then it shouldn't have to start everything from scratch in the middle of the run.
+1:09:02
+It should actually just be able to pick up from the step that it failed and all of the state so-called is kind of saved off in kind of a memory outside of the sandbox.
+1:09:13
+And so we've designed this to actually be a very durable agent so that if it fails, it can spin it back up.
+1:09:22
+You can launch a new sandbox, launch a new harness to kind of pick back up where it started.
+1:09:27
+So all of this is essentially the underpinnings of how we built signal to run every single run.
+1:09:34
+Agent gets triggered, agent gets started, loaded with all the context, the evidence.
+1:09:38
+It sweeps through the telemetry data.
+1:09:40
+It either finds something or it doesn't.
+1:09:42
+All of that gets saved to memory.
+1:09:44
+If something fails in the middle, the agent can get reset up.
+1:09:47
+And we built Signal to also be agnostic of the model or the harness.
+1:09:53
+So today, Signal supports not just Claude Code, which is what we started with,
+1:09:57
+but it also supports Cursor and Codex.
+1:10:00
+And the goal is to actually support all of the major, even the open source harnesses out there.
+1:10:04
+and Signal actually also supports multiple models.
+1:10:13
+So even if you're using Claude Code,
+1:10:15
+you can pick any of the models inside the Anthropic family.
+1:10:19
+And this is really important to us
+1:10:22
+because one, it's an awesome way for us
+1:10:24
+to evaluate the quality of the agent
+1:10:27
+every time we spin it up.
+1:10:29
+It helps us control costs so we can see
+1:10:31
+as we use more powerful models, the better quality maybe the PRs are, but can we reduce
+1:10:38
+the cost and actually still maintain the rigor and maintain the quality of issues that are
+1:10:46
+actually detected by signal? So this is something we deeply thought about from first principles
+1:10:52
+when we were designing signal. And this is actually a pretty good segue into what does
+1:10:58
+an AI engineer need to do? Well, an AI engineer really needs to kind of learn how to write evals.
+1:11:03
+And so we actually, every time Signal runs, Signal finds an issue, it puts up a PR. Well,
+1:11:09
+there's evals that are run on top of the agent to test that PR. And an eval can be as simple as
+1:11:17
+testing something as part of your development workflow. You have a data set. You can be a
+1:11:22
+simple prompt with outputs that you're testing to make sure that there's no regressions.
+1:11:29
+But these evals can also, they need to be kind of aligned with human judgment. And I'd argue that
+1:11:36
+this is actually probably where an AI engineer should be spending a lot of their time as they're
+1:11:42
+building the system to actually run the loop. They should be actually spending time looking at the
+1:11:47
+traces with their agents, identifying what the common errors are. And there's a lot of skills.
+1:11:53
+I think I was hearing Lance yesterday talk about the Claude skill to build evals. We have a skill
+1:11:58
+with Arize Evaluator to actually help you build and write evals, as well as align those evals
+1:12:04
+with the human judgment. But this is probably where the shift to defining what is good becomes
+1:12:12
+really, really important for an AI engineer to actually do.
+1:12:16
+And for a lot of teams I think we speak with and we work with,
+1:12:19
+their question becomes, well, how do I trust the evaluator?
+1:12:22
+And do I really trust that the eval is going to catch?
+1:12:32
+How do I trust that it's as good as my judgment?
+1:12:34
+And I'd say what we spend a lot of our own time doing for our own products
+1:12:38
+is that we actually evaluate the evaluators.
+1:12:42
+We spend a decent amount of time on actually building these data sets, golden truth data sets.
+1:12:49
+We run evals, verify them against the human output, and then try to align to make sure that the judge actually agrees with the human
+1:12:59
+and they're in agreement before we actually ship out a new evaluator.
+1:13:04
+And these evals can then be used both in an offline testing as well as in an online testing manner.
+1:13:12
+And this is probably what I would say as an AI engineer,
+1:13:15
+is more and more of what the job is becoming.
+1:13:21
+And so what I'm going to leave you guys with is,
+1:13:23
+as an AI engineer, you've built this agent. You've built this agent to actually run, be always on. You run evals before you actually ship it into production. You can ship it. And then once it goes into production, the goal is to actually trace everything. And tracing everything now means not just tracing the agents, but also tracing the coding agents behind the agents that build
+1:13:48
+built this. So you can trace Claude Code, you can trace Cursor, you can trace Codex, but
+1:13:56
+all these coding agents can be traced so you can understand what happened in the factory
+1:14:01
+of agents that you all are building. And then these agents, all the traces can then also
+1:14:07
+be evaluated online. So there's an offline evaluation when you're actually testing what
+1:14:13
+a new change is.
+1:14:15
+But as it goes into production, these become your online evals that you're running on top
+1:14:20
+of the telemetry data.
+1:14:22
+This, for us, ends up becoming the new data that then gets pulled back into the agents
+1:14:29
+to read the telemetry data, the evals, and surface up problems inside of the traces.
+1:14:35
+So the system really becomes how do you go from collect data, eval that data, run agents on top of it so that you can find problems and figure out where the gaps are to actually improve your systems.
+1:14:51
+So if I go back to kind of the question that we started this whole thing with, it's what does an AI engineer do?
+1:14:57
+I mean, the gap between, I think there's a pretty big gap between what's happening in the labs today and what's happening with a lot of businesses.
+1:15:05
+And some of it could just be the data inside of businesses are a lot more messy than what is very constrained and testable inside of a lab.
+1:15:14
+But AI engineers are kind of the role to close that gap.
+1:15:18
+And I think it really starts with tracing everything, tracing the agents you're actually building, running evals, being able to learn how to test these products that we're really building.
+1:15:29
+and then how do you build a system so that agents can actually improve
+1:15:34
+from the telemetry that's actually being collected
+1:15:37
+so that you're no longer just building individual features
+1:15:40
+but you're actually building the system to improve your products.
+1:15:46
+If you want to learn more, come check out.
+1:15:48
+We have a booth.
+1:15:48
+You can check out Signal, learn more.
+1:15:51
+But thank you so much for listening to us.
+Download transcript
+Download subtitles

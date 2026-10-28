@@ -1,0 +1,12 @@
+total 4
+drwxr-xr-x 4  501 dialout  128 Oct 28 02:33 .
+drwxr-xr-x 1 root root    4096 Oct 28 02:34 ..
+drwxr-xr-x 9  501 dialout  288 Oct 28 02:33 inputs
+drwxr-xr-x 2  501 dialout   64 Oct 28 02:33 output
+./inputs/sample-017.png
+./inputs/sample-029.png
+./inputs/sample-001.png
+./inputs/sample-006.png
+./inputs/sample-012.png
+./inputs/sample-023.png
+./inputs/sample-019.png

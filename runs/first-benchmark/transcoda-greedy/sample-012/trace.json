@@ -1,0 +1,25 @@
+{
+  "id": "내입술의_1",
+  "engine": "transcoda-greedy",
+  "source_image": "research/data/내입술의_1.png",
+  "source_image_sha256": "f3ce5694398cf0f340183c13db0939fe7679217b4f410e8e5bd7219b42a1367e",
+  "input_sha256": "9b90dbf43ad76eff026fe70e8c126ea6b167eeaa0633aa7de79feb669a9835db",
+  "started_unix": 1793067125.993997,
+  "reference_access": false,
+  "runner_sha256": "ab8fa3e423930b13d2c94b4c190d1ac7f8d9c7975dcdaef8e10ebf6347e240b5",
+  "status": "ok",
+  "output": "runs/first-benchmark/transcoda-greedy/sample-012/prediction.krn",
+  "device": "mps",
+  "tokens": 178,
+  "eos_reached": true,
+  "settings": {
+    "num_beams": 1,
+    "max_length": 2048,
+    "max_time": 120,
+    "repetition_penalty": 1.1,
+    "do_sample": false,
+    "revision": "b529f8aa5d996d9224df3395b5b92d0867343c91"
+  },
+  "elapsed_seconds": 3.6519578329998694,
+  "output_sha256": "04c431aee5c3c4bfd8e4b7c4e0c7ee4695b9a43d83b9427ed7d77a68f2135ddc"
+}

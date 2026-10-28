@@ -1,0 +1,14 @@
+{
+  "reference_count": 80,
+  "prediction_count": 80,
+  "matches": 80,
+  "substitutions": 0,
+  "deletions": 0,
+  "insertions": 0,
+  "errors": 0,
+  "error_rate": 0.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "edits": []
+}

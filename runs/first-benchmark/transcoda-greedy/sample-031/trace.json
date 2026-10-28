@@ -1,0 +1,25 @@
+{
+  "id": "주품에_3",
+  "engine": "transcoda-greedy",
+  "source_image": "research/data/주품에_3.png",
+  "source_image_sha256": "759cd942ed879748b8edb39e2d31b6d25e056706c28245ee92fcbac05a0a9580",
+  "input_sha256": "fae9637c601881545d73dbe9505c1d7c93632c658cf0cf9a95de2c1d93e40658",
+  "started_unix": 1793067284.175643,
+  "reference_access": false,
+  "runner_sha256": "ab8fa3e423930b13d2c94b4c190d1ac7f8d9c7975dcdaef8e10ebf6347e240b5",
+  "status": "ok",
+  "output": "runs/first-benchmark/transcoda-greedy/sample-031/prediction.krn",
+  "device": "mps",
+  "tokens": 85,
+  "eos_reached": true,
+  "settings": {
+    "num_beams": 1,
+    "max_length": 2048,
+    "max_time": 120,
+    "repetition_penalty": 1.1,
+    "do_sample": false,
+    "revision": "b529f8aa5d996d9224df3395b5b92d0867343c91"
+  },
+  "elapsed_seconds": 2.3701412909999817,
+  "output_sha256": "2e711eaddd5c153e64eb1586a3b83b4d17f185981651dc44a2c4cdb14a98b6f5"
+}

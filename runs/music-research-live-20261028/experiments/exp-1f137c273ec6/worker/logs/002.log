@@ -1,0 +1,22 @@
+/workspace
+/opt:
+total 8
+drwxr-xr-x 2 root root 4096 Oct 20 21:32 .
+drwxr-xr-x 1 root root 4096 Oct 28 02:34 ..
+
+/tmp:
+total 4
+drwxrwxrwt 2 root root   40 Oct 28 02:34 .
+drwxr-xr-x 1 root root 4096 Oct 28 02:34 ..
+
+/workspace:
+total 4
+drwxr-xr-x 4  501 dialout  128 Oct 28 02:33 .
+drwxr-xr-x 1 root root    4096 Oct 28 02:34 ..
+drwxr-xr-x 9  501 dialout  288 Oct 28 02:33 inputs
+drwxr-xr-x 2  501 dialout   64 Oct 28 02:33 output
+PIL False
+cv2 False
+numpy False
+music21 False
+pytesseract False

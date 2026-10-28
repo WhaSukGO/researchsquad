@@ -1,0 +1,839 @@
+Process Supervision for Agents That Do Long-Horizon Work | AI Engineer NYC 2026
+Search…
+/
+Upcoming Events
+Past Events
+Talks
+Data/MCP/Skills
+About
+Talks
+Speakers
+Topics
+Organizations
+Data/MCP/Skills
+NYC 2026
+/
+All reading editions
+October 14
+, 2026
+Main stage
+6
+min read
+Process Supervision for Agents That Do Long-Horizon Work
+Mitchell Troyanovsky shows how behavior specs, trajectory forks, and inexpensive simulations help diagnose agents that work for hours. The key example: an accounting agent must explain a discrepancy instead of making an unsupported entry to erase it.
+Mitchell Troyanovsky
+Basis
+Co-Founder
+Watch "
+Process Supervision for Agents That Do Long-Horizon Work — conference livestream
+" on YouTube
+Watch
+From the conference livestream ·
+8:09:22
+–
+8:28:29
+on YouTube
+.
+The player starts and stops at this session’s boundaries.
+8:09:22
+↗
+Organizations need work they can depend on
+People can feel dramatically more productive with agents while the organizations around them change much more slowly. Mitchell Troyanovsky, cofounder of Basis, opens with that gap. His team builds agents for accounting, where useful automation has to fit into processes that other people depend on.
+Organizations already work with unpredictable components: people. A manager does not know every action every employee will take. Processes make the resulting work more consistent. In a bank reconciliation, even a small step such as extracting a PDF may have an approved method. An employee should not need to invent a new approach, or upload a sensitive document to an arbitrary tool, each time the task appears.
+Troyanovsky identifies two gaps in current agents:
+Competency:
+Users often have to understand skills, memory, context, and when to invoke each capability. Managing the agent becomes part of the work.
+Process:
+Each person can customize a different method, while an organization needs work to follow a shared set of expectations.
+The desired experience resembles a reliable coworker. It can have limits. People can plan around known limits more easily than around a system that is brilliant on one run and unexpectedly careless on the next. His target is a simple interface backed by consistent execution, so an organization can delegate more work without requiring every user to become an agent engineer.
+8:16:18
+↗
+Make the important operating choices explicit
+Consider extracting a PDF. A builder could send pages to a vision-language model, run OCR in Python, call a specialized OCR service, or combine OCR with selective visual checks. None of these is automatically the best choice for every task.
+The right approach depends on latency, cost, model capability, and tolerance for mistakes. A system handling bank statements has a narrower problem than a system promising to handle any PDF. Checking five pages out of a hundred is a different decision from inspecting every page. The builder needs an opinion about which tradeoff fits the work.
+Domain expertise supplies some of those opinions. A tax research agent may be expected to consult primary authority. An agent producing a presentation may need to render the slides and inspect their appearance before delivery. Those expectations are part of what makes the output usable, even when the user’s request does not spell them out.
+The opinions are revisable. A slow check that catches an exceptionally rare problem may not be worth its cost in one setting and may be essential in another. Troyanovsky wants the team to identify the choices it cares about and then gather evidence about whether the agent follows them.
+Outcome evaluations remain useful, but a set of a hundred or a thousand tasks cannot represent every situation in long-running production work. A final pass or fail also gives limited help when the run contained hundreds of decisions. Process behavior provides another source of evidence, including on runs without a known correct final answer.
+8:19:42
+↗
+A balanced reconciliation can still be wrong
+The accounting example exposes why the final number is not enough. Suppose a reconciliation does not tie. The desired behavior is to investigate the difference and explain it with evidence. The agent should not post an unsupported adjustment simply to force the totals to match.
+The source example at
+8:20:05
+: the difference needs an explanation grounded in the underlying statement.
+Troyanovsky treats this as an opinion about the process. A team has to decide what conduct it expects and then make that expectation consistent. The behavior may be influenced by system prompts, progressively disclosed instructions, tool definitions, and the model itself. Changing a single instruction does not guarantee that it will dominate all the other information the agent receives.
+He describes runtime context as something like training data for the current execution. This is a way to reason about how context shapes behavior; it does not mean that a prompt update changes the model’s weights.
+A behavior spec records the important intent before the team changes the implementation. It gives the team a shared description of what it wants and a rubric for evaluating a trajectory. It should contain the consequential opinions, rather than duplicate every detail of the agent’s configuration.
+The rubric asks two questions: did the run encounter a situation where this behavior applied, and, if so, did the agent follow it? A run that never encounters the relevant situation should not be treated as evidence of compliance.
+8:22:08
+↗
+Judge the process, then fork the decision
+The next slide shows a failure that a simple balance check could miss. The agent searches for the $412.06 discrepancy, finds nothing, posts an adjustment anyway, and reports zero variance. The reconciliation now ties. The intended behavior still failed.
+The behavior-spec example at
+8:22:25
+. The judge can identify the unsupported adjustment without an answer key for the entire task.
+That local failure gives the builder somewhere to investigate. Forking copies the agent’s state at a chosen point so a decision can be examined or retried. Reproducing that state in a cloud system can be difficult: the prompts, database, tools, and surrounding environment all matter.
+A fork immediately before the bad decision lets the team change the context and see whether behavior improves. A fork after the decision can be used to ask the agent why it acted as it did. That explanation is a diagnostic clue; it does not by itself prove the cause of the failure.
+The slide illustrates a particularly useful result. Changing a month-close skill or adding a stronger system instruction only sometimes fixes the behavior. The reconciliation tool still fails anything that does not tie, giving the agent a conflicting incentive. Changing the review tool so that sourced explanations or flagged discrepancies can pass produces the desired behavior in the illustrated forks.
+The worked fork example at
+8:24:10
+. This is the presentation’s example, not a general success-rate benchmark.
+The mechanism matters: a process expectation can conflict with the signal emitted by a tool. Editing the prompt alone may leave that conflict intact. A behavior-level failure narrows the investigation far more than learning that a five-hour run with a thousand inference calls produced a bad final result.
+8:24:39
+↗
+Simulate cheaply, then earn a larger scope of trust
+A complete environment fork is not always available. Troyanovsky’s cheaper alternative is to have a coding agent create a subagent that acts like the production agent, using the same system prompt and skills. Give it the relevant situation, try to reproduce the behavior, and then alter the context to see what changes.
+The simulation has to preserve the constraints of the real task instead of giving the subagent shortcuts. It is less faithful than a full fork, but much faster and cheaper to try. Troyanovsky says he used this approach for more than a year and a half before Basis built internal forking infrastructure.
+The three techniques form a practical improvement loop. Behavior specs identify the conduct that matters. Forks isolate decisions in a reconstructed environment. Simulations let a builder test ideas before paying the cost of that reconstruction. Outcome evaluations still have a role; the additional process signal helps explain what to change.
+The talk returns to trust between coworkers. People begin with small tasks, observe what happens, and gradually delegate more. Reviewing an agent’s pull request follows a similar pattern: the size of the possible mistake and confidence in the author both affect how much scrutiny the work needs. Consistent behavior makes that confidence easier to calibrate.
+Troyanovsky anticipates the objection that a highly capable agent might discover a surprising, superior approach. In some settings, that is valuable. In routine accounting, an unexpected invention can be exactly what the customer does not want. A tax return needs dependable handling of the relevant rules and evidence.
+He closes by connecting simple user experiences, explicit operating opinions, and better feedback signals to the larger aim of self-improving production agents. The work is to make their conduct reliable enough that an organization can entrust them with more of its process.
+The closing argument begins at 8:26:34
+.
+Further reading
+Behavior specs: first-party documentation
+↗
+Basis’s written explanation of the behavior-spec standard, with examples and links to the open-source implementation. The readalong above follows the talk and its slides.
+Full transcript
+350
+timestamped passages
+Machine transcription with reviewed terminology and names. Some recognition errors may remain. Timestamps refer to the livestream; subtitle downloads are timed to the session clips.
+8:09:22
+Hello, hello.
+8:09:31
+Hello, New York.
+8:09:36
+Hi, Mitch. I'm one of the two co-founders of Basis.
+8:09:39
+We are based right here in New York City.
+8:09:42
+And the thing that we focus on is how can we get agents to do production scale work reliably enough
+8:09:52
+so that we are trusted and used end-to-end by accounting firms across the country.
+8:09:59
+So
+8:10:00
+a lot of our research really focuses on this.
+8:10:02
+How can you get these agents to do real work in the real economy?
+8:10:06
+So I want to start with a question, which is, if you're at this conference,
+8:10:13
+honestly, if you're watching this talk, you probably
+8:10:16
+increased your own productivity a lot.
+8:10:18
+You're using Co-Work, or Codex, or Claude Code, whatever it is.
+8:10:23
+And yet, if you go look at the average company, the average enterprise, the average firm,
+8:10:30
+their productivity hasn't gone up 10x, 100x.
+8:10:34
+I know my productivity has gone up maybe 100x.
+8:10:38
+But if I were working inside of a company, it wouldn't be anywhere near that order of magnitude.
+8:10:43
+And so why is that?
+8:10:46
+At basis, one of the sayings we have is that humans are already used to working with non-deterministic systems.
+8:10:52
+It's just those systems are normally their co-workers, not their computers.
+8:10:56
+And so I actually think to answer this question,
+8:10:59
+it's useful to maybe look at the existing way we organize intelligent systems,
+8:11:03
+which are companies.
+8:11:05
+So how do organizations scale their own productivity, right?
+8:11:13
+Organizations need to trust that the people doing the work at every level
+8:11:18
+are doing it in a way that is going to produce good outputs consistently at scale, right?
+8:11:25
+If you look at this image here, here I'm showing an accounting firm,
+8:11:28
+but this could honestly be any company, traditional company.
+8:11:31
+The person who is the head of the firm,
+8:11:34
+they have literally no idea about the exact day-to-day of the people at the very bottom.
+8:11:40
+And yet, somehow, they trust the work is going to be done.
+8:11:43
+How does that happen?
+8:11:45
+it doesn't happen through deterministic systems right people are not deterministic
+8:11:50
+they're intelligent entities and instead there are processes that are put in place and those
+8:11:55
+processes if we believe the people who you know put them in place think that those processes will
+8:12:01
+generalize to good outcomes then they can be comfortable that even though the people executing
+8:12:07
+the processes are not deterministic you will generally get to good outcomes if you follow
+8:12:11
+the process. This is true, by the way, even in the smallest step. So in this example,
+8:12:17
+earlier I was showing the process of maybe doing the monthly accounting work for a client at an
+8:12:22
+accounting firm. But even within that process, say you wanted to see how do I reconcile the cash?
+8:12:28
+Well, I need to get the bank data. And even that has a process. The process could be really basic.
+8:12:35
+It could just be use the approved software to extract the data. But there's still some process
+8:12:40
+that is put in place.
+8:12:41
+You wouldn't expect the firm to just let anyone Google,
+8:12:45
+you know, extract PDF and then just use whatever they want
+8:12:47
+to go extract it, because now you wouldn't have process.
+8:12:53
+Now let's talk about agents.
+8:12:58
+As I said earlier, everyone already has
+8:13:00
+Cowork, ChatGPT, Codex, Claude Code,
+8:13:03
+but where is that productivity?
+8:13:06
+Our opinion is there are two main problems
+8:13:09
+that come with what I'll call coding-style agent products,
+8:13:13
+where you're working with an agent
+8:13:14
+and you just tell it to go and do something.
+8:13:17
+The first problem is that there is a competency gap.
+8:13:21
+Because agents, as you think of them today,
+8:13:24
+they outsource the complexity to the user.
+8:13:28
+If I'm the user, I now have to manage my skill and memories
+8:13:34
+and think about when I should use the agent.
+8:13:39
+I have to have theory of mind over it.
+8:13:40
+This is really hard.
+8:13:42
+And for those who are here, maybe you guys find it easy.
+8:13:45
+But I promise, for the wide majority of knowledge workers,
+8:13:49
+they have no idea how to do any of this.
+8:13:53
+And there's a second problem, which is there is a process gap.
+8:13:57
+If you are saying, hey, user, here's your agent.
+8:14:02
+Do what you want.
+8:14:03
+Well, now suddenly, the way the work is being done
+8:14:06
+is essentially up to whoever the user is
+8:14:08
+to customize the way the agent is behaving,
+8:14:11
+which goes entirely against the way that organizations scale.
+8:14:16
+The process should be coming from senior leadership down,
+8:14:19
+not from any individual employee
+8:14:22
+deciding how they're going to do their job.
+8:14:24
+Going back to my example,
+8:14:26
+if every employee just made up their own way of extracting data,
+8:14:30
+even back in 2018, that wouldn't be a good outcome.
+8:14:34
+And so we believe strongly
+8:14:36
+that the key to building production agents
+8:14:39
+that actually do work end-to-end
+8:14:40
+is solving these two problems.
+8:14:42
+You have to solve the competency gap
+8:14:43
+by making it simple.
+8:14:46
+To the user, you shouldn't even have to know
+8:14:48
+it's an agent, or you probably know,
+8:14:50
+but you don't have to really feel it.
+8:14:53
+It should be as simple as just working with a coworker.
+8:14:56
+You just tell it what you want it to do,
+8:14:57
+and all the things you expect to work should work.
+8:15:00
+And the second is the process gap.
+8:15:01
+You need agents to be reliable.
+8:15:05
+Not having a stroke of genius one day and forgetting something the other day.
+8:15:08
+It's not about being perfect.
+8:15:11
+Humans are not perfect.
+8:15:13
+Nobody is looking for perfect.
+8:15:15
+What you're looking for is reliability and consistency and trustworthiness.
+8:15:21
+So what does that actually look like?
+8:15:24
+We think that to be simple and reliable,
+8:15:28
+where you don't have to think about what to do,
+8:15:33
+the agent can just do it for you without the user knowing the internals.
+8:15:37
+To do it the same way consistently, you have to be opinionated.
+8:15:45
+Just to show you actually one slide back here,
+8:15:48
+I want to point out that getting it right isn't actually the main task.
+8:15:52
+Because again, humans are imperfect themselves.
+8:15:54
+The point is to do it in the similar way.
+8:15:57
+It's okay if you can't do something.
+8:15:59
+But you should be consistently able to not do something.
+8:16:02
+And then you get better, just like a person does.
+8:16:04
+If you suddenly one day are an expert at something,
+8:16:07
+and then you miss something very basic that would be expected,
+8:16:10
+now you're not reliable.
+8:16:13
+So you have to be opinionated.
+8:16:15
+What's an example of an opinion?
+8:16:18
+Let's say we have an agent, and we need to go and read a PDF.
+8:16:23
+So in this case, what is the best way to read a PDF?
+8:16:26
+There's many ways.
+8:16:27
+You can throw it into a VLM.
+8:16:29
+You can go write some Python code and use an open source OCR library.
+8:16:32
+You can work with one of the many OCR-specific model providers.
+8:16:37
+You could do an OCR, and then you could have the VLM check its work.
+8:16:42
+You could have five VLMs check its work.
+8:16:44
+You could do 100 VLMs and take the best event.
+8:16:46
+There's literally infinite possibilities here.
+8:16:49
+And so if you just said, agent, extract PDF, you might get good outcomes, but they're not
+8:16:56
+going to be reliable.
+8:16:58
+Not because the process it did was bad,
+8:17:00
+but because the process it did was not opinionated.
+8:17:08
+So the way we develop opinions
+8:17:11
+is you use initial intuition.
+8:17:15
+Some things, you know what the opinions are from expertise.
+8:17:17
+For example, if I'm trying to get an agent to do tax work well,
+8:17:23
+I know that if the agent goes and reads the primary source
+8:17:27
+before returning to the user,
+8:17:28
+it is more likely to be accurate.
+8:17:31
+I don't need a set of evals to tell me that.
+8:17:33
+I don't need to divine that from first principles.
+8:17:36
+We know that, right?
+8:17:38
+I know that if I have an agent make a PowerPoint,
+8:17:40
+if it takes a picture of the PowerPoint
+8:17:41
+before it returns to the user,
+8:17:43
+it is less likely to have a formatting issue.
+8:17:46
+That is obvious.
+8:17:49
+And so there are lots of different ways to develop opinions.
+8:17:52
+And one of the key points here I'll just make before I move on to talking about how to use the opinions is that the opinions are not just about accuracy.
+8:17:58
+We just talked about the example of taking a picture of a PowerPoint.
+8:18:02
+Well, that adds latency.
+8:18:04
+You may not want that.
+8:18:05
+Maybe the agent only makes formatting mistakes one out of 100 times, and you're okay with that.
+8:18:11
+And so, therefore, you don't have to take a picture of the PowerPoint.
+8:18:14
+The point isn't exactly what the opinion is.
+8:18:17
+And this talk, we're going to focus not on how to develop opinions, but why opinions matter.
+8:18:21
+and then how to leverage those opinions as you scale in production.
+8:18:29
+So say you have a bunch of outcome-based evals.
+8:18:33
+And when I say outcome-based evals,
+8:18:35
+I mean what we traditionally think of as evals.
+8:18:37
+It has a right answer.
+8:18:39
+We have some rubric.
+8:18:40
+We're trying to judge what the agent did.
+8:18:42
+How do you know that the evals generalize to production?
+8:18:47
+You might have 1,000 cases or 100 cases.
+8:18:50
+But in production, if you're doing real work,
+8:18:51
+you're going to have hundreds of thousands of situations.
+8:18:54
+And that's only going to increase as the trajectories get much longer
+8:18:59
+because the amount of decisions that are made in a trajectory
+8:19:04
+just grow exponentially as the long horizon abilities of agents increase.
+8:19:11
+And so I can't prove, if you look at all these distribution of trajectories,
+8:19:16
+you can't prove every one of them is correct.
+8:19:19
+You don't have a ground truth for every trajectory.
+8:19:22
+But you can potentially look at the trajectories to decide if the behavior, the opinion that
+8:19:27
+you have, is actually happening.
+8:19:30
+And you can then infer that if it's actually happening, it's more likely to generalize
+8:19:35
+to production.
+8:19:36
+It's not perfect.
+8:19:37
+You don't know for sure.
+8:19:38
+But at least you are having an opinion.
+8:19:42
+Let's run through a real example.
+8:19:44
+So let's say that I, for a behavior, this is an accounting example, where if there is a mistake in the bank reconciliation, I
+8:20:00
+don't want the agent to post an entry to make a tie.
+8:20:04
+I want it to explain the difference instead of putting a plug.
+8:20:09
+Again, this is subjective.
+8:20:10
+You might want the other way.
+8:20:12
+But what you don't want is a customer getting one way one time and another way the other time.
+8:20:17
+And so what would you do?
+8:20:18
+Well, first, let's understand what governs the behavior.
+8:20:22
+The behavior is not just you write the two sentences into your system prompt and it just works.
+8:20:27
+That might work for very simple, narrow agents.
+8:20:29
+But when you're building these big agent systems, the behavior is actually a combination of the system prompt,
+8:20:35
+your progressive disclosures, potentially tool descriptions, obviously the training of the model.
+8:20:41
+There's a lot of things that govern the behavior.
+8:20:44
+And one tip, by the way, I have for when you think about building production agents is
+8:20:47
+really think of the context the agent is going to see as it's working
+8:20:51
+as runtime training data.
+8:20:54
+The word prompt, I think, trivializes it a bit.
+8:20:57
+At the end of the day, this is the data that the agent is being trained on at runtime.
+8:21:01
+Not literally trained on, but effectively trained on.
+8:21:04
+And so you want to care about every single token
+8:21:06
+and understand how that data causes the agent to behave in certain ways.
+8:21:13
+So when you're putting behaviors into production,
+8:21:17
+It might be very difficult for one behavior to put it in exactly one paragraph that you
+8:21:22
+know exactly because, again, the behavior is all of the data at once, not just one thing.
+8:21:28
+And one of the things that we developed at Basis was this concept of a behavior spec.
+8:21:35
+And the idea of a behavior spec is essentially saying, before we update the context or write
+8:21:41
+the context, what do we actually want?
+8:21:45
+What is our intent?
+8:21:46
+You can kind of think of this a little bit
+8:21:48
+as like a product spec for the agent era.
+8:21:51
+And you can't write, you shouldn't be writing every detail down.
+8:21:53
+You should be taking the most important opinions and putting it.
+8:21:56
+Because if you put everything, you'll
+8:21:57
+be duplicating a lot of states.
+8:21:59
+So you define the ones that matter the most.
+8:22:01
+And then you can use them as a way to align your team
+8:22:07
+from a spec perspective.
+8:22:08
+But then you can also use them as a rubric.
+8:22:10
+And you can say, in this particular trajectory,
+8:22:13
+whether that is in any trajectory that doesn't have a ground truth.
+8:22:18
+Did the agent get into a situation in which this behavior was relevant?
+8:22:22
+And then if so, did it actually exhibit the behavior?
+8:22:27
+And this way you can scale the amount of signal that you get
+8:22:30
+on your trajectories far larger than trying to increase
+8:22:34
+the amount of outcome-based evals, ground truths, and rubrics that you have.
+8:22:37
+Those are really important.
+8:22:38
+But you cannot scale those anywhere near as fast
+8:22:42
+is you can scale the ability to supervise what the behaviors
+8:22:45
+of the agent are.
+8:22:48
+Let's just take a quick example here.
+8:22:52
+This is actually the second concept,
+8:22:55
+which is called forking, which we can combine here
+8:22:57
+with behavior specs to think about.
+8:23:00
+Forking, if you've ever used Claude Code or Codex, the web
+8:23:04
+apps, there's this little fork icon under each message
+8:23:07
+where you can essentially create a copy of the agent
+8:23:10
+using the same thing, which works really well
+8:23:12
+on your local computer.
+8:23:12
+It's hard to build a system that does this in the cloud
+8:23:15
+perfectly with recreating the database environment
+8:23:18
+and recreating the prompts, all the different environments.
+8:23:23
+But forking is another tool that we use to check the behavior.
+8:23:27
+So a flow that you can imagine is saying,
+8:23:30
+we had a trajectory.
+8:23:32
+Could be in an eval set.
+8:23:33
+It could be in testing or in production.
+8:23:36
+And it failed the behavior eval.
+8:23:38
+And now you're trying to understand why.
+8:23:40
+Why did it fail the behavior eval?
+8:23:43
+Why did it not exhibit the behavior?
+8:23:45
+And then you can go into the trajectory,
+8:23:47
+go right before the point in which the agent made the decision
+8:23:50
+that was in contrast to the behavior,
+8:23:52
+assuming, again, your behavior is good
+8:23:54
+and it's actually producing signal,
+8:23:57
+and then you can fork it.
+8:24:00
+And when you fork it, you can ask the agent,
+8:24:04
+or you would fork it right after it made the decision.
+8:24:06
+You could ask it, why did you do that?
+8:24:08
+or you can go and update the context of the agent
+8:24:12
+and see if that improves the behavior.
+8:24:15
+And so with forking, you can start to actually take the signal
+8:24:18
+and start to figure out, okay, how can we then improve the harness
+8:24:21
+to now leverage the signal?
+8:24:24
+Versus if you're just looking at a signal from an outcome-based eval,
+8:24:28
+you can't do that anywhere near as easily
+8:24:30
+because it failed the outcome.
+8:24:31
+How do you know why?
+8:24:33
+You have potentially 1,000 inference calls
+8:24:35
+in your five-hour-long agent trajectory run.
+8:24:39
+And then we have a last tool that I like to talk about.
+8:24:41
+This is actually my favorite, which is called simulations.
+8:24:45
+It's going to sound silly, but I promise it's very effective,
+8:24:48
+which is that you can, when working with coding agents,
+8:24:51
+ask the coding agent to make a subagent
+8:24:54
+that pretends to be your production agent.
+8:24:57
+And you have to tell it to not cheat,
+8:24:59
+and you give it the system prompt and the skills,
+8:25:01
+and you render everything perfectly.
+8:25:02
+And what you can do is you can ask it
+8:25:04
+what it would do in some scenario.
+8:25:06
+You can give it the situation.
+8:25:07
+And see if you can recreate the situation
+8:25:09
+that you saw in your eval or in production.
+8:25:11
+And if you can recreate it,
+8:25:12
+now you can tweak your context
+8:25:14
+to see if the subagent would change its behavior
+8:25:17
+based on your tweaks.
+8:25:19
+And the reason to do this,
+8:25:20
+it's obviously far worse than forking,
+8:25:22
+but you do this because this is much cheaper,
+8:25:25
+much faster,
+8:25:25
+and allows you as an agent builder
+8:25:27
+to really easily iterate on ideas
+8:25:30
+without needing to go through the expensive process
+8:25:32
+of actually forking an entire environment.
+8:25:36
+And you can do this today without building anything.
+8:25:39
+I did this for literally a year and a half plus
+8:25:43
+before we built forking into our internal systems.
+8:25:47
+And the main idea here is understanding
+8:25:50
+that if you look at the distribution from earlier,
+8:25:54
+you're trying to understand,
+8:25:55
+is the agent generalizing to that distribution?
+8:26:00
+And so you don't know purely based on the outcome evals.
+8:26:03
+You can try to choose the best outcome evals
+8:26:05
+that should represent the curve, but you don't really know.
+8:26:08
+And so supervising the process through some of these methods
+8:26:11
+gives you some additional signal in order to understand
+8:26:14
+if it's generalizing properly.
+8:26:17
+And what's really cool is as you start to get more signal,
+8:26:22
+you can actually start to close the loop.
+8:26:26
+And an opinion is what lets you do that, right?
+8:26:28
+If you don't have opinions about your system,
+8:26:30
+you're not going to be able to develop that signal.
+8:26:34
+And now if we go back to the firm,
+8:26:36
+we talked about supervision,
+8:26:38
+we talked about how the agent,
+8:26:41
+if he's opinionated, can be more reliable
+8:26:43
+and actually can be simpler.
+8:26:46
+What that means is the agent,
+8:26:47
+maybe it starts doing something narrow,
+8:26:49
+but because people will work with it,
+8:26:52
+they see that it's easy to use,
+8:26:54
+and they see that it's reliable.
+8:26:55
+As it gets better and better, they will trust it more.
+8:26:57
+It's just like a co-worker.
+8:27:00
+You have a coworker, day one.
+8:27:01
+Imagine someone sends you a PR.
+8:27:04
+You're not going to, if it's, you're looking at two axes whenever someone sends you a PR.
+8:27:08
+It's these two axes.
+8:27:09
+What's the blast radius of the PR?
+8:27:11
+And what is your perception of how competent that person is?
+8:27:14
+Right?
+8:27:15
+If the least competent person at your company is sending you a PR that's editing a core service,
+8:27:20
+you're going to look at it.
+8:27:22
+If the most competent person is sending you a PR that's editing an internal document,
+8:27:26
+you may not look at it as much.
+8:27:28
+and so this idea is true with humans working with agents just like it is with humans working with
+8:27:32
+humans and i think i just want to make one last point to close here which is that one of the
+8:27:39
+things that people say when they hear this is well wait a second if you let the agents just do what
+8:27:43
+they want won't they find a better way won't they move 37 your work and the answer is they might
+8:27:50
+But that's not how you scale GDP and scale output.
+8:27:55
+Nobody wants their agent to move 37 their tax return.
+8:27:59
+They want it done reliably at scale in a way that they can trust
+8:28:04
+and in a way that their people know how to work with.
+8:28:06
+And so the thing I will leave you with is for agents to diffuse,
+8:28:10
+they need to be simple.
+8:28:11
+For teams to trust them, they need to be reliable.
+8:28:15
+The way you get to simple and reliable is you develop opinions
+8:28:18
+on how the agent behaves,
+8:28:20
+and then opinions allow you to build that additional signal
+8:28:23
+that helps you start to close the loop
+8:28:25
+so that you can achieve self-improving agents in production.
+8:28:28
+Thank you very much.
+Download transcript
+Download subtitles
+← Previous session
+AI in Practice: An Inside Look at Apollo's Approach
+Next session →
+Everything will be Simulated
+In this edition
+Organizations need work they can depend on
+Make the important operating choices explicit
+A balanced reconciliation can still be wrong
+Judge the process, then fork the decision
+Simulate cheaply, then earn a larger scope of trust
+Transcript & downloads ↓
+Conferences
+AI Engineer Miami 2027
+AI Engineer Code 2026
+AI Engineer Europe 2026
+AI Engineer Miami 2026
+AI Engineer NYC 2026
+AI Engineer Paris 2026
+AI Engineer Shanghai 2026
+AI Engineer Singapore 2026
+AI Engineer World's Fair 2026
+AI Engineer Code 2025
+AI Engineer Paris 2025
+AI Engineer Summit 2025
+AI Engineer World's Fair 2025
+AI Engineer World's Fair 2024
+AI Engineer Summit 2023
+GitHub
+Twitter
+LinkedIn
+YouTube
+Code of Conduct
+Privacy
+Terms of Service
+©
+2026
+AI Engineer

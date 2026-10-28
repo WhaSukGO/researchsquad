@@ -1,0 +1,200 @@
+{
+  "step": 9,
+  "decision": {
+    "tool": "evaluate_experiment",
+    "argument": "exp-d6d6755b413e",
+    "why": "The submitted integration must be evaluated before assigning more work. Its worker reports startup failures and placeholders; protected scoring will establish whether any chord gains survived and preserve an honest comparison with the earlier candidate without consuming another experiment slot.",
+    "hypothesis": "Audiveris startup failures prevented melody recovery and complete parseable transcriptions; retaining the chord OCR may preserve some ordered chord recognition, but does not establish a usable workflow.",
+    "expected_observation": "Likely zero parseable files and melody error rate 1.0. Chord error may remain near the parent's 25/38 errors or regress if placeholders omit harmony. Transposition and audited timing will remain unsupported.",
+    "evidence_ids": [
+      "exp-d6d6755b413e",
+      "exp-1f137c273ec6-evaluation",
+      "baseline"
+    ]
+  },
+  "observation": {
+    "id": "exp-d6d6755b413e-evaluation",
+    "experiment_id": "exp-d6d6755b413e",
+    "samples": 7,
+    "parseable": 0,
+    "melody": {
+      "reference_count": 130,
+      "prediction_count": 0,
+      "matches": 0,
+      "errors": 130,
+      "substitutions": 0,
+      "deletions": 130,
+      "insertions": 0,
+      "error_rate": 1.0,
+      "f1": 0.0
+    },
+    "chords": {
+      "reference_count": 38,
+      "prediction_count": 0,
+      "matches": 0,
+      "errors": 38,
+      "substitutions": 0,
+      "deletions": 38,
+      "insertions": 0,
+      "error_rate": 1.0,
+      "f1": 0.0
+    },
+    "exact_measured": 0,
+    "transposition_checked": 0,
+    "transposition_failures": null,
+    "chord_timing_audited": false,
+    "musician_accepted": false,
+    "paired_baselines": {
+      "audiveris-raw": {
+        "melody": {
+          "reference_count": 130,
+          "prediction_count": 16,
+          "matches": 0,
+          "errors": 130,
+          "substitutions": 16,
+          "deletions": 114,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 38,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 38,
+          "substitutions": 0,
+          "deletions": 38,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "audiveris-enlarged": {
+        "melody": {
+          "reference_count": 130,
+          "prediction_count": 108,
+          "matches": 46,
+          "errors": 87,
+          "substitutions": 59,
+          "deletions": 25,
+          "insertions": 3,
+          "error_rate": 0.6692307692307692,
+          "f1": 0.3865546218487395
+        },
+        "chords": {
+          "reference_count": 38,
+          "prediction_count": 8,
+          "matches": 8,
+          "errors": 30,
+          "substitutions": 0,
+          "deletions": 30,
+          "insertions": 0,
+          "error_rate": 0.7894736842105263,
+          "f1": 0.34782608695652173
+        }
+      },
+      "transcoda-greedy": {
+        "melody": {
+          "reference_count": 130,
+          "prediction_count": 657,
+          "matches": 93,
+          "errors": 564,
+          "substitutions": 37,
+          "deletions": 0,
+          "insertions": 527,
+          "error_rate": 4.338461538461538,
+          "f1": 0.2363405336721728
+        },
+        "chords": {
+          "reference_count": 38,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 38,
+          "substitutions": 0,
+          "deletions": 38,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      }
+    },
+    "per_sample": [
+      {
+        "id": "내이름으로_1",
+        "melody_errors": 12,
+        "chord_errors": 5,
+        "parse_ok": false,
+        "uncertainties": []
+      },
+      {
+        "id": "내입술로_1",
+        "melody_errors": 17,
+        "chord_errors": 0,
+        "parse_ok": false,
+        "uncertainties": []
+      },
+      {
+        "id": "내입술의_1",
+        "melody_errors": 27,
+        "chord_errors": 6,
+        "parse_ok": false,
+        "uncertainties": []
+      },
+      {
+        "id": "능력의_1",
+        "melody_errors": 19,
+        "chord_errors": 13,
+        "parse_ok": false,
+        "uncertainties": []
+      },
+      {
+        "id": "사랑하셔서_1",
+        "melody_errors": 27,
+        "chord_errors": 4,
+        "parse_ok": false,
+        "uncertainties": []
+      },
+      {
+        "id": "성령이여_1",
+        "melody_errors": 20,
+        "chord_errors": 4,
+        "parse_ok": false,
+        "uncertainties": []
+      },
+      {
+        "id": "주품에_1",
+        "melody_errors": 8,
+        "chord_errors": 6,
+        "parse_ok": false,
+        "uncertainties": []
+      }
+    ],
+    "limits": [
+      "Development pilot, not held-out performance.",
+      "Chord labels scored in order; beat timing unmeasured.",
+      "Reference files are supplied labels, not musician-audited gold.",
+      "Transposition, when checked, only covers an upward major second."
+    ]
+  },
+  "elapsed_seconds": 2.049350916999174,
+  "model_metadata": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "low",
+    "elapsed_seconds": 10.545695208000325,
+    "exit_code": 0,
+    "usage": {
+      "input_tokens": 18536,
+      "cached_input_tokens": 12928,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 188,
+      "reasoning_output_tokens": 0
+    },
+    "prompt_sha256": "8726d04a6d0346d4c38d7adadee4b9f8101d137710ad0cf42dd66b02e131b0c7",
+    "image_sha256": null,
+    "context_isolation": "fresh temporary directory outside the project; only explicit prompt, schema and optional image",
+    "os_read_isolation": false,
+    "unexpected_tool_events": [],
+    "billing": "Uses existing Codex account; monetary cost unavailable"
+  }
+}

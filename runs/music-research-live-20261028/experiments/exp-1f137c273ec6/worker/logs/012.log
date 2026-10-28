@@ -1,0 +1,49 @@
+TOP_LEVEL ['/workspace/inspection.png', '/workspace/output', '/workspace/apt-lists', '/workspace/apt-cache', '/workspace/diagnostics', '/workspace/tmp', '/workspace/vendor', '/workspace/inputs']
+SOURCE_AND_BASELINE_FILES []
+APT_LISTS None
+ E: Unable to locate package libgomp1
+
+	linux-vdso.so.1 (0x0000ffffa513c000)
+	libtesseract.so.5 => /workspace/tmp/ocr-root/usr/lib/aarch64-linux-gnu/libtesseract.so.5 (0x0000ffffa4d30000)
+	libleptonica.so.6 => /workspace/tmp/ocr-root/usr/lib/aarch64-linux-gnu/libleptonica.so.6 (0x0000ffffa4a00000)
+	libarchive.so.13 => /workspace/tmp/ocr-root/usr/lib/aarch64-linux-gnu/libarchive.so.13 (0x0000ffffa4910000)
+	libcurl.so.4 => /workspace/tmp/ocr-root/usr/lib/aarch64-linux-gnu/libcurl.so.4 (0x0000ffffa4800000)
+	libstdc++.so.6 => /lib/aarch64-linux-gnu/libstdc++.so.6 (0x0000ffffa4590000)
+	libm.so.6 => /lib/aarch64-linux-gnu/libm.so.6 (0x0000ffffa44e0000)
+	libgcc_s.so.1 => /lib/aarch64-linux-gnu/libgcc_s.so.1 (0x0000ffffa44a0000)
+	libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffffa42e0000)
+	/lib/ld-linux-aarch64.so.1 (0x0000ffffa50f0000)
+	libgomp.so.1 => not found
+	libpng16.so.16 => not found
+	libjpeg.so.62 => not found
+	libgif.so.7 => not found
+	libtiff.so.6 => not found
+	libwebp.so.7 => not found
+	libwebpmux.so.3 => not found
+	libopenjp2.so.7 => not found
+	libz.so.1 => /lib/aarch64-linux-gnu/libz.so.1 (0x0000ffffa42a0000)
+	libnettle.so.8 => /lib/aarch64-linux-gnu/libnettle.so.8 (0x0000ffffa4230000)
+	libacl.so.1 => /lib/aarch64-linux-gnu/libacl.so.1 (0x0000ffffa4200000)
+	liblzma.so.5 => /lib/aarch64-linux-gnu/liblzma.so.5 (0x0000ffffa41b0000)
+	libzstd.so.1 => /lib/aarch64-linux-gnu/libzstd.so.1 (0x0000ffffa40e0000)
+	liblz4.so.1 => /lib/aarch64-linux-gnu/liblz4.so.1 (0x0000ffffa4090000)
+	libbz2.so.1.0 => /lib/aarch64-linux-gnu/libbz2.so.1.0 (0x0000ffffa4060000)
+	libxml2.so.2 => not found
+	libnghttp3.so.9 => not found
+	libnghttp2.so.14 => not found
+	libidn2.so.0 => not found
+	librtmp.so.1 => not found
+	libssh2.so.1 => not found
+	libpsl.so.5 => not found
+	libssl.so.3 => /lib/aarch64-linux-gnu/libssl.so.3 (0x0000ffffa3f30000)
+	libcrypto.so.3 => /lib/aarch64-linux-gnu/libcrypto.so.3 (0x0000ffffa3910000)
+	libgssapi_krb5.so.2 => not found
+	libldap.so.2 => not found
+	liblber.so.2 => not found
+	libbrotlidec.so.1 => not found
+	libxxhash.so.0 => /lib/aarch64-linux-gnu/libxxhash.so.0 (0x0000ffffa38e0000)
+ 
+ /workspace/tmp/ocr-root/usr/bin/tesseract: error while loading shared libraries: libgomp.so.1: cannot open shared object file: No such file or directory
+
+TMP_IMAGES []
+DIAGNOSTICS ['diagnostics/sample-006-chord-crop.png', 'diagnostics/sample-001-chord-crop.png', 'diagnostics/sample-019-chords.png', 'diagnostics/sample-012-chord-crop.png', 'diagnostics/python-deps.log', 'diagnostics/sample-023-chords.png', 'diagnostics/sample-017-chord-crop.png', 'diagnostics/sample-029-chords.png', 'diagnostics/sample-019-chord-crop.png', 'diagnostics/pilot-montage.png', 'diagnostics/sample-023-chord-crop.png', 'diagnostics/apt-retry.log', 'diagnostics/sample-001-chords.png', 'diagnostics/sample-006-chords.png', 'diagnostics/sample-029-chord-crop.png', 'diagnostics/sample-017-chords.png', 'diagnostics/apt.log', 'diagnostics/install.log', 'diagnostics/sample-012-chords.png']

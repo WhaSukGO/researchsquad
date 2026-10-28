@@ -1,0 +1,20 @@
+{
+  "provider": "codex-cli",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "high",
+  "elapsed_seconds": 28.854948583000805,
+  "exit_code": 0,
+  "usage": {
+    "input_tokens": 23935,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 780,
+    "reasoning_output_tokens": 179
+  },
+  "prompt_sha256": "7db3d86251a144e101b27edfe2c5540eb5dc085877a88dddd999c4e0c0e9cd2e",
+  "image_sha256": null,
+  "context_isolation": "fresh temporary directory outside the project; only explicit prompt, schema and optional image",
+  "os_read_isolation": false,
+  "unexpected_tool_events": [],
+  "billing": "Uses existing Codex account; monetary cost unavailable"
+}

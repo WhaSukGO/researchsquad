@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+KeyError: 'getpwuid(): uid not found: 501'
+
+{
+  "method": "Rootless distribution-package download and extraction after system apt permission denial",
+  "system_installation": false,
+  "commands": [],
+  "chord_timing_audited": false,
+  "exception": "Traceback (most recent call last):\n  File \"<stdin>\", line 16, in <module>\nKeyError: 'getpwuid(): uid not found: 501'\n",
+  "finished_epoch": 1793156545.1552687
+}

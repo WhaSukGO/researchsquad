@@ -1,0 +1,9 @@
+[Warning] ERROR: Negative duration: -2
+	tokendur = 2
+	slicedur = 4
+	token    = 2rfff
+	CURRENT SLICE = TS=10 (p0:)(s0:)(v0:) "1ddd]" (v1:) "2rfff"  sside: []  pside: [] 
+	TIMESTAMP 10
+	NEXT SLICE = TS=10 (p0:)(s0:)(v0:) "1ddd]" (v1:) "2rfff"  sside: []  pside: [] 
+	NEXT TIMESTAMP 14
+

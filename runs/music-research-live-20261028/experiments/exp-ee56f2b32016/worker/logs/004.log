@@ -1,0 +1,68 @@
+INHERITED_COMMAND [
+  "/workspace/tmp/java25/zulu25.38.107-ca-jre25.0.5-linux_aarch64/bin/java",
+  "-Xmx1100m",
+  "-Djava.awt.headless=true",
+  "-Djava.io.tmpdir=/workspace/tmp/native",
+  "-Djna.tmpdir=/workspace/tmp/native",
+  "-Dorg.bytedeco.javacpp.cachedir=/workspace/tmp/javacpp",
+  "-Duser.home=/workspace/tmp/home",
+  "--add-exports=java.desktop/sun.awt.image=ALL-UNNAMED",
+  "--enable-native-access=ALL-UNNAMED",
+  "-cp",
+  "/workspace/tmp/audiveris-root/opt/audiveris/lib/app/*",
+  "Audiveris",
+  "-batch",
+  "-export",
+  "-output",
+  "/workspace/recognition",
+  "--",
+  "/workspace/enlarged/sample-001.png",
+  "/workspace/enlarged/sample-006.png",
+  "/workspace/enlarged/sample-012.png",
+  "/workspace/enlarged/sample-017.png",
+  "/workspace/enlarged/sample-019.png",
+  "/workspace/enlarged/sample-023.png",
+  "/workspace/enlarged/sample-029.png"
+]
+DIAGNOSTIC diagnostics/recognition-command.json 840
+[
+  "/workspace/tmp/java25/zulu25.38.107-ca-jre25.0.5-linux_aarch64/bin/java",
+  "-Xmx1100m",
+  "-Djava.awt.headless=true",
+  "-Djava.io.tmpdir=/workspace/tmp/native",
+  "-Djna.tmpdir=/workspace/tmp/native",
+  "-Dorg.bytedeco.javacpp.cachedir=/workspace/tmp/javacpp",
+  "-Duser.home=/workspace/tmp/home",
+  "--add-exports=java.desktop/sun.awt.image=ALL-UNNAMED",
+  "--enable-native-access=ALL-UNNAMED",
+  "-cp",
+  "/workspace/tmp/audiveris-root/opt/audiveris/lib/app/*",
+  "Audiveris",
+  "-batch",
+  "-export",
+  "-output",
+  "/workspace/recognition",
+  "--",
+  "/workspace/enlarged/sample-001.png",
+  "/workspace/enlarged/sample-006.png",
+  "/workspace/enlarged/sample-012.png",
+  "/workspace/enlarged/sample-017.png",
+  "/workspace/enlarged/sample-019.png",
+  "/workspace/enlarged/sample-023.png",
+  "/workspace/enlarged/sample-029.png"
+]
+RUNTIME_PATHS {'java': None, 'apt-get': '/usr/bin/apt-get', 'curl': None, 'wget': None, 'tesseract': None}
+DIRECTORY /workspace ['/workspace/output', '/workspace/integrate.py', '/workspace/parent_chord_ocr.py', '/workspace/diagnostics', '/workspace/inputs']
+DIRECTORY /opt []
+DIRECTORY /tmp []
+OS_RELEASE PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+DEBIAN_VERSION_FULL=13.7
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+

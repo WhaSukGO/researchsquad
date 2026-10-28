@@ -1,0 +1,25 @@
+music21: Certain music21 functions might need the optional package matplotlib;
+                  if you run into errors, install it by following the instructions at
+                  https://www.music21.org/music21docs/installing/installAdditional.html
+{
+  "status": "goal unmet",
+  "tests": {
+    "type": "synthetic software checks, not transcription accuracy",
+    "chord_roundtrip_and_root_slash_transposition": "passed",
+    "synthetic_kern_parse_and_melody_transposition": "passed"
+  },
+  "images": 7,
+  "outputs": 7,
+  "accepted_OCR_chords": 15,
+  "missing_baselines": 7,
+  "baseline_reported_metrics": {
+    "chord_errors": 30,
+    "chord_matches": 8,
+    "melody_errors": 87,
+    "melody_reference_count": 130
+  },
+  "new_measured_transcription_metrics": null,
+  "comparison": "Unavailable: no protected scorer or reference labels; accepted OCR count is not correct matches. Missing baseline prevents melody non-regression verification.",
+  "timing": "unaudited",
+  "release": "Not ready; incomplete melody outputs must count as failures."
+}

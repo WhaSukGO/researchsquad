@@ -1,0 +1,2557 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Goal agent — music experiment</title>
+<style>body{font:16px/1.6 system-ui;max-width:1100px;margin:32px auto;padding:0 20px;background:#faf9f6;color:#192a30}table{display:block;overflow-x:auto;border-collapse:collapse}td,th{padding:10px;border:1px solid #ddd;text-align:left}details,.card{padding:16px;background:white;border:1px solid #ddd;border-radius:8px;margin:16px 0}summary{cursor:pointer;font-weight:600}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}img{max-width:100%}a{color:#09634e}.status{background:#fff0d9;padding:18px}</style>
+<h1>Goal-solving agent: first music test</h1>
+<p>Develop an image-to-editable-kern workflow for a church band, including melody, chord symbols and correct transposition. Investigate observed failures, choose informative experiments, measure the result and stop honestly when the goal is unmet.</p>
+<p class="status"><b>Run status: goal_unmet · Product goal met: False</b><br>9 decisions · 16 model calls reserved/attempted · 572.4 active seconds</p>
+<p>The model chooses tools from observations. The host executes them, scores predictions against protected labels and enforces the completion rule. A successful agent run can still leave the music goal unmet.</p>
+<p>Why one controller: establish a traceable baseline before adding coordination. Why separate evaluators: the model cannot approve its own output or change the reference labels. Why a fixed pilot: paired comparisons within a bounded budget; it cannot establish performance on new songs.</p>
+<h2>Recent evidence behind the design</h2>
+<div class="card"><a href="https://ai.engineer/nyc/2026/talks/prime-intellect">Self-Improving Organizations — Will Brown, Prime Intellect</a> · 2026-10-14<p>Keep the controller, recognition model, evaluation and durable evidence separate. Compare candidate changes before adopting them; retain failed attempts as evidence.</p><small>Full available transcript reviewed; frames not inspected. The talk is partly a proposed direction and internal prototype. It provides no controlled evidence that training or additional agents will improve these music scores. Our first version updates its plan and memory, not its model weights.</small></div>
+<div class="card"><a href="https://ai.engineer/nyc/2026/talks/basis">Process Supervision for Agents That Do Long-Horizon Work — Mitchell Troyanovsky, Basis</a> · 2026-10-14<p>Write invariant tests for false success, altered references, unsupported actions and repeated execution. Keep musical outcome scores separate from checks on the agent&#x27;s behavior.</p><small>Full available transcript reviewed; frames not inspected. Process compliance is evidence about execution, not proof of correct music. Simulated controller tests do not replace live end-to-end experiments.</small></div>
+<div class="card"><a href="https://ai.engineer/nyc/2026/talks/arca">Inside Arca’s long-horizon agents that run the business — Aman Singh</a> · 2026-10-13<p>Persist decisions, pending actions and results. Resume completed experiments from receipts and expose unmet requirements explicitly instead of looping indefinitely.</p><small>Full available transcript reviewed; frames not inspected. The financial-services example is a practitioner account without a controlled ablation. Our local prototype has manual resume, not Arca&#x27;s external event integrations or production scale.</small></div>
+<h2>Measured candidates</h2><p>Lower edit rate is better. Melody compares pitch and duration; chord timing is not scored. Repeated invented events can produce rates above 100%.</p>
+<div class="card"><h3>exp-33c9e801b310</h3><pre>{
+  &quot;kind&quot;: &quot;audiveris_text_harmony&quot;
+}</pre><table><tr><th>Approach</th><th>Melody errors / events</th><th>Chord errors / labels</th></tr>
+<tr><td>exp-33c9e801b310</td><td>87/130 (66.9%)</td><td>30/38 (78.9%)</td></tr>
+<tr><td>audiveris-raw</td><td>130/130 (100.0%)</td><td>38/38 (100.0%)</td></tr>
+<tr><td>audiveris-enlarged</td><td>87/130 (66.9%)</td><td>30/38 (78.9%)</td></tr>
+<tr><td>transcoda-greedy</td><td>564/130 (433.8%)</td><td>38/38 (100.0%)</td></tr>
+</table><p>Parseable: 6/7. Exact measured melody + chord labels: 0/7. Chord timing audited: false. Musician accepted: false.</p><a href="experiments/exp-33c9e801b310/evaluation.json">Evaluation JSON</a></div>
+<details><summary>내이름으로_1 · melody errors 10 · chord errors 5</summary>
+<p>Input</p><img src="experiments/exp-33c9e801b310/sample-001/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-33c9e801b310/sample-001/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-33c9e801b310/sample-001/prediction.musicxml">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;3&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 1,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A4&quot;,
+          &quot;F4&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 2,
+      &quot;prediction_index&quot;: 2,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E5&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 3,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;1&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;F4&quot;,
+          &quot;F5&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 4,
+      &quot;prediction_index&quot;: 4,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 5,
+      &quot;prediction_index&quot;: 4,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 6,
+      &quot;prediction_index&quot;: 4,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 8,
+      &quot;prediction_index&quot;: 5,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;B3&quot;,
+          &quot;D4&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 9,
+      &quot;prediction_index&quot;: 6,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;B3&quot;,
+          &quot;D4&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 11,
+      &quot;prediction_index&quot;: 8,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;3&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;4&quot;
+      ]
+    }
+  ],
+  &quot;chord_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;C&quot;,
+        &quot;major&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 1,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;E&quot;,
+        &quot;minor&quot;,
+        &quot;E&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 2,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;D&quot;,
+        &quot;minor&quot;,
+        &quot;D&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;dominant&quot;,
+        &quot;G&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 4,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;C&quot;,
+        &quot;major&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    }
+  ]
+}</pre></details>
+<details><summary>내입술로_1 · melody errors 17 · chord errors 0</summary>
+<p>Input</p><img src="experiments/exp-33c9e801b310/sample-006/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-33c9e801b310/sample-006/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-33c9e801b310/sample-006/prediction.musicxml">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;B2&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 1,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;G2&quot;
+        ],
+        &quot;1/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 2,
+      &quot;prediction_index&quot;: 2,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;
+        ],
+        &quot;1/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 3,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;B2&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 4,
+      &quot;prediction_index&quot;: 4,
+      &quot;expected&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;9/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;B2&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 5,
+      &quot;prediction_index&quot;: 5,
+      &quot;expected&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;F2&quot;
+        ],
+        &quot;1/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 6,
+      &quot;prediction_index&quot;: 6,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;
+        ],
+        &quot;7/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 7,
+      &quot;prediction_index&quot;: 7,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E3&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 8,
+      &quot;prediction_index&quot;: 8,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 9,
+      &quot;prediction_index&quot;: 9,
+      &quot;expected&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;7/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 10,
+      &quot;prediction_index&quot;: 10,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 11,
+      &quot;prediction_index&quot;: 11,
+      &quot;expected&quot;: [
+        [
+          &quot;A4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;B2&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 12,
+      &quot;prediction_index&quot;: 12,
+      &quot;expected&quot;: [
+        [
+          &quot;A4&quot;
+        ],
+        &quot;2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C3&quot;
+        ],
+        &quot;1/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 13,
+      &quot;prediction_index&quot;: 13,
+      &quot;expected&quot;: [
+        [
+          &quot;F4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;D3&quot;
+        ],
+        &quot;1/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 14,
+      &quot;prediction_index&quot;: 14,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 15,
+      &quot;prediction_index&quot;: 14,
+      &quot;expected&quot;: [
+        [
+          &quot;F4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 16,
+      &quot;prediction_index&quot;: 14,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;17/4&quot;
+      ],
+      &quot;actual&quot;: null
+    }
+  ],
+  &quot;chord_edits&quot;: []
+}</pre></details>
+<details><summary>내입술의_1 · melody errors 0 · chord errors 2</summary>
+<p>Input</p><img src="experiments/exp-33c9e801b310/sample-012/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-33c9e801b310/sample-012/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-33c9e801b310/sample-012/prediction.musicxml">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [],
+  &quot;chord_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;C&quot;,
+        &quot;major&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 5,
+      &quot;prediction_index&quot;: 4,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;major&quot;,
+        &quot;G&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    }
+  ]
+}</pre></details>
+<details><summary>능력의_1 · melody errors 20 · chord errors 11</summary>
+<p>Input</p><img src="experiments/exp-33c9e801b310/sample-017/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-33c9e801b310/sample-017/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-33c9e801b310/sample-017/prediction.musicxml">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;insert&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: null,
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;A3&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 1,
+      &quot;prediction_index&quot;: 2,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 2,
+      &quot;prediction_index&quot;: 3,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;A3&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 4,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 4,
+      &quot;prediction_index&quot;: 5,
+      &quot;expected&quot;: [
+        [
+          &quot;F4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 5,
+      &quot;prediction_index&quot;: 6,
+      &quot;expected&quot;: [
+        [
+          &quot;F4&quot;
+        ],
+        &quot;3/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 6,
+      &quot;prediction_index&quot;: 7,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E3&quot;,
+          &quot;G2&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 7,
+      &quot;prediction_index&quot;: 8,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;G2&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;insert&quot;,
+      &quot;reference_index&quot;: 9,
+      &quot;prediction_index&quot;: 10,
+      &quot;expected&quot;: null,
+      &quot;actual&quot;: [
+        [
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;insert&quot;,
+      &quot;reference_index&quot;: 9,
+      &quot;prediction_index&quot;: 11,
+      &quot;expected&quot;: null,
+      &quot;actual&quot;: [
+        [
+          &quot;B3&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 9,
+      &quot;prediction_index&quot;: 12,
+      &quot;expected&quot;: [
+        [
+          &quot;A4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 10,
+      &quot;prediction_index&quot;: 13,
+      &quot;expected&quot;: [
+        [
+          &quot;A4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;B3&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 11,
+      &quot;prediction_index&quot;: 14,
+      &quot;expected&quot;: [
+        [
+          &quot;A4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;C3&quot;,
+          &quot;D4&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 12,
+      &quot;prediction_index&quot;: 15,
+      &quot;expected&quot;: [
+        [
+          &quot;A4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 13,
+      &quot;prediction_index&quot;: 16,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;3/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;A3&quot;,
+          &quot;C3&quot;,
+          &quot;F3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 14,
+      &quot;prediction_index&quot;: 17,
+      &quot;expected&quot;: [
+        [
+          &quot;F4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 15,
+      &quot;prediction_index&quot;: 18,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;3/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 16,
+      &quot;prediction_index&quot;: 19,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 17,
+      &quot;prediction_index&quot;: 20,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;1&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A2&quot;,
+          &quot;A3&quot;,
+          &quot;C3&quot;
+        ],
+        &quot;1&quot;
+      ]
+    }
+  ],
+  &quot;chord_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 1,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;suspended-fourth&quot;,
+        &quot;G&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 2,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;dominant&quot;,
+        &quot;G&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;F&quot;,
+        &quot;minor-sixth&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 4,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;C&quot;,
+        &quot;major&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 5,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;Bb&quot;,
+        &quot;major&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 6,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;C&quot;,
+        &quot;dominant&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 7,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;F&quot;,
+        &quot;major&quot;,
+        &quot;F&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 8,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;suspended-fourth&quot;,
+        &quot;G&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 9,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;dominant&quot;,
+        &quot;G&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 11,
+      &quot;prediction_index&quot;: 2,
+      &quot;expected&quot;: [
+        &quot;D&quot;,
+        &quot;minor&quot;,
+        &quot;D&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 12,
+      &quot;prediction_index&quot;: 2,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;dominant&quot;,
+        &quot;G&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    }
+  ]
+}</pre></details>
+<details><summary>사랑하셔서_1 · melody errors 12 · chord errors 3</summary>
+<p>Input</p><img src="experiments/exp-33c9e801b310/sample-019/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-33c9e801b310/sample-019/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-33c9e801b310/sample-019/prediction.musicxml">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 4,
+      &quot;prediction_index&quot;: 4,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;3/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;5/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 5,
+      &quot;prediction_index&quot;: 5,
+      &quot;expected&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A4&quot;
+        ],
+        &quot;4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 6,
+      &quot;prediction_index&quot;: 6,
+      &quot;expected&quot;: [
+        [
+          &quot;G3&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 7,
+      &quot;prediction_index&quot;: 6,
+      &quot;expected&quot;: [
+        [
+          &quot;G3&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 8,
+      &quot;prediction_index&quot;: 6,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 9,
+      &quot;prediction_index&quot;: 6,
+      &quot;expected&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 18,
+      &quot;prediction_index&quot;: 14,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;3/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;5/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 19,
+      &quot;prediction_index&quot;: 15,
+      &quot;expected&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;A4&quot;
+        ],
+        &quot;4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 20,
+      &quot;prediction_index&quot;: 16,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;F4&quot;
+        ],
+        &quot;3/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 21,
+      &quot;prediction_index&quot;: 17,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 22,
+      &quot;prediction_index&quot;: 17,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 23,
+      &quot;prediction_index&quot;: 17,
+      &quot;expected&quot;: [
+        [
+          &quot;F4&quot;
+        ],
+        &quot;7/4&quot;
+      ],
+      &quot;actual&quot;: null
+    }
+  ],
+  &quot;chord_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;C&quot;,
+        &quot;major&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 2,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;C&quot;,
+        &quot;major&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;F&quot;,
+        &quot;minor-sixth&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    }
+  ]
+}</pre></details>
+<details><summary>성령이여_1 · melody errors 20 · chord errors 3</summary>
+<p>Input</p><img src="experiments/exp-33c9e801b310/sample-023/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-33c9e801b310/sample-023/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-33c9e801b310/sample-023/prediction.musicxml">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E5&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 1,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E5&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 2,
+      &quot;prediction_index&quot;: 2,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E5&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 3,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E5&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 4,
+      &quot;prediction_index&quot;: 4,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E5&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 5,
+      &quot;prediction_index&quot;: 5,
+      &quot;expected&quot;: [
+        [
+          &quot;F4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;F5&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 6,
+      &quot;prediction_index&quot;: 6,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;G5&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 7,
+      &quot;prediction_index&quot;: 7,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;7/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;G5&quot;
+        ],
+        &quot;7/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 8,
+      &quot;prediction_index&quot;: 8,
+      &quot;expected&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;B6&quot;
+        ],
+        &quot;4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 9,
+      &quot;prediction_index&quot;: 9,
+      &quot;expected&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C5&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 10,
+      &quot;prediction_index&quot;: 10,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 11,
+      &quot;prediction_index&quot;: 11,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C5&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 12,
+      &quot;prediction_index&quot;: 12,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C5&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 13,
+      &quot;prediction_index&quot;: 13,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;C5&quot;
+        ],
+        &quot;1&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 14,
+      &quot;prediction_index&quot;: 14,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E5&quot;
+        ],
+        &quot;3&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 15,
+      &quot;prediction_index&quot;: 15,
+      &quot;expected&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;E5&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 16,
+      &quot;prediction_index&quot;: 16,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 17,
+      &quot;prediction_index&quot;: 16,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;7/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 18,
+      &quot;prediction_index&quot;: 16,
+      &quot;expected&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 19,
+      &quot;prediction_index&quot;: 16,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    }
+  ],
+  &quot;chord_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;C&quot;,
+        &quot;major&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 1,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;major&quot;,
+        &quot;B&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 1,
+      &quot;expected&quot;: [
+        &quot;E&quot;,
+        &quot;minor&quot;,
+        &quot;G&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    }
+  ]
+}</pre></details>
+<details><summary>주품에_1 · melody errors 8 · chord errors 6</summary>
+<p>Input</p><img src="experiments/exp-33c9e801b310/sample-029/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-33c9e801b310/sample-029/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-33c9e801b310/sample-029/prediction.musicxml">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [
+    &quot;parse: ZeroDivisionError(&#x27;float division by zero&#x27;)&quot;
+  ],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;E4&quot;
+        ],
+        &quot;2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 1,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 2,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;3&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;REST&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 4,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 5,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;A4&quot;
+        ],
+        &quot;2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 6,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;2&quot;
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 7,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;4&quot;
+      ],
+      &quot;actual&quot;: null
+    }
+  ],
+  &quot;chord_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 0,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;C&quot;,
+        &quot;major&quot;,
+        &quot;C&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 1,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;major&quot;,
+        &quot;B&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 2,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;A&quot;,
+        &quot;minor-seventh&quot;,
+        &quot;A&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 3,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;F&quot;,
+        &quot;major&quot;,
+        &quot;F&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 4,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;D&quot;,
+        &quot;major&quot;,
+        &quot;F#&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 5,
+      &quot;prediction_index&quot;: 0,
+      &quot;expected&quot;: [
+        &quot;G&quot;,
+        &quot;suspended-fourth&quot;,
+        &quot;G&quot;,
+        []
+      ],
+      &quot;actual&quot;: null
+    }
+  ]
+}</pre></details>
+<div class="card"><h3>exp-0ca8aa4fa31f</h3><pre>{
+  &quot;kind&quot;: &quot;vision_kern&quot;
+}</pre><table><tr><th>Approach</th><th>Melody errors / events</th><th>Chord errors / labels</th></tr>
+<tr><td>exp-0ca8aa4fa31f</td><td>4/130 (3.1%)</td><td>0/38 (0.0%)</td></tr>
+<tr><td>audiveris-raw</td><td>130/130 (100.0%)</td><td>38/38 (100.0%)</td></tr>
+<tr><td>audiveris-enlarged</td><td>87/130 (66.9%)</td><td>30/38 (78.9%)</td></tr>
+<tr><td>transcoda-greedy</td><td>564/130 (433.8%)</td><td>38/38 (100.0%)</td></tr>
+</table><p>Parseable: 7/7. Exact measured melody + chord labels: 5/7. Chord timing audited: false. Musician accepted: false.</p><a href="experiments/exp-0ca8aa4fa31f/evaluation.json">Evaluation JSON</a></div>
+<details><summary>내이름으로_1 · melody errors 0 · chord errors 0</summary>
+<p>Input</p><img src="experiments/exp-0ca8aa4fa31f/sample-001/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-0ca8aa4fa31f/sample-001/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-001/prediction.krn">Editable prediction</a></p>
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-001/transposed-M2.krn">Transposed up a major second</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [],
+  &quot;chord_edits&quot;: []
+}</pre></details>
+<details><summary>내입술로_1 · melody errors 1 · chord errors 0</summary>
+<p>Input</p><img src="experiments/exp-0ca8aa4fa31f/sample-006/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-0ca8aa4fa31f/sample-006/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-006/prediction.krn">Editable prediction</a></p>
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-006/transposed-M2.krn">Transposed up a major second</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 13,
+      &quot;prediction_index&quot;: 13,
+      &quot;expected&quot;: [
+        [
+          &quot;F4&quot;
+        ],
+        &quot;1/2&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;G4&quot;
+        ],
+        &quot;1/2&quot;
+      ]
+    }
+  ],
+  &quot;chord_edits&quot;: []
+}</pre></details>
+<details><summary>내입술의_1 · melody errors 3 · chord errors 0</summary>
+<p>Input</p><img src="experiments/exp-0ca8aa4fa31f/sample-012/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-0ca8aa4fa31f/sample-012/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-012/prediction.krn">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [
+    &quot;transpose: ValueError(&#x27;Independent interval/rhythm/harmony checks failed&#x27;)&quot;
+  ],
+  &quot;uncertainties&quot;: [
+    &quot;The final G chord label is horizontally ambiguous; it is assigned to the final dotted-quarter D. The image ends without a closing barline.&quot;
+  ],
+  &quot;melody_edits&quot;: [
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 16,
+      &quot;prediction_index&quot;: 16,
+      &quot;expected&quot;: [
+        [
+          &quot;C4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;1/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;replace&quot;,
+      &quot;reference_index&quot;: 20,
+      &quot;prediction_index&quot;: 20,
+      &quot;expected&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;1/4&quot;
+      ],
+      &quot;actual&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;9/4&quot;
+      ]
+    },
+    {
+      &quot;operation&quot;: &quot;delete&quot;,
+      &quot;reference_index&quot;: 21,
+      &quot;prediction_index&quot;: 21,
+      &quot;expected&quot;: [
+        [
+          &quot;D4&quot;
+        ],
+        &quot;2&quot;
+      ],
+      &quot;actual&quot;: null
+    }
+  ],
+  &quot;chord_edits&quot;: []
+}</pre></details>
+<details><summary>능력의_1 · melody errors 0 · chord errors 0</summary>
+<p>Input</p><img src="experiments/exp-0ca8aa4fa31f/sample-017/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-0ca8aa4fa31f/sample-017/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-017/prediction.krn">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [
+    &quot;transpose: ValueError(&#x27;Independent interval/rhythm/harmony checks failed&#x27;)&quot;
+  ],
+  &quot;uncertainties&quot;: [
+    &quot;The small chord symbol at the start of the second measure is read as F:min6/C.&quot;
+  ],
+  &quot;melody_edits&quot;: [],
+  &quot;chord_edits&quot;: []
+}</pre></details>
+<details><summary>사랑하셔서_1 · melody errors 0 · chord errors 0</summary>
+<p>Input</p><img src="experiments/exp-0ca8aa4fa31f/sample-019/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-0ca8aa4fa31f/sample-019/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-019/prediction.krn">Editable prediction</a></p>
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-019/transposed-M2.krn">Transposed up a major second</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [],
+  &quot;uncertainties&quot;: [
+    &quot;The final visible measure appears to contain only three quarter-note beats; its displayed durations are preserved without adding a beat.&quot;
+  ],
+  &quot;melody_edits&quot;: [],
+  &quot;chord_edits&quot;: []
+}</pre></details>
+<details><summary>성령이여_1 · melody errors 0 · chord errors 0</summary>
+<p>Input</p><img src="experiments/exp-0ca8aa4fa31f/sample-023/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-0ca8aa4fa31f/sample-023/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-023/prediction.krn">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [
+    &quot;transpose: ValueError(&#x27;Independent interval/rhythm/harmony checks failed&#x27;)&quot;
+  ],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [],
+  &quot;chord_edits&quot;: []
+}</pre></details>
+<details><summary>주품에_1 · melody errors 0 · chord errors 0</summary>
+<p>Input</p><img src="experiments/exp-0ca8aa4fa31f/sample-029/input.png" alt="Source music excerpt">
+<p>Prediction (first page)</p><img src="experiments/exp-0ca8aa4fa31f/sample-029/prediction.svg" alt="Predicted notation">
+<p><a href="experiments/exp-0ca8aa4fa31f/sample-029/prediction.krn">Editable prediction</a></p>
+<pre>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;errors&quot;: [
+    &quot;transpose: ValueError(&#x27;Independent interval/rhythm/harmony checks failed&#x27;)&quot;
+  ],
+  &quot;uncertainties&quot;: [],
+  &quot;melody_edits&quot;: [],
+  &quot;chord_edits&quot;: []
+}</pre></details>
+<h2>Decision trail: why, action, observation</h2>
+<details><summary>Step 1: inspect_dataset → dataset</summary><p>Establish the dataset scope and original-file integrity before choosing an intervention or interpreting accuracy.</p><p><b>Hypothesis:</b> The dataset contains paired music images and protected references suitable for measuring melody and chord failures across song groups.</p><p><b>Expected observation:</b> Confirm excerpt counts, song groups, available image inputs and integrity checks; missing files or inconsistent scope would limit subsequent experiments.</p><pre>{
+  &quot;id&quot;: &quot;dataset&quot;,
+  &quot;samples&quot;: 32,
+  &quot;song_groups&quot;: 7,
+  &quot;width_range&quot;: [
+    500,
+    1000
+  ],
+  &quot;height_range&quot;: [
+    72,
+    136
+  ],
+  &quot;pilot_indices&quot;: [
+    1,
+    6,
+    12,
+    17,
+    19,
+    23,
+    29
+  ],
+  &quot;label_policy&quot;: &quot;Recognition sees images only. References are opened by evaluation.&quot;,
+  &quot;release_limits&quot;: &quot;Conservative completion guard for this prototype, not a musician-agreed product release threshold. A seven-sample pilot cannot complete this goal. Report measured improvements separately.&quot;
+}</pre></details>
+<details><summary>Step 2: baseline_summary → baseline</summary><p>Measure melody and chord failures on the pilot and full development set so the intervention targets an observed problem.</p><p><b>Hypothesis:</b> The baseline has distinct melody and chord failure patterns that can guide selection between image preprocessing, chord extraction and vision transcription.</p><p><b>Expected observation:</b> Separate melody and chord error measurements, with pilot-to-full-set comparisons; uniformly distributed errors would weaken the case for a narrowly targeted intervention.</p><pre>{
+  &quot;id&quot;: &quot;baseline&quot;,
+  &quot;paired_subset&quot;: {
+    &quot;audiveris-raw&quot;: {
+      &quot;samples&quot;: 7,
+      &quot;melody&quot;: {
+        &quot;reference_count&quot;: 130,
+        &quot;prediction_count&quot;: 16,
+        &quot;matches&quot;: 0,
+        &quot;errors&quot;: 130,
+        &quot;substitutions&quot;: 16,
+        &quot;deletions&quot;: 114,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 1.0,
+        &quot;f1&quot;: 0.0
+      },
+      &quot;chords&quot;: {
+        &quot;reference_count&quot;: 38,
+        &quot;prediction_count&quot;: 0,
+        &quot;matches&quot;: 0,
+        &quot;errors&quot;: 38,
+        &quot;substitutions&quot;: 0,
+        &quot;deletions&quot;: 38,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 1.0,
+        &quot;f1&quot;: 0.0
+      },
+      &quot;failure_flags&quot;: {
+        &quot;input_resolution_rejected&quot;: 6,
+        &quot;all_chord_labels_missing&quot;: 6,
+        &quot;no_transcription&quot;: 6
+      }
+    },
+    &quot;audiveris-enlarged&quot;: {
+      &quot;samples&quot;: 7,
+      &quot;melody&quot;: {
+        &quot;reference_count&quot;: 130,
+        &quot;prediction_count&quot;: 108,
+        &quot;matches&quot;: 46,
+        &quot;errors&quot;: 87,
+        &quot;substitutions&quot;: 59,
+        &quot;deletions&quot;: 25,
+        &quot;insertions&quot;: 3,
+        &quot;error_rate&quot;: 0.6692307692307692,
+        &quot;f1&quot;: 0.3865546218487395
+      },
+      &quot;chords&quot;: {
+        &quot;reference_count&quot;: 38,
+        &quot;prediction_count&quot;: 8,
+        &quot;matches&quot;: 8,
+        &quot;errors&quot;: 30,
+        &quot;substitutions&quot;: 0,
+        &quot;deletions&quot;: 30,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 0.7894736842105263,
+        &quot;f1&quot;: 0.34782608695652173
+      },
+      &quot;failure_flags&quot;: {
+        &quot;all_chord_labels_missing&quot;: 2,
+        &quot;output_not_parseable&quot;: 1
+      }
+    },
+    &quot;transcoda-greedy&quot;: {
+      &quot;samples&quot;: 7,
+      &quot;melody&quot;: {
+        &quot;reference_count&quot;: 130,
+        &quot;prediction_count&quot;: 657,
+        &quot;matches&quot;: 93,
+        &quot;errors&quot;: 564,
+        &quot;substitutions&quot;: 37,
+        &quot;deletions&quot;: 0,
+        &quot;insertions&quot;: 527,
+        &quot;error_rate&quot;: 4.338461538461538,
+        &quot;f1&quot;: 0.2363405336721728
+      },
+      &quot;chords&quot;: {
+        &quot;reference_count&quot;: 38,
+        &quot;prediction_count&quot;: 0,
+        &quot;matches&quot;: 0,
+        &quot;errors&quot;: 38,
+        &quot;substitutions&quot;: 0,
+        &quot;deletions&quot;: 38,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 1.0,
+        &quot;f1&quot;: 0.0
+      },
+      &quot;failure_flags&quot;: {
+        &quot;all_chord_labels_missing&quot;: 6,
+        &quot;generation_did_not_finish&quot;: 1
+      }
+    }
+  },
+  &quot;all_32&quot;: {
+    &quot;audiveris-raw&quot;: {
+      &quot;melody_error_rate&quot;: 1.0,
+      &quot;chord_matches&quot;: 0
+    },
+    &quot;audiveris-enlarged&quot;: {
+      &quot;melody_error_rate&quot;: 0.612280701754386,
+      &quot;chord_matches&quot;: 47
+    },
+    &quot;transcoda-greedy&quot;: {
+      &quot;melody_error_rate&quot;: 5.040350877192982,
+      &quot;chord_matches&quot;: 0
+    }
+  },
+  &quot;limits&quot;: [
+    &quot;References are supplied labels, not a musician-audited gold set.&quot;,
+    &quot;Seven song groups, short excerpts, all with empty key signatures; no held-out generalization claim.&quot;,
+    &quot;Primary metric is sequence edit error on pitch plus rational duration, with matching ties merged. Includes rests.&quot;,
+    &quot;Chord score measures ordered root, kind, bass and explicit extensions; chord timing is not scored.&quot;,
+    &quot;No full notation, voice alignment, repeat-playback, lyric or accidental-display fidelity metric.&quot;,
+    &quot;Missing or unparseable outputs count as all reference events deleted; their unparsed insertions cannot be counted.&quot;,
+    &quot;An edit error rate can exceed 100 percent; it is not accuracy.&quot;,
+    &quot;No correction-time study or calibrated confidence thresholds yet.&quot;,
+    &quot;Latency includes per-image Audiveris startup, excludes neural load time; some runs overlapped, so do not compare speed as controlled performance.&quot;,
+    &quot;Transcoda canonical header/terminator restoration changes no pitches or durations. Raw outputs are retained.&quot;,
+    &quot;No weights trained, no labels sent to inference, no paid API calls.&quot;
+  ]
+}</pre></details>
+<details><summary>Step 3: discover_evidence → source-catalog</summary><p>Enlarged Audiveris still has 66.9% melody error and misses 30 of 38 pilot chords. Relevant sources can help select an intervention targeting these measured failures.</p><p><b>Hypothesis:</b> Chord-text extraction may recover omitted harmony, while pixel-based vision transcription may address both melody and chord failures; neither benefit is established without evaluation.</p><p><b>Expected observation:</b> Sources describing applicable capabilities and limitations; evidence of unreliable durations or unsupported chord extraction would weaken the corresponding intervention.</p><pre>{
+  &quot;id&quot;: &quot;source-catalog&quot;,
+  &quot;selection&quot;: &quot;Curated by project decision and domain, from the official October conference program; no live open-web search in this adapter.&quot;,
+  &quot;sources&quot;: [
+    {
+      &quot;id&quot;: &quot;prime-intellect-2026-10-14&quot;,
+      &quot;title&quot;: &quot;Self-Improving Organizations — Will Brown, Prime Intellect&quot;,
+      &quot;domain&quot;: &quot;autonomous_experimentation&quot;,
+      &quot;url&quot;: &quot;https://ai.engineer/nyc/2026/talks/prime-intellect&quot;
+    },
+    {
+      &quot;id&quot;: &quot;basis-2026-10-14&quot;,
+      &quot;title&quot;: &quot;Process Supervision for Agents That Do Long-Horizon Work — Mitchell Troyanovsky, Basis&quot;,
+      &quot;domain&quot;: &quot;process_evaluation&quot;,
+      &quot;url&quot;: &quot;https://ai.engineer/nyc/2026/talks/basis&quot;
+    },
+    {
+      &quot;id&quot;: &quot;arca-2026-10-13&quot;,
+      &quot;title&quot;: &quot;Inside Arca’s long-horizon agents that run the business — Aman Singh&quot;,
+      &quot;domain&quot;: &quot;durable_execution&quot;,
+      &quot;url&quot;: &quot;https://ai.engineer/nyc/2026/talks/arca&quot;
+    },
+    {
+      &quot;id&quot;: &quot;music-benchmark&quot;,
+      &quot;title&quot;: &quot;Supplied-score benchmark and format audit&quot;,
+      &quot;domain&quot;: &quot;optical_music_recognition&quot;,
+      &quot;url&quot;: &quot;runs/first-benchmark/results.json&quot;
+    }
+  ]
+}</pre></details>
+<details><summary>Step 4: read_evidence → evidence-82fd3c08</summary><p>Read the domain-specific format audit before choosing an experiment targeting the enlarged Audiveris baseline’s 66.9% melody error and 30 missing pilot chords.</p><p><b>Hypothesis:</b> The audit may identify whether omitted chord symbols remain available as OCR text and whether symbolic-format failures contribute to melody errors.</p><p><b>Expected observation:</b> Evidence about recoverable chord text and notation conversion limitations; absent or corrupted OCR chord text would weaken the case for text-to-harmony extraction.</p><pre>{
+  &quot;id&quot;: &quot;evidence-82fd3c08&quot;,
+  &quot;sources&quot;: [
+    {
+      &quot;id&quot;: &quot;music-benchmark&quot;,
+      &quot;domain&quot;: &quot;optical_music_recognition&quot;,
+      &quot;title&quot;: &quot;Supplied-score benchmark and format audit&quot;,
+      &quot;claim&quot;: &quot;32 development excerpts, seven songs. Enlarged Audiveris recovers 47/200 structured chords; Transcoda omits the chord spine and sometimes repeats notes. Plain OCR words are not yet promoted to harmony. Some outputs fail parsing.&quot;,
+      &quot;application&quot;: &quot;Separate image/model failures from output-format and text-to-harmony integration. Compare fixed paired inputs.&quot;,
+      &quot;limit&quot;: &quot;References unaudited; chord timing and human correction time unmeasured. No agent comparison.&quot;,
+      &quot;url&quot;: &quot;runs/first-benchmark/results.json&quot;
+    }
+  ]
+}</pre></details>
+<details><summary>Step 5: run_experiment → exp-33c9e801b310</summary><p>The pilot misses 30 of 38 chords, and the format audit identifies OCR words that are not promoted to harmony. This bounded experiment tests that integration gap without model calls or changes to notes.</p><p><b>Hypothesis:</b> Promoting whole OCR words with explicit chord syntax will reduce chord sequence error below the enlarged Audiveris baseline of 78.9%, while leaving melody error unchanged.</p><p><b>Expected observation:</b> Independent evaluation should show additional correct chords and unchanged melody error. No chord improvement or enough false chord insertions to offset recovered chords would contradict the hypothesis; chord timing remains unverified.</p><pre>{
+  &quot;id&quot;: &quot;exp-33c9e801b310&quot;,
+  &quot;config&quot;: {
+    &quot;kind&quot;: &quot;audiveris_text_harmony&quot;
+  },
+  &quot;samples&quot;: 7,
+  &quot;statuses&quot;: {
+    &quot;ok&quot;: 7
+  },
+  &quot;receipt&quot;: &quot;runs/goal-agent-001/experiments/exp-33c9e801b310/receipt.json&quot;,
+  &quot;evaluated&quot;: false,
+  &quot;note&quot;: &quot;Execution is not accuracy. Call evaluate_experiment with this ID.&quot;
+}</pre></details>
+<details><summary>Step 6: evaluate_experiment → exp-33c9e801b310-evaluation</summary><p>All seven outputs were generated, but correctness is unmeasured. Independently score whether promoting OCR chord words recovers missing harmony without introducing offsetting errors.</p><p><b>Hypothesis:</b> Chord sequence error falls below the enlarged Audiveris baseline of 78.9%, while melody error remains unchanged at 66.9%.</p><p><b>Expected observation:</b> More than eight correctly matched chords and lower chord edit error on the paired pilot would support the intervention. Unchanged or increased chord error would contradict it. Chord timing and full-product acceptance remain unverified.</p><pre>{
+  &quot;id&quot;: &quot;exp-33c9e801b310-evaluation&quot;,
+  &quot;experiment_id&quot;: &quot;exp-33c9e801b310&quot;,
+  &quot;samples&quot;: 7,
+  &quot;parseable&quot;: 6,
+  &quot;melody&quot;: {
+    &quot;reference_count&quot;: 130,
+    &quot;prediction_count&quot;: 108,
+    &quot;matches&quot;: 46,
+    &quot;errors&quot;: 87,
+    &quot;substitutions&quot;: 59,
+    &quot;deletions&quot;: 25,
+    &quot;insertions&quot;: 3,
+    &quot;error_rate&quot;: 0.6692307692307692,
+    &quot;f1&quot;: 0.3865546218487395
+  },
+  &quot;chords&quot;: {
+    &quot;reference_count&quot;: 38,
+    &quot;prediction_count&quot;: 8,
+    &quot;matches&quot;: 8,
+    &quot;errors&quot;: 30,
+    &quot;substitutions&quot;: 0,
+    &quot;deletions&quot;: 30,
+    &quot;insertions&quot;: 0,
+    &quot;error_rate&quot;: 0.7894736842105263,
+    &quot;f1&quot;: 0.34782608695652173
+  },
+  &quot;exact_measured&quot;: 0,
+  &quot;transposition_checked&quot;: 0,
+  &quot;transposition_failures&quot;: null,
+  &quot;chord_timing_audited&quot;: false,
+  &quot;musician_accepted&quot;: false,
+  &quot;paired_baselines&quot;: {
+    &quot;audiveris-raw&quot;: {
+      &quot;melody&quot;: {
+        &quot;reference_count&quot;: 130,
+        &quot;prediction_count&quot;: 16,
+        &quot;matches&quot;: 0,
+        &quot;errors&quot;: 130,
+        &quot;substitutions&quot;: 16,
+        &quot;deletions&quot;: 114,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 1.0,
+        &quot;f1&quot;: 0.0
+      },
+      &quot;chords&quot;: {
+        &quot;reference_count&quot;: 38,
+        &quot;prediction_count&quot;: 0,
+        &quot;matches&quot;: 0,
+        &quot;errors&quot;: 38,
+        &quot;substitutions&quot;: 0,
+        &quot;deletions&quot;: 38,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 1.0,
+        &quot;f1&quot;: 0.0
+      }
+    },
+    &quot;audiveris-enlarged&quot;: {
+      &quot;melody&quot;: {
+        &quot;reference_count&quot;: 130,
+        &quot;prediction_count&quot;: 108,
+        &quot;matches&quot;: 46,
+        &quot;errors&quot;: 87,
+        &quot;substitutions&quot;: 59,
+        &quot;deletions&quot;: 25,
+        &quot;insertions&quot;: 3,
+        &quot;error_rate&quot;: 0.6692307692307692,
+        &quot;f1&quot;: 0.3865546218487395
+      },
+      &quot;chords&quot;: {
+        &quot;reference_count&quot;: 38,
+        &quot;prediction_count&quot;: 8,
+        &quot;matches&quot;: 8,
+        &quot;errors&quot;: 30,
+        &quot;substitutions&quot;: 0,
+        &quot;deletions&quot;: 30,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 0.7894736842105263,
+        &quot;f1&quot;: 0.34782608695652173
+      }
+    },
+    &quot;transcoda-greedy&quot;: {
+      &quot;melody&quot;: {
+        &quot;reference_count&quot;: 130,
+        &quot;prediction_count&quot;: 657,
+        &quot;matches&quot;: 93,
+        &quot;errors&quot;: 564,
+        &quot;substitutions&quot;: 37,
+        &quot;deletions&quot;: 0,
+        &quot;insertions&quot;: 527,
+        &quot;error_rate&quot;: 4.338461538461538,
+        &quot;f1&quot;: 0.2363405336721728
+      },
+      &quot;chords&quot;: {
+        &quot;reference_count&quot;: 38,
+        &quot;prediction_count&quot;: 0,
+        &quot;matches&quot;: 0,
+        &quot;errors&quot;: 38,
+        &quot;substitutions&quot;: 0,
+        &quot;deletions&quot;: 38,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 1.0,
+        &quot;f1&quot;: 0.0
+      }
+    }
+  },
+  &quot;per_sample&quot;: [
+    {
+      &quot;id&quot;: &quot;내이름으로_1&quot;,
+      &quot;melody_errors&quot;: 10,
+      &quot;chord_errors&quot;: 5,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;내입술로_1&quot;,
+      &quot;melody_errors&quot;: 17,
+      &quot;chord_errors&quot;: 0,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;내입술의_1&quot;,
+      &quot;melody_errors&quot;: 0,
+      &quot;chord_errors&quot;: 2,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;능력의_1&quot;,
+      &quot;melody_errors&quot;: 20,
+      &quot;chord_errors&quot;: 11,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;사랑하셔서_1&quot;,
+      &quot;melody_errors&quot;: 12,
+      &quot;chord_errors&quot;: 3,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;성령이여_1&quot;,
+      &quot;melody_errors&quot;: 20,
+      &quot;chord_errors&quot;: 3,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;주품에_1&quot;,
+      &quot;melody_errors&quot;: 8,
+      &quot;chord_errors&quot;: 6,
+      &quot;parse_ok&quot;: false,
+      &quot;uncertainties&quot;: []
+    }
+  ],
+  &quot;limits&quot;: [
+    &quot;Development pilot, not held-out performance.&quot;,
+    &quot;Chord labels scored in order; beat timing unmeasured.&quot;,
+    &quot;Reference files are supplied labels, not musician-audited gold.&quot;,
+    &quot;Transposition, when checked, only covers an upward major second.&quot;
+  ]
+}</pre></details>
+<details><summary>Step 7: run_experiment → exp-0ca8aa4fa31f</summary><p>OCR-to-harmony promotion produced no improvement: melody error remains 66.9% and chord error 78.9%. Direct pixel transcription tests whether a different recognition approach can recover both missing chords and incorrect notes on the same seven excerpts, using seven model calls.</p><p><b>Hypothesis:</b> Vision transcription will reduce both melody and chord sequence error relative to enlarged Audiveris by reading notation and chord symbols directly into editable kern.</p><p><b>Expected observation:</b> Independent evaluation should show melody error below 66.9% and chord error below 78.9%. Equal or higher error in either metric would contradict the joint-improvement hypothesis. Parse failures and transposition checks must also be inspected; this pilot cannot establish full-goal completion or audited chord timing.</p><pre>{
+  &quot;id&quot;: &quot;exp-0ca8aa4fa31f&quot;,
+  &quot;config&quot;: {
+    &quot;kind&quot;: &quot;vision_kern&quot;
+  },
+  &quot;samples&quot;: 7,
+  &quot;statuses&quot;: {
+    &quot;ok&quot;: 7
+  },
+  &quot;receipt&quot;: &quot;runs/goal-agent-001/experiments/exp-0ca8aa4fa31f/receipt.json&quot;,
+  &quot;evaluated&quot;: false,
+  &quot;note&quot;: &quot;Execution is not accuracy. Call evaluate_experiment with this ID.&quot;
+}</pre></details>
+<details><summary>Step 8: evaluate_experiment → exp-0ca8aa4fa31f-evaluation</summary><p>Seven vision outputs were generated, but execution success does not establish musical correctness. Independently score the saved outputs against the same pilot baselines and inspect parsing and transposition results.</p><p><b>Hypothesis:</b> Direct vision transcription reduces both melody error below 66.9% and chord sequence error below 78.9%, unlike the text-to-harmony intervention, which showed no improvement.</p><p><b>Expected observation:</b> Lower error in both metrics would support the hypothesis; equal or higher error in either would contradict it. Report parse failures and available transposition checks separately. Seven excerpts cannot establish full-set completion, audited chord timing or musician acceptance.</p><pre>{
+  &quot;id&quot;: &quot;exp-0ca8aa4fa31f-evaluation&quot;,
+  &quot;experiment_id&quot;: &quot;exp-0ca8aa4fa31f&quot;,
+  &quot;samples&quot;: 7,
+  &quot;parseable&quot;: 7,
+  &quot;melody&quot;: {
+    &quot;reference_count&quot;: 130,
+    &quot;prediction_count&quot;: 129,
+    &quot;matches&quot;: 126,
+    &quot;errors&quot;: 4,
+    &quot;substitutions&quot;: 3,
+    &quot;deletions&quot;: 1,
+    &quot;insertions&quot;: 0,
+    &quot;error_rate&quot;: 0.03076923076923077,
+    &quot;f1&quot;: 0.972972972972973
+  },
+  &quot;chords&quot;: {
+    &quot;reference_count&quot;: 38,
+    &quot;prediction_count&quot;: 38,
+    &quot;matches&quot;: 38,
+    &quot;errors&quot;: 0,
+    &quot;substitutions&quot;: 0,
+    &quot;deletions&quot;: 0,
+    &quot;insertions&quot;: 0,
+    &quot;error_rate&quot;: 0.0,
+    &quot;f1&quot;: 1.0
+  },
+  &quot;exact_measured&quot;: 5,
+  &quot;transposition_checked&quot;: 7,
+  &quot;transposition_failures&quot;: 4,
+  &quot;chord_timing_audited&quot;: false,
+  &quot;musician_accepted&quot;: false,
+  &quot;paired_baselines&quot;: {
+    &quot;audiveris-raw&quot;: {
+      &quot;melody&quot;: {
+        &quot;reference_count&quot;: 130,
+        &quot;prediction_count&quot;: 16,
+        &quot;matches&quot;: 0,
+        &quot;errors&quot;: 130,
+        &quot;substitutions&quot;: 16,
+        &quot;deletions&quot;: 114,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 1.0,
+        &quot;f1&quot;: 0.0
+      },
+      &quot;chords&quot;: {
+        &quot;reference_count&quot;: 38,
+        &quot;prediction_count&quot;: 0,
+        &quot;matches&quot;: 0,
+        &quot;errors&quot;: 38,
+        &quot;substitutions&quot;: 0,
+        &quot;deletions&quot;: 38,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 1.0,
+        &quot;f1&quot;: 0.0
+      }
+    },
+    &quot;audiveris-enlarged&quot;: {
+      &quot;melody&quot;: {
+        &quot;reference_count&quot;: 130,
+        &quot;prediction_count&quot;: 108,
+        &quot;matches&quot;: 46,
+        &quot;errors&quot;: 87,
+        &quot;substitutions&quot;: 59,
+        &quot;deletions&quot;: 25,
+        &quot;insertions&quot;: 3,
+        &quot;error_rate&quot;: 0.6692307692307692,
+        &quot;f1&quot;: 0.3865546218487395
+      },
+      &quot;chords&quot;: {
+        &quot;reference_count&quot;: 38,
+        &quot;prediction_count&quot;: 8,
+        &quot;matches&quot;: 8,
+        &quot;errors&quot;: 30,
+        &quot;substitutions&quot;: 0,
+        &quot;deletions&quot;: 30,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 0.7894736842105263,
+        &quot;f1&quot;: 0.34782608695652173
+      }
+    },
+    &quot;transcoda-greedy&quot;: {
+      &quot;melody&quot;: {
+        &quot;reference_count&quot;: 130,
+        &quot;prediction_count&quot;: 657,
+        &quot;matches&quot;: 93,
+        &quot;errors&quot;: 564,
+        &quot;substitutions&quot;: 37,
+        &quot;deletions&quot;: 0,
+        &quot;insertions&quot;: 527,
+        &quot;error_rate&quot;: 4.338461538461538,
+        &quot;f1&quot;: 0.2363405336721728
+      },
+      &quot;chords&quot;: {
+        &quot;reference_count&quot;: 38,
+        &quot;prediction_count&quot;: 0,
+        &quot;matches&quot;: 0,
+        &quot;errors&quot;: 38,
+        &quot;substitutions&quot;: 0,
+        &quot;deletions&quot;: 38,
+        &quot;insertions&quot;: 0,
+        &quot;error_rate&quot;: 1.0,
+        &quot;f1&quot;: 0.0
+      }
+    }
+  },
+  &quot;per_sample&quot;: [
+    {
+      &quot;id&quot;: &quot;내이름으로_1&quot;,
+      &quot;melody_errors&quot;: 0,
+      &quot;chord_errors&quot;: 0,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;내입술로_1&quot;,
+      &quot;melody_errors&quot;: 1,
+      &quot;chord_errors&quot;: 0,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;내입술의_1&quot;,
+      &quot;melody_errors&quot;: 3,
+      &quot;chord_errors&quot;: 0,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: [
+        &quot;The final G chord label is horizontally ambiguous; it is assigned to the final dotted-quarter D. The image ends without a closing barline.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;능력의_1&quot;,
+      &quot;melody_errors&quot;: 0,
+      &quot;chord_errors&quot;: 0,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: [
+        &quot;The small chord symbol at the start of the second measure is read as F:min6/C.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;사랑하셔서_1&quot;,
+      &quot;melody_errors&quot;: 0,
+      &quot;chord_errors&quot;: 0,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: [
+        &quot;The final visible measure appears to contain only three quarter-note beats; its displayed durations are preserved without adding a beat.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;성령이여_1&quot;,
+      &quot;melody_errors&quot;: 0,
+      &quot;chord_errors&quot;: 0,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;주품에_1&quot;,
+      &quot;melody_errors&quot;: 0,
+      &quot;chord_errors&quot;: 0,
+      &quot;parse_ok&quot;: true,
+      &quot;uncertainties&quot;: []
+    }
+  ],
+  &quot;limits&quot;: [
+    &quot;Development pilot, not held-out performance.&quot;,
+    &quot;Chord labels scored in order; beat timing unmeasured.&quot;,
+    &quot;Reference files are supplied labels, not musician-audited gold.&quot;,
+    &quot;Transposition, when checked, only covers an upward major second.&quot;
+  ]
+}</pre></details>
+<details><summary>Step 9: finish → final</summary><p>Vision transcription was best on the seven-excerpt pilot: melody error fell from 66.9% to 3.1%, chord sequence error from 78.9% to 0%, and all outputs parsed. OCR-to-harmony promotion gave no improvement. The goal remains unmet: four melody errors remain, four of seven transposition checks failed, chord timing is unaudited, musician review is absent, and the remaining 25 development excerpts were not tested with this approach. Both experiments are exhausted.</p><p><b>Hypothesis:</b> Direct vision transcription improves pilot recognition, but reliable transposition and complete musical correctness remain unestablished.</p><p><b>Expected observation:</b> Retain the best evaluated pilot result without claiming completion or held-out accuracy; further work requires diagnosing transposition failures, correcting melody errors, auditing chord timing and evaluating all 32 excerpts with musician review.</p><pre>{
+  &quot;id&quot;: &quot;final&quot;,
+  &quot;goal_met&quot;: false,
+  &quot;reason&quot;: &quot;Vision transcription was best on the seven-excerpt pilot: melody error fell from 66.9% to 3.1%, chord sequence error from 78.9% to 0%, and all outputs parsed. OCR-to-harmony promotion gave no improvement. The goal remains unmet: four melody errors remain, four of seven transposition checks failed, chord timing is unaudited, musician review is absent, and the remaining 25 development excerpts were not tested with this approach. Both experiments are exhausted.&quot;,
+  &quot;best_experiment&quot;: &quot;exp-0ca8aa4fa31f&quot;
+}</pre></details>
+<h2>What is not established</h2><p>This is a bounded local agent with a music toolkit and a curated evidence library. It has no arbitrary code-editing or model-training tool, no automatic external event subscriptions, and no proven multi-agent benefit. Model self-reported uncertainty is not calibrated confidence. The acceptance guard requires all 32 samples, audited chord timing and musician acceptance; the pilot cannot satisfy it.</p><p><a href="state.json">Complete durable state</a> · <a href="../../README.md">Rerun instructions</a></p></html>

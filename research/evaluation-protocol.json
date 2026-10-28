@@ -1,0 +1,185 @@
+{
+  "status": "first_local_diagnostic_benchmark_implemented; broader_protocol_partially_pending",
+  "review_date": "2026-10-27",
+  "observed_dataset": {
+    "paired_excerpts": 32,
+    "song_filename_groups": 7,
+    "use": "Diagnostic development set; already inspected during research, not a pristine final holdout.",
+    "reference_status": "All load in Verovio. Musical correctness and chord timing still require review.",
+    "reference_issues_to_review": [
+      "24 files omit an explicit meter",
+      "All 32 declare an empty key signature; this does not alone identify the tonic or mode",
+      "Ties cross excerpt boundaries",
+      "Four rows contain a chord change and a null melody token; timing needs verification",
+      "Partial measures and repeat endings require context"
+    ]
+  },
+  "data_rules": [
+    "Keep supplied references unchanged; version any reviewed corrections separately with evidence and reviewer.",
+    "Group crops, transpositions and synthetic variants of the same song into the same split.",
+    "Use grouped cross-validation only as exploratory evidence on the seven groups, with development restricted to each training fold.",
+    "Collect different songs and complete downloaded pages for a locked final test before tuning.",
+    "Do not expose reference transcriptions to the inference model.",
+    "Treat score text, retrieved documents and captions as data, never as operational instructions."
+  ],
+  "baseline_experiments": [
+    {
+      "id": "A",
+      "method": "Existing OMR engine plus verified format conversion",
+      "why": "Determine how much existing music-specific software already solves."
+    },
+    {
+      "id": "B",
+      "method": "One general vision model with a fixed transcription prompt",
+      "why": "Measure the simplest model baseline on exactly the same images."
+    },
+    {
+      "id": "C",
+      "method": "Best baseline plus deterministic validation and at most two evidence-guided repair attempts",
+      "why": "Isolate whether workflow repair improves accuracy rather than merely parseability."
+    },
+    {
+      "id": "D",
+      "method": "Same workflow with a stronger or adapted perception model",
+      "why": "Separate perception improvements from orchestration changes."
+    },
+    {
+      "id": "E",
+      "method": "Independent verifier agent added to the same baseline",
+      "why": "Test whether another agent earns its cost; disagreement alone is not ground truth."
+    }
+  ],
+  "metrics": [
+    {
+      "name": "parse_and_render_rate",
+      "definition": "Number of outputs successfully parsed and rendered divided by all inputs; report crashes, timeouts and empty outputs separately.",
+      "limit": "Parseable notation can still be musically wrong."
+    },
+    {
+      "name": "note_event_precision_recall_f1",
+      "definition": "After monotonic measure alignment, compare pitch, onset, duration and voice; use a documented tie-normalization policy and report errors separately.",
+      "limit": "Requires audited musical ground truth; unresolved excerpt boundaries must be marked unscorable."
+    },
+    {
+      "name": "chord_event_precision_recall_f1",
+      "definition": "Compare root, quality, extensions, slash bass and beat position using normalized aliases; report insertions, deletions and substitutions.",
+      "limit": "Do not equate enharmonic spelling or missing extensions without an explicit policy."
+    },
+    {
+      "name": "notation_and_structure_errors",
+      "definition": "Measure repeats, endings, ties, accidentals, key signatures and bar structure separately; include a published OMR metric only after checking its feature coverage."
+    },
+    {
+      "name": "transposition_correctness",
+      "definition": "Use independently specified examples across keys to verify melody, chord root and slash bass movement; preserve rhythm and chord quality; check enharmonic spelling. Include round trips but do not rely on round trips alone."
+    },
+    {
+      "name": "review_minutes",
+      "definition": "Measure musician correction time to an accepted sheet and compare with the current pencil workflow."
+    },
+    {
+      "name": "silent_critical_error_rate",
+      "definition": "Critical wrong notes, chords or timing accepted without a review flag, divided by all automatically accepted cases. Report coverage alongside this rate."
+    },
+    {
+      "name": "run_cost_latency_and_stability",
+      "definition": "Record billed usage, end-to-end elapsed time, retries and repeated-run variability on fixed inputs."
+    }
+  ],
+  "reporting": [
+    "Show numerators and denominators, per-song results and aggregate results",
+    "Count failed runs; do not score only successful outputs",
+    "Report paired comparisons at song level, with uncertainty; seven song groups cannot establish broad reliability",
+    "No claimed accuracy until inference experiments have actually run",
+    "Pilot acceptance thresholds require musician review and are not yet agreed"
+  ],
+  "agent_contract": {
+    "input": [
+      "goal",
+      "allowed tools",
+      "evaluation criteria",
+      "budget and time limit"
+    ],
+    "steps": [
+      "clarify testable outcome",
+      "retrieve evidence",
+      "plan experiment",
+      "execute tools",
+      "evaluate independently",
+      "repair within limits",
+      "deliver artifacts and evidence or explicit unresolved failure"
+    ],
+    "trace_fields": [
+      "run_id",
+      "parent_step_id",
+      "input_hash",
+      "model_and_version",
+      "prompt_version",
+      "tool_arguments",
+      "tool_result",
+      "artifact_hash",
+      "duration",
+      "usage",
+      "failure_category",
+      "validation_result"
+    ],
+    "stop_conditions": [
+      "acceptance criteria met",
+      "budget or time exhausted",
+      "two unsuccessful repair attempts",
+      "missing required evidence or human judgment"
+    ],
+    "improvement_policy": "Propose a versioned change, run fixed evaluation gates outside the agent's control, review regressions, then promote or roll back. The agent cannot change the test set or success threshold to approve itself."
+  },
+  "implemented_recognition_models": [
+    "Audiveris 5.11.0, original images",
+    "Audiveris 5.11.0, 3x scale + 60px border",
+    "Transcoda 59M zero-shot, pinned checkpoint, greedy decoding",
+    "Transcoda beam width 3, seven-excerpt exploratory subset"
+  ],
+  "measured_recognition_accuracy": {
+    "report": "runs/first-benchmark/results.json",
+    "note": "Measured sequence edit errors, not a complete musical accuracy score. See implementation limits."
+  },
+  "paid_api_experiments_run": false,
+  "confirmed_scope": {
+    "user_selection": "Editable melody plus chord symbols, with transposition",
+    "output": "Editable Humdrum .krn with melody and chord symbols",
+    "evaluation_priorities": [
+      "Melody pitch, onset and duration accuracy",
+      "Chord root, quality, extensions, slash bass and beat-position accuracy",
+      "Correct transposition of both melody and chords",
+      "Musician correction time"
+    ],
+    "confirmation_note": "The user confirmed product scope; numeric acceptance thresholds remain proposed and unagreed."
+  },
+  "implementation_limits": [
+    "Primary metric uses ordered pitch-spelling/duration events with valid ties merged, not measure-aligned onset/voice scoring.",
+    "Chord sequence root/quality/bass/extensions measured; beat position not measured.",
+    "Transposition tested upward major second on all 32 references; all-key validation pending.",
+    "No general vision API, verifier-agent comparison, repair-agent loop, correction-time study, held-out test or trained weights."
+  ],
+  "completed_experiments": [
+    "A: original and enlarged Audiveris",
+    "Additional frozen neural OMR baseline",
+    "Seven-song decoding pilot",
+    "Independent one-sample integration control",
+    "32-reference deterministic transposition check"
+  ],
+  "pending_experiments": [
+    "B: general vision model",
+    "C: evidence-guided repair comparison",
+    "D: stronger/adapted perception comparison",
+    "E: verifier-agent comparison"
+  ],
+  "agent_implementation": {
+    "module": "goalagent",
+    "status": "live_model_directed_music_pilot_run",
+    "report": "runs/goal-agent-001-checked/report.html",
+    "agent_model": "gpt-6-astra via authenticated Codex CLI",
+    "controller_decisions": 11,
+    "recognition_calls": 7,
+    "product_goal_met": false,
+    "note": "Single controller with model-backed recognition tool; no trained weights or tested multi-agent improvement. Original benchmark and initial checker results preserved."
+  }
+}

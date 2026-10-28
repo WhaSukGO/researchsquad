@@ -1,0 +1,14 @@
+{
+  "sample_index": 1,
+  "id": "내이름으로_1",
+  "kind": "audiveris_text_harmony",
+  "reference_access": false,
+  "source_image_sha256": "0d8d864f885c302aafb273d9d5e2febb3dc768ee65faca53a9c82dccf877a3a1",
+  "output": "runs/goal-agent-001-checked/experiments/exp-33c9e801b310/sample-001/prediction.musicxml",
+  "status": "ok",
+  "recovered_words": [],
+  "source_prediction_sha256": "8c0e279cbc1c8a7ffa9e9742f1533554e340c357246a5d57d9f35d3988ce187d",
+  "timing_audited": false,
+  "elapsed_seconds": 0.0023830000009184005,
+  "output_sha256": "6f4ab45dba736dea4506838cf6fd24f4a246ae7a9eec468d2a8f0dd090edd1eb"
+}

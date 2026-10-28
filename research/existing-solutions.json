@@ -1,0 +1,92 @@
+{
+  "checked_on": "2026-10-28",
+  "selection_method": "Start from the concrete constraints: small lead-sheet crops, melody plus chord symbols, Humdrum, transposition, independent scoring, persistent goal-directed control. Follow primary project and framework sources; do not rank by multi-agent keyword popularity.",
+  "sources": [
+    {
+      "id": "jazzmus",
+      "category": "Recognition model",
+      "name": "Jazzmus / Optical Music Recognition of Jazz Lead Sheets",
+      "url": "https://arxiv.org/abs/2509.05329",
+      "code": "https://github.com/JuanCarlosMartinezSevilla/ISMIR-Jazzmus",
+      "model": "https://huggingface.co/JuanCarlosMartinezSevilla/jazzmus-model",
+      "why_relevant": "The task is explicitly melody plus chord symbols at staff level, with **kern and **mxhm output. This is a closer task match than a full-page melody-only path.",
+      "verified": "Read the paper HTML, official project, repository, inference source and model card. Public code and model checkpoint are available.",
+      "limitations": "Trained for jazz handwriting and synthetic fonts. Publisher warns about chord errors, implicit accidentals and different printed genres. No performance claim on the church data.",
+      "decision": "Highest-priority open-source recognition candidate for a subsequent paired benchmark; not installed or run in this investigation."
+    },
+    {
+      "id": "soundslice",
+      "category": "Existing user-facing product",
+      "name": "Soundslice",
+      "url": "https://www.soundslice.com/sheet-music-scanner/",
+      "capability_source": "https://www.soundslice.com/help/en/creating/pdf-import/294/supported-notations/",
+      "why_relevant": "Scans images/PDFs into editable notation, recognizes chord names, transposes, and exports MusicXML. Could already address much of the church workflow.",
+      "verified": "Read official scanner and supported-notation documentation.",
+      "limitations": "Vendor capabilities, not an independent accuracy result. Its documented pickup-bar limitation matters for our cropped inputs. Our local .krn chord dialect would need a tested MusicXML conversion.",
+      "decision": "Useful product comparator. No account created, purchase made, or church data uploaded."
+    },
+    {
+      "id": "scanscore",
+      "category": "Existing user-facing product",
+      "name": "ScanScore 3",
+      "url": "https://scan-score.com/en/faq/",
+      "why_relevant": "Official FAQ documents note/lyric/chord recognition, editing, transposition and MusicXML export.",
+      "verified": "Read official FAQ.",
+      "limitations": "Not benchmarked on our input; product capability does not establish quality. A .krn conversion remains necessary.",
+      "decision": "Another product comparator; not purchased or run."
+    },
+    {
+      "id": "langgraph",
+      "category": "Agent orchestration",
+      "name": "LangGraph",
+      "url": "https://docs.langchain.com/oss/python/langgraph/use-subgraphs",
+      "persistence_source": "https://docs.langchain.com/oss/python/langgraph/persistence",
+      "why_relevant": "Supports separate subgraph message histories through explicit input/output mapping and durable checkpoints. Fits per-agent goals and resumable work.",
+      "verified": "Read current official subgraph and persistence docs.",
+      "limitations": "Private state schemas are not OS security boundaries and do not automatically prevent a developer from passing answers. It does not supply a music recognizer or objective.",
+      "decision": "Good foundation when expanding the prototype. We retained the small existing runner for this controlled review experiment; no claim that a framework migration improves recognition."
+    },
+    {
+      "id": "inspect",
+      "category": "Evaluation infrastructure",
+      "name": "Inspect AI",
+      "url": "https://inspect.aisi.org.uk/scoring.html",
+      "solver_source": "https://inspect.aisi.org.uk/solvers.html",
+      "sandbox_source": "https://inspect.aisi.org.uk/sandboxing.html",
+      "why_relevant": "Has solvers, separate scorers, deferred scoring, logs and tool sandboxing. Reduces the amount of evaluation plumbing to maintain.",
+      "verified": "Read official solver, scoring and sandbox docs.",
+      "limitations": "TaskState exposes target to solver code. Choosing this framework alone does not guarantee blinding. Must deliberately exclude targets from model inputs and tool environments.",
+      "decision": "Prefer as evaluation infrastructure for larger campaigns after adapting our image provider and music metrics; not installed this turn."
+    },
+    {
+      "id": "smb",
+      "category": "Music evaluation",
+      "name": "Sheet Music Benchmark / OMR-NED",
+      "url": "https://arxiv.org/abs/2506.10488",
+      "why_relevant": "Provides a standard OMR dataset using Humdrum and a metric covering more notation details than our narrow event sequence metric.",
+      "verified": "Read primary paper abstract/version information; v3 dated July 1, 2026.",
+      "limitations": "A whole-notation score still does not measure Sunday rehearsal effort or guarantee our chord dialect is supported.",
+      "decision": "Use as an external comparison metric, while retaining explicit chord timing and musician correction time."
+    },
+    {
+      "id": "audiveris-scale",
+      "category": "Failure explanation",
+      "name": "Audiveris SCALE documentation",
+      "url": "https://audiveris.github.io/audiveris/_pages/explanation/steps/scale/",
+      "why_relevant": "Explains the staff-scale assumptions behind the rejection messages in our logs.",
+      "verified": "Read official scale-step docs and matched against local logs.",
+      "limitations": "Explains rejection, not the cause of every later recognition error.",
+      "decision": "Input geometry is a distinct intervention from model selection."
+    },
+    {
+      "id": "openai-evals",
+      "category": "Evaluation design",
+      "name": "OpenAI evaluation best practices",
+      "url": "https://developers.openai.com/api/docs/guides/evaluation-best-practices",
+      "why_relevant": "Supports task-specific measurements, logging, continuous regression evaluation and calibration with human judgments.",
+      "verified": "Read current official guide.",
+      "limitations": "General guidance does not supply a music correctness oracle or isolation mechanism.",
+      "decision": "Measure observable failures and compare automated scores with musician review."
+    }
+  ]
+}

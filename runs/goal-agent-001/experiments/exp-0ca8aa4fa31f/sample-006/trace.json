@@ -1,0 +1,29 @@
+{
+  "sample_index": 6,
+  "id": "내입술로_1",
+  "kind": "vision_kern",
+  "reference_access": false,
+  "source_image_sha256": "972a47424b1a0536164c5ebc9affb1cbb7f0c1ccb94aee25d0f619395be1a2d0",
+  "output": "runs/goal-agent-001/experiments/exp-0ca8aa4fa31f/sample-006/prediction.krn",
+  "status": "ok",
+  "uncertainties": [],
+  "model": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "elapsed_seconds": 79.79116741600046,
+    "exit_code": 0,
+    "usage": {
+      "input_tokens": 11702,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1553,
+      "reasoning_output_tokens": 1363
+    },
+    "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+    "unexpected_tool_events": [],
+    "billing": "Uses existing Codex account; monetary cost unavailable"
+  },
+  "elapsed_seconds": 79.79547966600148,
+  "output_sha256": "73655c58d1a45c510e35168c0a4711a2d0ced2f896a2ed3ea9b4971a18aa586e"
+}

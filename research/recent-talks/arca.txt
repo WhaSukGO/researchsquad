@@ -1,0 +1,537 @@
+Inside Arca’s long-horizon agents that run the business | AI Engineer NYC 2026
+Search…
+/
+Upcoming Events
+Past Events
+Talks
+Data/MCP/Skills
+About
+Talks
+Speakers
+Topics
+Organizations
+Data/MCP/Skills
+NYC 2026
+/
+All reading editions
+October 13
+, 2026
+Main stage
+4
+min read
+Inside Arca’s long-horizon agents that run the business
+Aman Singh follows one client’s tax payment across days of analysis, approval, trading, and settlement to show how Arca’s agents keep work moving between human decisions.
+Aman Singh
+Arca
+Lead AI Engineer
+Watch "
+Inside Arca’s long-horizon agents that run the business — conference livestream
+" on YouTube
+Watch
+From the conference livestream ·
+1:53:23
+–
+2:06:38
+on YouTube
+.
+The player starts and stops at this session’s boundaries.
+1:54:48
+↗
+Keep a tax payment moving across ten days
+Jane owes a large tax bill. Raising the cash means analyzing her holdings, choosing a tax-efficient plan, obtaining approval, trading assets, waiting for settlement, and moving the money. Several people and systems participate. The task can span days even when no individual step requires days of computation.
+Aman Singh calls this long-horizon work, distinguishing it from a model continuously generating tokens for hours. Financial services work is full of pauses, handoffs, and events outside the firm’s control. The challenge is remembering what should happen next and noticing when it becomes possible.
+Arca carries out this work as a financial-services firm. Its agents take responsibility for keeping the process moving, bringing people in when the next step needs their judgment or action.
+Follow Jane’s example at 1:55:22
+.
+1:57:46
+↗
+From an email to a shared plan
+The example begins with an email: Jane needs $100,000 for taxes. Background agents read that message as one signal among many. Calls, documents, meetings, custodian events, and market changes can all provide information relevant to ongoing work.
+The latest email leaves out information the agent needs:
+The firm’s process:
+how to handle this kind of request and who should participate.
+Jane’s history:
+including her earlier instruction never to sell her Apple position.
+A place to do the analysis:
+a sandbox for calculations, with tools and restrictions supplied by the agent’s harness.
+Together, these let the agent prepare a plan that respects more than the dollar amount in the new message.
+The result is a plan, but a plan cannot simply execute itself. Arca’s product gives the work a shared space where people can inspect it, discuss it with the agent, and perform the steps that require them. Multiple people can participate in the same work rather than holding separate private chats with incomplete context.
+In Jane’s case, a person approves the plan and the outgoing email. Then the task waits for a response. Someone—or something—must keep track of whether Jane replied and what her answer changes.
+1:59:44
+↗
+Subscribe to what must happen next
+Arca gives agents a way to register interest in future events. An agent can ask to be notified when Jane replies or when an ACH transfer lands. The signal system routes new events to the agents that care about them. Scheduled wakeups cover the case where the expected event never arrives.
+At
+2:00:01
+, the agent declares which future events should wake it. Waiting does not require continuous model execution.
+Real work rarely follows only the expected channel. Jane might never answer the email, but an in-person conversation could change the plan. When a colleague records that information in the product, the UI action becomes another signal. Rescheduling a calendar event or marking a task complete can do the same.
+In the example, the updated information reduces the required cash from $100,000 to $80,000. A background agent passes the change to the agent responsible for the shared space, which updates the plan. Operational context then tells it when to involve the person who trades the assets.
+The signal system therefore covers both the outside world and work inside the application. Persistent memory holds the state between events; the harness does the work when the agent wakes; collaboration brings in the appropriate person when a human action is due.
+2:02:29
+↗
+Do not turn every future obligation into a task
+With hundreds of signals arriving, coordination becomes a problem of its own. An agent can know that work remains and still pull in the wrong person, or pull in the right person too early. Arca has been improving the context agents receive, when they create tasks, and how they remember unfinished work.
+Singh makes a useful distinction between work to remember and work a person can do now. Future obligations belong in the agent’s memory. A task should appear on a person’s plate when it is actionable. Otherwise the system merely replaces human bookkeeping with a noisy queue of premature requests.
+Because Arca operates the service itself, it can also standardize how the firm works and incorporate that process into agent context. Colleagues’ explanations of why an action was right or wrong become evaluation material. That feedback helps refine both the agent and the workflow it follows.
+The resulting interface changes who prompts whom. A person logs in to find tasks the agents have already prepared, after reading the relevant messages and documents. Agents bring people into the process at the point where their participation matters.
+2:04:43
+↗
+Change the business goal, then the work
+Singh ends by reconsidering the initial email. Why did Jane have to ask about the tax bill at all? A proactive firm would prepare for it before the client raised the issue.
+He proposes a new business goal: every January, analyze each client’s tax situation and prepare the outreach. With the same signal, memory, analysis, and collaboration primitives, agents can drive that goal and bring prepared plans and approval-ready emails to the team.
+Singh’s ambition is to steer the firm by changing its agents’ goals. For Jane, the difference would be concrete: a prepared tax plan arrives before she has to ask for one. A person still approves the outreach, but no person has to remember to start the process.
+Full transcript
+206
+timestamped passages
+Machine transcription with reviewed terminology and names. Some recognition errors may remain. Timestamps refer to the livestream; subtitle downloads are timed to the session clips.
+1:53:23
+Good morning, everybody. Thank you for joining us today. It is such an honor to be sharing this stage with so many great speakers. So yeah, let's get right into it. My name's Aman. I lead AI at Arca.
+1:53:44
+and today I'm going to talk to you about ARCA's Long Horizon agents that run our business.
+1:53:51
+ARCA is an AI native services firm.
+1:53:55
+We provide our clients with financial services like financial planning, tax planning, asset management, investment advice,
+1:54:04
+and we serve a range of clients.
+1:54:06
+Some of them are like technology executives that have amassed a lot of wealth and need a real plan to retire early.
+1:54:13
+but also that family in New Hampshire that made their first million dollars
+1:54:17
+and want to buy that house finally.
+1:54:22
+I said we were AI native.
+1:54:25
+There's lots of definitions of this term these days, very overused.
+1:54:29
+What we mean by AI native is that agents run our business.
+1:54:36
+Not that they assist the business from some co-pilot corner.
+1:54:40
+They execute the decisions that shape the outcomes that our business has for our clients.
+1:54:48
+Work in this industry, it's interesting to know what it looks like.
+1:54:52
+In financial services, the work is more long horizon and less long running.
+1:54:57
+And what I mean by that is this is less agents grinding tokens for like hours or days on end, right?
+1:55:05
+This is more one client goal that spans 10 days.
+1:55:09
+It's very stop-start. There's many actors in between, many decision points, many handoffs, and ultimately that goal lands like 10 days later.
+1:55:19
+That is the kind of work that we are working on.
+1:55:23
+And so here's an example. Jane's our client, fairly wealthy, but has a big tax bill.
+1:55:28
+Oh. Has a big tax bill in April 15th, right?
+1:55:35
+So we're going to help Jane figure out what is the most tax-optimal way for this cash to be raised to pay the tax bill.
+1:55:45
+So there's the advisor that will do all of the statement analysis and the analysis of how to make this tax optimal.
+1:55:52
+There's the trader that would actually liquidate the assets.
+1:55:57
+assets themselves will take days to settle, and then the ops people will come in and trigger the ACH.
+1:56:03
+that will itself take days to land.
+1:56:06
+So this is kind of the work I'm talking about in this industry,
+1:56:09
+which takes days to settle.
+1:56:12
+And of course, if you do this at scale for several, several clients,
+1:56:16
+the amount of time our firm takes to do this sort of work exponentiates, right?
+1:56:20
+So at ARCA, we took a different approach.
+1:56:25
+It's helpful to know that ARCA is not a SaaS company.
+1:56:29
+We are not selling software to other businesses, to other firms.
+1:56:33
+We are the firm.
+1:56:35
+We're an applied AI company that happens to be running a services business in this industry.
+1:56:40
+And so the approach we took was, all right, we're going to have agents own this whole long horizon outcome end to end.
+1:56:47
+And for that, we gave them a couple of key components I'll give you a sneak peek of.
+1:56:52
+We gave them signals from the external world that keeps them really aware of what is happening.
+1:56:57
+So that email will be read by agents.
+1:57:00
+We gave them all of our operational context on what to do about that email.
+1:57:04
+What does this industry do with the situation of taxes?
+1:57:07
+We gave them a harness that gives them all of the tools and the guardrails,
+1:57:13
+and more importantly, persistence of memory over the long horizon period
+1:57:18
+to carry that work out.
+1:57:20
+And, of course, we gave them the ability to collaborate with people.
+1:57:26
+So that work with agents compresses a lot,
+1:57:31
+because all we did was we took humans out of the critical path of this work.
+1:57:36
+Nobody has to babysit this goal over days.
+1:57:40
+Agents are on it.
+1:57:41
+In this talk, I'd love to describe to you how we actually do that.
+1:57:46
+Let's follow the journey of this email.
+1:57:50
+Jane owes $100,000 for taxes.
+1:57:52
+this email, much like many other signals in our platform,
+1:57:59
+will be read by background agents.
+1:58:01
+So there's phone calls our firm is making,
+1:58:04
+there's documents that are coming in,
+1:58:05
+there's meetings being had,
+1:58:07
+there's events coming in from our custodian,
+1:58:09
+there's market movement that's happening.
+1:58:11
+These are all signals that our background agents
+1:58:13
+are continuously evaluating to progress work.
+1:58:17
+So this email is one of those signals.
+1:58:19
+And when the signal is ingested by agents,
+1:58:21
+they actually get to the work.
+1:58:22
+right? We have a harness that gives them the knowledge to know what to do about the situation.
+1:58:28
+They have deep client memory, so they know, hey, let's never touch Jane's Apple position,
+1:58:34
+because she said that in a call like eight months ago, right? We, of course, have a sandbox for all
+1:58:39
+of the financial computation that needs to happen for this analysis. But largely, I think harnesses
+1:58:45
+today are coalescing on a standard shape. So it's more interesting what happens outside of
+1:58:50
+this harness.
+1:58:54
+So, after they've done the work, they produce this plan.
+1:58:57
+This plan by itself cannot be executed without people.
+1:59:01
+So, in our product, we build a space, agents build a space, where they put out this plan,
+1:59:06
+and you can chat with the agent to kind of know what's happening with the plan.
+1:59:10
+There's multiple people that can be chatting with the agent.
+1:59:14
+And more importantly, this space is where also they pull people in when they need people
+1:59:19
+to execute some work.
+1:59:20
+So here in this case, we would approve the plan and the email out to Jane.
+1:59:26
+And then there's this whole dance of, has Jane replied?
+1:59:30
+What does her answer mean for the plan that we had?
+1:59:34
+And then all of these other questions that will have to be answered
+1:59:37
+throughout this whole long-horizon work.
+1:59:40
+At Arca, we were like, of course, we're not going to have people babysitting it.
+1:59:45
+So we let our agents watch the world so people don't have to.
+1:59:48
+We give them tools to be able to register interest in anything happening in our world.
+1:59:54
+So they're able to say, let me know when Jane responds.
+1:59:58
+Let me know when that ACH lands.
+2:00:00
+And this is powered by our signal system in the background,
+2:00:04
+where agents are routing signals to agents that are interested in it.
+2:00:10
+And of course, if the signal never lands,
+2:00:14
+agents can wake themselves up on a schedule as well
+2:00:17
+to keep track of work.
+2:00:21
+But then, of course, the real world is very messy, right?
+2:00:25
+People are waiting for that email,
+2:00:26
+but Jay never responds to that email.
+2:00:30
+Say we meet her in person,
+2:00:32
+and we learn some information that affects the plan.
+2:00:36
+So the person goes in,
+2:00:37
+and they add this information into our UI.
+2:00:41
+But this act of adding information or doing work in our UI
+2:00:44
+is also a signal that will wake up an agent.
+2:00:48
+In fact, when people work in our product,
+2:00:51
+when they reschedule a calendar event,
+2:00:54
+that's a signal.
+2:00:55
+When they mark a task complete, that is a signal.
+2:00:58
+So this system lets us be both aware
+2:01:02
+of everything happening in the external world
+2:01:04
+and the internal world as work is progressing
+2:01:07
+so our agents can participate in work.
+2:01:12
+and of course agents are communicating with each other as well
+2:01:15
+so this signal read by a background agent
+2:01:17
+we let it notify another agent about this
+2:01:20
+so that it can update the space to say
+2:01:22
+hey, we just need $80,000 instead of the $100,000
+2:01:26
+so the work has changed because of these signals
+2:01:30
+and the last piece of the story is that
+2:01:32
+agents are able to pull in the right people at the right time
+2:01:36
+So the agent on the left has read operational context
+2:01:39
+to be like, okay, the next step here
+2:01:42
+is to pull in the person that trades these assets.
+2:01:46
+And so that person now gets a task
+2:01:48
+and gets pulled in to participate in this long horizon work.
+2:01:53
+What we've done overall, if you take a step back,
+2:01:55
+is we've given our agents the primitives
+2:01:57
+for driving long horizon work.
+2:02:01
+What do people do at work, right?
+2:02:02
+They need to stay aware of what is happening,
+2:02:04
+so we've built this very intense signal system for our agents to be aware.
+2:02:09
+They need to know what to do next,
+2:02:11
+so we've given them all this operational context.
+2:02:13
+They need to do the work, so it's our harness
+2:02:15
+that lets them actually perform the work and keep track of it.
+2:02:18
+It's long persistence memory systems that hold the state
+2:02:24
+and bring in the right people at the right time.
+2:02:29
+This is a pretty simple idea on the face of it,
+2:02:32
+but there's a lot of emergent complexity.
+2:02:35
+You can imagine at any point,
+2:02:37
+there's hundreds of these signals coming in,
+2:02:39
+and tasks are being added on people's plates,
+2:02:44
+they're being pulled in,
+2:02:45
+background agents are communicating with each other.
+2:02:48
+So over the last six months,
+2:02:49
+we've been working on getting this system to be really good.
+2:02:53
+We've been closing all of our context gaps
+2:02:56
+so that agents are fully aware.
+2:02:58
+We have been working on the precision of tasks,
+2:03:01
+So pulling in the right person at the right time.
+2:03:04
+Work that needs to be tracked for the future is tracked in the agent's memory.
+2:03:08
+Work that is doable now becomes a task, right?
+2:03:11
+So we've been working on our ability to hold state over long horizons as well.
+2:03:16
+And because we are the firm and not just a SaaS company,
+2:03:20
+we've been changing and standardizing how work happens in the
+2:03:23
+firm in the first place.
+2:03:25
+And operationalizing that context into our agent state. And because these are our colleagues that use our product, we collect rich reasoning from them that become evals for our system to improve.
+2:03:39
+So I guess there's a question to be asked here, like, why do this? What does this unlock? What is the takeaway here?
+2:03:48
+For us, this is our whole thesis, is that we want our platform to be so AI native that agents drive the business.
+2:03:58
+Agents run the business.
+2:04:01
+They are making the decisions that shape our outcomes.
+2:04:04
+And so at ARCA, when people log in, they see a list of tasks that have been prepared for them by agents.
+2:04:12
+They've already read that email.
+2:04:13
+They've looked at the document that came in.
+2:04:16
+they've done like 90% of the work,
+2:04:18
+and they're pulling you in just when it's time for you to act.
+2:04:23
+So building this system lets us get to a point where at Arca,
+2:04:29
+agents prompt people more than people are prompting agents,
+2:04:32
+which lets our agents drive the work that our firm does.
+2:04:37
+And because agents are driving the work the firm does,
+2:04:41
+agents can drive the business.
+2:04:43
+Let me give you an example.
+2:04:44
+Remember that email that Jane sent us?
+2:04:47
+This is a bit of a failure, right?
+2:04:49
+Because we should have just been proactive about this in the first place, right?
+2:04:53
+So Jane should never have to send this email.
+2:04:56
+So say at, you know, our AI native business, we take on this new goal.
+2:05:01
+Our new goal is proactivity.
+2:05:06
+Every January, prepare each client's tax situation
+2:05:09
+and proactively reach out to them before anyone even asks.
+2:05:14
+This is a new business goal for our business to drive.
+2:05:16
+And in an AI native firm,
+2:05:20
+all we have to do is make this goal part of our agent's set of goals.
+2:05:25
+And because they have the primitives to be able to drive work
+2:05:29
+through people for the business,
+2:05:31
+they start driving this goal.
+2:05:33
+And just like that,
+2:05:35
+you have these analyses being done in January
+2:05:39
+and these one-click approval emails
+2:05:42
+with the full plan for every client showing up on our users' plates.
+2:05:47
+And because they're aligned with the goal of proactivity,
+2:05:50
+they can one-click approve and drive the business towards this new outcome.
+2:05:57
+So this is sort of, I think, the key difference
+2:06:02
+between a company that uses AI tools
+2:06:06
+versus a company that is AI native.
+2:06:11
+in an AI native company
+2:06:13
+you know you've built one
+2:06:14
+when you can steer your business
+2:06:16
+by steering your agents
+2:06:19
+and
+2:06:20
+that is our ambition
+2:06:23
+at Arca
+2:06:23
+and we are hiring
+2:06:27
+so
+2:06:28
+please check out our website
+2:06:30
+please reach out to me if this is something that you're
+2:06:32
+interested in working on, these sorts of problems
+2:06:34
+and thank you for listening
+2:06:38
+applause
+Download transcript
+Download subtitles
+← Previous session
+Wells Fargo Foundation Model: Application to Fraud Detection at Scale
+Next session →
+Intent Based Auth
+In this edition
+Keep a tax payment moving across ten days
+From an email to a shared plan
+Subscribe to what must happen next
+Do not turn every future obligation into a task
+Change the business goal, then the work
+Transcript & downloads ↓
+Conferences
+AI Engineer Miami 2027
+AI Engineer Code 2026
+AI Engineer Europe 2026
+AI Engineer Miami 2026
+AI Engineer NYC 2026
+AI Engineer Paris 2026
+AI Engineer Shanghai 2026
+AI Engineer Singapore 2026
+AI Engineer World's Fair 2026
+AI Engineer Code 2025
+AI Engineer Paris 2025
+AI Engineer Summit 2025
+AI Engineer World's Fair 2025
+AI Engineer World's Fair 2024
+AI Engineer Summit 2023
+GitHub
+Twitter
+LinkedIn
+YouTube
+Code of Conduct
+Privacy
+Terms of Service
+©
+2026
+AI Engineer

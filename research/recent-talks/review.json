@@ -1,0 +1,49 @@
+{
+  "reviewed_on": "2026-10-27",
+  "selection_method": "Followed the official October NYC conference program by project decisions: learning from experiments, process validation, and recoverable long-horizon execution. Not a generic multi-agent keyword ranking.",
+  "coverage": "Full available machine transcripts of the three sessions below. Video frames were not inspected. These are practitioner accounts, not independent music-recognition experiments.",
+  "sources": [
+    {
+      "id": "prime-intellect-2026-10-14",
+      "title": "Self-Improving Organizations — Will Brown, Prime Intellect",
+      "date": "2026-10-14",
+      "date_type": "conference session",
+      "url": "https://ai.engineer/nyc/2026/talks/prime-intellect",
+      "domain": "autonomous_experimentation",
+      "transcript": "research/recent-talks/prime-intellect.txt",
+      "reviewed_range": "7:05:28–7:25:22 in the livestream",
+      "claim": "At 7:16:31–7:19:22, Brown proposes starting with evaluations and comparing routes before investing in training. At 7:23:51–7:24:57 he describes an internal continual-learning prototype.",
+      "application": "Keep the controller, recognition model, evaluation and durable evidence separate. Compare candidate changes before adopting them; retain failed attempts as evidence.",
+      "limit": "The talk is partly a proposed direction and internal prototype. It provides no controlled evidence that training or additional agents will improve these music scores. Our first version updates its plan and memory, not its model weights.",
+      "transcript_sha256": "98b5a7d693819371763da7459d0cc1577cf2719e137ea79ddae3cba3fb21433c"
+    },
+    {
+      "id": "basis-2026-10-14",
+      "title": "Process Supervision for Agents That Do Long-Horizon Work — Mitchell Troyanovsky, Basis",
+      "date": "2026-10-14",
+      "date_type": "conference session",
+      "url": "https://ai.engineer/nyc/2026/talks/basis",
+      "domain": "process_evaluation",
+      "transcript": "research/recent-talks/basis.txt",
+      "reviewed_range": "8:09:22–8:28:28 in the livestream",
+      "claim": "At 8:19:42–8:22:42, Troyanovsky contrasts explaining a discrepancy with inserting an unsupported adjustment, and describes behavior specifications. At 8:22:48–8:26:17 he describes forks and cheap simulations for diagnosing decisions.",
+      "application": "Write invariant tests for false success, altered references, unsupported actions and repeated execution. Keep musical outcome scores separate from checks on the agent's behavior.",
+      "limit": "Process compliance is evidence about execution, not proof of correct music. Simulated controller tests do not replace live end-to-end experiments.",
+      "transcript_sha256": "7df751d7d40b135a25feb19c59d154da68b8e27057331161f8b47a8e7593adde"
+    },
+    {
+      "id": "arca-2026-10-13",
+      "title": "Inside Arca’s long-horizon agents that run the business — Aman Singh",
+      "date": "2026-10-13",
+      "date_type": "conference session",
+      "url": "https://ai.engineer/nyc/2026/talks/arca",
+      "domain": "durable_execution",
+      "transcript": "research/recent-talks/arca.txt",
+      "reviewed_range": "1:53:23–2:06:38 in the livestream",
+      "claim": "At 1:54:48–1:57:20, Singh distinguishes long-horizon work from continuous generation. At 1:59:45–2:03:25 he describes signals, persistent state and bringing people in when action is possible.",
+      "application": "Persist decisions, pending actions and results. Resume completed experiments from receipts and expose unmet requirements explicitly instead of looping indefinitely.",
+      "limit": "The financial-services example is a practitioner account without a controlled ablation. Our local prototype has manual resume, not Arca's external event integrations or production scale.",
+      "transcript_sha256": "c061bd6219d990a420e0ecd1093f72944262a1195b1c40da76207e08d621bd92"
+    }
+  ]
+}

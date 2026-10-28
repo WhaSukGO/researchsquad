@@ -1,0 +1,13 @@
+{
+  "events": [],
+  "chords": [],
+  "parse_ok": false,
+  "render_ok": true,
+  "raw_render_ok": true,
+  "adapter_actions": [],
+  "errors": [
+    "parse: ZeroDivisionError('float division by zero')"
+  ],
+  "render_pages": 1,
+  "renderer_log": ""
+}

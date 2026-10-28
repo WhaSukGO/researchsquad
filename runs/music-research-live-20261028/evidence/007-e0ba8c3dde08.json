@@ -1,0 +1,9 @@
+{
+  "step": 7,
+  "decision": null,
+  "observation": {
+    "id": "decision-error-7",
+    "error": "ValueError",
+    "detail": "Debug requires a failed parent"
+  }
+}

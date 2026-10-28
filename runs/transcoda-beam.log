@@ -1,0 +1,12 @@
+W1027 11:17:28.266000 7712 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+2026-10-27 11:17:29.263 | INFO     | transformers_modules.transcoda_hyphen_hf.encoder:_load_transformers:70 - Loaded transformers encoder: facebook/convnextv2-tiny-22k-224, output_dim=768
+2026-10-27 11:17:29.263 | INFO     | transformers_modules.transcoda_hyphen_hf.encoder:load:46 - Loaded encoder 'facebook/convnextv2-tiny-22k-224' via transformers with output dimension 768
+2026-10-27 11:17:29.264 | WARNING  | transformers_modules.transcoda_hyphen_hf.modeling_transcoda:__init__:781 - Encoder facebook/convnextv2-tiny-22k-224 does not support gradient checkpointing
+The following generation flags are not valid and may be ignored: ['early_stopping']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+transcoda-beam 1/32 ok 11.5s
+transcoda-beam 6/32 ok 5.4s
+transcoda-beam 12/32 ok 8.7s
+transcoda-beam 17/32 ok 5.7s
+transcoda-beam 19/32 ok 4.6s
+transcoda-beam 23/32 ok 3.8s
+transcoda-beam 29/32 ok 3.8s

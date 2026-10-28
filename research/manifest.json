@@ -1,0 +1,386 @@
+[
+  {
+    "id": "내이름으로_1",
+    "song": "내이름으로",
+    "image": "research/data/내이름으로_1.png",
+    "reference": "research/data/내이름으로_1.krn",
+    "image_sha256": "0d8d864f885c302aafb273d9d5e2febb3dc768ee65faca53a9c82dccf877a3a1",
+    "reference_sha256": "94d9eeaa48b2ed7a258f05424a941dc52c0db389d47bd7cde9a92cf889f7cbc4",
+    "size": [
+      750,
+      107
+    ]
+  },
+  {
+    "id": "내이름으로_2",
+    "song": "내이름으로",
+    "image": "research/data/내이름으로_2.png",
+    "reference": "research/data/내이름으로_2.krn",
+    "image_sha256": "96a25feab65d7c38b4de96958f4a4acf8ef6d0d995a2cd470cdf065db9eb1a45",
+    "reference_sha256": "7b5a42f7ae53fac357d7dd44c430be76b5f3c5960a5ff9feae55560a966a6ef4",
+    "size": [
+      750,
+      124
+    ]
+  },
+  {
+    "id": "내이름으로_3",
+    "song": "내이름으로",
+    "image": "research/data/내이름으로_3.png",
+    "reference": "research/data/내이름으로_3.krn",
+    "image_sha256": "a89dd94aaacc1bc1126e5778af441813ae20db403a7130e0f0ab98ce3d0464d6",
+    "reference_sha256": "c654e037795d76ceba723b7a7ee9aa012c0496bca17f54d801ff3b3dd34f8813",
+    "size": [
+      745,
+      106
+    ]
+  },
+  {
+    "id": "내이름으로_4",
+    "song": "내이름으로",
+    "image": "research/data/내이름으로_4.png",
+    "reference": "research/data/내이름으로_4.krn",
+    "image_sha256": "ae220d2eb7e145d571bdacd041170106071780f2defda0e8f710fc48f3c88069",
+    "reference_sha256": "2c71f36d9b5177f984016233c6d1727ffc0e42762d5914492c36d8ca06e6829e",
+    "size": [
+      750,
+      107
+    ]
+  },
+  {
+    "id": "내이름으로_5",
+    "song": "내이름으로",
+    "image": "research/data/내이름으로_5.png",
+    "reference": "research/data/내이름으로_5.krn",
+    "image_sha256": "88e33641cd2001a777aaa39a4561f7ada3b0c4e1a5f31d53119dea95b99bb60a",
+    "reference_sha256": "e84c17255f6f7102c3b4760d742203b73660e87cf248020d7aeb71cd11fdf8f1",
+    "size": [
+      750,
+      107
+    ]
+  },
+  {
+    "id": "내입술로_1",
+    "song": "내입술로",
+    "image": "research/data/내입술로_1.png",
+    "reference": "research/data/내입술로_1.krn",
+    "image_sha256": "972a47424b1a0536164c5ebc9affb1cbb7f0c1ccb94aee25d0f619395be1a2d0",
+    "reference_sha256": "1050f6291d23c85f231d028fcb972eba3faf554c69408d06af69a8d2ffbe58f9",
+    "size": [
+      1000,
+      128
+    ]
+  },
+  {
+    "id": "내입술로_2",
+    "song": "내입술로",
+    "image": "research/data/내입술로_2.png",
+    "reference": "research/data/내입술로_2.krn",
+    "image_sha256": "fdfd63117354edbad818e89a99f323c307c79a03259a4aa9576fa1be616ed7ff",
+    "reference_sha256": "c61c09318081644f5bcd5c0aff64c8b50fe4eea1ee1eecc8cbad5413939b1fa2",
+    "size": [
+      500,
+      72
+    ]
+  },
+  {
+    "id": "내입술로_3",
+    "song": "내입술로",
+    "image": "research/data/내입술로_3.png",
+    "reference": "research/data/내입술로_3.krn",
+    "image_sha256": "da5a0877601ae8a0cf364db93452ac81a17b65601198a77430eca7ca15d69244",
+    "reference_sha256": "f428eef9efb7ff3d008ac9b6d85e71dc0f8a697197c6696ff06612ed0ede4b80",
+    "size": [
+      500,
+      72
+    ]
+  },
+  {
+    "id": "내입술로_4",
+    "song": "내입술로",
+    "image": "research/data/내입술로_4.png",
+    "reference": "research/data/내입술로_4.krn",
+    "image_sha256": "a0f2bed5b14f9f16a247f06cc28e2f0a2646a19c931a23ae55a83f18f7581c34",
+    "reference_sha256": "9d59849283a7c96b6d74b5a1aa1883a63e86f54b8387fa4306306a6483963580",
+    "size": [
+      500,
+      72
+    ]
+  },
+  {
+    "id": "내입술로_5",
+    "song": "내입술로",
+    "image": "research/data/내입술로_5.png",
+    "reference": "research/data/내입술로_5.krn",
+    "image_sha256": "e9d5f06f08304443fdc46e5baa17c79714b6938ba3f271a0a4e14bd61d692d92",
+    "reference_sha256": "605b06c1d1ca156e8c740bb51939b00f742dfd164dc6419e0befc09b31e5012f",
+    "size": [
+      500,
+      72
+    ]
+  },
+  {
+    "id": "내입술로_6",
+    "song": "내입술로",
+    "image": "research/data/내입술로_6.png",
+    "reference": "research/data/내입술로_6.krn",
+    "image_sha256": "76a71c9cedc857aef87ec066ad044bc2ffed79e911fe6272a1472b2893a8742d",
+    "reference_sha256": "c4d4e73c0d812973337652a22b2016e772d462369ef7b3ab5fbe4bf357d3f084",
+    "size": [
+      500,
+      72
+    ]
+  },
+  {
+    "id": "내입술의_1",
+    "song": "내입술의",
+    "image": "research/data/내입술의_1.png",
+    "reference": "research/data/내입술의_1.krn",
+    "image_sha256": "f3ce5694398cf0f340183c13db0939fe7679217b4f410e8e5bd7219b42a1367e",
+    "reference_sha256": "10cb8f05fd6ac5d9b1a8579bbd8dccdce4933a0010801a4125d63d5f44206f40",
+    "size": [
+      859,
+      123
+    ]
+  },
+  {
+    "id": "내입술의_2",
+    "song": "내입술의",
+    "image": "research/data/내입술의_2.png",
+    "reference": "research/data/내입술의_2.krn",
+    "image_sha256": "505a4f681e8608fcadceeac4db1f7efca0713a10c22148731322485d488a01a2",
+    "reference_sha256": "ff65335d274dab549e43b6fd2306e9ac38026cb716064b7abba01ab45899c32a",
+    "size": [
+      859,
+      123
+    ]
+  },
+  {
+    "id": "내입술의_3",
+    "song": "내입술의",
+    "image": "research/data/내입술의_3.png",
+    "reference": "research/data/내입술의_3.krn",
+    "image_sha256": "8a1d001a1980f446887f7634d76ac512525588a34b030600404c3e0f73ee3325",
+    "reference_sha256": "fc1c1154fce797678e9a8b6328edbfd534e3e628883f4909e2ccea397317e0ba",
+    "size": [
+      859,
+      123
+    ]
+  },
+  {
+    "id": "내입술의_4",
+    "song": "내입술의",
+    "image": "research/data/내입술의_4.png",
+    "reference": "research/data/내입술의_4.krn",
+    "image_sha256": "a594562cea35dd6d00fba34275096b4e480da0b8431f3b3b62f6843c4d1ce8ea",
+    "reference_sha256": "4783c0b5e5e84c9a3effeb3060e08f9aaa3a24d4ed0494294f31f77813caebac",
+    "size": [
+      859,
+      123
+    ]
+  },
+  {
+    "id": "내입술의_5",
+    "song": "내입술의",
+    "image": "research/data/내입술의_5.png",
+    "reference": "research/data/내입술의_5.krn",
+    "image_sha256": "99387e461248873101cb6e7e8afd8bf997673e4d9e6530340d359be2b7493af7",
+    "reference_sha256": "9ac719688a695f4076e17f90c8738dc4ca8321c574f44596f43aeff76066a5c0",
+    "size": [
+      861,
+      123
+    ]
+  },
+  {
+    "id": "능력의_1",
+    "song": "능력의",
+    "image": "research/data/능력의_1.png",
+    "reference": "research/data/능력의_1.krn",
+    "image_sha256": "8f13d1617a03312ecad7f3db34d729e4b8625d2419082d32d1117d70a50bc455",
+    "reference_sha256": "40e2468ea25d5a80ae400d309a961d4863a63d0531f4477fa5a1fe9eabb59510",
+    "size": [
+      750,
+      107
+    ]
+  },
+  {
+    "id": "능력의_2",
+    "song": "능력의",
+    "image": "research/data/능력의_2.png",
+    "reference": "research/data/능력의_2.krn",
+    "image_sha256": "ecc45250bd0e83a7d5e324bd23817a0e00c507a0da3d541e250952cc3e38cdb3",
+    "reference_sha256": "e845b74e9f5631205abd6cb70b66ef24b47b536efcb258bb308079a5804ae863",
+    "size": [
+      500,
+      72
+    ]
+  },
+  {
+    "id": "사랑하셔서_1",
+    "song": "사랑하셔서",
+    "image": "research/data/사랑하셔서_1.png",
+    "reference": "research/data/사랑하셔서_1.krn",
+    "image_sha256": "a18b3002935f808e29d96f6c604e2df8188be0291b26452091f2e9511555e620",
+    "reference_sha256": "1de58b732007b11b0b0d32a2c9c02e26ac5fa0065e632f6cab6e7d8afdd21891",
+    "size": [
+      952,
+      136
+    ]
+  },
+  {
+    "id": "사랑하셔서_2",
+    "song": "사랑하셔서",
+    "image": "research/data/사랑하셔서_2.png",
+    "reference": "research/data/사랑하셔서_2.krn",
+    "image_sha256": "0d04ed314da3b87e6fa678654122e23db757d36aac9c88846e031c241c65ef5c",
+    "reference_sha256": "6b235d031d8dfa788f37d00e1ecadfdd88fefc1286d536ba20610571ea619cec",
+    "size": [
+      956,
+      136
+    ]
+  },
+  {
+    "id": "사랑하셔서_3",
+    "song": "사랑하셔서",
+    "image": "research/data/사랑하셔서_3.png",
+    "reference": "research/data/사랑하셔서_3.krn",
+    "image_sha256": "ce220e65f31435e868c6382a0997dbd4b1daef1782c45f19c54f5db793353e8c",
+    "reference_sha256": "34e7d00e7fb264e482099105aa2dda1ddd8796cf0d21bae9d5c1577015434ed7",
+    "size": [
+      952,
+      136
+    ]
+  },
+  {
+    "id": "사랑하셔서_4",
+    "song": "사랑하셔서",
+    "image": "research/data/사랑하셔서_4.png",
+    "reference": "research/data/사랑하셔서_4.krn",
+    "image_sha256": "058a04f85079433e29d221ae1e39e348f3ec8d97b3ef7014a564a19a3c163089",
+    "reference_sha256": "56128caa704bd3e35a392d21f7104a3f8eaa1b70ab6ad5b1a3c256fb98e48fbe",
+    "size": [
+      956,
+      136
+    ]
+  },
+  {
+    "id": "성령이여_1",
+    "song": "성령이여",
+    "image": "research/data/성령이여_1.png",
+    "reference": "research/data/성령이여_1.krn",
+    "image_sha256": "f5cfddb59f9af825ec9afc53e29094299e61d0669317d83eed8e7f3e7e50a9e5",
+    "reference_sha256": "0ad7eea9f333d68e58801969ec2b2ed21a1d71c677d4ca560a1c5156d257da9d",
+    "size": [
+      715,
+      102
+    ]
+  },
+  {
+    "id": "성령이여_2",
+    "song": "성령이여",
+    "image": "research/data/성령이여_2.png",
+    "reference": "research/data/성령이여_2.krn",
+    "image_sha256": "15f19d05b60f8ae02405749ecbcdd8f9e012e5f2be26da8eeeef153c0fc20e3c",
+    "reference_sha256": "6e68f6094eed0b45adbfa795f429547c19eb840afc7f7f0b11f1864986afd9e2",
+    "size": [
+      715,
+      102
+    ]
+  },
+  {
+    "id": "성령이여_3",
+    "song": "성령이여",
+    "image": "research/data/성령이여_3.png",
+    "reference": "research/data/성령이여_3.krn",
+    "image_sha256": "9ab06c59b250d581ead88e482966e4271a1594035a09fca138ea565d106537f7",
+    "reference_sha256": "8a6cc4d0ce7f85a6d44dfe1306bfe741c6ec3c72c020d6efa96429622772405f",
+    "size": [
+      709,
+      101
+    ]
+  },
+  {
+    "id": "성령이여_4",
+    "song": "성령이여",
+    "image": "research/data/성령이여_4.png",
+    "reference": "research/data/성령이여_4.krn",
+    "image_sha256": "d4090f2cf407ee2f8a93c50cbba4ab89e910b1905629b9987dc42da2a3808bf5",
+    "reference_sha256": "fb14a51ff04661e4fc74e4d23937989921d47fe286607627511efb1c2eed774d",
+    "size": [
+      715,
+      102
+    ]
+  },
+  {
+    "id": "성령이여_5",
+    "song": "성령이여",
+    "image": "research/data/성령이여_5.png",
+    "reference": "research/data/성령이여_5.krn",
+    "image_sha256": "7c6298cfd6fa33dbb56df29b430763b9d81275b0e3ba3487e33505007667eba1",
+    "reference_sha256": "1da5f8bfb7b8d49850e465a500d4976b9f803072388bdc85da704c0b76d38414",
+    "size": [
+      715,
+      102
+    ]
+  },
+  {
+    "id": "성령이여_6",
+    "song": "성령이여",
+    "image": "research/data/성령이여_6.png",
+    "reference": "research/data/성령이여_6.krn",
+    "image_sha256": "49ce3b78236754d35a295ac568fea260921825e5192438f3ce812e0827d7b0d2",
+    "reference_sha256": "dff0e2cfd95093cd3f3ccee021f380cd42078b808569c757ca2a53e5d05ae48a",
+    "size": [
+      715,
+      102
+    ]
+  },
+  {
+    "id": "주품에_1",
+    "song": "주품에",
+    "image": "research/data/주품에_1.png",
+    "reference": "research/data/주품에_1.krn",
+    "image_sha256": "d5f7503b2990726b767c11babf0c0ebe06aa462d0317baf54e82d3233668bf26",
+    "reference_sha256": "342f93bef652c00a0139520579d8582de32e151639a890c88c3ba31d49fda938",
+    "size": [
+      745,
+      106
+    ]
+  },
+  {
+    "id": "주품에_2",
+    "song": "주품에",
+    "image": "research/data/주품에_2.png",
+    "reference": "research/data/주품에_2.krn",
+    "image_sha256": "81dfb61f771e6833ab0ffe67a5f3c498ff2954dcf953e4df9db795c4281888e1",
+    "reference_sha256": "67cb2cd37ba4f7ad841f4f3444831c745c1d532c8b0ef856215e3cc68d6e770e",
+    "size": [
+      500,
+      72
+    ]
+  },
+  {
+    "id": "주품에_3",
+    "song": "주품에",
+    "image": "research/data/주품에_3.png",
+    "reference": "research/data/주품에_3.krn",
+    "image_sha256": "759cd942ed879748b8edb39e2d31b6d25e056706c28245ee92fcbac05a0a9580",
+    "reference_sha256": "a025cd09d0c8e3ffb5a344c8212e35806690bde2ca90e779c8a8d56e4ba05aa7",
+    "size": [
+      750,
+      107
+    ]
+  },
+  {
+    "id": "주품에_4",
+    "song": "주품에",
+    "image": "research/data/주품에_4.png",
+    "reference": "research/data/주품에_4.krn",
+    "image_sha256": "68374dc60382264353fdbc6f2bf955a00a53f453303751d2cee9b9681b3187d5",
+    "reference_sha256": "c28fa69fe94ee4b0fdcc4c92345923ad4516a8eb996dfb265c5aade87291174f",
+    "size": [
+      750,
+      109
+    ]
+  }
+]

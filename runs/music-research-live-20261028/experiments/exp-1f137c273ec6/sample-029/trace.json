@@ -1,0 +1,11 @@
+{
+  "sample_index": 29,
+  "id": "주품에_1",
+  "kind": "worker",
+  "reference_access": false,
+  "status": "ok",
+  "error": null,
+  "output": "/Users/geegle/development/whasuk/researchagent/runs/music-research-live-20261028/experiments/exp-1f137c273ec6/sample-029/prediction.krn",
+  "output_sha256": "551bd9c2f6826632c9c36e1b7e7f4968ece8eaf94377ab06a3381b6efd620887",
+  "source_image_sha256": "d5f7503b2990726b767c11babf0c0ebe06aa462d0317baf54e82d3233668bf26"
+}

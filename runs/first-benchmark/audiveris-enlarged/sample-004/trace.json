@@ -1,0 +1,25 @@
+{
+  "id": "내이름으로_4",
+  "engine": "audiveris-enlarged",
+  "source_image": "research/data/내이름으로_4.png",
+  "source_image_sha256": "ae220d2eb7e145d571bdacd041170106071780f2defda0e8f710fc48f3c88069",
+  "input_sha256": "0ed680eda19618e684d75e960095dd369d4b0940770a3227c9b351f06d012970",
+  "started_unix": 1793066885.120405,
+  "reference_access": false,
+  "runner_sha256": "ab8fa3e423930b13d2c94b4c190d1ac7f8d9c7975dcdaef8e10ebf6347e240b5",
+  "exit_code": 0,
+  "status": "ok",
+  "output": "runs/first-benchmark/audiveris-enlarged/sample-004/input.mxl",
+  "command": [
+    "/Users/geegle/development/whasuk/researchagent/.cache/audiveris-mount/Audiveris.app/Contents/MacOS/Audiveris",
+    "-batch",
+    "-transcribe",
+    "-export",
+    "-output",
+    "/Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-004",
+    "--",
+    "/Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-004/input.png"
+  ],
+  "elapsed_seconds": 5.556793834000018,
+  "output_sha256": "d8740ff377c8d081e40afb3b8a4519ed4831ed08c5a01c61d34546fc100c2dd2"
+}

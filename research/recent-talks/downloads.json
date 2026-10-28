@@ -1,0 +1,23 @@
+[
+  {
+    "id": "prime-intellect",
+    "url": "https://ai.engineer/nyc/2026/talks/prime-intellect",
+    "sha256": "98b5a7d693819371763da7459d0cc1577cf2719e137ea79ddae3cba3fb21433c",
+    "characters": 33591,
+    "source": "Official session page, including machine transcript"
+  },
+  {
+    "id": "basis",
+    "url": "https://ai.engineer/nyc/2026/talks/basis",
+    "sha256": "7df751d7d40b135a25feb19c59d154da68b8e27057331161f8b47a8e7593adde",
+    "characters": 31194,
+    "source": "Official session page, including machine transcript"
+  },
+  {
+    "id": "arca",
+    "url": "https://ai.engineer/nyc/2026/talks/arca",
+    "sha256": "c061bd6219d990a420e0ecd1093f72944262a1195b1c40da76207e08d621bd92",
+    "characters": 20144,
+    "source": "Official session page, including machine transcript"
+  }
+]

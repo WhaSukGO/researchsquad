@@ -1,0 +1,658 @@
+Evaluated audiveris-raw: 32 samples
+Evaluated audiveris-enlarged: 32 samples
+Evaluated transcoda-greedy: 32 samples
+{
+  "audiveris-raw": {
+    "samples": 32,
+    "execution_status": {
+      "no_output": 31,
+      "ok": 1
+    },
+    "files_returned": 1,
+    "parseable": 1,
+    "renderable": 1,
+    "exact_melody_and_chords": 0,
+    "exact_melody": 0,
+    "median_melody_error_rate": 1.0,
+    "melody": {
+      "reference_count": 570,
+      "prediction_count": 16,
+      "matches": 0,
+      "errors": 570,
+      "substitutions": 16,
+      "deletions": 554,
+      "insertions": 0,
+      "error_rate": 1.0,
+      "f1": 0.0
+    },
+    "pitch_only": {
+      "reference_count": 570,
+      "prediction_count": 16,
+      "matches": 0,
+      "errors": 570,
+      "substitutions": 16,
+      "deletions": 554,
+      "insertions": 0,
+      "error_rate": 1.0,
+      "f1": 0.0
+    },
+    "chords": {
+      "reference_count": 200,
+      "prediction_count": 0,
+      "matches": 0,
+      "errors": 200,
+      "substitutions": 0,
+      "deletions": 200,
+      "insertions": 0,
+      "error_rate": 1.0,
+      "f1": 0.0
+    },
+    "median_seconds": 1.6400368330000674,
+    "total_sample_seconds": 55.75117053800341,
+    "per_song": {
+      "내이름으로": {
+        "melody": {
+          "reference_count": 63,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 63,
+          "substitutions": 0,
+          "deletions": 63,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 25,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 25,
+          "substitutions": 0,
+          "deletions": 25,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "내입술로": {
+        "melody": {
+          "reference_count": 121,
+          "prediction_count": 16,
+          "matches": 0,
+          "errors": 121,
+          "substitutions": 16,
+          "deletions": 105,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 31,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 31,
+          "substitutions": 0,
+          "deletions": 31,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "내입술의": {
+        "melody": {
+          "reference_count": 119,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 119,
+          "substitutions": 0,
+          "deletions": 119,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 43,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 43,
+          "substitutions": 0,
+          "deletions": 43,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "능력의": {
+        "melody": {
+          "reference_count": 37,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 37,
+          "substitutions": 0,
+          "deletions": 37,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 24,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 24,
+          "substitutions": 0,
+          "deletions": 24,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "사랑하셔서": {
+        "melody": {
+          "reference_count": 86,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 86,
+          "substitutions": 0,
+          "deletions": 86,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 27,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 27,
+          "substitutions": 0,
+          "deletions": 27,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "성령이여": {
+        "melody": {
+          "reference_count": 96,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 96,
+          "substitutions": 0,
+          "deletions": 96,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 27,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 27,
+          "substitutions": 0,
+          "deletions": 27,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "주품에": {
+        "melody": {
+          "reference_count": 48,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 48,
+          "substitutions": 0,
+          "deletions": 48,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 23,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 23,
+          "substitutions": 0,
+          "deletions": 23,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      }
+    }
+  },
+  "audiveris-enlarged": {
+    "samples": 32,
+    "execution_status": {
+      "ok": 32
+    },
+    "files_returned": 32,
+    "parseable": 31,
+    "renderable": 32,
+    "exact_melody_and_chords": 0,
+    "exact_melody": 2,
+    "median_melody_error_rate": 0.7596153846153846,
+    "melody": {
+      "reference_count": 570,
+      "prediction_count": 548,
+      "matches": 244,
+      "errors": 349,
+      "substitutions": 281,
+      "deletions": 45,
+      "insertions": 23,
+      "error_rate": 0.612280701754386,
+      "f1": 0.4364937388193202
+    },
+    "pitch_only": {
+      "reference_count": 570,
+      "prediction_count": 548,
+      "matches": 268,
+      "errors": 324,
+      "substitutions": 258,
+      "deletions": 44,
+      "insertions": 22,
+      "error_rate": 0.5684210526315789,
+      "f1": 0.47942754919499103
+    },
+    "chords": {
+      "reference_count": 200,
+      "prediction_count": 47,
+      "matches": 47,
+      "errors": 153,
+      "substitutions": 0,
+      "deletions": 153,
+      "insertions": 0,
+      "error_rate": 0.765,
+      "f1": 0.3805668016194332
+    },
+    "median_seconds": 6.687896146000185,
+    "total_sample_seconds": 207.11325641800022,
+    "per_song": {
+      "내이름으로": {
+        "melody": {
+          "reference_count": 63,
+          "prediction_count": 52,
+          "matches": 18,
+          "errors": 46,
+          "substitutions": 33,
+          "deletions": 12,
+          "insertions": 1,
+          "error_rate": 0.7301587301587301,
+          "f1": 0.3130434782608696
+        },
+        "chords": {
+          "reference_count": 25,
+          "prediction_count": 1,
+          "matches": 1,
+          "errors": 24,
+          "substitutions": 0,
+          "deletions": 24,
+          "insertions": 0,
+          "error_rate": 0.96,
+          "f1": 0.07692307692307693
+        }
+      },
+      "내입술로": {
+        "melody": {
+          "reference_count": 121,
+          "prediction_count": 118,
+          "matches": 16,
+          "errors": 110,
+          "substitutions": 97,
+          "deletions": 8,
+          "insertions": 5,
+          "error_rate": 0.9090909090909091,
+          "f1": 0.13389121338912133
+        },
+        "chords": {
+          "reference_count": 31,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 31,
+          "substitutions": 0,
+          "deletions": 31,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "내입술의": {
+        "melody": {
+          "reference_count": 119,
+          "prediction_count": 119,
+          "matches": 112,
+          "errors": 9,
+          "substitutions": 5,
+          "deletions": 2,
+          "insertions": 2,
+          "error_rate": 0.07563025210084033,
+          "f1": 0.9411764705882353
+        },
+        "chords": {
+          "reference_count": 43,
+          "prediction_count": 19,
+          "matches": 19,
+          "errors": 24,
+          "substitutions": 0,
+          "deletions": 24,
+          "insertions": 0,
+          "error_rate": 0.5581395348837209,
+          "f1": 0.6129032258064516
+        }
+      },
+      "능력의": {
+        "melody": {
+          "reference_count": 37,
+          "prediction_count": 43,
+          "matches": 2,
+          "errors": 41,
+          "substitutions": 35,
+          "deletions": 0,
+          "insertions": 6,
+          "error_rate": 1.1081081081081081,
+          "f1": 0.05
+        },
+        "chords": {
+          "reference_count": 24,
+          "prediction_count": 4,
+          "matches": 4,
+          "errors": 20,
+          "substitutions": 0,
+          "deletions": 20,
+          "insertions": 0,
+          "error_rate": 0.8333333333333334,
+          "f1": 0.2857142857142857
+        }
+      },
+      "사랑하셔서": {
+        "melody": {
+          "reference_count": 86,
+          "prediction_count": 80,
+          "matches": 72,
+          "errors": 15,
+          "substitutions": 7,
+          "deletions": 7,
+          "insertions": 1,
+          "error_rate": 0.1744186046511628,
+          "f1": 0.8674698795180723
+        },
+        "chords": {
+          "reference_count": 27,
+          "prediction_count": 11,
+          "matches": 11,
+          "errors": 16,
+          "substitutions": 0,
+          "deletions": 16,
+          "insertions": 0,
+          "error_rate": 0.5925925925925926,
+          "f1": 0.5789473684210527
+        }
+      },
+      "성령이여": {
+        "melody": {
+          "reference_count": 96,
+          "prediction_count": 93,
+          "matches": 24,
+          "errors": 76,
+          "substitutions": 65,
+          "deletions": 7,
+          "insertions": 4,
+          "error_rate": 0.7916666666666666,
+          "f1": 0.25396825396825395
+        },
+        "chords": {
+          "reference_count": 27,
+          "prediction_count": 10,
+          "matches": 10,
+          "errors": 17,
+          "substitutions": 0,
+          "deletions": 17,
+          "insertions": 0,
+          "error_rate": 0.6296296296296297,
+          "f1": 0.5405405405405406
+        }
+      },
+      "주품에": {
+        "melody": {
+          "reference_count": 48,
+          "prediction_count": 43,
+          "matches": 0,
+          "errors": 52,
+          "substitutions": 39,
+          "deletions": 9,
+          "insertions": 4,
+          "error_rate": 1.0833333333333333,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 23,
+          "prediction_count": 2,
+          "matches": 2,
+          "errors": 21,
+          "substitutions": 0,
+          "deletions": 21,
+          "insertions": 0,
+          "error_rate": 0.9130434782608695,
+          "f1": 0.16
+        }
+      }
+    }
+  },
+  "transcoda-greedy": {
+    "samples": 32,
+    "execution_status": {
+      "ok": 28,
+      "generation_limit": 4
+    },
+    "files_returned": 32,
+    "parseable": 32,
+    "renderable": 32,
+    "exact_melody_and_chords": 0,
+    "exact_melody": 6,
+    "median_melody_error_rate": 0.9352226720647774,
+    "melody": {
+      "reference_count": 570,
+      "prediction_count": 3279,
+      "matches": 411,
+      "errors": 2873,
+      "substitutions": 154,
+      "deletions": 5,
+      "insertions": 2714,
+      "error_rate": 5.040350877192982,
+      "f1": 0.21356196414653156
+    },
+    "pitch_only": {
+      "reference_count": 570,
+      "prediction_count": 3279,
+      "matches": 471,
+      "errors": 2813,
+      "substitutions": 94,
+      "deletions": 5,
+      "insertions": 2714,
+      "error_rate": 4.935087719298245,
+      "f1": 0.24473889321901793
+    },
+    "chords": {
+      "reference_count": 200,
+      "prediction_count": 0,
+      "matches": 0,
+      "errors": 200,
+      "substitutions": 0,
+      "deletions": 200,
+      "insertions": 0,
+      "error_rate": 1.0,
+      "f1": 0.0
+    },
+    "median_seconds": 2.4550320835001003,
+    "total_sample_seconds": 425.5510009149998,
+    "per_song": {
+      "내이름으로": {
+        "melody": {
+          "reference_count": 63,
+          "prediction_count": 814,
+          "matches": 20,
+          "errors": 794,
+          "substitutions": 43,
+          "deletions": 0,
+          "insertions": 751,
+          "error_rate": 12.603174603174603,
+          "f1": 0.04561003420752566
+        },
+        "chords": {
+          "reference_count": 25,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 25,
+          "substitutions": 0,
+          "deletions": 25,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "내입술로": {
+        "melody": {
+          "reference_count": 121,
+          "prediction_count": 166,
+          "matches": 70,
+          "errors": 100,
+          "substitutions": 47,
+          "deletions": 4,
+          "insertions": 49,
+          "error_rate": 0.8264462809917356,
+          "f1": 0.4878048780487805
+        },
+        "chords": {
+          "reference_count": 31,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 31,
+          "substitutions": 0,
+          "deletions": 31,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "내입술의": {
+        "melody": {
+          "reference_count": 119,
+          "prediction_count": 583,
+          "matches": 114,
+          "errors": 469,
+          "substitutions": 5,
+          "deletions": 0,
+          "insertions": 464,
+          "error_rate": 3.9411764705882355,
+          "f1": 0.3247863247863248
+        },
+        "chords": {
+          "reference_count": 43,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 43,
+          "substitutions": 0,
+          "deletions": 43,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "능력의": {
+        "melody": {
+          "reference_count": 37,
+          "prediction_count": 555,
+          "matches": 17,
+          "errors": 538,
+          "substitutions": 20,
+          "deletions": 0,
+          "insertions": 518,
+          "error_rate": 14.54054054054054,
+          "f1": 0.057432432432432436
+        },
+        "chords": {
+          "reference_count": 24,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 24,
+          "substitutions": 0,
+          "deletions": 24,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "사랑하셔서": {
+        "melody": {
+          "reference_count": 86,
+          "prediction_count": 105,
+          "matches": 85,
+          "errors": 20,
+          "substitutions": 1,
+          "deletions": 0,
+          "insertions": 19,
+          "error_rate": 0.23255813953488372,
+          "f1": 0.8900523560209425
+        },
+        "chords": {
+          "reference_count": 27,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 27,
+          "substitutions": 0,
+          "deletions": 27,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "성령이여": {
+        "melody": {
+          "reference_count": 96,
+          "prediction_count": 96,
+          "matches": 94,
+          "errors": 3,
+          "substitutions": 1,
+          "deletions": 1,
+          "insertions": 1,
+          "error_rate": 0.03125,
+          "f1": 0.9791666666666666
+        },
+        "chords": {
+          "reference_count": 27,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 27,
+          "substitutions": 0,
+          "deletions": 27,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      },
+      "주품에": {
+        "melody": {
+          "reference_count": 48,
+          "prediction_count": 960,
+          "matches": 11,
+          "errors": 949,
+          "substitutions": 37,
+          "deletions": 0,
+          "insertions": 912,
+          "error_rate": 19.770833333333332,
+          "f1": 0.021825396825396824
+        },
+        "chords": {
+          "reference_count": 23,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 23,
+          "substitutions": 0,
+          "deletions": 23,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        }
+      }
+    }
+  }
+}

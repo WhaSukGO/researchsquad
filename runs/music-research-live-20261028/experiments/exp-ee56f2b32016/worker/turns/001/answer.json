@@ -1,0 +1,1 @@
+{"tool":"run","argument":"pwd; ls -la; find diagnostics -maxdepth 2 -type f 2>/dev/null; cat diagnostics/recognition-command.json 2>/dev/null; sed -n '1,260p' integrate.py","why":"Inspect inherited execution command, startup diagnostics, and integration code before a bounded dependency repair."}

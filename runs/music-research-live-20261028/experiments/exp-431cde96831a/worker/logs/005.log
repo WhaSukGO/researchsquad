@@ -1,0 +1,110 @@
+import concurrent.futures,json,os,pathlib,subprocess,time,traceback,urllib.request
+R=pathlib.Path('/workspace');os.chdir(R);D=R/'diagnostics';T=R/'tmp';T.mkdir(exist_ok=True)
+deadline=json.loads((D/'preflight-start.json').read_text())['deadline_epoch']
+report={'deadline_epoch':deadline,'commands':[],'chord_timing_audited':False,'inherited_native_exception_available':False}
+def remaining():
+ r=deadline-time.time()
+ if r<=0:raise TimeoutError('180-second single-image preflight deadline exhausted')
+ return r
+def command(args):
+ remaining();report['commands'].append(args)
+ p=subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=remaining())
+ return {'returncode':p.returncode,'output':p.stdout}
+def download(item):
+ url,path=item
+ with urllib.request.urlopen(url,timeout=min(20,remaining())) as response,path.open('wb') as out:
+  while True:
+   remaining();block=response.read(1024*1024)
+   if not block:break
+   out.write(block)
+ return str(path)
+try:
+ remaining()
+ assets=[('https://cdn.azul.com/zulu/bin/zulu25.38.107-ca-jre25.0.5-linux_aarch64.tar.gz',T/'java.tar.gz'),('https://github.com/Audiveris/audiveris/releases/download/5.11.0/Audiveris-5.11.0-ubuntu22.04-x86_64.deb',T/'audiveris.deb')]
+ report['asset_urls']=[u for u,p in assets]
+ with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+  futures=[pool.submit(download,item) for item in assets]
+  results=[]
+  for f in futures:
+   try:results.append({'download':f.result(timeout=remaining())})
+   except Exception:results.append({'exception':traceback.format_exc()})
+ report['downloads']=results
+ if any('exception' in x for x in results):raise RuntimeError('Runtime/application restoration failed; see exact download exceptions')
+ (T/'java25').mkdir(exist_ok=True)
+ report['extract_java']=command(['tar','xzf',str(T/'java.tar.gz'),'-C',str(T/'java25')])
+ report['extract_application']=command(['dpkg-deb','-x',str(T/'audiveris.deb'),str(T/'audiveris-root')])
+ java=next((T/'java25').glob('*/bin/java'))
+ report['java_version']=command([str(java),'-version'])
+ for directory in ['native','javacpp','home']:(T/directory).mkdir(exist_ok=True)
+ cmd=json.loads((D/'recognition-command.json').read_text());cmd[0]=str(java)
+ cmd=cmd[:cmd.index('--')+1]+[str(R/'inputs/sample-001.png')]
+ cmd[cmd.index('-output')+1]=str(R/'recognition-preflight')
+ report['pilot_input']='Original pilot image; enlarged derivative not inherited'
+ (D/'preflight-command.json').write_text(json.dumps(cmd,indent=2))
+ report['pilot_run']=command(cmd)
+ (D/'preflight-recognition.log').write_text(report['pilot_run']['output'])
+ exports=list((R/'recognition-preflight').rglob('*.mxl'))+list((R/'recognition-preflight').rglob('*.musicxml'))
+ report['exports']=[str(p) for p in exports]
+ report['milestone']='export requires content inspection' if exports else 'failed: no MusicXML export'
+except Exception:
+ report['exception']=traceback.format_exc();report['milestone']='failed: no verified single-image MusicXML export'
+finally:
+ report['finished_epoch']=time.time();report['elapsed_since_preflight_start']=time.time()-(deadline-180)
+ (D/'bounded-preflight.json').write_text(json.dumps(report,indent=2))
+ print(json.dumps(report,indent=2)[-14000:])
+{
+  "epoch": 1793156384.3975236,
+  "deadline_epoch": 1793156624.3975236
+}import os,sys,json,subprocess,traceback,shutil,re,time
+from pathlib import Path
+from fractions import Fraction
+sys.path.insert(0,'/workspace/vendor')
+from music21 import converter,note,chord,stream
+ROOT=Path('/workspace');os.chdir(ROOT)
+D=ROOT/'diagnostics';D.mkdir(exist_ok=True)
+O=ROOT/'output';O.mkdir(exist_ok=True)
+report={'limits':['No reference labels available; protected melody and chord errors cannot be measured locally.','Chord onset alignment unaudited.','Structural transposition checks do not establish transcription correctness.'],'samples':{}}
+# Keep the existing OCR implementation intact, including its thresholds.
+candidates=[]
+for base,dirs,files in os.walk(ROOT):
+ dirs[:]=[d for d in dirs if d not in ('vendor','tmp','.git','__pycache__')]
+ for f in files:
+  if f.endswith('.py') and f!='integrate.py':
+   p=Path(base)/f
+   try:
+    txt=p.read_text()
+    if 'def parse_chord' in txt and 'baseline-dir' in txt:candidates.append((p,txt))
+   except Exception:pass
+parent=None
+if candidates:
+ parent,src=candidates[0];(ROOT/'parent_chord_ocr.py').write_text(src)
+ report['parent_source']=str(parent)
+ report['serializer_audit']={'source_retained':'parent_chord_ocr.py','finding':'A syntax-only row check and a synthetic melody parse do not validate complete generated files. Missing baseline melody must be treated as recognition failure; null-only melody cannot demonstrate a parsed transcription. Exact protected-reader failure is unavailable.'}
+ try:
+  env=os.environ.copy();env['PYTHONPATH']='/workspace/vendor'
+  p=subprocess.run([sys.executable,str(ROOT/'parent_chord_ocr.py'),'--baseline-dir','/workspace/fresh-baseline'],env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=22)
+  (D/'parent-ocr-run.log').write_text(p.stdout);report['parent_ocr_returncode']=p.returncode
+ except Exception as e:report['parent_ocr_error']=repr(e)
+else:report['parent_source_error']='Original OCR implementation not located; thresholds will not be reconstructed or changed.'
+# Retain original OCR artifacts before replacing any output.
+old={p.stem:p.read_text() for p in O.glob('*.krn')}
+archive=D/'parent-output';archive.mkdir(exist_ok=True)
+for name,text in old.items():(archive/(name+'.krn')).write_text(text)
+cmd=json.loads((D/'recognition-command.json').read_text())
+cmd[1:1]=['-Dsun.java2d.uiScale=1','-Dsun.java2d.uiScale.enabled=false']
+(D/'final-recognition-command.json').write_text(json.dumps(cmd,indent=2))
+try:
+ with (D/'final-recognition.log').open('w') as log:
+  p=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=80)
+ report['recognition_returncode']=p.returncode
+except Exception as e:report['recognition_error']=repr(e)
+print('RECOGNITION_LOG_TAIL', (D/'final-recognition.log').read_text()[-6000:])
+# Serialize only actual MusicXML events. Reject overlapping/polyphonic results instead of inventing melody.
+bounded-preflight.json
+gtk-before-install.json
+gtk-repair-start.json
+preflight-command.json
+preflight-recognition.log
+preflight-start.json
+recognition-command.json
+startup-reproduction.json

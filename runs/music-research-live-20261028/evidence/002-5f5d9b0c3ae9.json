@@ -1,0 +1,155 @@
+{
+  "step": 2,
+  "decision": {
+    "tool": "baseline_summary",
+    "argument": "",
+    "why": "Dataset inspection establishes a seven-song pilot within 32 development excerpts. Read measured baseline failures before selecting a targeted experiment; the pilot cannot establish completion.",
+    "hypothesis": "Baseline errors will identify whether melody recognition, chord timing, or transposition is the most informative first target.",
+    "expected_observation": "Measured melody and chord errors, timing audit status, and sample-level failure patterns that support a narrowly scoped experiment.",
+    "evidence_ids": [
+      "goal",
+      "dataset"
+    ]
+  },
+  "observation": {
+    "id": "baseline",
+    "paired_subset": {
+      "audiveris-raw": {
+        "samples": 7,
+        "melody": {
+          "reference_count": 130,
+          "prediction_count": 16,
+          "matches": 0,
+          "errors": 130,
+          "substitutions": 16,
+          "deletions": 114,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "chords": {
+          "reference_count": 38,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 38,
+          "substitutions": 0,
+          "deletions": 38,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "failure_flags": {
+          "input_resolution_rejected": 6,
+          "all_chord_labels_missing": 6,
+          "no_transcription": 6
+        }
+      },
+      "audiveris-enlarged": {
+        "samples": 7,
+        "melody": {
+          "reference_count": 130,
+          "prediction_count": 108,
+          "matches": 46,
+          "errors": 87,
+          "substitutions": 59,
+          "deletions": 25,
+          "insertions": 3,
+          "error_rate": 0.6692307692307692,
+          "f1": 0.3865546218487395
+        },
+        "chords": {
+          "reference_count": 38,
+          "prediction_count": 8,
+          "matches": 8,
+          "errors": 30,
+          "substitutions": 0,
+          "deletions": 30,
+          "insertions": 0,
+          "error_rate": 0.7894736842105263,
+          "f1": 0.34782608695652173
+        },
+        "failure_flags": {
+          "all_chord_labels_missing": 2,
+          "output_not_parseable": 1
+        }
+      },
+      "transcoda-greedy": {
+        "samples": 7,
+        "melody": {
+          "reference_count": 130,
+          "prediction_count": 657,
+          "matches": 93,
+          "errors": 564,
+          "substitutions": 37,
+          "deletions": 0,
+          "insertions": 527,
+          "error_rate": 4.338461538461538,
+          "f1": 0.2363405336721728
+        },
+        "chords": {
+          "reference_count": 38,
+          "prediction_count": 0,
+          "matches": 0,
+          "errors": 38,
+          "substitutions": 0,
+          "deletions": 38,
+          "insertions": 0,
+          "error_rate": 1.0,
+          "f1": 0.0
+        },
+        "failure_flags": {
+          "all_chord_labels_missing": 6,
+          "generation_did_not_finish": 1
+        }
+      }
+    },
+    "all_32": {
+      "audiveris-raw": {
+        "melody_error_rate": 1.0,
+        "chord_matches": 0
+      },
+      "audiveris-enlarged": {
+        "melody_error_rate": 0.612280701754386,
+        "chord_matches": 47
+      },
+      "transcoda-greedy": {
+        "melody_error_rate": 5.040350877192982,
+        "chord_matches": 0
+      }
+    },
+    "limits": [
+      "References are supplied labels, not a musician-audited gold set.",
+      "Seven song groups, short excerpts, all with empty key signatures; no held-out generalization claim.",
+      "Primary metric is sequence edit error on pitch plus rational duration, with matching ties merged. Includes rests.",
+      "Chord score measures ordered root, kind, bass and explicit extensions; chord timing is not scored.",
+      "No full notation, voice alignment, repeat-playback, lyric or accidental-display fidelity metric.",
+      "Missing or unparseable outputs count as all reference events deleted; their unparsed insertions cannot be counted.",
+      "An edit error rate can exceed 100 percent; it is not accuracy.",
+      "No correction-time study or calibrated confidence thresholds yet.",
+      "Latency includes per-image Audiveris startup, excludes neural load time; some runs overlapped, so do not compare speed as controlled performance.",
+      "Transcoda canonical header/terminator restoration changes no pitches or durations. Raw outputs are retained.",
+      "No weights trained, no labels sent to inference, no paid API calls."
+    ]
+  },
+  "elapsed_seconds": 0.04801858300015738,
+  "model_metadata": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "low",
+    "elapsed_seconds": 10.796712999999727,
+    "exit_code": 0,
+    "usage": {
+      "input_tokens": 12481,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 108,
+      "reasoning_output_tokens": 0
+    },
+    "prompt_sha256": "e178dd6ef0d71ba55539d9464f962709da1ab26d2616bab910aa77e073f9ee4b",
+    "image_sha256": null,
+    "context_isolation": "fresh temporary directory outside the project; only explicit prompt, schema and optional image",
+    "os_read_isolation": false,
+    "unexpected_tool_events": [],
+    "billing": "Uses existing Codex account; monetary cost unavailable"
+  }
+}

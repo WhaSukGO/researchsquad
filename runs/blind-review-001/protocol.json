@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "system_goal": "Reduce musician correction work while preserving melody, harmony and transposition.",
+  "experiment_goal": "Test whether one independent blind review improves frozen transcriptions without introducing errors.",
+  "hypothesis": "Image-grounded review reduces measured errors; unchanged or worse outputs contradict the benefit.",
+  "model": "gpt-6-astra",
+  "effort": "high",
+  "source_batch": "/Users/geegle/development/whasuk/researchagent/runs/goal-agent-001-checked/experiments/exp-0ca8aa4fa31f",
+  "sample_policy": "Every supplied source prediction, including previously correct cases; no filtering by accuracy.",
+  "data_status": "Development diagnostic; previously inspected songs are not a held-out test.",
+  "roles": {
+    "controller": {
+      "goal": "Choose informative experiments within the fixed goal and budget; report unmet requirements honestly.",
+      "allowed_inputs": [
+        "budget",
+        "goal",
+        "observations"
+      ],
+      "forbidden": "Reference transcriptions, editing labels or scoring code, changing acceptance criteria."
+    },
+    "transcriber": {
+      "goal": "Recover the visible melody and chord symbols faithfully in the specified editable format.",
+      "allowed_inputs": [
+        "format"
+      ],
+      "forbidden": "Reference answers, previous scores, song retrieval or a shared reviewer conversation."
+    },
+    "reviewer": {
+      "goal": "Find image-supported mistakes in a candidate transcription and propose minimal corrections; abstain on ambiguity.",
+      "allowed_inputs": [
+        "candidate",
+        "format"
+      ],
+      "forbidden": "Reference answers, ground-truth error locations, prior accuracy, source filenames or other model conversations."
+    },
+    "scorer": {
+      "goal": "Measure frozen predictions against fixed references using versioned deterministic metrics.",
+      "allowed_inputs": [
+        "metric_version",
+        "references",
+        "sealed_predictions"
+      ],
+      "forbidden": "Model calls, editing predictions or labels, feeding answers back into the sealed experiment."
+    }
+  },
+  "review_prompt_sha256": "6ae491bb65e68899f8040fbf93280d3bb5dca3f1641578ef7b7df569666ebc0f",
+  "schema_sha256": "e71431ef6078f71f464b22f24fe6ae159904e2fa75bdc79cda4e8928d3e42c74",
+  "budget": {
+    "max_model_calls": 7,
+    "max_active_seconds": 1800,
+    "call_timeout": 240
+  },
+  "score_release": "Only after all case outputs are frozen; no further model calls in this run.",
+  "boundary": "Fresh tool-disabled model contexts; application data-flow enforcement, not OS-level read isolation."
+}

@@ -1,0 +1,25 @@
+{
+  "id": "내이름으로_2",
+  "engine": "transcoda-greedy",
+  "source_image": "research/data/내이름으로_2.png",
+  "source_image_sha256": "96a25feab65d7c38b4de96958f4a4acf8ef6d0d995a2cd470cdf065db9eb1a45",
+  "input_sha256": "e93b2152e3e6616c74e8293a9ef1cde8169ff86e22476d9bbd1a78106265a2e7",
+  "started_unix": 1793066908.931103,
+  "reference_access": false,
+  "runner_sha256": "ab8fa3e423930b13d2c94b4c190d1ac7f8d9c7975dcdaef8e10ebf6347e240b5",
+  "status": "generation_limit",
+  "output": "runs/first-benchmark/transcoda-greedy/sample-002/prediction.krn",
+  "device": "mps",
+  "tokens": 1336,
+  "eos_reached": false,
+  "settings": {
+    "num_beams": 1,
+    "max_length": 2048,
+    "max_time": 120,
+    "repetition_penalty": 1.1,
+    "do_sample": false,
+    "revision": "b529f8aa5d996d9224df3395b5b92d0867343c91"
+  },
+  "elapsed_seconds": 120.21260091700015,
+  "output_sha256": "62d4ac69149decb61e55b734e02c346402d91d30d67071b4c3bb7de724648f79"
+}

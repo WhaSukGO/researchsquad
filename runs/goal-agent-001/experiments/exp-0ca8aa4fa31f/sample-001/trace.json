@@ -1,0 +1,29 @@
+{
+  "sample_index": 1,
+  "id": "내이름으로_1",
+  "kind": "vision_kern",
+  "reference_access": false,
+  "source_image_sha256": "0d8d864f885c302aafb273d9d5e2febb3dc768ee65faca53a9c82dccf877a3a1",
+  "output": "runs/goal-agent-001/experiments/exp-0ca8aa4fa31f/sample-001/prediction.krn",
+  "status": "ok",
+  "uncertainties": [],
+  "model": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "elapsed_seconds": 29.630879042000743,
+    "exit_code": 0,
+    "usage": {
+      "input_tokens": 14354,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 643,
+      "reasoning_output_tokens": 508
+    },
+    "prompt_sha256": "2eb0c055add5d7024017ad95167f877c05fb77bed38772e86247c58f6b565f87",
+    "unexpected_tool_events": [],
+    "billing": "Uses existing Codex account; monetary cost unavailable"
+  },
+  "elapsed_seconds": 29.633145292000336,
+  "output_sha256": "8b39eae54d3cd5ec5a9a7672b011606d95927b516ad03d4a71f82eb86337bc26"
+}

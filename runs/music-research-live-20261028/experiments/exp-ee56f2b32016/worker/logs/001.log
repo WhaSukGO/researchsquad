@@ -1,0 +1,174 @@
+/workspace
+total 28
+drwxr-xr-x 7  501 dialout  224 Oct 28 02:53 .
+drwxr-xr-x 1 root root    4096 Oct 28 02:53 ..
+drwxr-xr-x 3  501 dialout   96 Oct 28 02:53 diagnostics
+drwxr-xr-x 9  501 dialout  288 Oct 28 02:53 inputs
+-rw-r--r-- 1  501 dialout 8924 Oct 28 02:53 integrate.py
+drwxr-xr-x 2  501 dialout   64 Oct 28 02:53 output
+-rw-r--r-- 1  501 dialout 9717 Oct 28 02:53 parent_chord_ocr.py
+diagnostics/recognition-command.json
+[
+  "/workspace/tmp/java25/zulu25.38.107-ca-jre25.0.5-linux_aarch64/bin/java",
+  "-Xmx1100m",
+  "-Djava.awt.headless=true",
+  "-Djava.io.tmpdir=/workspace/tmp/native",
+  "-Djna.tmpdir=/workspace/tmp/native",
+  "-Dorg.bytedeco.javacpp.cachedir=/workspace/tmp/javacpp",
+  "-Duser.home=/workspace/tmp/home",
+  "--add-exports=java.desktop/sun.awt.image=ALL-UNNAMED",
+  "--enable-native-access=ALL-UNNAMED",
+  "-cp",
+  "/workspace/tmp/audiveris-root/opt/audiveris/lib/app/*",
+  "Audiveris",
+  "-batch",
+  "-export",
+  "-output",
+  "/workspace/recognition",
+  "--",
+  "/workspace/enlarged/sample-001.png",
+  "/workspace/enlarged/sample-006.png",
+  "/workspace/enlarged/sample-012.png",
+  "/workspace/enlarged/sample-017.png",
+  "/workspace/enlarged/sample-019.png",
+  "/workspace/enlarged/sample-023.png",
+  "/workspace/enlarged/sample-029.png"
+]import os,sys,json,subprocess,traceback,shutil,re,time
+from pathlib import Path
+from fractions import Fraction
+sys.path.insert(0,'/workspace/vendor')
+from music21 import converter,note,chord,stream
+ROOT=Path('/workspace');os.chdir(ROOT)
+D=ROOT/'diagnostics';D.mkdir(exist_ok=True)
+O=ROOT/'output';O.mkdir(exist_ok=True)
+report={'limits':['No reference labels available; protected melody and chord errors cannot be measured locally.','Chord onset alignment unaudited.','Structural transposition checks do not establish transcription correctness.'],'samples':{}}
+# Keep the existing OCR implementation intact, including its thresholds.
+candidates=[]
+for base,dirs,files in os.walk(ROOT):
+ dirs[:]=[d for d in dirs if d not in ('vendor','tmp','.git','__pycache__')]
+ for f in files:
+  if f.endswith('.py') and f!='integrate.py':
+   p=Path(base)/f
+   try:
+    txt=p.read_text()
+    if 'def parse_chord' in txt and 'baseline-dir' in txt:candidates.append((p,txt))
+   except Exception:pass
+parent=None
+if candidates:
+ parent,src=candidates[0];(ROOT/'parent_chord_ocr.py').write_text(src)
+ report['parent_source']=str(parent)
+ report['serializer_audit']={'source_retained':'parent_chord_ocr.py','finding':'A syntax-only row check and a synthetic melody parse do not validate complete generated files. Missing baseline melody must be treated as recognition failure; null-only melody cannot demonstrate a parsed transcription. Exact protected-reader failure is unavailable.'}
+ try:
+  env=os.environ.copy();env['PYTHONPATH']='/workspace/vendor'
+  p=subprocess.run([sys.executable,str(ROOT/'parent_chord_ocr.py'),'--baseline-dir','/workspace/fresh-baseline'],env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=22)
+  (D/'parent-ocr-run.log').write_text(p.stdout);report['parent_ocr_returncode']=p.returncode
+ except Exception as e:report['parent_ocr_error']=repr(e)
+else:report['parent_source_error']='Original OCR implementation not located; thresholds will not be reconstructed or changed.'
+# Retain original OCR artifacts before replacing any output.
+old={p.stem:p.read_text() for p in O.glob('*.krn')}
+archive=D/'parent-output';archive.mkdir(exist_ok=True)
+for name,text in old.items():(archive/(name+'.krn')).write_text(text)
+cmd=json.loads((D/'recognition-command.json').read_text())
+cmd[1:1]=['-Dsun.java2d.uiScale=1','-Dsun.java2d.uiScale.enabled=false']
+(D/'final-recognition-command.json').write_text(json.dumps(cmd,indent=2))
+try:
+ with (D/'final-recognition.log').open('w') as log:
+  p=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=80)
+ report['recognition_returncode']=p.returncode
+except Exception as e:report['recognition_error']=repr(e)
+print('RECOGNITION_LOG_TAIL', (D/'final-recognition.log').read_text()[-6000:])
+# Serialize only actual MusicXML events. Reject overlapping/polyphonic results instead of inventing melody.
+def reciprocal(q):
+ q=Fraction(q).limit_denominator(4096)
+ if q<=0:raise ValueError('Nonpositive duration')
+ for dots in range(4):
+  factor=Fraction(2**(dots+1)-1,2**dots)
+  r=4*factor/q
+  if r.denominator==1 and r>0:return str(r.numerator)+'.'*dots
+ r=4/q
+ return str(r.numerator)+'%'+str(r.denominator)
+def pitch_token(p):
+ octv=p.octave
+ if octv is None:raise ValueError('Missing octave')
+ s=p.step.lower()*(octv-3) if octv>=4 else p.step.upper()*(4-octv)
+ a=p.accidental.alter if p.accidental else 0
+ if a!=int(a):raise ValueError('Microtonal pitch unsupported')
+ return s+('#'*int(a) if a>0 else '-'*int(-a))
+def token(n):
+ if n.duration.isGrace:raise ValueError('Grace event requires explicit handling')
+ s=reciprocal(n.duration.quarterLength)
+ if n.isRest:return s+'r'
+ if isinstance(n,chord.Chord):raise ValueError('Polyphonic recognized chord: melody selection unaudited')
+ s+=pitch_token(n.pitch)
+ if n.tie:s={'start':'[','continue':'_','stop':']'}[n.tie.type]+s if n.tie.type=='start' else s+{'continue':'_','stop':']'}[n.tie.type]
+ return s
+harm=re.compile(r'^[A-G](?:#|b)?:(?:maj|min|7|maj7|min7|min6|dim7|sus4|add9)(?:/[A-G](?:#|b)?)?$')
+def old_harmonies(name):
+ ans=[]
+ for row in old.get(name,'').splitlines():
+  cells=row.split('\t')
+  if len(cells)==2 and harm.fullmatch(cells[1]):ans.append(cells[1])
+ return ans
+pcs=dict(zip('CDEFGAB',[0,2,4,5,7,9,11]));names=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']
+def pc(s):return (pcs[s[0]]+s.count('#')-s.count('b'))%12
+def transpose_h(h):
+ root,tail=h.split(':');parts=tail.split('/');out=names[(pc(root)+2)%12]+':'+parts[0]
+ if len(parts)==2:out+='/'+names[(pc(parts[1])+2)%12]
+ return out
+for inp in sorted((ROOT/'inputs').glob('sample-*.png')):
+ name=inp.stem;r={'recognition':'failed','conversion':'not attempted','independent_parse':'not attempted','chord_timing_audited':False};report['samples'][name]=r
+ target=O/(name+'.krn')
+ # Do not leave the parent's melody-free output masquerading as a successful prediction.
+ if target.exists():target.unlink()
+ try:
+  exports=[p for p in (ROOT/'recognition').rglob('*') if p.suffix.lower() in ('.mxl','.xml','.musicxml') and name in str(p)]
+  r['raw_exports']=[str(p.relative_to(ROOT)) for p in exports]
+  if not exports:raise RuntimeError('No actual Audiveris MusicXML export; no melody substituted')
+  score=converter.parse(str(exports[0]));parts=list(score.parts)
+  if len(parts)!=1:raise ValueError('Expected a single recognized melody part, got '+str(len(parts)))
+  part=parts[0];events=list(part.recurse().notesAndRests)
+  if not events:raise ValueError('Recognition contains no melody events')
+  r['recognition']='export parsed';r['recognized_events']=len(events)
+  hs=old_harmonies(name);r['retained_ocr_chords']=hs
+  rows=['**kern\t**mxhm','*clefG2\t*'];actual=[]
+  for m in part.getElementsByClass(stream.Measure):
+   rows.append('='+str(m.number)+'\t='+str(m.number))
+   if m.timeSignature:rows.append('*M'+m.timeSignature.ratioString+'\t*')
+   end=Fraction(0)
+   for n in m.recurse().notesAndRests:
+    offset=Fraction(n.getOffsetInHierarchy(m)).limit_denominator(4096)
+    if offset!=end:raise ValueError('Gap or overlap in recognized measure '+str(m.number)+': '+str(offset)+' vs '+str(end))
+    rows.append(token(n)+'\t.');actual.append(n);end=offset+Fraction(n.duration.quarterLength).limit_denominator(4096)
+  if len(actual)!=len(events):raise ValueError('Unserialized recognized events')
+  # Preserve ordered OCR symbols; geometric onset placement is explicitly unaudited.
+  indexes=[i for i,row in enumerate(rows) if not row.startswith(('*','=','!'))]
+  if len(hs)>len(indexes):raise ValueError('More OCR harmonies than available melody onsets')
+  for j,h in enumerate(hs):
+   idx=indexes[min(len(indexes)-1,j*len(indexes)//max(1,len(hs)))];rows[idx]=rows[idx].split('\t')[0]+'\t'+h
+  rows+=['==\t==','*-\t*-'];text='\n'.join(rows)+'\n';target.write_text(text);r['conversion']='written'
+  parsed=converter.parse(str(target),format='humdrum');got=list(parsed.recurse().notesAndRests)
+  def signature(n):return (None if n.isRest else n.pitch.midi,Fraction(n.duration.quarterLength).limit_denominator(4096),None if n.tie is None else n.tie.type)
+  if [signature(n) for n in got]!=[signature(n) for n in actual]:raise ValueError('Independent kern reader changed event pitches, durations, rests or ties')
+  r['independent_parse']='passed complete file and event round trip';r['parsed_events']=len(got)
+  shifted=parsed.transpose('M2');gs=list(shifted.recurse().notesAndRests)
+  assert len(gs)==len(got)
+  for a,b in zip(got,gs):
+   assert a.isRest==b.isRest and a.duration.quarterLength==b.duration.quarterLength
+   if not a.isRest:assert b.pitch.midi-a.pitch.midi==2
+  th=[transpose_h(h) for h in hs]
+  for a,b in zip(hs,th):
+   assert (pc(b.split(':')[0])-pc(a.split(':')[0]))%12==2
+   if '/' in a:assert (pc(b.split('/')[1])-pc(a.split('/')[1]))%12==2
+  r['major_second_structural_test']={'melody':'passed','chord_roots_and_actual_slash_basses':'passed','transposed_chords':th,'actual_slash_bass_count':sum('/' in h for h in hs)}
+ except Exception as e:
+  r['failure']=repr(e);r['traceback']=traceback.format_exc()
+  if target.exists():
+   (D/(name+'-failed.krn')).write_text(target.read_text());target.unlink()
+  # Explicit diagnostic artifact, not a dummy transcription or a claimed parseable output.
+  target.write_text('!! RECOGNITION_OR_CONVERSION_FAILURE: '+str(e).replace('\n',' ')+'\n**kern\t**mxhm\n*-\t*-\n')
+  r['output_is_failure_placeholder']=True
+ (D/(name+'-integration.json')).write_text(json.dumps(r,indent=2))
+report['parseable_complete_melodies']=sum(r.get('independent_parse','').startswith('passed') for r in report['samples'].values())
+report['protected_comparisons']={'current':'unavailable; must be scored independently','parent_chord_errors':'25/38','baseline_chord_errors':'30/38','baseline_melody_errors':'87/130','regression_claim':'No claim possible without protected evaluation'}
+(D/'integration-report.json').write_text(json.dumps(report,indent=2))
+print(json.dumps(report,indent=2))

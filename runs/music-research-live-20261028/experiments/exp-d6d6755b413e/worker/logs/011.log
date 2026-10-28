@@ -1,0 +1,25 @@
+JAVA_PACKAGE https://cdn.azul.com/zulu/bin/zulu25.38.107-ca-jre25.0.5-linux_aarch64.tar.gz
+openjdk version "25.0.5" 2026-10-20 LTS
+OpenJDK Runtime Environment Zulu25.38+107-CA (build 25.0.5+8-LTS)
+OpenJDK 64-Bit Server VM Zulu25.38+107-CA (build 25.0.5+8-LTS, mixed mode, sharing)
+
+PROCESS 29 STATUS 1
+Exception in thread "main" java.lang.UnsatisfiedLinkError: /tmp/.cache/JNA/temp/jna15169394995194653790.tmp: /tmp/.cache/JNA/temp/jna15169394995194653790.tmp: failed to map segment from shared object
+	at java.base/jdk.internal.loader.NativeLibraries.load(Native Method)
+	at java.base/jdk.internal.loader.NativeLibraries$NativeLibraryImpl.open(Unknown Source)
+	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(Unknown Source)
+	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(Unknown Source)
+	at java.base/java.lang.ClassLoader.loadLibrary(Unknown Source)
+	at java.base/java.lang.Runtime.load0(Unknown Source)
+	at java.base/java.lang.System.load(Unknown Source)
+	at com.sun.jna.Native.loadNativeDispatchLibraryFromClasspath(Native.java:1041)
+	at com.sun.jna.Native.loadNativeDispatchLibrary(Native.java:1011)
+	at com.sun.jna.Native.<clinit>(Native.java:221)
+	at org.audiveris.omr.WellKnowns.getGdkMaxScale(WellKnowns.java:310)
+	at org.audiveris.omr.WellKnowns.enableHiDpiScaling(WellKnowns.java:295)
+	at org.audiveris.omr.WellKnowns.<clinit>(WellKnowns.java:211)
+	at org.audiveris.omr.Main.<clinit>(Main.java:70)
+	at Audiveris.main(Audiveris.java:50)
+
+FILES []
+OCR_FILES ['/workspace/tmp/audiveris-root/opt/audiveris/lib/app/org/audiveris/omr/text/tesseract']

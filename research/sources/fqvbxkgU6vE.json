@@ -1,0 +1,837 @@
+[
+  {
+    "text": "Hey folks, it's Sydney from Lingchain.",
+    "start": 0.08,
+    "duration": 3.599
+  },
+  {
+    "text": "I'm super excited to chat with you today",
+    "start": 2.08,
+    "duration": 3.84
+  },
+  {
+    "text": "about how to choose a multi-agent",
+    "start": 3.679,
+    "duration": 4.24
+  },
+  {
+    "text": "architecture. First, I would actually",
+    "start": 5.92,
+    "duration": 3.679
+  },
+  {
+    "text": "like to caution you. You might not",
+    "start": 7.919,
+    "duration": 3.84
+  },
+  {
+    "text": "actually need a multi-agent pattern for",
+    "start": 9.599,
+    "duration": 4.561
+  },
+  {
+    "text": "your system. Many agentic tasks are",
+    "start": 11.759,
+    "duration": 4.161
+  },
+  {
+    "text": "actually best handled by a single agent",
+    "start": 14.16,
+    "duration": 4.0
+  },
+  {
+    "text": "with well-designed tools. That being",
+    "start": 15.92,
+    "duration": 4.48
+  },
+  {
+    "text": "said, when your tasks are increasingly",
+    "start": 18.16,
+    "duration": 4.32
+  },
+  {
+    "text": "complex, multi-agent might be the way to",
+    "start": 20.4,
+    "duration": 4.16
+  },
+  {
+    "text": "go. So, let's dive into chatting about",
+    "start": 22.48,
+    "duration": 3.6
+  },
+  {
+    "text": "our scoring criteria for different",
+    "start": 24.56,
+    "duration": 3.84
+  },
+  {
+    "text": "architectures.",
+    "start": 26.08,
+    "duration": 4.56
+  },
+  {
+    "text": "So we have four criteria here. The first",
+    "start": 28.4,
+    "duration": 4.159
+  },
+  {
+    "text": "is distributed development which is",
+    "start": 30.64,
+    "duration": 3.36
+  },
+  {
+    "text": "exactly what it sounds like. Can",
+    "start": 32.559,
+    "duration": 3.361
+  },
+  {
+    "text": "different teams maintain different",
+    "start": 34.0,
+    "duration": 3.76
+  },
+  {
+    "text": "components or agents independently based",
+    "start": 35.92,
+    "duration": 4.479
+  },
+  {
+    "text": "on their specialties? The second is",
+    "start": 37.76,
+    "duration": 4.24
+  },
+  {
+    "text": "parallelization.",
+    "start": 40.399,
+    "duration": 3.441
+  },
+  {
+    "text": "Can you execute multiple agents at the",
+    "start": 42.0,
+    "duration": 4.32
+  },
+  {
+    "text": "same time? The third is multihop",
+    "start": 43.84,
+    "duration": 5.199
+  },
+  {
+    "text": "conversational support. So does the",
+    "start": 46.32,
+    "duration": 4.48
+  },
+  {
+    "text": "architecture support calling multiple",
+    "start": 49.039,
+    "duration": 4.481
+  },
+  {
+    "text": "sub aents in series with the context",
+    "start": 50.8,
+    "duration": 5.52
+  },
+  {
+    "text": "from previous calls? And the final",
+    "start": 53.52,
+    "duration": 5.199
+  },
+  {
+    "text": "criteria is direct user interaction. So",
+    "start": 56.32,
+    "duration": 4.32
+  },
+  {
+    "text": "the question here is can sub aents",
+    "start": 58.719,
+    "duration": 4.721
+  },
+  {
+    "text": "converse directly with a user.",
+    "start": 60.64,
+    "duration": 4.4
+  },
+  {
+    "text": "So our first pattern that we're going to",
+    "start": 63.44,
+    "duration": 3.76
+  },
+  {
+    "text": "look at is sub aents often also called",
+    "start": 65.04,
+    "duration": 4.56
+  },
+  {
+    "text": "the supervisor pattern. And in this",
+    "start": 67.2,
+    "duration": 4.239
+  },
+  {
+    "text": "pattern a main supervisor agent",
+    "start": 69.6,
+    "duration": 4.48
+  },
+  {
+    "text": "coordinates sub aents as tools. All of",
+    "start": 71.439,
+    "duration": 4.561
+  },
+  {
+    "text": "the message routing passes through the",
+    "start": 74.08,
+    "duration": 4.24
+  },
+  {
+    "text": "main agent which decides how and when to",
+    "start": 76.0,
+    "duration": 4.96
+  },
+  {
+    "text": "invoke each sub aent.",
+    "start": 78.32,
+    "duration": 4.159
+  },
+  {
+    "text": "Now we can talk about how this",
+    "start": 80.96,
+    "duration": 3.36
+  },
+  {
+    "text": "architecture kind of scores along those",
+    "start": 82.479,
+    "duration": 4.401
+  },
+  {
+    "text": "different criteria lines.",
+    "start": 84.32,
+    "duration": 3.92
+  },
+  {
+    "text": "So we actually give distributed",
+    "start": 86.88,
+    "duration": 3.599
+  },
+  {
+    "text": "development here a five out of five. The",
+    "start": 88.24,
+    "duration": 4.239
+  },
+  {
+    "text": "sub aents architecture is great when",
+    "start": 90.479,
+    "duration": 4.881
+  },
+  {
+    "text": "these different sub aents manages tools",
+    "start": 92.479,
+    "duration": 6.241
+  },
+  {
+    "text": "are are managed across teams. The sub",
+    "start": 95.36,
+    "duration": 5.04
+  },
+  {
+    "text": "aents architecture also does quite well",
+    "start": 98.72,
+    "duration": 3.439
+  },
+  {
+    "text": "with parallelization.",
+    "start": 100.4,
+    "duration": 3.92
+  },
+  {
+    "text": "Agents support parallel tool calling and",
+    "start": 102.159,
+    "duration": 4.401
+  },
+  {
+    "text": "thus you can invoke your sub aents in",
+    "start": 104.32,
+    "duration": 4.479
+  },
+  {
+    "text": "parallel. Multihop conversations are",
+    "start": 106.56,
+    "duration": 4.16
+  },
+  {
+    "text": "also easy to organize here. This just",
+    "start": 108.799,
+    "duration": 3.68
+  },
+  {
+    "text": "requires multiple cycles of the model",
+    "start": 110.72,
+    "duration": 4.24
+  },
+  {
+    "text": "and tool calling loop. Finally, direct",
+    "start": 112.479,
+    "duration": 4.241
+  },
+  {
+    "text": "user interaction is definitely where the",
+    "start": 114.96,
+    "duration": 4.32
+  },
+  {
+    "text": "sub aents architecture falls short. With",
+    "start": 116.72,
+    "duration": 4.24
+  },
+  {
+    "text": "lang chains architecture, you can",
+    "start": 119.28,
+    "duration": 4.0
+  },
+  {
+    "text": "technically",
+    "start": 120.96,
+    "duration": 4.479
+  },
+  {
+    "text": "achieve direct user interaction via",
+    "start": 123.28,
+    "duration": 4.159
+  },
+  {
+    "text": "interrupts in your sub aents, but",
+    "start": 125.439,
+    "duration": 3.361
+  },
+  {
+    "text": "there's no easy way for users to",
+    "start": 127.439,
+    "duration": 3.841
+  },
+  {
+    "text": "interact directly with sub aents. Our",
+    "start": 128.8,
+    "duration": 4.159
+  },
+  {
+    "text": "next architecture is the handoffs",
+    "start": 131.28,
+    "duration": 4.16
+  },
+  {
+    "text": "pattern. In the handoffs pattern, agents",
+    "start": 132.959,
+    "duration": 6.561
+  },
+  {
+    "text": "can use tool calling to hand off control",
+    "start": 135.44,
+    "duration": 5.76
+  },
+  {
+    "text": "to other agents. And you can see that in",
+    "start": 139.52,
+    "duration": 4.32
+  },
+  {
+    "text": "the diagram here. The user request is",
+    "start": 141.2,
+    "duration": 5.119
+  },
+  {
+    "text": "sent to the entry point agent, which is",
+    "start": 143.84,
+    "duration": 4.96
+  },
+  {
+    "text": "agent A. And then all of ages A, B, and",
+    "start": 146.319,
+    "duration": 4.481
+  },
+  {
+    "text": "C have the power to hand off to one",
+    "start": 148.8,
+    "duration": 3.76
+  },
+  {
+    "text": "another and then also to generate a",
+    "start": 150.8,
+    "duration": 3.68
+  },
+  {
+    "text": "final response.",
+    "start": 152.56,
+    "duration": 3.44
+  },
+  {
+    "text": "Distributed development is one of the",
+    "start": 154.48,
+    "duration": 3.36
+  },
+  {
+    "text": "weak points of the handoffs",
+    "start": 156.0,
+    "duration": 3.76
+  },
+  {
+    "text": "architecture. It's a bit difficult to",
+    "start": 157.84,
+    "duration": 3.92
+  },
+  {
+    "text": "develop agents independently that need",
+    "start": 159.76,
+    "duration": 4.88
+  },
+  {
+    "text": "capabilities to hand off to each other.",
+    "start": 161.76,
+    "duration": 5.52
+  },
+  {
+    "text": "Parallelization is also not a specialty",
+    "start": 164.64,
+    "duration": 6.08
+  },
+  {
+    "text": "of the handoffs architecture,",
+    "start": 167.28,
+    "duration": 5.44
+  },
+  {
+    "text": "but the handoffs architecture is",
+    "start": 170.72,
+    "duration": 4.08
+  },
+  {
+    "text": "particularly great for multihop",
+    "start": 172.72,
+    "duration": 4.08
+  },
+  {
+    "text": "conversations and direct user",
+    "start": 174.8,
+    "duration": 4.0
+  },
+  {
+    "text": "interaction.",
+    "start": 176.8,
+    "duration": 3.519
+  },
+  {
+    "text": "In fact, this is probably the best",
+    "start": 178.8,
+    "duration": 3.439
+  },
+  {
+    "text": "architecture to choose if you are",
+    "start": 180.319,
+    "duration": 4.721
+  },
+  {
+    "text": "looking to have those two features. Our",
+    "start": 182.239,
+    "duration": 4.72
+  },
+  {
+    "text": "third architecture which is sort of a",
+    "start": 185.04,
+    "duration": 4.8
+  },
+  {
+    "text": "quasi multi-agent architecture is",
+    "start": 186.959,
+    "duration": 5.041
+  },
+  {
+    "text": "support for skills. So skills are",
+    "start": 189.84,
+    "duration": 3.6
+  },
+  {
+    "text": "specialized prompts and knowledge that",
+    "start": 192.0,
+    "duration": 4.48
+  },
+  {
+    "text": "are loaded on demand. A single agent",
+    "start": 193.44,
+    "duration": 5.2
+  },
+  {
+    "text": "stays in control while loading context",
+    "start": 196.48,
+    "duration": 3.839
+  },
+  {
+    "text": "from skills as needed. This is a",
+    "start": 198.64,
+    "duration": 3.519
+  },
+  {
+    "text": "practice called progressive disclosure",
+    "start": 200.319,
+    "duration": 3.761
+  },
+  {
+    "text": "and it's becoming increasingly more",
+    "start": 202.159,
+    "duration": 3.601
+  },
+  {
+    "text": "popular as a context management",
+    "start": 204.08,
+    "duration": 4.56
+  },
+  {
+    "text": "strategy.",
+    "start": 205.76,
+    "duration": 4.64
+  },
+  {
+    "text": "The skills architecture scores quite",
+    "start": 208.64,
+    "duration": 3.12
+  },
+  {
+    "text": "high on the distributed development",
+    "start": 210.4,
+    "duration": 3.52
+  },
+  {
+    "text": "front. Different teams can manage",
+    "start": 211.76,
+    "duration": 3.44
+  },
+  {
+    "text": "different skills based on their",
+    "start": 213.92,
+    "duration": 4.239
+  },
+  {
+    "text": "specialties.",
+    "start": 215.2,
+    "duration": 5.2
+  },
+  {
+    "text": "We score a three out of five here on the",
+    "start": 218.159,
+    "duration": 4.481
+  },
+  {
+    "text": "parallelization front. Even though you",
+    "start": 220.4,
+    "duration": 4.8
+  },
+  {
+    "text": "can load multiple skills in parallel and",
+    "start": 222.64,
+    "duration": 4.8
+  },
+  {
+    "text": "call multiple skills in parallel, it's",
+    "start": 225.2,
+    "duration": 3.92
+  },
+  {
+    "text": "kind of a two-step process. And so",
+    "start": 227.44,
+    "duration": 2.879
+  },
+  {
+    "text": "that's why we don't give it that five",
+    "start": 229.12,
+    "duration": 4.399
+  },
+  {
+    "text": "out of five.",
+    "start": 230.319,
+    "duration": 5.2
+  },
+  {
+    "text": "You can certainly have multiple calls in",
+    "start": 233.519,
+    "duration": 5.36
+  },
+  {
+    "text": "series to the sub aents aka skills here.",
+    "start": 235.519,
+    "duration": 6.481
+  },
+  {
+    "text": "So multihop scores at five out of five.",
+    "start": 238.879,
+    "duration": 5.121
+  },
+  {
+    "text": "And then direct user interaction is also",
+    "start": 242.0,
+    "duration": 3.92
+  },
+  {
+    "text": "a five out of five. Again, we really",
+    "start": 244.0,
+    "duration": 4.0
+  },
+  {
+    "text": "just have that one core agent that the",
+    "start": 245.92,
+    "duration": 6.48
+  },
+  {
+    "text": "user can easily interact directly with.",
+    "start": 248.0,
+    "duration": 6.4
+  },
+  {
+    "text": "Our final architecture is the router",
+    "start": 252.4,
+    "duration": 4.16
+  },
+  {
+    "text": "architecture. In this one, a routing",
+    "start": 254.4,
+    "duration": 4.48
+  },
+  {
+    "text": "step classifies input and directs it to",
+    "start": 256.56,
+    "duration": 4.56
+  },
+  {
+    "text": "one or more specialized agents and then",
+    "start": 258.88,
+    "duration": 4.24
+  },
+  {
+    "text": "results are synthesized into a combined",
+    "start": 261.12,
+    "duration": 4.24
+  },
+  {
+    "text": "response. And both the router and",
+    "start": 263.12,
+    "duration": 5.12
+  },
+  {
+    "text": "synthesizer steps here can be agentic,",
+    "start": 265.36,
+    "duration": 4.16
+  },
+  {
+    "text": "but they also don't have to be. They",
+    "start": 268.24,
+    "duration": 4.16
+  },
+  {
+    "text": "could be more deterministic.",
+    "start": 269.52,
+    "duration": 4.64
+  },
+  {
+    "text": "We score distributed development for",
+    "start": 272.4,
+    "duration": 3.92
+  },
+  {
+    "text": "this case at a three out of five just",
+    "start": 274.16,
+    "duration": 4.16
+  },
+  {
+    "text": "because there's no standard protocol for",
+    "start": 276.32,
+    "duration": 4.159
+  },
+  {
+    "text": "the agents unlike in the sub aents",
+    "start": 278.32,
+    "duration": 5.12
+  },
+  {
+    "text": "protocol or the skill protocol where you",
+    "start": 280.479,
+    "duration": 4.641
+  },
+  {
+    "text": "can use tools or skills as standard",
+    "start": 283.44,
+    "duration": 3.36
+  },
+  {
+    "text": "protocols. It's a little bit harder to",
+    "start": 285.12,
+    "duration": 3.6
+  },
+  {
+    "text": "standardize here. So certainly possible",
+    "start": 286.8,
+    "duration": 3.679
+  },
+  {
+    "text": "to do distributed development but not",
+    "start": 288.72,
+    "duration": 4.72
+  },
+  {
+    "text": "quite as easy. We do though score",
+    "start": 290.479,
+    "duration": 5.041
+  },
+  {
+    "text": "parallelization at a five out of five",
+    "start": 293.44,
+    "duration": 5.44
+  },
+  {
+    "text": "here. The router can invoke multiple sub",
+    "start": 295.52,
+    "duration": 6.48
+  },
+  {
+    "text": "aents in parallel or just one at a time.",
+    "start": 298.88,
+    "duration": 5.2
+  },
+  {
+    "text": "Multihop we've scored at a zero out of",
+    "start": 302.0,
+    "duration": 4.08
+  },
+  {
+    "text": "five here. The main point of support for",
+    "start": 304.08,
+    "duration": 4.32
+  },
+  {
+    "text": "multihop is that you can have multiple",
+    "start": 306.08,
+    "duration": 5.2
+  },
+  {
+    "text": "invocations of an agent in series which",
+    "start": 308.4,
+    "duration": 4.56
+  },
+  {
+    "text": "is not super feasible with this",
+    "start": 311.28,
+    "duration": 4.16
+  },
+  {
+    "text": "architecture. You can have stateful",
+    "start": 312.96,
+    "duration": 4.48
+  },
+  {
+    "text": "routers but it's much more difficult to",
+    "start": 315.44,
+    "duration": 3.68
+  },
+  {
+    "text": "manage. We actually recommend and you",
+    "start": 317.44,
+    "duration": 3.52
+  },
+  {
+    "text": "can check out our new docs on this if",
+    "start": 319.12,
+    "duration": 3.76
+  },
+  {
+    "text": "you do want a stateful router that you",
+    "start": 320.96,
+    "duration": 4.799
+  },
+  {
+    "text": "just wrap your router in a tool.",
+    "start": 322.88,
+    "duration": 4.64
+  },
+  {
+    "text": "Finally, we score direct interaction",
+    "start": 325.759,
+    "duration": 3.921
+  },
+  {
+    "text": "with the user at a three out of five. As",
+    "start": 327.52,
+    "duration": 3.519
+  },
+  {
+    "text": "you can see, there's router and",
+    "start": 329.68,
+    "duration": 3.76
+  },
+  {
+    "text": "synthesizer steps on either side of the",
+    "start": 331.039,
+    "duration": 4.401
+  },
+  {
+    "text": "agent invocation. So, this isn't as",
+    "start": 333.44,
+    "duration": 4.88
+  },
+  {
+    "text": "direct as the interaction that we see in",
+    "start": 335.44,
+    "duration": 5.92
+  },
+  {
+    "text": "some of our other architectures.",
+    "start": 338.32,
+    "duration": 4.64
+  },
+  {
+    "text": "Putting this all together, we're sort of",
+    "start": 341.36,
+    "duration": 3.92
+  },
+  {
+    "text": "using the fivestar scale here. Here is a",
+    "start": 342.96,
+    "duration": 4.239
+  },
+  {
+    "text": "table summarizing all of our results.",
+    "start": 345.28,
+    "duration": 3.44
+  },
+  {
+    "text": "And you can also check out our newly",
+    "start": 347.199,
+    "duration": 3.201
+  },
+  {
+    "text": "rolled out multi-agent docs to learn",
+    "start": 348.72,
+    "duration": 5.199
+  },
+  {
+    "text": "more about these comparisons.",
+    "start": 350.4,
+    "duration": 4.96
+  },
+  {
+    "text": "Again, I would say that probably the",
+    "start": 353.919,
+    "duration": 2.801
+  },
+  {
+    "text": "most important thing here is to start",
+    "start": 355.36,
+    "duration": 3.36
+  },
+  {
+    "text": "simple. So start with a single agent and",
+    "start": 356.72,
+    "duration": 3.52
+  },
+  {
+    "text": "build up from there as your problem gets",
+    "start": 358.72,
+    "duration": 5.28
+  },
+  {
+    "text": "more complex. Thanks, folks.",
+    "start": 360.24,
+    "duration": 3.76
+  }
+]

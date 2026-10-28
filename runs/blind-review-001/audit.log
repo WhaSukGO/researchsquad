@@ -1,0 +1,84 @@
+{
+  "checks": {
+    "all_inputs_verified": true,
+    "no_model_side_tools": true,
+    "all_cases_sealed": true,
+    "within_call_budget": true,
+    "sealed_before_results_written": true,
+    "scorer_result_matches_seal": true
+  },
+  "pass": true,
+  "cases": [
+    {
+      "case": "case-001",
+      "review_status": "ok",
+      "prompt_exactly_allowlisted": true,
+      "schema_matches": true,
+      "image_hash_matches": true,
+      "no_model_tools": true,
+      "os_read_isolation": false
+    },
+    {
+      "case": "case-002",
+      "review_status": "ok",
+      "prompt_exactly_allowlisted": true,
+      "schema_matches": true,
+      "image_hash_matches": true,
+      "no_model_tools": true,
+      "os_read_isolation": false
+    },
+    {
+      "case": "case-003",
+      "review_status": "ok",
+      "prompt_exactly_allowlisted": true,
+      "schema_matches": true,
+      "image_hash_matches": true,
+      "no_model_tools": true,
+      "os_read_isolation": false
+    },
+    {
+      "case": "case-004",
+      "review_status": "ok",
+      "prompt_exactly_allowlisted": true,
+      "schema_matches": true,
+      "image_hash_matches": true,
+      "no_model_tools": true,
+      "os_read_isolation": false
+    },
+    {
+      "case": "case-005",
+      "review_status": "ok",
+      "prompt_exactly_allowlisted": true,
+      "schema_matches": true,
+      "image_hash_matches": true,
+      "no_model_tools": true,
+      "os_read_isolation": false
+    },
+    {
+      "case": "case-006",
+      "review_status": "ok",
+      "prompt_exactly_allowlisted": true,
+      "schema_matches": true,
+      "image_hash_matches": true,
+      "no_model_tools": true,
+      "os_read_isolation": false
+    },
+    {
+      "case": "case-007",
+      "review_status": "ok",
+      "prompt_exactly_allowlisted": true,
+      "schema_matches": true,
+      "image_hash_matches": true,
+      "no_model_tools": true,
+      "os_read_isolation": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 99550,
+    "cached_input_tokens": 9216,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 8212,
+    "reasoning_output_tokens": 6714
+  },
+  "scope": "Audit of application data flow and observed tool events, not proof of OS isolation, unknown training data, musical correctness or unbiased human labels."
+}
