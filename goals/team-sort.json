@@ -1,0 +1,15 @@
+{
+  "goal": "Produce the public input numbers in ascending order, retaining duplicates.",
+  "inputs": {
+    "numbers.json": "[4,1,3,1]"
+  },
+  "evaluator": "sorted_numbers",
+  "network": false,
+  "acceptance": "The protected host comparison must match the complete ascending list.",
+  "budget": {
+    "max_calls": 30,
+    "max_seconds": 180,
+    "max_assignments": 4,
+    "max_depth": 2
+  }
+}

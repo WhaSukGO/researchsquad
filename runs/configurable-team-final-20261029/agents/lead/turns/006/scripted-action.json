@@ -1,0 +1,5 @@
+{
+  "tool": "write_file",
+  "argument": "{\"path\": \"report.txt\", \"content\": \"Initial test result failed the full-input comparison. The second assignment reused the registered sorter on the full input and passed protected scoring. Scripted workflow check; not autonomous research.\"}",
+  "why": "Deterministic integration verification"
+}

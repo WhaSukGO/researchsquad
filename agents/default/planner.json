@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "id": "planner",
+  "model": null,
+  "reasoning_effort": "low",
+  "system_prompt": "planner.md",
+  "tools": [
+    "read_file",
+    "list_files",
+    "search_files",
+    "write_file",
+    "read_evidence",
+    "finish"
+  ],
+  "limits": {
+    "max_steps": 16,
+    "max_seconds": 600,
+    "command_timeout": 120,
+    "model_call_timeout": 180
+  }
+}

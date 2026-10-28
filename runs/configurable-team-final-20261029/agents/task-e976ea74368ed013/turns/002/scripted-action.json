@@ -1,0 +1,5 @@
+{
+  "tool": "register_tool",
+  "argument": "{\"name\": \"sort_numbers\", \"description\": \"Read a JSON number array from stdin; write result.json and print ascending values.\", \"script\": \"sorter.py\", \"test_argument\": [2, 1]}",
+  "why": "Deterministic integration verification"
+}

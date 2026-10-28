@@ -1,0 +1,4 @@
+{
+  "sorter.py": "import json,sys\nvalues=json.load(sys.stdin)\nresult=sorted(values)\nwith open('result.json','w') as f: json.dump(result,f)\nprint(json.dumps(result))\n",
+  "result.json": "[1, 2]"
+}

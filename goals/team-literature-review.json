@@ -1,0 +1,12 @@
+{
+  "goal": "Compare open-source optical music recognition approaches for editable notation, and identify the smallest useful next experiment.",
+  "acceptance": "A sourced comparison, applicability limits, reproducible repository references and an explicit experiment proposal. Human review required; no automatic completion verdict.",
+  "inputs": {},
+  "network": true,
+  "budget": {
+    "max_calls": 40,
+    "max_seconds": 1800,
+    "max_assignments": 6,
+    "max_depth": 2
+  }
+}

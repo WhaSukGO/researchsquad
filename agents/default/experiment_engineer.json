@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "id": "experiment_engineer",
+  "model": null,
+  "reasoning_effort": "high",
+  "system_prompt": "experiment_engineer.md",
+  "tools": [
+    "catalog",
+    "read_file",
+    "write_file",
+    "list_files",
+    "search_files",
+    "run",
+    "view_image",
+    "register_tool",
+    "read_evidence",
+    "request_environment",
+    "finish"
+  ],
+  "limits": {
+    "max_steps": 16,
+    "max_seconds": 600,
+    "command_timeout": 120,
+    "model_call_timeout": 180
+  }
+}

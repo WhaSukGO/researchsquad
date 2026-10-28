@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "id": "sorting_specialist",
+  "model": null,
+  "reasoning_effort": "high",
+  "system_prompt": "Use registered tools to sort the complete assigned public input. Submit result.json.",
+  "tools": [
+    "read_file",
+    "write_file",
+    "run",
+    "finish",
+    "script.sort_numbers"
+  ],
+  "limits": {
+    "max_steps": 16,
+    "max_seconds": 600,
+    "command_timeout": 120,
+    "model_call_timeout": 180
+  }
+}
