@@ -10,6 +10,7 @@ import subprocess
 import time
 from pathlib import Path
 from .agent import Agent
+from .budgets import limit, valid_limit, visible_remaining
 from .configuration import load_agent, validate_agent
 from .contracts import atomic_json, digest
 from .provider import CodexProvider
@@ -25,6 +26,10 @@ class Team:
         self.folder=Path(folder).resolve();self.folder.mkdir(parents=True,exist_ok=True)
         self._lock=(self.folder/'run.lock').open('w')
         fcntl.flock(self._lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        task=copy.deepcopy(task)
+        if type(task.get('unlimited',False)) is not bool:raise ValueError('unlimited must be boolean')
+        if task.get('unlimited'):
+            task['budget']={key:None for key in ('max_calls','max_seconds','max_assignments','max_depth')}
         self.task=task;self.model=model;self.sandbox_factory=sandbox_factory
         self.provider_factory=provider_factory or (lambda config:CodexProvider(config['model'] or model,config['reasoning_effort']))
         self.evaluators=evaluators or {}
@@ -37,18 +42,19 @@ class Team:
         if sum(map(len,self.assets.values()))>64000000:raise ValueError('Asset budget exceeds 64 MB')
         if not isinstance(task.get('goal'),str) or not task['goal'].strip():raise ValueError('Goal required')
         budget=task['budget']
-        if set(budget)!={'max_calls','max_seconds','max_assignments','max_depth'} or any(type(v) is not int or v<=0 for v in budget.values()):raise ValueError('Invalid team budget')
+        if set(budget)!={'max_calls','max_seconds','max_assignments','max_depth'} or any(not valid_limit(v) for v in budget.values()):raise ValueError('Invalid team budget')
         if type(task.get('network',False)) is not bool:raise ValueError('Invalid network policy')
         self.definitions={}
         for path in sorted(Path(agents_dir or ROOT/'agents/default').glob('*.json')):
             config=load_agent(path)
+            if task.get('unlimited'):config['limits']={key:None for key in config['limits']}
             if config['id'] in self.definitions:raise ValueError('Duplicate agent definition')
             self.definitions[config['id']]=config
         if 'coordinator' not in self.definitions:raise ValueError('Coordinator definition missing')
         self.registry=default_registry()
         handlers={
             'catalog':('Empty argument; list available roles and registered tool interfaces.',self.catalog),
-            'delegate':('JSON {agent, objective, success_criteria, inputs:{destination:caller_workspace_path}, parent?:assignment_id, mode?:explore|improve|debug}. Distinct assignment, isolated context/workspace. Returns child evidence.',self.delegate),
+            'delegate':('JSON {agent:string, objective:string, success_criteria:string, inputs:{destination:caller_workspace_path}, parent?:assignment_id, mode?:explore|improve|debug}. Criteria must be a string, not an object/list. Default explore has no parent; improve/debug require a prior assignment ID. Inputs are workspace-relative paths, normally inputs/FILE. Distinct assignment, isolated context/workspace. Returns child evidence.',self.delegate),
             'create_specialist':('JSON {id, template, system_prompt, tools}; create a role with a subset of template tools and unchanged model/budget. No permission expansion.',self.create_specialist),
             'register_tool':('JSON {name, description, script, test_argument}; capture a Python script reading JSON from stdin. It must pass its test in Docker. Registered as script.NAME for future executing agents, never as a host plugin.',self.register_tool),
             'read_evidence':('JSON {id, offset?:0}; read a durable shared evidence record in 6000-character pages.',self.read_evidence),
@@ -78,9 +84,9 @@ class Team:
     def __del__(self):self.close()
     def save(self):atomic_json(self.folder/'team-state.json',self.state)
     def remaining(self):
-        return self.task['budget']['max_seconds']-self.state['active_seconds']-(time.monotonic()-self.started if self.started else 0)
+        return limit(self.task['budget']['max_seconds'])-self.state['active_seconds']-(time.monotonic()-self.started if self.started else 0)
     def charge(self):
-        if self.remaining()<=1 or self.state['calls']>=self.task['budget']['max_calls']:raise TimeoutError('Team budget exhausted')
+        if self.remaining()<=1 or self.state['calls']>=limit(self.task['budget']['max_calls']):raise TimeoutError('Team budget exhausted')
         self.state['calls']+=1;self.save()
     def record(self,id,data):
         path=self.folder/'evidence'/f'{id}.json'
@@ -88,7 +94,7 @@ class Team:
         atomic_json(path,data);self.state['evidence'][id]=digest(data);self.save()
         return {'evidence_id':id,**data}
     def catalog(self,agent,action,timeout):
-        return {'environment':self.state['environment'],'agents':[{k:v for k,v in c.items() if k!='system_prompt'} for c in self.definitions.values()],
+        return {'budget':{'limits':self.task['budget'],'calls_used':self.state['calls'],'remaining_seconds':visible_remaining(self.remaining()),'unlimited':self.task.get('unlimited',False)},'environment':self.state['environment'],'agents':[{k:v for k,v in c.items() if k!='system_prompt'} for c in self.definitions.values()],
                 'tools':self.registry.catalog(list(self.registry.tools))}
     def policy(self,config):
         env=self.state['environment']
@@ -120,10 +126,10 @@ class Team:
         if set(data)-{'agent','objective','success_criteria','inputs','parent','mode'}:raise ValueError('Unknown assignment fields')
         config=self.definitions[data['agent']]
         for k in ('objective','success_criteria'):
-            if not isinstance(data.get(k),str) or not data[k].strip() or len(data[k])>8000:raise ValueError('Distinct objective and criteria required')
+            if not isinstance(data.get(k),str) or not data[k].strip() or len(data[k])>8000:raise ValueError(k+' must be a nonempty string of at most 8000 characters; objects/lists are not accepted')
         if data['objective'].strip()==self.task['goal'].strip():raise ValueError('Translate the goal into a distinct task')
         depth=agent.assignment.get('depth',0)+1
-        if depth>self.task['budget']['max_depth']:raise ValueError('Delegation depth exceeded')
+        if depth>limit(self.task['budget']['max_depth']):raise ValueError('Delegation depth exceeded')
         mode=data.get('mode','explore');parent=data.get('parent')
         if mode not in {'explore','improve','debug'}:raise ValueError('Unknown branch mode')
         if mode=='explore' and parent is not None:raise ValueError('Explore has no parent')
@@ -133,7 +139,7 @@ class Team:
             if mode=='debug' and self.state['assignments'][parent].get('outcome',{}).get('status') not in {'budget_exhausted','environment_blocked','execution_error'}:raise ValueError('Debug requires failed execution')
         id='task-'+digest({'caller':str(agent.folder.relative_to(self.folder)),'step':agent.state['steps'],'data':data})[:16]
         if id not in self.state['assignments']:
-            if len(self.state['assignments'])>=self.task['budget']['max_assignments']:raise ValueError('Assignment budget exhausted')
+            if len(self.state['assignments'])>=limit(self.task['budget']['max_assignments']):raise ValueError('Assignment budget exhausted')
             inputs=data.get('inputs',{})
             if not isinstance(inputs,dict) or len(inputs)>32:raise ValueError('Invalid input inventory')
             inventory={};raw_inputs={}
@@ -182,7 +188,7 @@ class Team:
         if config['id'] in self.definitions:
             if self.definitions[config['id']]!=config:raise ValueError('Role already exists with another definition')
         else:
-            if len(self.state['specialists'])>=8:raise ValueError('Specialist limit reached')
+            if not self.task.get('unlimited') and len(self.state['specialists'])>=8:raise ValueError('Specialist limit reached')
             self.definitions[config['id']]=config;self.state['specialists'][config['id']]=config;self.save()
         return {'created':config['id'],'template':template['id'],'tools':config['tools']}
     def install_extension(self,extension):
@@ -202,7 +208,7 @@ class Team:
         if name in self.state['extensions']:
             if self.state['extensions'][name]!=extension:raise ValueError('Tool already registered with different source')
             return {'registered':name,'reused':True}
-        if len(self.state['extensions'])>=16:raise ValueError('Extension limit reached')
+        if not self.task.get('unlimited') and len(self.state['extensions'])>=16:raise ValueError('Extension limit reached')
         test=json.dumps(data['test_argument']);captured=agent.workspace/'inputs'/'tools'/f'{extension["hash"]}.py'
         captured.parent.mkdir(parents=True,exist_ok=True);captured.write_text(source)
         result=agent.sandbox.run('printf %s '+shlex.quote(test)+' | python '+shlex.quote(str(captured.relative_to(agent.workspace))),agent.folder/'logs'/f'tool-test-{agent.state["steps"]}.log',timeout)
@@ -269,9 +275,11 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--task',required=True);parser.add_argument('--run-dir',required=True)
     parser.add_argument('--agents-dir');parser.add_argument('--model')
+    parser.add_argument('--unlimited',action='store_true',help='Remove team/agent effort budgets and model/command deadlines')
     args=parser.parse_args()
     from .team_evaluators import EVALUATORS
     task=json.loads(Path(args.task).read_text())
+    if args.unlimited:task['unlimited']=True
     task['assets']={name:str((Path(args.task).resolve().parent/path).resolve()) for name,path in task.get('assets',{}).items()}
     team=Team(args.run_dir,task,agents_dir=args.agents_dir,model=args.model,evaluators=EVALUATORS)
     print(json.dumps({'outcome':team.run(),'goal_met':team.state['goal_met'],'calls':team.state['calls']}))

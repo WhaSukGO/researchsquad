@@ -1,0 +1,38 @@
+!!!!SEGMENT:
+**kern	**mxhm
+*part1	*part1
+*staff1	*
+*I"Voice	*
+*I'V	*
+*clefG^2	*
+!!LO:TX:omd:t=
+*M4/4	*
+=1	=1
+8eeL	.
+8ee	.
+8ee	.
+8eeJ	.
+8eeL	.
+8ffJ	.
+8ggL	.
+[8ggJ	.
+=	=
+!LO:TX:a:i:t=GI"	!
+2.gg]	.
+[4bbb	.
+=	=
+!	!LO:H:kt=m
+2.bbb]	A minor
+1ryy	.
+4.cc	.
+4.cc	.
+4.cc	.
+=	=
+2.ee]	.
+8ee	.
+=	=
+*-	*-
+!!!software: music21 v.9.9.2
+!!!software: converter21
+!!!RDF**kern: > = above
+!!!RDF**kern: < = below

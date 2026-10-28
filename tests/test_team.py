@@ -171,3 +171,25 @@ def test_ready_environment_is_visible_to_lead_and_new_assignment(tmp_path):
     assert a.execute(action('catalog'),1)['environment']==receipt
     result=a.execute(action('delegate',{'agent':'planner','objective':'Inspect available capabilities','success_criteria':'A plan','inputs':{}}),30)
     assert team.state['assignments'][result['assignment_id']]['assignment']['environment']==receipt
+
+def test_default_directory_listing_accepts_dot_without_allowing_traversal(tmp_path):
+    team=make(tmp_path);a=instance(team)
+    (a.workspace/'inputs'/'brief.txt').write_text('supplied')
+    assert 'inputs/brief.txt' in a.execute(action('list_files',{}),1)['files']
+    assert 'inputs/brief.txt' in a.execute(action('list_files',{'path':'.'}),1)['files']
+    with pytest.raises(ValueError):a.execute(action('list_files',{'path':'..'}),1)
+
+
+def test_delegate_explains_criteria_type_error(tmp_path):
+    team=make(tmp_path);a=instance(team)
+    with pytest.raises(ValueError,match='success_criteria must be a nonempty string'):
+        a.execute(action('delegate',{'agent':'planner','objective':'Plan','success_criteria':{'check':'something'}}),1)
+
+
+def test_agent_prompt_explains_input_location_and_read_limit(tmp_path):
+    def inspect(prompt):
+        context=json.loads(prompt.split('Task data:\n',1)[1])
+        assert context['workspace']['input_root']=='inputs/' and context['workspace']['read_file_limit_max']==8000
+        return action('write_file',{'path':'report.txt','content':'verified'})
+    def factory(config):return Scripted([inspect,action('finish',{'summary':'done','files':['report.txt']})])
+    team=make(tmp_path,provider_factory=factory);assert team.run()['status']=='submitted'

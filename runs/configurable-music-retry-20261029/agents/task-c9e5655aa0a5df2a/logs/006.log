@@ -1,0 +1,17 @@
+Run a real music-transcription pilot on the seven supplied development excerpts.
+The goal is editable kern with melody and chord symbols. References stay with the protected evaluator.
+Read delivered-baseline.json for the directly scored supplied kern files; baseline.json contains historical engine scores and is not an identical artifact comparison. Use the explicitly supplied prediction files when preserving baseline melody.
+The image and prediction paths are listed in the assignment inventory; delegate the actual files your engineer needs.
+Prepared Python, Pillow, music21, converter21, Verovio and Tesseract are available. Register converter21 before Humdrum import/export. Audiveris is not installed; its existing predictions and raw MusicXML exports are provided.
+Choose a specific, measurable intervention. Evaluate the first submitted candidate, then use its measurements to refine it or try another feasible approach. Preserve the strongest measured candidate, and explain any decision to stop.
+Each evaluated engineer must submit seven text artifacts named sample-NNN.krn at workspace root, plus source and a short report. Use finish.files to list them; files left only in output/ are not submitted by this interface. The required sample numbers are in samples.json. A submitted file should have **kern melody and **mxhm harmony, tab-separated rows, with matched terminators. Chords use root:quality[/bass]. Missing files count as failures. Do not invent notes or use evaluation answers.
+Use request_environment for missing capabilities. Tool registration and extra specialists are optional; choose them only if useful. Do not spend the entire pilot making a new runtime.
+This is a development pilot, not held-out accuracy. Seven samples cannot complete the 32-sample acceptance gate; chord timing audit and musician review remain outstanding. Finish with measured deltas, limitations and next steps, even if the goal is unmet.
+
+sample-001.png (750, 107)
+sample-006.png (1000, 128)
+sample-012.png (859, 123)
+sample-017.png (750, 107)
+sample-019.png (952, 136)
+sample-023.png (715, 102)
+sample-029.png (745, 106)

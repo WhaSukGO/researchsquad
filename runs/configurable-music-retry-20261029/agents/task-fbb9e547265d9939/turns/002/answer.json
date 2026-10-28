@@ -1,0 +1,1 @@
+{"tool":"run","argument":"cat inputs/brief.txt inputs/samples.json inputs/delivered-baseline.json","why":"Read the declared requirements and observed baseline failures before choosing the conversion and harmony repairs."}

@@ -1,0 +1,11 @@
+{
+  "image": "sha256:68272ce059bbeb37797a1e81a87e896738f103f19134709f4d33cd8a670488ea",
+  "network": true,
+  "memory": "2g",
+  "cpus": 2,
+  "managed_environment": true,
+  "max_steps": 16,
+  "max_seconds": 600,
+  "command_timeout": 120,
+  "model_call_timeout": 180
+}

@@ -8,5 +8,6 @@
     "max_seconds": 1800,
     "max_assignments": 6,
     "max_depth": 2
-  }
+  },
+  "unlimited": true
 }

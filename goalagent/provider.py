@@ -4,6 +4,7 @@ The model proposes JSON; the host, not the model process, executes registered to
 """
 from __future__ import annotations
 import hashlib
+import math
 import json
 import os
 from pathlib import Path
@@ -25,7 +26,7 @@ def run_process(command, *, cwd, stdin='', timeout=180):
     process = subprocess.Popen(command, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, text=True, start_new_session=True)
     try:
-        out, err = process.communicate(stdin, timeout=timeout)
+        out, err = process.communicate(stdin, timeout=None if timeout is None or math.isinf(timeout) else timeout)
         return process.returncode, out, err
     except (subprocess.TimeoutExpired, KeyboardInterrupt):
         os.killpg(process.pid, signal.SIGTERM)

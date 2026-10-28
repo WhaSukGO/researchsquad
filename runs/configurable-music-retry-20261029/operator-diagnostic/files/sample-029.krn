@@ -1,0 +1,26 @@
+!!!!SEGMENT:
+!!!OMD: sample-029-repaired.musicxml
+**kern	**mxhm
+*part1	*
+*staff1	*
+*I"Voice	*
+*I'Voice	*
+!!LO:TX:omd:t=
+*M4/4	*
+=	=
+2d/	.
+=1	=1
+1r	.
+=2	=2
+2B/	.
+=3	=3
+1r	.
+=	=
+*-	*-
+!!!software: music21 v.9.9.2
+!!!software: Audiveris 5.11.0
+!!!software: ProxyMusic 4.0.3
+!!!source-file: /Users/geegle/development/whasuk/researchagent/runs/first-benchmark/audiveris-enlarged/sample-029/input.png
+!!!source-sheet-1: 1
+!!!RDF**kern: > = above
+!!!RDF**kern: < = below

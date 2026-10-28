@@ -1,0 +1,208 @@
+DELIVERED {"accepted": false, "id": "exp-80a13f46921f-evaluation", "experiment_id": "exp-80a13f46921f", "samples": 7, "parseable": 3, "melody": {"reference_count": 130, "prediction_count": 50, "matches": 29, "errors": 101, "substitutions": 21, "deletions": 80, "insertions": 0, "error_rate": 0.7769230769230769, "f1": 0.32222222222222224}, "chords": {"reference_count": 38, "prediction_count": 0, "matches": 0, "errors": 38, "substitutions": 0, "deletions": 38, "insertions": 0, "error_rate": 1.0, "f1": 0.0}, "exact_measured": 0, "transposition_checked": 3, "transposition_failures": null, "chord_timing_audited": false, "musician_accepted": false, "paired_baselines": {"audiveris-raw": {"melody": {"reference_count": 130, "prediction_count": 16, "matches": 0, "errors": 130, "substitutions": 16, "deletions": 114, "insertions": 0, "error_rate": 1.0, "f1": 0.0}, "chords": {"reference_count": 38, "prediction_count": 0, "matches": 0, "errors": 38, "substitutions": 0, "deletions": 38, "insertions": 0, "error_rate": 1.0, "f1": 0.0}}, "audiveris-enlarged": {"melody": {"reference_count": 130, "prediction_count": 108, "matches": 46, "errors": 87, "substitutions": 59, "deletions": 25, "insertions": 3, "error_rate": 0.6692307692307692, "f1": 0.3865546218487395}, "chords": {"reference_count": 38, "prediction_count": 8, "matches": 8, "errors": 30, "substitutions": 0, "deletions": 30, "insertions": 0, "error_rate": 0.7894736842105263, "f1": 0.34782608695652173}}, "transcoda-greedy": {"melody": {"reference_count": 130, "prediction_count": 657, "matches": 93, "errors": 564, "substitutions": 37, "deletions": 0, "insertions": 527, "error_rate": 4.338461538461538, "f1": 0.2363405336721728}, "chords": {"reference_count": 38, "prediction_count": 0, "matches": 0, "errors": 38, "substitutions": 0, "deletions": 38, "insertions": 0, "error_rate": 1.0, "f1": 0.0}}}, "limits": ["Development pilot, not held-out performance.", "Chord labels scored in order; beat timing unmeasured.", "Reference files are supplied labels, not musician-audited gold.", "Transposition, when checked, only covers an upward major second."], "per_sample": [{"melody_errors": 10, "chord_errors": 5, "parse_ok": true, "uncertainties": [], "sample": "sample-001"}, {"melody_errors": 17, "chord_errors": 0, "parse_ok": true, "uncertainties": [], "sample": "sample-006"}, {"melody_errors": 0, "chord_errors": 6, "parse_ok": true, "uncertainties": [], "sample": "sample-012"}, {"melody_errors": 19, "chord_errors": 13, "parse_ok": false, "uncertainties": [], "sample": "sample-017"}, {"melody_errors": 27, "chord_errors": 4, "parse_ok": false, "uncertainties": [], "sample": "sample-019"}, {"melody_errors": 20, "chord_errors": 4, "parse_ok": false, "uncertainties": [], "sample": "sample-023"}, {"melody_errors": 8, "chord_errors": 6, "parse_ok": false, "uncertainties": [], "sample": "sample-029"}]}
+
+IMAGE sample-001 (750, 107)
+OCR 6 5 (3 2 Dm cH c
+
+OCR 11 Oi eS
+
+XML 0 1 div 1 notes [('C', '4', '1', 'quarter', '1', False)] harmony []
+XML 1 2 div None notes [('F', '4', '1', 'quarter', '1', False), ('A', '4', '1', 'quarter', '1', True)] harmony []
+XML 2 3 div None notes [('E', '5', '1', 'quarter', '1', False), ('F', '4', '1', 'quarter', '1', False), ('F', '5', '1', 'quarter', '1', True)] harmony []
+XML 3 4 div None notes [('C', '4', '1', 'quarter', '1', False), ('B', '3', '1', 'quarter', '1', False), ('D', '4', '1', 'quarter', '1', True), ('B', '3', '1', 'quarter', '1', False), ('D', '4', '1', 'quarter', '1', True), ('D', '4', '1', 'quarter', '1', False)] harmony []
+XML 4 5 div None notes [] harmony []
+
+IMAGE sample-006 (1000, 128)
+OCR 6 7 ae ee eee
+
+TY ee ——_— e S| _— _ ee...
+
+CU) Pe ae ee ee ee ee ee ee
+
+Sr @ eg 5 __@€6. 9 e _) ~ @o8 Se _
+— —
+
+OCR 11 ra
+
+we
+
+—ti
+
+CON 8 ee — | F  e
+
+a
+
+|
+
+Vi rm
+
+sil
+
+| aa
+
+—/ ia
+
+a
+
+XML 0 1 div 4 notes [('B', '2', '2', 'eighth', '1', False), ('G', '2', '1', '16th', '1', False), ('A', '2', '1', '16th', '1', False)] harmony []
+XML 1 2 div None notes [('B', '2', '2', 'eighth', '1', False), ('B', '2', '2', 'eighth', '1', False), ('F', '2', '1', '16th', '1', False), ('A', '2', '1', '16th', '1', True), ('A', '2', '1', '16th', '1', False), ('A', '2', '6', 'quarter', '1', False)] harmony []
+XML 2 3 div None notes [('E', '3', '2', 'eighth', '1', False), ('E', '3', '4', 'quarter', '1', False), ('D', '4', '4', 'quarter', '1', False), ('C', '3', '4', 'quarter', '1', False), ('B', '2', '2', 'eighth', '1', False), ('C', '3', '1', '16th', '1', False), ('D', '3', '1', '16th', '1', False)] harmony []
+
+IMAGE sample-012 (859, 123)
+OCR 6 A Cc G/B Am’? Fmaj’ CIG G
+SS a tC Ce ee ee ee ee ee ee ee
+
+OCR 11 Cc
+
+G/B
+
+Am’?
+
+Fmaj’
+
+CIG
+
+G
+
+=
+
+eer ee oe 7g
+
+PRerSro toorresaeoerase
+
+XML 0 0 div 4 notes [('C', '4', '1', '16th', '1', False), ('D', '4', '1', '16th', '1', False)] harmony []
+XML 1 1 div None notes [('E', '4', '3', 'eighth', '1', False), ('D', '4', '1', '16th', '1', False), ('D', '4', '1', '16th', '1', False), ('G', '4', '2', 'eighth', '1', False), ('E', '4', '1', '16th', '1', False), ('E', '4', '4', 'quarter', '1', False), ('C', '4', '1', '16th', '1', False), ('D', '4', '1', '16th', '1', False), ('E', '4', '1', '16th', '1', False), ('F', '4', '1', '16th', '1', False)] harmony [('G', 'major', 'B', None)]
+XML 2 2 div None notes [('E', '4', '3', 'eighth', '1', False), ('D', '4', '1', '16th', '1', False), ('D', '4', '1', '16th', '1', False), ('G', '4', '2', 'eighth', '1', False), ('E', '4', '1', '16th', '1', False), ('E', '4', '4', 'quarter', '1', False), (None, None, '2', 'eighth', '1', False), ('C', '4', '1', '16th', '1', False), ('C', '4', '1', '16th', '1', False)] harmony [('A', 'minor-seventh', None, None)]
+XML 3 3 div None notes [('E', '4', '3', 'eighth', '1', False), ('F', '4', '1', '16th', '1', False), ('F', '4', '2', 'eighth', '1', False), ('E', '4', '1', '16th', '1', False), ('D', '4', '1', '16th', '1', False), ('D', '4', '8', 'half', '1', False)] harmony [('F', 'major-seventh', None, None)]
+XML 4 4 div None notes [('E', '4', '3', 'eighth', '1', False), ('F', '4', '1', '16th', '1', False), ('F', '4', '2', 'eighth', '1', False), ('E', '4', '1', '16th', '1', False), ('D', '4', '1', '16th', '1', False), ('D', '4', '6', 'quarter', '1', False)] harmony [('C', 'major', 'G', None)]
+
+IMAGE sample-017 (750, 107)
+OCR 6 c GuiG’ Fevc C Bic C’ —s— 3G). Ce DmG’
+se
+eee
+tees eae: gg (7 Pt te gti see
+
+OCR 11 ¢
+
+Gai G?
+
+Five C BIC’ F
+
+=
+
+harcu
+
+(73
+
+DmG!
+
+=
+
+=
+
+XML 0 1 div 2 notes [('A', '2', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', True), ('A', '2', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', True), ('A', '3', '2', 'quarter', '1', True), ('A', '2', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', True), ('A', '2', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', True), ('A', '3', '2', 'quarter', '1', True), ('A', '2', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', True), ('A', '2', '1', 'eighth', '1', False)] harmony [('C', 'major', None, None)]
+XML 1 2 div None notes [('A', '2', '2', 'quarter', '1', False), ('G', '2', '2', 'quarter', '1', False), ('E', '3', '2', 'quarter', '1', True), ('G', '2', '2', 'quarter', '1', False), (None, None, '4', 'half', '1', False)] harmony []
+XML 2 3 div None notes [('C', '3', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', False), ('B', '3', '2', 'quarter', '1', True), ('C', '3', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', False), ('B', '3', '2', 'quarter', '1', True), ('A', '2', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', True), ('D', '4', '2', 'quarter', '1', True), ('A', '2', '2', 'quarter', '1', False), ('A', '2', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', True), ('F', '3', '2', 'quarter', '1', True), ('A', '3', '2', 'quarter', '1', True)] harmony []
+XML 3 4 div None notes [('A', '2', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', True), ('A', '2', '2', 'quarter', '1', False), ('C', '3', '2', 'quarter', '1', True), (None, None, '2', 'quarter', '2', False), ('A', '2', '2', 'quarter', '2', False), ('C', '3', '2', 'quarter', '2', True), ('A', '3', '2', 'quarter', '2', True), (None, None, '4', 'half', '2', False)] harmony [('C', 'major', 'E', None)]
+
+IMAGE sample-019 (952, 136)
+OCR 6 Cc Dm/c ( Fm/¢C
+va ad —
+
+OCR 11 Dn/c
+
+Cc
+
+Fm/¢C
+
+vi
+
+t
+
+=
+
+=r
+
+=o
+
+==
+
+=sa
+
+§
+
+ve
+
+-
+
+me:
+
+—
+
+vue
+
+r=
+
+XML 0 1 div 4 notes [('G', '3', '2', 'eighth', '1', False), ('G', '3', '1', '16th', '1', False), ('G', '3', '1', '16th', '1', False), ('G', '3', '2', 'eighth', '1', False), ('C', '4', '1', '16th', '1', False), ('C', '4', '1', '16th', '1', False), ('C', '4', '4', 'quarter', '1', False), ('A', '4', '16', 'whole', '1', False)] harmony []
+XML 1 2 div None notes [('D', '4', '8', 'half', '1', False), (None, None, '2', 'eighth', '1', False), (None, None, '1', '16th', '1', False), ('G', '3', '1', '16th', '1', False), ('G', '3', '2', 'eighth', '1', False), ('E', '4', '2', 'eighth', '1', False)] harmony [('D', 'minor', 'C', None)]
+XML 2 3 div None notes [('E', '4', '6', 'quarter', '1', False), ('D', '4', '1', '16th', '1', False), ('C', '4', '1', '16th', '1', False), ('C', '4', '4', 'quarter', '1', False), ('A', '4', '16', 'whole', '1', False)] harmony []
+XML 3 4 div None notes [('F', '4', '6', 'quarter', '2', False), ('E', '4', '1', '16th', '2', False), ('F', '4', '1', '16th', '2', False), (None, None, '4', 'quarter', '2', False)] harmony []
+
+IMAGE sample-023 (715, 102)
+OCR 6 P Cc GB Am Em/G
+
+OCR 11 GiB
+
+Am
+
+Em/G
+
+——
+
+ct
+
+f
+
+——
+
+=}
+
+=F
+
+=e
+
+eevee
+
+-
+
+=
+
+XML 0 1 div 2 notes [('E', '5', '1', 'eighth', '1', False), ('E', '5', '1', 'eighth', '1', False), ('E', '5', '1', 'eighth', '1', False), ('E', '5', '1', 'eighth', '1', False), ('E', '5', '1', 'eighth', '1', False), ('F', '5', '1', 'eighth', '1', False), ('G', '5', '1', 'eighth', '1', False), ('G', '5', '1', 'eighth', '1', False)] harmony []
+XML 1 2 div None notes [('G', '5', '6', 'half', '1', False), ('B', '6', '8', 'whole', '1', False)] harmony []
+XML 2 3 div None notes [('C', '5', '2', 'quarter', '1', False), ('C', '5', '2', 'quarter', '1', False), ('C', '5', '2', 'quarter', '1', False), ('C', '5', '2', 'quarter', '1', False), (None, None, '8', None, None, False)] harmony [('A', 'minor', None, None)]
+XML 3 3 div None notes [('E', '5', '6', 'half', '2', False), ('E', '5', '1', 'eighth', '2', False)] harmony []
+
+IMAGE sample-029 (745, 106)
+OCR 6 5 c = Ad F Dre Gat
+
+OCR 11 CG
+
+Am
+
+Dvr#
+
+Gut
+
+pe— + ——
+
+———
+
+—— —~
+
+——<-—
+
+— =
+
+XML 0 0 div 0 notes [('D', '4', '1', 'half', '1', False)] harmony []
+XML 1 1 div None notes [] harmony []
+XML 2 2 div None notes [('B', '3', '1', 'half', '1', False)] harmony []
+XML 3 3 div None notes [] harmony []

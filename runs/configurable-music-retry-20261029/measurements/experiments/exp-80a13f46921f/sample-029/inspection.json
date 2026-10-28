@@ -1,0 +1,10 @@
+{
+  "events": [],
+  "chords": [],
+  "parse_ok": false,
+  "render_ok": false,
+  "errors": [
+    "melody: StopIteration()",
+    "chords: StopIteration()"
+  ]
+}

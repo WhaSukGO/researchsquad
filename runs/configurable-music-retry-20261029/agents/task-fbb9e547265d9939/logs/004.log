@@ -1,0 +1,68 @@
+BRIEF
+Run a real music-transcription pilot on the seven supplied development excerpts.
+The goal is editable kern with melody and chord symbols. References stay with the protected evaluator.
+Read delivered-baseline.json for the directly scored supplied kern files; baseline.json contains historical engine scores and is not an identical artifact comparison. Use the explicitly supplied prediction files when preserving baseline melody.
+The image and prediction paths are listed in the assignment inventory; delegate the actual files your engineer needs.
+Prepared Python, Pillow, music21, converter21, Verovio and Tesseract are available. Register converter21 before Humdrum import/export. Audiveris is not installed; its existing predictions and raw MusicXML exports are provided.
+Choose a specific, measurable intervention. Evaluate the first submitted candidate, then use its measurements to refine it or try another feasible approach. Preserve the strongest measured candidate, and explain any decision to stop.
+Each evaluated engineer must submit seven text artifacts named sample-NNN.krn at workspace root, plus source and a short report. Use finish.files to list them; files left only in output/ are not submitted by this interface. The required sample numbers are in samples.json. A submitted file should have **kern melody and **mxhm harmony, tab-separated rows, with matched terminators. Chords use root:quality[/bass]. Missing files count as failures. Do not invent notes or use evaluation answers.
+Use request_environment for missing capabilities. Tool registration and extra specialists are optional; choose them only if useful. Do not spend the entire pilot making a new runtime.
+This is a development pilot, not held-out accuracy. Seven samples cannot complete the 32-sample acceptance gate; chord timing audit and musician review remain outstanding. Finish with measured deltas, limitations and next steps, even if the goal is unmet.
+
+SAMPLES
+["sample-001", "sample-006", "sample-012", "sample-017", "sample-019", "sample-023", "sample-029"]
+
+BASELINE inputs/baselines/audiveris-enlarged/sample-001.krn 
+**kern
+*I"Voice
+*I'Voice
+=1
+4c
+=
+4f 4a
+=
+4ee
+4f 4ff
+=
+4c
+4B 4d
+4B 4d
+4d
+=
+4%-1ryy
+=
+*-
+
+
+BASELINE inputs/baselines/audiveris-enlarged/sample-006.krn 
+**kern
+*I"Voice
+*I'Voice
+*clefF3
+=1
+8BBL
+16GG'L
+16AAJJ
+=
+8BB
+8BBL
+16FFL 16AA
+[16AA`JJ
+4.AA]
+=
+8E
+4E
+4d
+4C
+8BBL
+16CK
+16DJk
+=
+*-
+
+PARSE 001 OK 8
+PARSE 006 OK 15
+PARSE 012 OK 36
+PARSE 017 OK 21
+PARSE 019 OK 21
+PARSE 023 OK 16

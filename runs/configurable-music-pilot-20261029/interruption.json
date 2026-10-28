@@ -1,0 +1,6 @@
+{
+  "status": "interrupted_for_interface_fix",
+  "timestamp": "2026-10-28T15:50:22.639397+00:00",
+  "implementation": "7b279a6",
+  "reason": "Default list_files path . rejected by workspace_path; supplied input names omit inputs/ prefix. Delegate schema descriptions also omit string types. Preserve attempt before fresh restart."
+}

@@ -1,0 +1,20 @@
+{
+  "provider": "codex-cli",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "low",
+  "elapsed_seconds": 8.990368957995088,
+  "exit_code": 0,
+  "usage": {
+    "input_tokens": 17438,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 90,
+    "reasoning_output_tokens": 35
+  },
+  "prompt_sha256": "05a2a533f8f07916deffccf73ebeb3b90daccbcb4e102085eba160a4b893e236",
+  "image_sha256": null,
+  "context_isolation": "fresh temporary directory outside the project; only explicit prompt, schema and optional image",
+  "os_read_isolation": false,
+  "unexpected_tool_events": [],
+  "billing": "Uses existing Codex account; monetary cost unavailable"
+}

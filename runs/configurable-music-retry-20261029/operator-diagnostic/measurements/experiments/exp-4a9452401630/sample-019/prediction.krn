@@ -1,0 +1,49 @@
+!!!!SEGMENT:
+**kern	**dynam	**mxhm
+*part1	*part1	*part1
+*staff1	*staff1	*
+*I"Voice	*	*
+*I'V	*	*
+*clefG2	*	*
+!!LO:TX:omd:t=
+*M4/4	*	*
+=1	=1	=1
+8GL	.	.
+16GL	.	.
+[16GJJ	.	.
+8GL]	.	.
+16cL	.	.
+[16cJJ	.	.
+4c]	.	.
+[4a	.	.
+=	=	=
+*^	*	*
+2.a]	2ryy	.	.
+!	!	!	!LO:H:kt=m
+.	1ryy	.	D minor/C
+2d	.	.	.
+8r	.	.	.
+16r	.	.	.
+16G	.	.	.
+8GL	4ryy	.	.
+8eJ	.	.	.
+*v	*v	*	*
+=	=	=
+4.e	.	.
+16dLL	.	.
+[16cJJ	.	.
+4c]	.	.
+[4a	.	.
+=	=	=
+!	!LO:DY:a	!
+2.a]	pp	.
+4.f]	.	.
+16eLL	.	.
+16fJJ	.	.
+4r	.	.
+=	=	=
+*-	*-	*-
+!!!software: music21 v.9.9.2
+!!!software: converter21
+!!!RDF**kern: > = above
+!!!RDF**kern: < = below

@@ -1,0 +1,241 @@
+[
+  {
+    "sample": "sample-001",
+    "source": "inputs/inputs/baselines/audiveris-enlarged/sample-001.krn",
+    "source_sha256": "39032956c24ab4cb175ae1d737b831b65d5f76f5c08a632756b2ff06bb56a4e4",
+    "image": "inputs/inputs/images/sample-001.png",
+    "artifact": "sample-001.krn",
+    "artifact_sha256": "243522e2324935672363ca70a2c5909a1092e4fd478b7a48d75a245ec7d9d5e0",
+    "method": "Supplied kern preserved; empty harmony spine appended only when absent.",
+    "repairs": [],
+    "source_note_events": 8,
+    "output_note_events": 8,
+    "source_duration": 9.0,
+    "output_duration": 9.0,
+    "source_harmonies": [],
+    "output_harmonies": [],
+    "exact_event_preservation": true,
+    "parse_ok": true
+  },
+  {
+    "sample": "sample-006",
+    "source": "inputs/inputs/baselines/audiveris-enlarged/sample-006.krn",
+    "source_sha256": "a92193d54f9973d00c77985730e196a4cf457a7a39cbc14f206db8e1f73916d8",
+    "image": "inputs/inputs/images/sample-006.png",
+    "artifact": "sample-006.krn",
+    "artifact_sha256": "84c09c48ceaba4f9b2a65dd05306c868e10e889b7ba51de43c0601fb18293879",
+    "method": "Supplied kern preserved; empty harmony spine appended only when absent.",
+    "repairs": [],
+    "source_note_events": 15,
+    "output_note_events": 15,
+    "source_duration": 8.5,
+    "output_duration": 8.5,
+    "source_harmonies": [],
+    "output_harmonies": [],
+    "exact_event_preservation": true,
+    "parse_ok": true
+  },
+  {
+    "sample": "sample-012",
+    "source": "inputs/inputs/baselines/audiveris-enlarged/sample-012.krn",
+    "source_sha256": "e7cebd6b2b821fba3c92e34bd91431dd76152fb0aabc33c5752617d1a30aa1ce",
+    "image": "inputs/inputs/images/sample-012.png",
+    "artifact": "sample-012.krn",
+    "artifact_sha256": "e7cebd6b2b821fba3c92e34bd91431dd76152fb0aabc33c5752617d1a30aa1ce",
+    "method": "Supplied kern preserved; empty harmony spine appended only when absent.",
+    "repairs": [],
+    "source_note_events": 32,
+    "output_note_events": 32,
+    "source_duration": 16.0,
+    "output_duration": 16.0,
+    "source_harmonies": [
+      [
+        3.5,
+        "G",
+        "major",
+        "B"
+      ],
+      [
+        4.5,
+        "A",
+        "minor-seventh",
+        "A"
+      ],
+      [
+        9.25,
+        "F",
+        "major-seventh",
+        "F"
+      ],
+      [
+        12.5,
+        "C",
+        "major",
+        "G"
+      ]
+    ],
+    "output_harmonies": [
+      [
+        3.5,
+        "G",
+        "major",
+        "B"
+      ],
+      [
+        4.5,
+        "A",
+        "minor-seventh",
+        "A"
+      ],
+      [
+        9.25,
+        "F",
+        "major-seventh",
+        "F"
+      ],
+      [
+        12.5,
+        "C",
+        "major",
+        "G"
+      ]
+    ],
+    "exact_event_preservation": true,
+    "parse_ok": true
+  },
+  {
+    "sample": "sample-017",
+    "source": "inputs/inputs/baselines/audiveris-enlarged/sample-017.krn",
+    "source_sha256": "5d01b0e3bdb36b9e7930af3d027453900c603bf1ce5f6ed0477102fe07b2dc32",
+    "image": "inputs/inputs/images/sample-017.png",
+    "artifact": "sample-017.krn",
+    "artifact_sha256": "e5bd754983bb598446f5b74d43aefcd75fd8297fd96a52ee2204f0e30413927f",
+    "method": "Supplied kern parsed with converter21 and canonically re-exported; source harmonies retained through explicit Harte-to-mxhm mapping.",
+    "repairs": [
+      "Canonical serialization normalizes malformed tokens, ties and spine structure; this is not a manual melody correction."
+    ],
+    "source_note_events": 19,
+    "output_note_events": 19,
+    "source_duration": 21.5,
+    "output_duration": 21.5,
+    "source_harmonies": [
+      [
+        0.0,
+        "C",
+        "major",
+        "C"
+      ],
+      [
+        17.5,
+        "C",
+        "major",
+        "E"
+      ]
+    ],
+    "output_harmonies": [
+      [
+        0.0,
+        "C",
+        "major",
+        "C"
+      ],
+      [
+        17.5,
+        "C",
+        "major",
+        "E"
+      ]
+    ],
+    "exact_event_preservation": true,
+    "parse_ok": true
+  },
+  {
+    "sample": "sample-019",
+    "source": "inputs/inputs/baselines/audiveris-enlarged/sample-019.krn",
+    "source_sha256": "c898709de6fa6056c1b8bf683a2583457a8b77a269f370b3f5d7e0d42bcea120",
+    "image": "inputs/inputs/images/sample-019.png",
+    "artifact": "sample-019.krn",
+    "artifact_sha256": "4602adc8a351d4935156415cab0c909243bd30fc559687a83a800faf13050414",
+    "method": "Supplied kern parsed with converter21 and canonically re-exported; source harmonies retained through explicit Harte-to-mxhm mapping.",
+    "repairs": [
+      "Canonical serialization normalizes malformed tokens, ties and spine structure; this is not a manual melody correction."
+    ],
+    "source_note_events": 20,
+    "output_note_events": 22,
+    "source_duration": 21.0,
+    "output_duration": 21.0,
+    "source_harmonies": [
+      [
+        9.0,
+        "D",
+        "minor",
+        "C"
+      ]
+    ],
+    "output_harmonies": [
+      [
+        6.0,
+        "D",
+        "minor",
+        "C"
+      ]
+    ],
+    "exact_event_preservation": false,
+    "parse_ok": true
+  },
+  {
+    "sample": "sample-023",
+    "source": "inputs/inputs/baselines/audiveris-enlarged/sample-023.krn",
+    "source_sha256": "9b4ee388490ce8487de4cbeb0d789aad99a4200a5a27f7473c8fe951d7dc8e5e",
+    "image": "inputs/inputs/images/sample-023.png",
+    "artifact": "sample-023.krn",
+    "artifact_sha256": "829e3b0e74d65f0129a2d0523b30733171a54d8ee2d3fb47ce4333e9a71739d2",
+    "method": "Supplied kern parsed with converter21 and canonically re-exported; source harmonies retained through explicit Harte-to-mxhm mapping.",
+    "repairs": [
+      "Canonical serialization normalizes malformed tokens, ties and spine structure; this is not a manual melody correction."
+    ],
+    "source_note_events": 15,
+    "output_note_events": 16,
+    "source_duration": 23.0,
+    "output_duration": 23.0,
+    "source_harmonies": [
+      [
+        11.0,
+        "A",
+        "minor",
+        "A"
+      ]
+    ],
+    "output_harmonies": [
+      [
+        8.0,
+        "A",
+        "minor",
+        "A"
+      ]
+    ],
+    "exact_event_preservation": false,
+    "parse_ok": true
+  },
+  {
+    "sample": "sample-029",
+    "source": "inputs/inputs/baselines/audiveris-enlarged/sample-029.musicxml",
+    "source_sha256": "e123b1f53b80878a3b02fdfc236b10141c4eff6c07eacee6fef875c3ebcf0a08",
+    "image": "inputs/inputs/images/sample-029.png",
+    "artifact": "sample-029.krn",
+    "artifact_sha256": "52c92abee18ff88d272bc4b99cbe5e0f74a110dc19d9a90c562625629546c064",
+    "method": "Supplied MusicXML repaired using explicit half-note types, then converted with converter21 registered.",
+    "repairs": [
+      "Invalid divisions=0 replaced with 1. Note durations are reconstructed from explicit type/dot, not original duration=1.",
+      "Only supplied D4 and B3 pitches retained. Empty measures and omitted material remain unresolved; no image melody reconstruction attempted."
+    ],
+    "source_note_events": 2,
+    "output_note_events": 2,
+    "source_duration": 12.0,
+    "output_duration": 12.0,
+    "source_harmonies": [],
+    "output_harmonies": [],
+    "exact_event_preservation": true,
+    "parse_ok": true
+  }
+]

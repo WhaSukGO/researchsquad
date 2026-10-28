@@ -1,0 +1,1 @@
+{"type": "object", "properties": {"tool": {"type": "string", "enum": ["catalog", "read_file", "write_file", "list_files", "search_files", "run", "view_image", "register_tool", "read_evidence", "request_environment", "finish"]}, "argument": {"type": "string"}, "why": {"type": "string"}}, "required": ["tool", "argument", "why"], "additionalProperties": false}

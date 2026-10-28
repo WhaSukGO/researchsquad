@@ -1,0 +1,15 @@
+{
+  "assignment_id": "task-11de587c168123b8",
+  "agent": "experiment_engineer",
+  "objective": "Recover the first candidate from the prior assignment and fix its failed finish submission. The observed failure was ValueError: Submit 1–32 source/config files for reproducibility, and no artifacts were frozen. Inspect inherited workspace files first. Submit the seven required sample-NNN.krn files at workspace root, the actual reproducible source script/config and a short report, using an explicit finish.files list of 1–32 existing text files. Do not pass directories, globs, or an empty files list. If prior work is unavailable, rebuild a minimal structural-repair candidate from the supplied inputs. Preserve source melody where parseable, repair malformed kern or convert supplied raw MusicXML with converter21 registered, and include image-supported or MusicXML-supported harmony only. Record unresolved chord timing and transposition limitations honestly. Prioritize obtaining a valid frozen submission promptly so the coordinator can run protected evaluation before refinement.",
+  "outcome": {
+    "status": "environment_blocked",
+    "steps": 3,
+    "last_observation": {
+      "status": "environment_blocked",
+      "requirements": "Required source data is missing. Inherited inspection step 1 returned no workspace files; step 2 confirmed /workspace contains no files. The assignment declares inputs={} and parent_artifacts=[]. Restore the prior candidate’s seven sample-NNN.krn files and reproducible source, or supply the original images/raw MusicXML under inputs/. Without these, I cannot preserve source melody or produce seven supported artifacts without inventing notes. Status: environment_blocked; no submission has been frozen."
+    }
+  },
+  "artifacts": [],
+  "submission_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+}

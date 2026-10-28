@@ -1,0 +1,22 @@
+{
+  "input_directory": "inputs/inputs",
+  "samples": [
+    "sample-001",
+    "sample-006",
+    "sample-012",
+    "sample-017",
+    "sample-019",
+    "sample-023",
+    "sample-029"
+  ],
+  "preserve_verbatim": [
+    "sample-001",
+    "sample-006",
+    "sample-012"
+  ],
+  "harmony_policy": "Only supplied source harmonies; no speculative labels or timing changes.",
+  "python_packages": {
+    "music21": "9.9.2",
+    "converter21": "4.0.1"
+  }
+}

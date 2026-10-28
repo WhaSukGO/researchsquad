@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-10-28T16:09:56.854245+00:00",
+  "source_assignment": "task-c9e5655aa0a5df2a",
+  "snapshot_hash": "4a9452401630d6417451a64adddd806ef60403841ffed92fc82bc7ae01b5b219",
+  "files": {
+    "sample-001.krn": "243522e2324935672363ca70a2c5909a1092e4fd478b7a48d75a245ec7d9d5e0",
+    "sample-006.krn": "84c09c48ceaba4f9b2a65dd05306c868e10e889b7ba51de43c0601fb18293879",
+    "sample-012.krn": "e7cebd6b2b821fba3c92e34bd91431dd76152fb0aabc33c5752617d1a30aa1ce",
+    "sample-017.krn": "e5bd754983bb598446f5b74d43aefcd75fd8297fd96a52ee2204f0e30413927f",
+    "sample-019.krn": "4602adc8a351d4935156415cab0c909243bd30fc559687a83a800faf13050414",
+    "sample-023.krn": "829e3b0e74d65f0129a2d0523b30733171a54d8ee2d3fb47ce4333e9a71739d2",
+    "sample-029.krn": "52c92abee18ff88d272bc4b99cbe5e0f74a110dc19d9a90c562625629546c064",
+    "build_candidate.py": "7df117838fd8f282a72ff101b7c9675837bbc071762954f39b6e7c950cfcf7de",
+    "candidate-config.json": "0fd52cc8be9ac08ab7b25fa36926e90cb63f745f48c31499022d62a223276847",
+    "test_candidate.py": "fb5568b1da7ad3568ae4078128f050e5e5f00a51dc61a5db38fd9fe3df5f32fd",
+    "report.md": "9a537482226564623c48d481d12272a51adc8e1ce1142fb3f8beb45a6bf23b9a",
+    "provenance.json": "38b053c7d7a544e954383eb52a4b6f9ac490357b2b9277a2b9fd4a94559c9a50",
+    "transposition-checks.json": "80ac16c9ded2a7c712f9d144b71fc01ba3a015c829b28cd00deaa82353924592",
+    "sample-029-repaired.musicxml": "cf1aeca5413bc2a41add764c6c9e26c6d99f3baf2a33886e6886399b12529947",
+    "build-results.log": "bed1eed8652a554a574d378635a8dc9d3964a7e296200f1ccaeb024f6420a002",
+    "test-results.log": "cdd2700864d44a54f2c72ce2e79cdb1936fb480d0bf2513f01f7156938a38512"
+  },
+  "status": "operator_recovered_after_budget_stop",
+  "note": "No candidate files edited. Not a successful autonomous submission. Team state and its empty evaluations remain unchanged."
+}
