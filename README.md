@@ -7,6 +7,10 @@ candidate. Workers write and execute scripts in Docker; experiments are no longe
 limited to a hardcoded recognition menu. Existing controller and blind-review runs
 remain supported by their original commands below.
 
+## Human feedback and proposed improvements
+
+Use the [PR review workflow](docs/pr-review-workflow.md) to discuss and revise changes. The [environment and handoff proposal](docs/design/environment-and-review.md) responds to issue #1; it is a design under review, not an implemented runtime change.
+
 ## Run the research coordinator
 
 Start Docker, then prepare the pinned execution image and run:
