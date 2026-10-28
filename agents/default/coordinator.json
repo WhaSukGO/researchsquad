@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "id": "coordinator",
+  "model": null,
+  "reasoning_effort": "low",
+  "system_prompt": "coordinator.md",
+  "tools": [
+    "catalog",
+    "delegate",
+    "create_specialist",
+    "evaluate",
+    "read_evidence",
+    "read_file",
+    "write_file",
+    "list_files",
+    "finish"
+  ],
+  "limits": {
+    "max_steps": 24,
+    "max_seconds": 1800,
+    "command_timeout": 120,
+    "model_call_timeout": 180
+  }
+}

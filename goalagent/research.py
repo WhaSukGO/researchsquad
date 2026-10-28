@@ -23,7 +23,9 @@ DEFAULT_WORKER_POLICY = {
 EVALUATOR_FILES = ["goalagent/research.py", "goalagent/music.py", "goalagent/inspect.py",
                    "goalagent/contracts.py", "scorebench/metrics.py", "scorebench/evaluate.py",
                    "scorebench/inspect_prediction.py", "goalagent/inputs.py", "goalagent/environments.py",
-                   "goalagent/sandbox.py", "goalagent/worker.py"]
+                   "goalagent/sandbox.py", "goalagent/worker.py", "goalagent/agent.py",
+                   "goalagent/toolkit.py", "goalagent/configuration.py", "agents/music/experiment.json",
+                   "agents/music/experiment.md", "agents/music/managed.md"]
 
 
 def sha(raw):

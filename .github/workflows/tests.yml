@@ -48,3 +48,5 @@ jobs:
         run: GOALAGENT_DOCKER_TESTS=1 uv run --no-sync pytest -q tests/test_environments.py -k two_registries
       - name: Build and verify reusable environment
         run: uv run --no-sync python -m goalagent.environment_check --run-dir /tmp/environment-verification
+      - name: Verify configurable team, tool reuse and generic environment
+        run: uv run --no-sync python -m goalagent.team_check --run-dir /tmp/configurable-team-verification

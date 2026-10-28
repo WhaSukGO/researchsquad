@@ -17,3 +17,4 @@ __pycache__/
 /runs/**/run.lock
 /runs/**/smoke-workspace/
 /runs/**/check-*/workspace/
+/runs/**/agents/*/workspace/

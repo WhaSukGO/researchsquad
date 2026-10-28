@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "provider": "scripted (no model calls)",
+  "real_docker": true,
+  "agent_runtime": "Agent for all roles",
+  "specialist_created": "sorting_specialist",
+  "tool_registered": "script.sort_numbers",
+  "measurements": [
+    {
+      "accepted": false,
+      "exact_match": false,
+      "samples": 4,
+      "scope": "Software integration fixture; not research quality or generalization."
+    },
+    {
+      "accepted": true,
+      "exact_match": true,
+      "samples": 4,
+      "scope": "Software integration fixture; not research quality or generalization."
+    }
+  ],
+  "reserved_scripted_calls": 13,
+  "resume_added_calls": 0,
+  "scope": "Non-music integration and evidence-driven control-flow fixture; not autonomous research or transcription accuracy.",
+  "environment": {
+    "status": "passed",
+    "image": "sha256:614b22f81e8f04d194c23ec2f1ef0daba85c85cdd07cb1185c0b42c1dbe77309",
+    "reuse": true,
+    "setup_attempts": 1,
+    "scope": "Real generic package-builder/readiness/reuse check, no model calls"
+  }
+}

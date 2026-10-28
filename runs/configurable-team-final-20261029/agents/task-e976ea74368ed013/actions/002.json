@@ -1,0 +1,24 @@
+{
+  "action": {
+    "tool": "register_tool",
+    "argument": "{\"name\": \"sort_numbers\", \"description\": \"Read a JSON number array from stdin; write result.json and print ascending values.\", \"script\": \"sorter.py\", \"test_argument\": [2, 1]}",
+    "why": "Deterministic integration verification"
+  },
+  "step": 2,
+  "tool": "register_tool",
+  "why": "Deterministic integration verification",
+  "observation": {
+    "evidence_id": "tool-732f24f20f9a513c",
+    "registered": "script.sort_numbers",
+    "test": {
+      "exit_code": 0,
+      "interrupted": false,
+      "elapsed_seconds": 0.63,
+      "log": "/Users/geegle/development/whasuk/researchagent/runs/configurable-team-final-20261029/agents/task-e976ea74368ed013/logs/tool-test-2.log",
+      "bytes": 7,
+      "first_diagnostic": "",
+      "tail": "[1, 2]\n"
+    },
+    "note": "Available to future execution agents. This smoke test is not protected scientific evaluation."
+  }
+}

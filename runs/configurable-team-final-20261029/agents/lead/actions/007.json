@@ -1,0 +1,16 @@
+{
+  "action": {
+    "tool": "finish",
+    "argument": "{\"summary\": \"Integration fixture passed\", \"files\": [\"report.txt\"]}",
+    "why": "Deterministic integration verification"
+  },
+  "step": 7,
+  "tool": "finish",
+  "why": "Deterministic integration verification",
+  "observation": {
+    "summary": "Integration fixture passed",
+    "source_files": [
+      "report.txt"
+    ]
+  }
+}

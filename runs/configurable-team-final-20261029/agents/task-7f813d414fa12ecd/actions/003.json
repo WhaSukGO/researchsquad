@@ -1,0 +1,16 @@
+{
+  "action": {
+    "tool": "finish",
+    "argument": "{\"summary\": \"Sorted complete input with registered tool\", \"files\": [\"result.json\"]}",
+    "why": "Deterministic integration verification"
+  },
+  "step": 3,
+  "tool": "finish",
+  "why": "Deterministic integration verification",
+  "observation": {
+    "summary": "Sorted complete input with registered tool",
+    "source_files": [
+      "result.json"
+    ]
+  }
+}
