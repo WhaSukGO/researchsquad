@@ -15,3 +15,6 @@ __pycache__/
 
 # Process locks are local to the running host
 /runs/**/run.lock
+/runs/**/smoke-workspace/
+/runs/**/check-*/workspace/
+/runs/**/agents/*/workspace/

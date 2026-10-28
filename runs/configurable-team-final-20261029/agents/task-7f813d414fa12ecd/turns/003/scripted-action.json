@@ -1,0 +1,5 @@
+{
+  "tool": "finish",
+  "argument": "{\"summary\": \"Sorted complete input with registered tool\", \"files\": [\"result.json\"]}",
+  "why": "Deterministic integration verification"
+}

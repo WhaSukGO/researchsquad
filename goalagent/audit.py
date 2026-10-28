@@ -14,7 +14,7 @@ def audit(folder):
         if r.get('decision'):
             try:
                 decision=r['decision']
-                if s.get('architecture')=='research-coordinator-v1' and decision['tool']=='read_record':
+                if s.get('architecture')=='research-coordinator-v1' and decision['tool'] in {'read_record','prepare_environment'}:
                     decision={**decision,'tool':'read_evidence'}
                 validate_decision(decision,known)
             except ValueError as err:invalid.append({'step':r['step'],'error':str(err)})

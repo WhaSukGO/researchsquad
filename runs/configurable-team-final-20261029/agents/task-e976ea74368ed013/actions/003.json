@@ -1,0 +1,17 @@
+{
+  "action": {
+    "tool": "finish",
+    "argument": "{\"summary\": \"Reusable sorter and initial fixture output\", \"files\": [\"sorter.py\", \"result.json\"]}",
+    "why": "Deterministic integration verification"
+  },
+  "step": 3,
+  "tool": "finish",
+  "why": "Deterministic integration verification",
+  "observation": {
+    "summary": "Reusable sorter and initial fixture output",
+    "source_files": [
+      "sorter.py",
+      "result.json"
+    ]
+  }
+}

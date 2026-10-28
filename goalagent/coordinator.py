@@ -55,7 +55,7 @@ when success is unsupported or the remaining budget cannot fund useful work.
 
 class CoordinatorRunner(AgentRunner):
     decision_schema = copy.deepcopy(DECISION_SCHEMA)
-    decision_schema["properties"]["tool"]["enum"] = [*DECISION_SCHEMA["properties"]["tool"]["enum"], "read_record"]
+    decision_schema["properties"]["tool"]["enum"] = [*DECISION_SCHEMA["properties"]["tool"]["enum"], "read_record", "prepare_environment"]
 
     def __init__(self, spec, folder, provider=None, domain=None):
         provider = provider or CodexProvider()
@@ -73,7 +73,7 @@ class CoordinatorRunner(AgentRunner):
 
     def validate_action(self, decision):
         # Reuse the legacy shape/citation checks without expanding its tool surface.
-        if decision.get("tool") == "read_record":
+        if decision.get("tool") in {"read_record", "prepare_environment"}:
             validate_decision({**decision, "tool": "read_evidence"}, self.state["known_evidence"])
         else:
             validate_decision(decision, self.state["known_evidence"])
@@ -135,6 +135,11 @@ class CoordinatorRunner(AgentRunner):
                 self.save()
                 raise
         super().complete_pending()
+        observation = self.state['history'][-1]['observation']
+        if d['tool'] == 'run_experiment' and observation.get('status') == 'environment_blocked':
+            eid = observation['experiment_id']
+            if eid in self.state['experiments']: self.state['experiments'].remove(eid)
+            self.save()
         self.persist_evidence()
 
     def experiment_tree(self):
@@ -197,10 +202,32 @@ class CoordinatorRunner(AgentRunner):
         context["history"] = history
         context["experiment_tree"] = self.experiment_tree()
         context["worker_capabilities"] = self.domain.policy
+        if self.domain.environment_manager:
+            manager = self.domain.environment_manager
+            context['environment'] = {k:manager.state[k] for k in ('attempts','model_calls','active_seconds')}
+            context['environment']['recent_receipts'] = manager.state['events'][-2:]
         return context
 
     def decision_prompt(self):
-        return INSTRUCTIONS + "\nObserved context (JSON data):\n" + json.dumps(self.context(), ensure_ascii=False)
+        instructions = INSTRUCTIONS
+        if self.domain.environment_manager:
+            instructions += """
+Managed setup is enabled. run_experiment must additionally include required_inputs (array
+of artifact catalog IDs, empty if not needed) and environment: "music-python".
+An assignment to preserve baseline melody MUST request baseline:audiveris-enlarged or the
+chosen baseline. The host validates and delivers these predictions, not reference labels.
+prepare_environment: argument describes missing dependencies, or empty for routine readiness.
+A separate environment engineer handles package setup within its own bounded budget. It
+cannot change scoring or declare accuracy. Initial capabilities: Python notation conversion,
+Pillow, music21, converter21, Verovio, Tesseract. Audiveris is NOT installed or promised.
+Experiment workers run with network disabled in a prebuilt environment; do not assign OS
+installation. A worker can request_environment, which ends that worker with a diagnostic.
+Read environment receipts. Repeated setup failures should lead to an alternative feasible
+method or an honest stop, not consume all scientific experiments repairing the same runtime.
+You may use worker image inspection to implement image-derived transcription approaches.
+Synthetic readiness is not measured accuracy. Only sealed evaluation determines quality.
+"""
+        return instructions + "\nObserved context (JSON data):\n" + json.dumps(self.context(), ensure_ascii=False)
 
     def on_locked_start(self):
         # Cached state is also checked against frozen artifacts before any resume.

@@ -1,6 +1,6 @@
 # Give research engineers a ready workplace
 
-Status: proposed design, awaiting human review. Related: [issue #1](https://github.com/WhaSukGO/researchsquad/issues/1).
+Status: approved for follow-up implementation by the user. The initial implementation and its boundaries are documented in [environment operations](../environment-operations.md). Related: [issue #1](https://github.com/WhaSukGO/researchsquad/issues/1).
 
 This PR establishes the review workflow and records a proposed change in responsibilities. It does not add an environment engineer to the running system or change access to labels. We should review the design before replacing the current runtime.
 

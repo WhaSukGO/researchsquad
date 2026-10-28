@@ -1,0 +1,5 @@
+{
+  "tool": "delegate",
+  "argument": "{\"agent\": \"sorting_specialist\", \"objective\": \"Apply the reusable sorter to the complete task input after the failed comparison\", \"success_criteria\": \"Complete ascending values with duplicates retained\", \"inputs\": {\"numbers.json\": \"inputs/numbers.json\"}, \"parent\": \"task-e976ea74368ed013\", \"mode\": \"improve\"}",
+  "why": "Deterministic integration verification"
+}

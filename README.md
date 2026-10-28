@@ -9,7 +9,14 @@ remain supported by their original commands below.
 
 ## Human feedback and proposed improvements
 
-Use the [PR review workflow](docs/pr-review-workflow.md) to discuss and revise changes. The [environment and handoff proposal](docs/design/environment-and-review.md) responds to issue #1; it is a design under review, not an implemented runtime change.
+Use the [PR review workflow](docs/pr-review-workflow.md) to discuss and revise changes. The [environment and handoff proposal](docs/design/environment-and-review.md) responds to issue #1; its initial implementation is documented in [environment operations](docs/environment-operations.md).
+
+## Prepared environments and explicit input handoffs
+
+The follow-up implementation is available with `--goal goals/music-research-v2.json`.
+See [environment operations](docs/environment-operations.md) for input contracts,
+readiness checks, environment-engineer escalation, budgets and current limitations.
+Use a new run directory; existing run evidence and acceptance rules are preserved.
 
 ## Run the research coordinator
 
@@ -349,3 +356,9 @@ Caches are not part of the source package. Moving this repository requires provi
 Keep these results fixed. On the same images, compare a recognizer capable of melody **and** chord symbols, and separately test extracting Audiveris's text labels into structured chords with image-supported alignment. Audit chord timing with a musician before claiming usable output. Keep newly collected complete pages and different songs as a locked test set.
 
 Only after a baseline has sufficient perceptual coverage should a verifier/repair agent be compared with that same baseline at a fixed budget. Count corrected errors, newly introduced errors, failed runs, cost and musician correction time. Promote a change only if it passes external evaluation gates; an agent's self-critique is not a ground-truth score.
+
+## Configurable research team
+
+The general-purpose entry point is `python -m goalagent.team`. Six default roles share one agent runtime; JSON definitions select models, prompts, tools and limits. The team can create specialist definitions and tested sandbox script tools during a run. See [configuration, tools, delegation and limitations](docs/configurable-team.md).
+
+The existing music workflow remains available, and its experiment engineer now uses the shared runtime. A non-music Docker integration check is available with `python -m goalagent.team_check --run-dir runs/new-team-verification`; its decisions are scripted, not an autonomous research claim.

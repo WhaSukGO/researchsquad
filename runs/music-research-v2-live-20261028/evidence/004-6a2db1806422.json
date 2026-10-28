@@ -1,0 +1,50 @@
+{
+  "step": 4,
+  "decision": {
+    "tool": "read_evidence",
+    "argument": "music-benchmark",
+    "why": "Data and baseline inspection are complete. Read the format audit before assigning an experiment so its deliverables address measured failures and respect scoring limitations.",
+    "hypothesis": "The benchmark audit can identify a feasible image-derived chord recovery experiment that preserves the stronger enlarged baseline melody.",
+    "expected_observation": "Evidence about chord omissions, editable-kern constraints, and transposition or timing limitations sufficient to define a small, falsifiable pilot.",
+    "evidence_ids": [
+      "dataset",
+      "baseline",
+      "source-catalog"
+    ]
+  },
+  "observation": {
+    "id": "evidence-82fd3c08",
+    "sources": [
+      {
+        "id": "music-benchmark",
+        "domain": "optical_music_recognition",
+        "title": "Supplied-score benchmark and format audit",
+        "claim": "32 development excerpts, seven songs. Enlarged Audiveris recovers 47/200 structured chords; Transcoda omits the chord spine and sometimes repeats notes. Plain OCR words are not yet promoted to harmony. Some outputs fail parsing.",
+        "application": "Separate image/model failures from output-format and text-to-harmony integration. Compare fixed paired inputs.",
+        "limit": "References unaudited; chord timing and human correction time unmeasured. No agent comparison.",
+        "url": "runs/first-benchmark/results.json"
+      }
+    ]
+  },
+  "elapsed_seconds": 0.049929834000067785,
+  "model_metadata": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "low",
+    "elapsed_seconds": 9.214615833996504,
+    "exit_code": 0,
+    "usage": {
+      "input_tokens": 16792,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 118,
+      "reasoning_output_tokens": 0
+    },
+    "prompt_sha256": "d71abbf43a27c7aa5618a23932d267569daf7415f664a9432d3b17687c59bd47",
+    "image_sha256": null,
+    "context_isolation": "fresh temporary directory outside the project; only explicit prompt, schema and optional image",
+    "os_read_isolation": false,
+    "unexpected_tool_events": [],
+    "billing": "Uses existing Codex account; monetary cost unavailable"
+  }
+}

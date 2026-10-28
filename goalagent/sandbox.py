@@ -49,6 +49,22 @@ def read_file(root, relative, limit=1_000_000):
         os.close(fd)
 
 
+def log_summary(path):
+    """Bounded first diagnostic plus tail; full output remains retrievable on disk."""
+    path = Path(path)
+    first = ''
+    with path.open('rb') as stream:
+        for raw in stream:
+            line = raw.decode('utf-8', errors='replace').strip()
+            if any(word in line.lower() for word in ('error', 'exception', 'failed', 'not found', 'denied')):
+                first = line[:1200]
+                break
+    with path.open('rb') as stream:
+        stream.seek(max(0, path.stat().st_size - 4000))
+        tail = stream.read(4000).decode('utf-8', errors='replace')
+    return {'log': str(path), 'bytes': path.stat().st_size, 'first_diagnostic': first, 'tail': tail}
+
+
 class DockerSandbox:
     def __init__(self, workspace, policy):
         self.workspace = Path(workspace).resolve()
@@ -68,7 +84,7 @@ class DockerSandbox:
         subprocess.run(["docker", "rm", "-f", self.name], capture_output=True, timeout=15)
 
     def command(self, script):
-        return ["docker", "run", "--rm", "--name", self.name,
+        command = ["docker", "run", "--rm", "--name", self.name,
                 "--network", "bridge" if self.policy.get("network", False) else "none",
                 "--read-only", "--cap-drop=ALL", "--security-opt=no-new-privileges",
                 "--pids-limit", "128", "--memory", self.policy["memory"],
@@ -77,7 +93,13 @@ class DockerSandbox:
                 "--env", "PYTHONPATH=/workspace/vendor", "--workdir", "/workspace",
                 "--mount", f"type=bind,src={self.workspace},dst=/workspace",
                 "--mount", f"type=bind,src={self.workspace / 'inputs'},dst=/workspace/inputs,readonly",
-                self.policy["image"], "/bin/sh", "-lc", script]
+                ]
+        if (self.workspace / 'baselines').exists():
+            command += ['--mount', f'type=bind,src={self.workspace / "baselines"},dst=/workspace/baselines,readonly']
+        if self.policy.get('managed_environment'):
+            command += ['--env', 'TMPDIR=/workspace/tmp', '--env', 'PYTHONNOUSERSITE=1',
+                        '--env', 'PIP_NO_INDEX=1', '--env', 'PIP_REQUIRE_VIRTUALENV=1']
+        return command + [self.policy['image'], '/bin/sh', '-lc', script]
 
     def run(self, script, log_path, timeout):
         self.cleanup()
@@ -103,9 +125,6 @@ class DockerSandbox:
                     process.kill()
                     process.wait()
                 self.cleanup()
-        with log_path.open("rb") as log:
-            log.seek(max(0, log_path.stat().st_size - 4000))
-            excerpt = log.read(4000).decode("utf-8", errors="replace")
         return {"exit_code": process.returncode, "interrupted": timed_out,
                 "elapsed_seconds": round(time.monotonic() - started, 2),
-                "log": str(log_path), "tail": excerpt}
+                **log_summary(log_path)}
