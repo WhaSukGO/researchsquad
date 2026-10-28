@@ -105,7 +105,7 @@ def workspace_action(self, action, timeout):
 
 
 DESCRIPTIONS = {
- "read_file": 'JSON {path, offset?:0, limit?:4000}; read a bounded workspace file.',
+ "read_file": 'JSON {path, offset?:0, limit?:4000}; read a workspace-relative file. limit must be an integer 1..8000; supplied inputs live under inputs/.',
  "write_file": 'JSON {path, content}; write a workspace text file; inputs are read-only.',
  "run": 'Shell command in a disposable Docker container. Full logs stay on disk. Download/install only if the execution policy permits.',
  "view_image": 'Relative workspace image path; attach image to next model call.',
@@ -116,7 +116,8 @@ DESCRIPTIONS = {
 }
 
 def inspect_files(agent, action, timeout):
-    data=json.loads(action['argument']); root=workspace_path(agent.workspace,data.get('path','.'))
+    data=json.loads(action['argument']); relative=data.get('path','.')
+    root=agent.workspace.resolve() if relative=='.' else workspace_path(agent.workspace,relative)
     files=[];matches=[]
     import os
     for directory,dirs,names in os.walk(root,followlinks=False):

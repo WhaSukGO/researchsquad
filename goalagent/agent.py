@@ -68,7 +68,7 @@ class Agent:
                         self.state["status"] = "budget_exhausted"
                         break
                     # Workers receive their assignment, not coordinator/global conversations.
-                    context = {"assignment": self.assignment, "network": self.policy.get("network", False),
+                    context = {"workspace": {"input_root":"inputs/", "paths":"All tool paths are relative to /workspace. Assignment input names are relative to inputs/.", "read_file_limit_max":8000}, "assignment": self.assignment, "network": self.policy.get("network", False),
                                "remaining_steps": self.policy["max_steps"] - self.state["steps"],
                                "remaining_seconds": int(remaining()), "authored_files": self.state.get("written_files", [])[-32:],
                                "recent_actions": self.state["history"][-6:]}

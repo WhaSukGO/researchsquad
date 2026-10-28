@@ -48,7 +48,7 @@ class Team:
         self.registry=default_registry()
         handlers={
             'catalog':('Empty argument; list available roles and registered tool interfaces.',self.catalog),
-            'delegate':('JSON {agent, objective, success_criteria, inputs:{destination:caller_workspace_path}, parent?:assignment_id, mode?:explore|improve|debug}. Distinct assignment, isolated context/workspace. Returns child evidence.',self.delegate),
+            'delegate':('JSON {agent:string, objective:string, success_criteria:string, inputs:{destination:caller_workspace_path}, parent?:assignment_id, mode?:explore|improve|debug}. Criteria must be a string, not an object/list. Default explore has no parent; improve/debug require a prior assignment ID. Inputs are workspace-relative paths, normally inputs/FILE. Distinct assignment, isolated context/workspace. Returns child evidence.',self.delegate),
             'create_specialist':('JSON {id, template, system_prompt, tools}; create a role with a subset of template tools and unchanged model/budget. No permission expansion.',self.create_specialist),
             'register_tool':('JSON {name, description, script, test_argument}; capture a Python script reading JSON from stdin. It must pass its test in Docker. Registered as script.NAME for future executing agents, never as a host plugin.',self.register_tool),
             'read_evidence':('JSON {id, offset?:0}; read a durable shared evidence record in 6000-character pages.',self.read_evidence),
@@ -120,7 +120,7 @@ class Team:
         if set(data)-{'agent','objective','success_criteria','inputs','parent','mode'}:raise ValueError('Unknown assignment fields')
         config=self.definitions[data['agent']]
         for k in ('objective','success_criteria'):
-            if not isinstance(data.get(k),str) or not data[k].strip() or len(data[k])>8000:raise ValueError('Distinct objective and criteria required')
+            if not isinstance(data.get(k),str) or not data[k].strip() or len(data[k])>8000:raise ValueError(k+' must be a nonempty string of at most 8000 characters; objects/lists are not accepted')
         if data['objective'].strip()==self.task['goal'].strip():raise ValueError('Translate the goal into a distinct task')
         depth=agent.assignment.get('depth',0)+1
         if depth>self.task['budget']['max_depth']:raise ValueError('Delegation depth exceeded')
