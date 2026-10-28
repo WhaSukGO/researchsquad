@@ -44,5 +44,7 @@ jobs:
           docker tag python:3.12-slim@sha256:12316debbfb86890f6b2d825820612741ba527ad5a44e3902759141d572bfe8f python:3.12-slim
       - name: Test real Docker isolation and protected scoring
         run: GOALAGENT_DOCKER_TESTS=1 uv run --no-sync pytest -q tests/test_research.py -k real_
+      - name: Verify immutable publication across registries
+        run: GOALAGENT_DOCKER_TESTS=1 uv run --no-sync pytest -q tests/test_environments.py -k two_registries
       - name: Build and verify reusable environment
         run: uv run --no-sync python -m goalagent.environment_check --run-dir /tmp/environment-verification

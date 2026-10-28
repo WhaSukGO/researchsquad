@@ -166,3 +166,20 @@ def test_no_weakened_smoke_or_build_injection(tmp_path):
     for field,value in [('base','python:latest'),('system_packages',['pkg; cat /secret']),('python_packages',['https://arbitrary/script'])]:
         recipe=copy.deepcopy(m.recipe);recipe[field]=value if field=='base' else value
         with pytest.raises(ValueError):dockerfile(recipe)
+
+@pytest.mark.skipif(__import__('os').environ.get('GOALAGENT_DOCKER_TESTS') != '1', reason='Real Docker publication regression')
+def test_two_registries_never_replace_an_image_already_handed_off(tmp_path):
+    from goalagent.environment_check import NoModel
+    spec=json.loads(Path('goals/music-research-v2.json').read_text())
+    first=EnvironmentManager(tmp_path/'first',spec['environment'],spec['worker'],NoModel(),tmp_path/'registry-a')
+    a=first.ensure(lambda:None,lambda:900);assert a['status']=='ready',a
+    second=EnvironmentManager(tmp_path/'second',spec['environment'],spec['worker'],NoModel(),tmp_path/'registry-b')
+    b=second.ensure(lambda:None,lambda:900);assert b['status']=='ready',b
+    assert a['cache_key']==b['cache_key']
+    assert a['published_tag']!=b['published_tag']
+    assert first.inspect_image(a['image']['id'])==a['image']
+    workspace=tmp_path/'old-worker'
+    for name in ('inputs','output','tmp'):(workspace/name).mkdir(parents=True,exist_ok=True)
+    sandbox=DockerSandbox(workspace,{**spec['worker'],'image':a['image']['id'],'network':False,'managed_environment':True})
+    r=sandbox.run('python -c "import music21; print(42)"',tmp_path/'old-image.log',30)
+    assert r['exit_code']==0,r

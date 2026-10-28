@@ -13,6 +13,7 @@ import re
 import shutil
 import subprocess
 import time
+import uuid
 from .contracts import atomic_json, digest
 from .sandbox import DockerSandbox, log_summary
 from scorebench.run import ROOT
@@ -85,7 +86,7 @@ class EnvironmentManager:
 
     def key(self,recipe):
         return digest({'recipe':recipe,'smoke':self.smoke,'platform':self.platform,
-                       'dependency_lock':digest(self.dependencies),
+                       'dependency_lock':digest(self.dependencies), 'uid':os.getuid(), 'gid':os.getgid(),
                        'policy':{k:self.policy[k] for k in ('memory','cpus')},
                        'sandbox':hashlib.sha256((ROOT/'goalagent/sandbox.py').read_bytes()).hexdigest()})
 
@@ -101,7 +102,9 @@ class EnvironmentManager:
         (context/'Dockerfile').write_text(dockerfile(recipe))
         (context/'requirements.txt').write_text(self.dependencies)
         atomic_json(context/'recipe.json',recipe)
-        tag='researchsquad-env:'+self.key(recipe)[:24]
+        # Never move a tag already published to a worker. Different registries and
+        # rebuild attempts may build the same key concurrently; keep every image rooted.
+        tag='researchsquad-env:'+self.key(recipe)[:16]+'-'+uuid.uuid4().hex[:12]
         log=folder/'build.log'; started=time.monotonic()
         with log.open('wb') as stream:
             p=subprocess.Popen(['docker','build','--progress=plain','--tag',tag,str(context)],stdout=stream,stderr=subprocess.STDOUT)
@@ -130,7 +133,7 @@ class EnvironmentManager:
                              'cat /opt/python-lock.txt /opt/system-lock.txt'],check=True,capture_output=True,text=True,timeout=15).stdout
         (folder/'resolved-lock.txt').write_text(lock)
         return {'status':'ready','image':image,'recipe_hash':digest(recipe),'profile':'music-python',
-                'capabilities':recipe['capabilities'],'smoke_hash':digest(self.smoke),'platform':self.platform,
+                'published_tag':tag, 'capabilities':recipe['capabilities'],'smoke_hash':digest(self.smoke),'platform':self.platform,
                 'lock_sha256':hashlib.sha256(lock.encode()).hexdigest(),'diagnostic':result}
 
     def record_event(self, event, folder):
