@@ -5,6 +5,7 @@ from pathlib import Path
 from .contracts import atomic_json, digest
 from .sandbox import DockerSandbox, workspace_path, read_file
 from .toolkit import default_registry
+from .budgets import limit, visible_remaining
 
 class Agent:
     def __init__(self, folder, assignment, provider, policy, config, registry=None, sandbox_factory=DockerSandbox):
@@ -50,14 +51,14 @@ class Agent:
         started = time.monotonic()
         base = self.state["active_seconds"]
         def remaining():
-            return min(remaining_seconds(), self.policy["max_seconds"] - base - (time.monotonic() - started))
+            return min(remaining_seconds(), limit(self.policy["max_seconds"]) - base - (time.monotonic() - started))
         try:
             while self.state["status"] == "running":
                 if remaining() <= 1:
                     self.state["status"] = "budget_exhausted"
                     break
                 if not self.state["pending"]:
-                    if self.state["steps"] >= self.policy["max_steps"]:
+                    if self.state["steps"] >= limit(self.policy["max_steps"]):
                         self.state["status"] = "budget_exhausted"
                         break
                     self.state["steps"] += 1
@@ -69,8 +70,8 @@ class Agent:
                         break
                     # Workers receive their assignment, not coordinator/global conversations.
                     context = {"workspace": {"input_root":"inputs/", "paths":"All tool paths are relative to /workspace. Assignment input names are relative to inputs/.", "read_file_limit_max":8000}, "assignment": self.assignment, "network": self.policy.get("network", False),
-                               "remaining_steps": self.policy["max_steps"] - self.state["steps"],
-                               "remaining_seconds": int(remaining()), "authored_files": self.state.get("written_files", [])[-32:],
+                               "remaining_steps": visible_remaining(limit(self.policy["max_steps"]) - self.state["steps"]),
+                               "remaining_seconds": visible_remaining(remaining()), "authored_files": self.state.get("written_files", [])[-32:],
                                "recent_actions": self.state["history"][-6:]}
                     instructions = self.config['system_prompt']
                     context['tools'] = self.registry.catalog(self.config['tools'])
@@ -78,7 +79,7 @@ class Agent:
                     try:
                         action, metadata = self.provider.call(
                             prompt, self.schema, self.folder / "turns" / f'{self.state["steps"]:03}',
-                            image=self.state["image"], timeout=min(self.policy["model_call_timeout"], remaining()))
+                            image=self.state["image"], timeout=min(limit(self.policy["model_call_timeout"]), remaining()))
                         self.state["image"] = None
                         self.state["pending"] = action
                         self.save()
@@ -89,7 +90,7 @@ class Agent:
                 if not isinstance(action, dict):
                     action = {"tool": "invalid", "argument": "", "why": "Invalid model output"}
                 try:
-                    observation = self.execute(action, min(self.policy["command_timeout"], remaining()))
+                    observation = self.execute(action, min(limit(self.policy["command_timeout"]), remaining()))
                 except Exception as error:
                     observation = {"error": type(error).__name__, "detail": str(error)[:2000]}
                 record = {"step": self.state["steps"], "tool": action.get("tool"),

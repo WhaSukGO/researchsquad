@@ -56,7 +56,7 @@ This is a development pilot, not held-out accuracy. Seven samples cannot complet
                    'baseline.json':json.dumps(domain.execute('baseline_summary','',None,None))}
 
 
-def run(folder,model='gpt-6.1-sol'):
+def run(folder,model='gpt-6.1-sol',*,unlimited=True):
     folder=Path(folder).resolve()
     spec=json.loads((ROOT/'goals/music-research-v2.json').read_text())
     evaluator,domain=music_evaluator(folder,spec)
@@ -68,11 +68,11 @@ def run(folder,model='gpt-6.1-sol'):
     inputs['delivered-baseline.json']=json.dumps(baseline)
     evaluator,domain=music_evaluator(folder,spec,lambda:team.remaining())
     task={'goal':spec['goal'],'acceptance':spec['acceptance'],'evaluator':'music','network':True,
-          'assets':assets,'inputs':inputs,'budget':{'max_calls':40,'max_seconds':1800,'max_assignments':6,'max_depth':2}}
+          'assets':assets,'inputs':inputs,'unlimited':unlimited,'budget':{'max_calls':40,'max_seconds':1800,'max_assignments':6,'max_depth':2}}
     team=Team(folder,task,model=model,evaluators={'music':evaluator})
     atomic_json(folder/'pilot-plan.json',{'model':model,'scope':'seven first-per-song development excerpts','fresh_state':True,
         'new_team_runtime':True,'decisions':'live model, not scripted','baseline_predictions_delivered':14,
-        'reference_labels_delivered':0,'budget':task['budget'],'comparison_limit':'Different architecture and total budget from old runs; not a controlled causal ablation.'})
+        'reference_labels_delivered':0,'budget':team.task['budget'],'unlimited':unlimited,'comparison_limit':'Different architecture and total budget from old runs; not a controlled causal ablation.'})
     # Deterministic readiness reuses the reviewed profile; no setup model is needed on a cache hit.
     if team.state['environment'] is None:
         from .research import DEFAULT_WORKER_POLICY
@@ -92,5 +92,5 @@ def run(folder,model='gpt-6.1-sol'):
     return result
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--run-dir',required=True);parser.add_argument('--model',default='gpt-6.1-sol');args=parser.parse_args()
-    print(json.dumps(run(args.run_dir,args.model)))
+    parser=argparse.ArgumentParser();parser.add_argument('--run-dir',required=True);parser.add_argument('--model',default='gpt-6.1-sol');parser.add_argument('--bounded',action='store_true',help='Restore the historical 40-call pilot limits');args=parser.parse_args()
+    print(json.dumps(run(args.run_dir,args.model,unlimited=not args.bounded)))

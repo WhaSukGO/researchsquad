@@ -26,7 +26,7 @@ def prepare(team,agent,data,timeout):
         if saved['status']=='ready' and inspect.returncode==0 and (folder/'resolved-lock.txt').exists() and digest((folder/'resolved-lock.txt').read_text())==saved['lock_hash']:return {**saved,'cache_hit':True}
     if not team.task.get('network',False):raise ValueError('Environment builds require owner-granted network access')
     attempts=team.state.get('setup_attempts',0)
-    if attempts>=3:raise ValueError('Setup attempt budget exhausted')
+    if not team.task.get('unlimited') and attempts>=3:raise ValueError('Setup attempt budget exhausted')
     team.state['setup_attempts']=attempts+1;team.save()
     folder.mkdir(parents=True,exist_ok=True);(folder/'readiness.py').write_text(source);context=folder/'build';context.mkdir(exist_ok=True)
     lines=['FROM '+BASE]

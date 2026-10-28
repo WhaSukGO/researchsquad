@@ -24,7 +24,7 @@ EVALUATOR_FILES = ["goalagent/research.py", "goalagent/music.py", "goalagent/ins
                    "goalagent/contracts.py", "scorebench/metrics.py", "scorebench/evaluate.py",
                    "scorebench/inspect_prediction.py", "goalagent/inputs.py", "goalagent/environments.py",
                    "goalagent/sandbox.py", "goalagent/worker.py", "goalagent/agent.py",
-                   "goalagent/toolkit.py", "goalagent/configuration.py", "agents/music/experiment.json",
+                   "goalagent/toolkit.py", "goalagent/configuration.py", "goalagent/budgets.py", "agents/music/experiment.json",
                    "agents/music/experiment.md", "agents/music/managed.md"]
 
 

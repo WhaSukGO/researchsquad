@@ -96,3 +96,21 @@ Current submission snapshots contain bounded text source/report files (up to 8 M
 `python -m goalagent.music_team --run-dir runs/new-music-team --model gpt-6.1-sol` connects the default configured team to the existing music inputs and protected scorer. It supplies seven images and fourteen prediction/export artifacts, with labels retained by the evaluator. It uses a fresh state and the prepared notation/OCR environment; it does not add a new agent class.
 
 The [29 October live assessment](../runs/configurable-music-retry-20261029/assessment.html) records an important limit: the 40-call run created a candidate but exhausted its budget before submission or evaluation. An unchanged, operator-recovered copy improved parse coverage from 3/7 to 5/7; melody errors stayed at 101/130 and chord errors at 38/38. This diagnostic score was not produced by the autonomous loop. The report distinguishes the initial interrupted interface-bug attempt, all three engineer assignments, and the remaining handoff/progress/evaluation gaps. The goal remains unmet.
+
+## Unlimited research budgets
+
+New music-team runs now default to unlimited mode:
+
+```sh
+uv run python -m goalagent.music_team --run-dir runs/music-unlimited --model gpt-6.1-sol
+```
+
+For another task, set `"unlimited": true` in its task JSON or pass `--unlimited` to `goalagent.team`. The literature-review task enables this mode; the sorting verification fixture remains bounded. `--bounded` restores the historical 40-call music-pilot configuration.
+
+Unlimited mode replaces team call/time/assignment/depth limits and every role's step/time/model-call/command deadlines with JSON `null`. It also removes run-local specialist/tool-count and generic environment-build-attempt caps. A `null` budget can be set individually for a team or role limit; other finite values remain effective. No artificially large integer stands in for unlimited. Model subprocesses receive no timeout, and serialized contracts/context use `null`, never non-standard JSON Infinity.
+
+Usage is still counted and saved. The team can finish normally or be interrupted; use Ctrl-C to stop the CLI. A hung model or command can now wait indefinitely until interrupted. External provider quotas, resource availability, protected scoring and completion requirements still apply. Container CPU/memory/process limits, isolation, output/file/context size bounds, parser/HTTP operational timeouts and the bounded readiness bootstrap remain. A failed bootstrap can still be routed to the environment engineer; it does not end the research session.
+
+The previous live pilot had 40 calls, 1,800 team seconds, six assignments and depth two. Engineers had 16 steps, 600 seconds, 180-second model deadlines and 120-second command deadlines. The legacy music-coordinator entry point retains its separate goal-file budgets; unlimited mode applies to the new configurable team. Existing evidence is never rewritten to change these historical limits. Start a new run when changing budget mode.
+
+Removing budgets does not fix repeated inspection or missing handoffs. The known pilot limitations remain recorded in the assessment; unlimited operation is a user-selected execution policy, not a claim that research will converge.

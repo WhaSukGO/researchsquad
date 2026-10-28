@@ -3,6 +3,7 @@ import json
 import re
 from pathlib import Path
 from .sandbox import read_file
+from .budgets import valid_limit
 
 FIELDS={'version','id','model','reasoning_effort','system_prompt','tools','limits'}
 
@@ -13,7 +14,7 @@ def validate_agent(data):
     if data['reasoning_effort'] not in {'low','medium','high'}:raise ValueError('Invalid reasoning effort')
     if not isinstance(data['system_prompt'],str) or not 1<=len(data['system_prompt'])<=32000:raise ValueError('Invalid system prompt')
     if not isinstance(data['tools'],list) or not data['tools'] or len(data['tools'])>64 or any(not isinstance(n,str) for n in data['tools']) or len(set(data['tools']))!=len(data['tools']):raise ValueError('Invalid tool grants')
-    if set(data['limits'])!={'max_steps','max_seconds','command_timeout','model_call_timeout'} or any(type(v) is not int or not 1<=v<=3600 for v in data['limits'].values()):raise ValueError('Invalid limits')
+    if set(data['limits'])!={'max_steps','max_seconds','command_timeout','model_call_timeout'} or any(not valid_limit(v) for v in data['limits'].values()):raise ValueError('Invalid limits')
     return data
 
 def load_agent(path):
