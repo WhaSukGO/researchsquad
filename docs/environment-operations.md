@@ -70,3 +70,11 @@ The existing experiment seals now include the environment receipt. Changes to pr
 Unit tests cover missing-input rejection, label exclusion, read-only baseline handoff, setup capacity, context boundaries, cache invalidation, package-input validation and bounded diagnostics. Docker tests verify isolation and protected scoring. A live research rerun must additionally report parseability, melody/chord error, model calls, setup time and reuse.
 
 A fresh research session means a new state directory, new assignments, no inherited experiment workspaces, and no previous session's conclusions in the prompt. It can still use the same declared benchmark and a prepared image. Report Docker layer/image cache warmth explicitly, and separate cold validation/build cost from reuse cost. One old run and one new run are a diagnostic comparison, not a controlled causal ablation.
+
+### 28 October 2026 verification outcome
+
+Implementation revision `c578de9` passed 87 regression tests and three separate real-Docker tests; both CI jobs passed. The initial live attempt exposed image-tag reuse across registries, which was fixed with unique retained publication tags and a real regression test.
+
+**Live research verification is inconclusive.** The first attempt dispatched an engineer with 14 baseline artifacts, but produced no predictions after the missing-image failure. Two fresh post-fix attempts (original model, then an explicitly separate alternate-model attempt) completed initial reviews but repeatedly timed out choosing an experiment. They were interrupted and preserved; neither dispatched an experiment engineer or produced a new accuracy measurement. PR #3 remains draft.
+
+Read the [team verification report](../output/pdf/prepared-environment-verification.pdf) and [machine-readable attempt summary](../runs/environment-followup-verification-20261028.json). Interruption records describe the actual stopped status; durable checkpoints remain unchanged with their pending actions. The two post-fix checkpoint audits passed, but that is not evidence of successful research completion. No process was left running. Timeout/interruption calls lack completed usage receipts, so complete token and dollar costs are unavailable.

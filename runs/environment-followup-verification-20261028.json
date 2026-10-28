@@ -1,0 +1,55 @@
+{
+  "outcome": "live_research_verification_inconclusive",
+  "implementation_commit": "c578de9",
+  "runs": [
+    {
+      "run": "music-research-v2-live-20261028",
+      "outcome": "interrupted_for_harness_fix",
+      "model_calls_reserved_or_attempted": 11,
+      "completed_model_receipts": 8,
+      "checkpoint_active_seconds": 658.361009207998,
+      "observed_wall_seconds_until_interruption": 745.58,
+      "experiments_dispatched": 1,
+      "evaluated_experiments": 0,
+      "goal_met": false,
+      "durable_state_status": "running",
+      "interruption_record": "interruption.json"
+    },
+    {
+      "run": "music-research-v2-verified-20261028",
+      "outcome": "interrupted_for_model_latency",
+      "model_calls_reserved_or_attempted": 8,
+      "completed_model_receipts": 4,
+      "checkpoint_active_seconds": 739.0088931249993,
+      "observed_wall_seconds_until_interruption": 821.51,
+      "experiments_dispatched": 0,
+      "evaluated_experiments": 0,
+      "goal_met": false,
+      "durable_state_status": "running",
+      "interruption_record": "interruption.json"
+    },
+    {
+      "run": "music-research-v2-sol-20261028",
+      "outcome": "interrupted_after_repeated_decision_timeouts",
+      "model_calls_reserved_or_attempted": 7,
+      "completed_model_receipts": 4,
+      "checkpoint_active_seconds": 499.9496845410031,
+      "observed_wall_seconds_until_interruption": 534.44,
+      "experiments_dispatched": 0,
+      "evaluated_experiments": 0,
+      "goal_met": false,
+      "durable_state_status": "running",
+      "interruption_record": "interruption.json"
+    }
+  ],
+  "diagnostic_model_calls": 2,
+  "total_reserved_research_and_diagnostic_calls": 28,
+  "new_accuracy_result": null,
+  "limitations": [
+    "Checkpoint active time excludes pending interrupted work; wall time includes it.",
+    "The durable running state was preserved; interruption.json records operator stop. No process remains running.",
+    "Later run changed model; no causal harness-only comparison.",
+    "Timeout/interruption calls have no completed usage receipt; no reliable complete token or dollar cost.",
+    "First interrupted run predates the image publication fix; audit it against b30dcdd, not current protected code."
+  ]
+}

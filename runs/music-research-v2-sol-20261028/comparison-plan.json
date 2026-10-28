@@ -1,0 +1,22 @@
+{
+  "previous_run": "runs/music-research-live-20261028",
+  "same_goal": true,
+  "same_seven_development_excerpts": true,
+  "same_acceptance": true,
+  "same_model": false,
+  "previous_model": "gpt-6-astra",
+  "current_model": "gpt-6.1-sol",
+  "same_total_budget": {
+    "max_experiments": 4,
+    "max_model_calls": 80,
+    "max_active_seconds": 3600
+  },
+  "setup_budget_is_within_total": true,
+  "fresh_state_and_workspaces": true,
+  "previous_run_feedback_not_supplied": true,
+  "baseline_predictions_now_explicitly_available": true,
+  "docker_layer_cache_warmed_by_readiness_validation": true,
+  "interrupted_validation_attempt": "runs/music-research-v2-live-20261028",
+  "implementation_revision": "immutable environment publication fix",
+  "comparison_limit": "One run per architecture on reused development data. Model changed because of repeated decision timeouts; no harness-only causal or held-out accuracy claim."
+}
