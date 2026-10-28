@@ -1,0 +1,100 @@
+{
+  "mode": "research",
+  "stages": [
+    {
+      "id": "R0",
+      "description": "Define the research question and completion scope",
+      "gates": [
+        {
+          "id": "question-delivered",
+          "kind": "artifact",
+          "criterion": "A research question and positive/negative/inconclusive outcome definitions are delivered for review",
+          "path": "charter.md"
+        }
+      ]
+    },
+    {
+      "id": "R1",
+      "description": "Map prior work and unresolved questions",
+      "gates": [
+        {
+          "id": "knowledge-map-delivered",
+          "kind": "artifact",
+          "criterion": "Sources read, search limitations and competing explanations are documented",
+          "path": "literature.md"
+        }
+      ]
+    },
+    {
+      "id": "R2",
+      "description": "Specify hypotheses and discriminating tests",
+      "gates": [
+        {
+          "id": "plan-delivered",
+          "kind": "artifact",
+          "criterion": "Metrics, baselines, material selection, exclusions and stopping conditions are documented",
+          "path": "experiment-plan.md"
+        },
+        {
+          "id": "plan-reviewed",
+          "kind": "review",
+          "criterion": "An independent assignment reviews whether the planned observations distinguish the hypotheses",
+          "reviewers": [
+            "critic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R3",
+      "description": "Prepare the environment and run a small pilot",
+      "gates": [
+        {
+          "id": "pilot-measured",
+          "kind": "evaluation",
+          "criterion": "Protected measurement exists for the pilot, including valid negative outcomes"
+        }
+      ]
+    },
+    {
+      "id": "R4",
+      "description": "Run the stated validation and analyze results",
+      "gates": [
+        {
+          "id": "validation-measured",
+          "kind": "evaluation",
+          "criterion": "Protected measurement exists for the validation candidate"
+        }
+      ]
+    },
+    {
+      "id": "R5",
+      "description": "Obtain independent confirmation",
+      "gates": [
+        {
+          "id": "confirmation-received",
+          "kind": "external",
+          "criterion": "Independent execution or material and scope checks have been supplied through a trusted event"
+        }
+      ]
+    },
+    {
+      "id": "R6",
+      "description": "Package supported claims and reproduction guidance",
+      "gates": [
+        {
+          "id": "report-delivered",
+          "kind": "artifact",
+          "criterion": "Evidence, limitations and reproduction instructions are delivered",
+          "path": "report.md"
+        },
+        {
+          "id": "objective-accepted",
+          "kind": "evaluation",
+          "criterion": "The original protected completion predicate accepts this candidate",
+          "accepted": true
+        }
+      ]
+    }
+  ]
+}

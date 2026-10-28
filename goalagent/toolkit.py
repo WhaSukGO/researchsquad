@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from .contracts import atomic_json, digest
 from .sandbox import workspace_path, read_file
+from .artifacts import capture_workspace, text_snapshot
+from .reports import validate_progress, validate_report
 
 @dataclass(frozen=True)
 class Tool:
@@ -30,6 +32,27 @@ def workspace_action(self, action, timeout):
     if set(action) != {"tool", "argument", "why"} or not all(isinstance(v, str) for v in action.values()):
         raise ValueError("Invalid worker action")
     tool, argument = action["tool"], action["argument"]
+    if tool == 'checkpoint':
+        data = validate_progress(json.loads(argument))
+        # Validate explicitly named important files before acknowledging the checkpoint.
+        capture_workspace(self.folder, self.workspace, files=data['files'])
+        self.state['important_files'] = data['files']
+        self.state['progress'] = data
+        self.state['status'] = 'checkpointed'
+        return {'status': 'checkpointed', 'progress': data}
+    if tool == 'submit_report':
+        data = json.loads(argument)
+        if hasattr(self, 'validate_report'):
+            self.validate_report(data)
+        else:
+            validate_report(data)
+        manifest = capture_workspace(self.folder, self.workspace, files=data['files'])
+        atomic_json(self.folder / 'submission.json', manifest)
+        atomic_json(self.folder / 'source-snapshot.json', text_snapshot(self.folder, manifest))
+        self.state['report'] = data
+        self.state['status'] = {'DONE': 'submitted', 'NEEDS_INPUT': 'needs_input', 'FAILED': 'failed'}[data['status']]
+        atomic_json(self.folder / 'report.json', data)
+        return {'status': self.state['status'], 'summary': data['summary'], 'source_files': data['files']}
     if tool == 'request_environment':
         if self.config['id']=='music_experiment' and not self.policy.get('managed_environment'):
             raise ValueError('Environment escalation is unavailable in legacy mode')
@@ -86,6 +109,8 @@ def workspace_action(self, action, timeout):
             raise ValueError("Invalid finish fields")
         if not isinstance(data["files"], list) or not 1 <= len(data["files"]) <= 32:
             raise ValueError("Submit 1–32 source/config files for reproducibility")
+        if hasattr(self, 'validate_report'):
+            self.validate_report({'status':'DONE','summary':data['summary'],'files':data['files']})
         files = {}
         for relative in data["files"]:
             if not isinstance(relative, str):
@@ -99,12 +124,17 @@ def workspace_action(self, action, timeout):
                 raise ValueError("Source snapshot exceeds 8 MB")
         # Host-owned source snapshot, never mounted in the worker container.
         atomic_json(self.folder / "source-snapshot.json", files)
+        manifest = capture_workspace(self.folder, self.workspace, files=data['files'])
+        atomic_json(self.folder / 'submission.json', manifest)
+        self.state['report'] = {'status': 'DONE', 'summary': data['summary'][:4000], 'files': list(files)}
         self.state["status"] = "submitted"
         return {"summary": data["summary"][:4000], "source_files": list(files)}
     raise ValueError("Unregistered worker tool")
 
 
 DESCRIPTIONS = {
+ "checkpoint": 'JSON {summary, next_test, findings?:[text], failures?:[text], files?:[paths]}; save durable progress and yield to coordinator. Work can continue without a new assignment or total budget limit. Describe what changed and what the next test distinguishes.',
+ "submit_report": 'JSON {status:DONE|NEEDS_INPUT|FAILED, summary, files:[paths], failure_kind?:environment|implementation|measurement|performance|missing_input|other, claims?:[{statement,epistemic_status:observed|inferred|hypothesis|unknown,evidence_ids:[],limitations}], objections?:[{target_id,category,severity,statement,evidence_ids:[],resolution_test}], next_actions?:[{action,owner,expected_information,acceptance_check,requires_external}], open_questions?:[text]}. Empty files allowed for blocked work. DONE completes only this assignment; host alone verifies project success.',
  "read_file": 'JSON {path, offset?:0, limit?:4000}; read a workspace-relative file. limit must be an integer 1..8000; supplied inputs live under inputs/.',
  "write_file": 'JSON {path, content}; write a workspace text file; inputs are read-only.',
  "run": 'Shell command in a disposable Docker container. Full logs stay on disk. Download/install only if the execution policy permits.',

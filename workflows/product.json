@@ -1,0 +1,94 @@
+{
+  "mode": "product",
+  "stages": [
+    {
+      "id": "P0",
+      "description": "Define purpose, constraints and completion scope",
+      "gates": [
+        {
+          "id": "charter-delivered",
+          "kind": "artifact",
+          "criterion": "Objectives and mandatory criteria are documented",
+          "path": "charter.md"
+        }
+      ]
+    },
+    {
+      "id": "P1",
+      "description": "Investigate problems and alternative mechanisms",
+      "gates": [
+        {
+          "id": "alternatives-delivered",
+          "kind": "artifact",
+          "criterion": "Observed problems, existing alternatives and distinct candidate mechanisms are documented",
+          "path": "alternatives.md"
+        }
+      ]
+    },
+    {
+      "id": "P2",
+      "description": "Select a candidate and the smallest discriminating test",
+      "gates": [
+        {
+          "id": "test-plan-reviewed",
+          "kind": "review",
+          "criterion": "The validation plan matches the stated decision and criteria",
+          "reviewers": [
+            "critic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "description": "Validate the value hypothesis with real evidence",
+      "gates": [
+        {
+          "id": "value-observed",
+          "kind": "external",
+          "criterion": "Required real participant observations meet the agreed value criterion"
+        }
+      ]
+    },
+    {
+      "id": "P4",
+      "description": "Build and verify a usable implementation",
+      "gates": [
+        {
+          "id": "implementation-measured",
+          "kind": "evaluation",
+          "criterion": "Protected functional checks accept the implementation",
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "P5",
+      "description": "Operate a limited pilot",
+      "gates": [
+        {
+          "id": "pilot-observed",
+          "kind": "external",
+          "criterion": "Actual usage, repeated value, errors and operating costs meet the stated scope"
+        }
+      ]
+    },
+    {
+      "id": "P6",
+      "description": "Validate expansion and package the result",
+      "gates": [
+        {
+          "id": "expansion-observed",
+          "kind": "external",
+          "criterion": "The proposed expansion unit meets the agreed value, performance and cost requirements"
+        },
+        {
+          "id": "objective-accepted",
+          "kind": "evaluation",
+          "criterion": "The original protected completion predicate accepts the delivered candidate",
+          "accepted": true
+        }
+      ]
+    }
+  ]
+}

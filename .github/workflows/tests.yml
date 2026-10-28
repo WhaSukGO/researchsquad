@@ -52,3 +52,6 @@ jobs:
         run: uv run --no-sync python -m goalagent.team_check --run-dir /tmp/configurable-team-verification
       - name: Verify unlimited execution and usage accounting
         run: GOALAGENT_DOCKER_TESTS=1 uv run --no-sync pytest -q tests/test_budgets.py
+
+      - name: Verify checkpoints, inherited artifacts and protected stage completion
+        run: uv run --no-sync python -m goalagent.checkpoint_check --run-dir /tmp/checkpoint-verification

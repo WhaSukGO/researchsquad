@@ -1,6 +1,6 @@
 # A default research team that can specialize
 
-The general team now uses one `Agent` model/tool loop. Roles are JSON definitions plus Markdown prompts; assignments are separate data. Six defaults are available: coordinator, planner, researcher, experiment engineer, environment engineer, and critic. The coordinator chooses whom to commission; all six do not run automatically.
+The general team now uses one `Agent` model/tool loop. Roles are JSON definitions plus Markdown prompts; assignments are separate data. Eight defaults are available: coordinator, planner, researcher, experiment engineer, environment engineer, critic, experience and strategy. The coordinator commissions only the roles needed. See [checkpoints, evidence and stage decisions](checkpoints-and-workflows.md) for the new operating protocol.
 
 ## Start a team
 
@@ -50,25 +50,25 @@ The default team does not have host shell access. The existing provider runs mod
 | Extensions | Register a captured Python script after a passing Docker test; future execution agents can call it |
 | Results | Submit frozen artifacts and ask a host-registered evaluator for measurements |
 
-Commands are synchronous and bounded by the assignment and team deadlines. There is no background-job scheduler or remote GPU provisioner in this increment. Long work can run within configured command limits, with output written to files. An ordinary script requires no registration.
+Commands are synchronous; finite deadlines apply only when configured. Workers now return control at configurable checkpoints between completed actions. There is no background-job scheduler or remote GPU provisioner in this increment. Long work can run within configured command limits, with output written to files. An ordinary script requires no registration.
 
 ## How assignments and evidence move
 
 The lead supplies the role, a distinct objective, success criteria, explicit inputs, and optional parent/mode. It cannot simply repeat the global goal. Each assignment receives an independent model context and workspace. Public text inputs come from `task.inputs`; binary inputs use `task.assets`, an explicit map of destination names to owner-provided paths (relative to the task file in the CLI). Asset hashes are pinned. No project checkout or reference directory is inherited.
 
-Delegation copies only explicitly selected files into read-only child inputs. The child returns a host-owned source/report snapshot. The lead receives paths to read-only handoff copies and a concise outcome. An improve branch requires a measured parent; a debug branch requires failed execution. Parent artifacts come from the frozen snapshot, not a mutable workspace. Full records are retrievable by evidence ID.
+Delegation copies only explicitly selected files into read-only child inputs. The child returns a host-owned checkpoint or final report, with preserved source, output and binary artifacts. The lead receives paths to read-only handoff copies and a concise outcome. An improve branch requires a measured parent; a debug branch requires failed execution. Parent artifacts come from the frozen snapshot, not a mutable workspace. Full records are retrievable by evidence ID.
 
 Delegation is sequential in this increment. Roles do not chat through a shared transcript. Global limits bound calls, active time, assignments and nesting depth; individual role limits apply within those limits. No evaluator means no automatic `goal_met`, even if the lead submits a confident final report.
 
 ## Add capabilities during research
 
-A coordinator can use `create_specialist` with a template, new identity, prompt and subset of tools. The specialist inherits the template's model and limits. It cannot grant itself new host privileges. Up to eight run-local specialists are supported.
+A coordinator can use `create_specialist` with a template, new identity, prompt and subset of tools. The specialist inherits the template's model and limits. It cannot grant itself new host privileges. Bounded mode supports up to eight run-local specialists; unlimited mode removes this cap.
 
-An execution engineer can write a Python script that reads JSON from stdin, document its interface, and invoke `register_tool` with a test argument. The host captures the script, tests it in Docker and stores its source/hash. A failed test does not publish it. Up to sixteen extensions are supported. Future agents with an execution grant receive `script.NAME` in their frozen tool catalog. Read-only roles gain no execution permission. The registering engineer can continue using its ordinary scripts; its existing tool contract does not mutate mid-assignment.
+An execution engineer can write a Python script that reads JSON from stdin, document its interface, and invoke `register_tool` with a test argument. The host captures the script, tests it in Docker and stores its source/hash. A failed test does not publish it. Bounded mode supports up to sixteen extensions; unlimited mode removes this cap. Future agents with an execution grant receive `script.NAME` in their frozen tool catalog. Read-only roles gain no execution permission. The registering engineer can continue using its ordinary scripts; its existing tool contract does not mutate mid-assignment.
 
 Script-tool registration proves that the supplied test executed. It does not certify scientific validity. Script tools run in the same restricted environment as ordinary experiment code, never as imported host plugins. Run-local extensions do not silently become trusted defaults across future runs; a maintainer can promote useful ones through PR review.
 
-For dependencies, the environment engineer supplies validated Debian package names, pinned Python package requests, and a capability smoke script. The host fixes the base image, isolates the build context, captures dependency versions and publishes a unique retained image tag plus immutable image ID. Readiness runs without network under the actual non-root/read-only restrictions. It does not receive research data or labels. The lead can inspect its readiness receipt and package inventory through the catalog, and new assignments receive that inventory explicitly. New assignments can reuse that image; existing assignments keep their frozen policy. There are three build attempts within the total time budget. Receipts and setup duration are retained. This generic path supports more than the earlier fixed notation/OCR profile, but agent-proposed readiness is still not independent scoring.
+For dependencies, the environment engineer supplies validated Debian package names, pinned Python package requests, and a capability smoke script. The host fixes the base image, isolates the build context, captures dependency versions and publishes a unique retained image tag plus immutable image ID. Readiness runs without network under the actual non-root/read-only restrictions. It does not receive research data or labels. The lead can inspect its readiness receipt and package inventory through the catalog, and new assignments receive that inventory explicitly. New assignments can reuse that image; existing assignments keep their frozen policy. Bounded mode allows three build attempts within the total time budget; unlimited mode removes the attempt cap. Receipts and setup duration are retained. This generic path supports more than the earlier fixed notation/OCR profile, but agent-proposed readiness is still not independent scoring.
 
 ## Protected evaluation and music compatibility
 
@@ -89,7 +89,7 @@ The fixture creates a specialist, commissions an engineer to register a sorting 
 
 The recorded local verification is [available here](../runs/configurable-team-final-20261029/verification.json): the complete tool-reuse scenario and a real generic environment build/readiness/cache-hit check passed. The regression suite passed 106 tests; two real-Docker music isolation/scoring tests also passed separately. CI includes the new team fixture alongside the existing Docker checks.
 
-Current submission snapshots contain bounded text source/report files (up to 8 MB total), not large binary model checkpoints. A production evaluator for a new scientific domain must define its artifact and acceptance contracts. The generic environment cache is run-local; its immutable image is reused across assignments, while Docker build layers can accelerate another run. Automatic image garbage collection is not included.
+New checkpoints and reports preserve binary and text artifacts (up to 256 files, 16 MB per file and 64 MB per bundle); the legacy finish tool retains its 8 MB text contract. Protected text evaluators receive only a text view of explicitly submitted files. A production evaluator for a new scientific domain must define its artifact and acceptance contracts. The generic environment cache is run-local; its immutable image is reused across assignments, while Docker build layers can accelerate another run. Automatic image garbage collection is not included.
 
 ## Live music pilot
 
@@ -113,4 +113,4 @@ Usage is still counted and saved. The team can finish normally or be interrupted
 
 The previous live pilot had 40 calls, 1,800 team seconds, six assignments and depth two. Engineers had 16 steps, 600 seconds, 180-second model deadlines and 120-second command deadlines. The legacy music-coordinator entry point retains its separate goal-file budgets; unlimited mode applies to the new configurable team. Existing evidence is never rewritten to change these historical limits. Start a new run when changing budget mode.
 
-Removing budgets does not fix repeated inspection or missing handoffs. The known pilot limitations remain recorded in the assessment; unlimited operation is a user-selected execution policy, not a claim that research will converge.
+The checkpoint and artifact protocol now addresses repeated inspection without coordinator visibility and missing handoffs. Unlimited operation remains a user-selected execution policy, not a claim that research will converge. The earlier assessment is a historical record.
