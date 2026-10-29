@@ -80,7 +80,7 @@ For dependencies, the environment engineer supplies validated Debian package nam
 
 Evaluators are versioned host registrations. Agents cannot register a scorer through script tools, change task acceptance, or overwrite the frozen submission. The host verifies the submission hash before every evaluation, including cached evaluations. The included non-music evaluator is deliberately a small software fixture. A new scientific domain usually needs a suitable evaluator and input contract; configuration alone cannot define trustworthy measurement for every problem.
 
-The existing music coordinator remains a compatibility workflow with its existing acceptance checks and protected evaluator. Its experiment engineer now uses the same `Agent` runtime, with music prompts loaded from `agents/music/`. The music coordinator's control loop has not been silently replaced by the general team's policy. Existing recorded runs remain unchanged; changed protected fingerprints require a new run. The general team is the new entry point for configurable roles and arbitrary goals. A full migration of the music workflow into its tool/evaluator adapters is not claimed in this increment.
+The current `goalagent.music_team` adapter uses this configurable team, delivers explicit images and prediction inputs, and registers the protected music scorer. Earlier coordinator/worker and blind-review entry points have been retired; their original code and tracked evidence are available in the [pre-cleanup archive](repository-cleanup.md). Existing records are unchanged, and changed protected fingerprints require a fresh run.
 
 ## Verification
 
@@ -93,30 +93,24 @@ uv run python -m goalagent.team_check --run-dir runs/new-team-verification
 
 The fixture creates a specialist, commissions an engineer to register a sorting tool, obtains a failed protected measurement on an incomplete input, commissions an improvement that reuses the tool with the complete input, and obtains a passing measurement. Resuming adds no calls. Its model decisions are scripted to make the regression deterministic. It proves execution, delegation, extension reuse and evaluation wiring, not autonomous research quality or improved music transcription.
 
-The recorded local verification is [available here](../runs/configurable-team-final-20261029/verification.json): the complete tool-reuse scenario and a real generic environment build/readiness/cache-hit check passed. The regression suite passed 106 tests; two real-Docker music isolation/scoring tests also passed separately. CI includes the new team fixture alongside the existing Docker checks.
+The historical local verification is preserved under `runs/configurable-team-final-20261029/verification.json` in the pre-cleanup archive: the complete tool-reuse scenario and a real generic environment build/readiness/cache-hit check passed. The regression suite passed 106 tests; two real-Docker music isolation/scoring tests also passed separately. CI includes the new team fixture alongside the existing Docker checks.
 
 New checkpoints and reports preserve binary and text artifacts (up to 256 files, 16 MB per file and 64 MB per bundle); the legacy finish tool retains its 8 MB text contract. Protected text evaluators receive only a text view of explicitly submitted files. A production evaluator for a new scientific domain must define its artifact and acceptance contracts. The generic environment cache is run-local; its immutable image is reused across assignments, while Docker build layers can accelerate another run. Automatic image garbage collection is not included.
 
-## Live music pilot
+## Music execution and budgets
 
-`python -m goalagent.music_team --run-dir runs/new-music-team --model gpt-6.1-sol` connects the default configured team to the existing music inputs and protected scorer. It supplies seven images and fourteen prediction/export artifacts, with labels retained by the evaluator. It uses a fresh state and the prepared notation/OCR environment; it does not add a new agent class.
+The maintained music entry point selects the managed research workflow, all 32
+samples and finite 80-call/one-hour effort limits. Use `--sample-scope first_per_song`
+for the seven-sample pilot and `--unlimited` to remove effort limits explicitly.
+`--bounded` selects the finite default; it does not restore the historical 40-call
+pilot. See [managed operations](managed-workflow.md) for scope and external events.
 
-The [29 October live assessment](../runs/configurable-music-retry-20261029/assessment.html) records an important limit: the 40-call run created a candidate but exhausted its budget before submission or evaluation. An unchanged, operator-recovered copy improved parse coverage from 3/7 to 5/7; melody errors stayed at 101/130 and chord errors at 38/38. This diagnostic score was not produced by the autonomous loop. The report distinguishes the initial interrupted interface-bug attempt, all three engineer assignments, and the remaining handoff/progress/evaluation gaps. The goal remains unmet.
+Training labels in a future training task must be explicit public training inputs;
+protected evaluation labels remain separate. The present generic text evaluator is
+not a model-checkpoint evaluator, and default containers do not receive a GPU.
+See [the training assessment](training-benchmark-plan-ko.md) for concrete gaps.
 
-## Unlimited research budgets
-
-New music-team runs now default to unlimited mode:
-
-```sh
-uv run python -m goalagent.music_team --run-dir runs/music-unlimited --model gpt-6.1-sol
-```
-
-For another task, set `"unlimited": true` in its task JSON or pass `--unlimited` to `goalagent.team`. The literature-review task enables this mode; the sorting verification fixture remains bounded. `--bounded` restores the historical 40-call music-pilot configuration.
-
-Unlimited mode replaces team call/time/assignment/depth limits and every role's step/time/model-call/command deadlines with JSON `null`. It also removes run-local specialist/tool-count and generic environment-build-attempt caps. A `null` budget can be set individually for a team or role limit; other finite values remain effective. No artificially large integer stands in for unlimited. Model subprocesses receive no timeout, and serialized contracts/context use `null`, never non-standard JSON Infinity.
-
-Usage is still counted and saved. The team can finish normally or be interrupted; use Ctrl-C to stop the CLI. A hung model or command can now wait indefinitely until interrupted. External provider quotas, resource availability, protected scoring and completion requirements still apply. Container CPU/memory/process limits, isolation, output/file/context size bounds, parser/HTTP operational timeouts and the bounded readiness bootstrap remain. A failed bootstrap can still be routed to the environment engineer; it does not end the research session.
-
-The previous live pilot had 40 calls, 1,800 team seconds, six assignments and depth two. Engineers had 16 steps, 600 seconds, 180-second model deadlines and 120-second command deadlines. The legacy music-coordinator entry point retains its separate goal-file budgets; unlimited mode applies to the new configurable team. Existing evidence is never rewritten to change these historical limits. Start a new run when changing budget mode.
-
-The checkpoint and artifact protocol now addresses repeated inspection without coordinator visibility and missing handoffs. Unlimited operation remains a user-selected execution policy, not a claim that research will converge. The earlier assessment is a historical record.
+Unlimited mode uses JSON `null`, keeps usage accounting and preserves container,
+file, evidence and evaluation boundaries. It does not provide GPU scheduling,
+asynchronous training jobs or convergence guarantees. Original historical runs and
+their original budgets remain available in the [archive](repository-cleanup.md).

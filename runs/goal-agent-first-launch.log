@@ -1,6 +1,0 @@
-{"step": 1, "tool": "inspect_dataset", "observation": "dataset", "error": null, "goal_met": false}
-{"step": 2, "tool": "baseline_summary", "observation": "baseline", "error": null, "goal_met": false}
-{"step": 3, "tool": "discover_evidence", "observation": "source-catalog", "error": null, "goal_met": false}
-{"step": 4, "tool": "read_evidence", "observation": "evidence-82fd3c08", "error": null, "goal_met": false}
-{"step": 5, "tool": "run_experiment", "observation": "exp-33c9e801b310", "error": null, "goal_met": false}
-{"status": "running", "goal_met": false, "steps": 5, "model_calls": 5, "report": "/Users/geegle/development/whasuk/researchagent/runs/goal-agent-001/report.html"}

@@ -54,8 +54,6 @@ def workspace_action(self, action, timeout):
         atomic_json(self.folder / 'report.json', data)
         return {'status': self.state['status'], 'summary': data['summary'], 'source_files': data['files']}
     if tool == 'request_environment':
-        if self.config['id']=='music_experiment' and not self.policy.get('managed_environment'):
-            raise ValueError('Environment escalation is unavailable in legacy mode')
         if not 10 <= len(argument) <= 2000:
             raise ValueError('Describe the missing dependency and observed failure')
         self.state['status'] = 'environment_blocked'

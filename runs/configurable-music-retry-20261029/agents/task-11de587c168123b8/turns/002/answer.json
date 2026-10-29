@@ -1,1 +1,0 @@
-{"tool":"run","argument":"pwd && find /workspace -maxdepth 3 -type f | head -100","why":"Inspect inherited workspace and supplied input files before attempting candidate recovery; the previous list_files action reported no files."}

@@ -1,6 +1,12 @@
+# Generated documents and images must not be diffed or whitespace-checked as text.
+*.pdf binary
+*.png binary
+*.mxl binary
 # Keep protected notation bytes stable across Windows and Linux checkouts.
 *.krn -text
 *.py text eol=lf
 *.md text eol=lf
 *.json text eol=lf
 *.yml text eol=lf
+# These relocated inputs are byte-pinned, including their JSON/XML sources.
+research/baselines/** -text

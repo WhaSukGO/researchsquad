@@ -1,1 +1,0 @@
-{"tool":"run","argument":"cat inputs/inputs/brief.txt inputs/inputs/samples.json inputs/inputs/delivered-baseline.json","why":"Read the brief, explicit sample mapping, and delivered baseline from the observed nested input location before implementing the candidate."}

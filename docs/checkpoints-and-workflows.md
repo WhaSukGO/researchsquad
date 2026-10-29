@@ -13,7 +13,7 @@ The initial implementation priorities came from the music runs: a worker could k
 5. The coordinator gets the checkpoint ID, partial artifacts, progress, failure details and input inventory. It can call `continue_assignment` with a concrete next instruction, commission another person, request environment repair, or stop.
 6. The worker submits a final assignment report. The coordinator requests protected measurement of a completed candidate and uses the result to improve that branch, investigate failure, or explore another approach.
 
-`checkpoint_interval` is configurable per role. It is a scheduling cadence, **not a total budget**. Unlimited mode continues to use JSON `null` for total calls, time, assignments, nesting and role deadlines. Continued work retains its original assignment, workspace, counters and durable findings. The coordinator itself has no automatic work-period cutoff.
+`checkpoint_interval` is configurable per role. It is a scheduling cadence, **not a total budget**. Unlimited mode continues to use JSON `null` for total calls, time, assignments, nesting and role deadlines. Continued work retains its original assignment, workspace, counters and durable findings. In version 1 the coordinator has no automatic work-period cutoff; managed version 2 defaults to a one-action coordinator period.
 
 Checkpoints are cooperative, between completed tool/model actions. A single command or model call with an unlimited deadline can still run indefinitely until the operator interrupts it. This implementation does not add a background scheduler or preempt a command midway through execution.
 
@@ -31,7 +31,7 @@ The host binds the actual role, tools, workflow stage, revision and remaining bu
 
 Legacy `finish` remains available for bounded text submissions. Both report paths preserve the distinction between completing an assignment and achieving the project goal. Missing dependencies do not refute a scientific hypothesis.
 
-A debug or improvement branch inherits the parent's preserved authored files **and its registered input files**, unless the coordinator explicitly supplies a replacement input. Original versions remain in the registry. Reviewers receive the specified candidate version and its inputs. No reference labels or other host-private files are introduced by this mechanism.
+A debug or improvement branch inherits the parent's preserved authored files **and its registered input files**, unless the coordinator explicitly supplies a replacement input. Original versions remain in the registry. Full reviewers receive the specified candidate version and its inputs; managed report-only readers receive only explicitly selected report files. No reference labels or other host-private files are introduced by this mechanism.
 
 ## What is preserved
 
@@ -95,6 +95,6 @@ uv run pytest -q
 uv run python -m goalagent.checkpoint_check --run-dir runs/checkpoint-verification
 ```
 
-The second command runs real Docker commands with scripted model decisions. A first candidate removes duplicates, yields a checkpoint, resumes and fails protected comparison. A measured improvement branch inherits the original input, retains duplicates and passes. Restarting adds no model calls. This checks machinery and evidence-driven routing; it does not demonstrate autonomous reasoning, general research convergence, or improved music transcription. A fresh live music study remains the next empirical evaluation, including comparison with the earlier run and a single-agent baseline where practical.
+The second command runs real Docker commands with scripted model decisions. A first candidate removes duplicates, yields a checkpoint, resumes and fails protected comparison. A measured improvement branch inherits the original input, retains duplicates and passes. Restarting adds no model calls. This checks machinery and evidence-driven routing; it does not demonstrate autonomous reasoning, general research convergence, or improved music transcription. The later live checkpoint pilot is described in the operating guide. Further controlled studies, including a single-agent baseline where practical, are still needed to assess research quality.
 
 The [recorded local verification](verification/checkpoints-20261029.json) includes the fixture results, runtime fingerprint and test outcomes.

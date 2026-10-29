@@ -1,102 +1,20 @@
-"""Readiness, input handoffs and setup budgets are independent of model quality."""
+"""Prepared-image cache integrity, readiness and separate setup responsibility."""
 import copy
 import json
 from pathlib import Path
 import pytest
-from goalagent.contracts import atomic_json, digest
-from goalagent.inputs import resolve_inputs, deliver_inputs, verify_inputs
-from goalagent.environments import EnvironmentManager, validate_recipe, dockerfile
-from goalagent.research import ResearchTools
-from goalagent.coordinator import CoordinatorRunner
+from goalagent.environments import EnvironmentManager, dockerfile
 from goalagent.sandbox import DockerSandbox, log_summary
-from goalagent.worker import ExperimentWorker
-from tests.test_research import SPEC, Scripted, FakeSandbox, assignment, decision, action, worker_actions
 
+SPEC = json.loads(Path('goals/music-research-v2.json').read_text())
 
-class FakeEnvironments:
-    status='ready'
-    def __init__(self,*args):
-        self.state={'attempts':0,'model_calls':0,'active_seconds':0,'events':[]}
-    def ensure(self,*args):
-        return {'status':self.status,'image':{'id':'fixture'},'cache_hit':True}
-
-
-def managed(tmp_path, actions=None, env=FakeEnvironments):
-    spec=copy.deepcopy(SPEC);spec['environment']={'max_attempts':2,'max_model_calls':1,'max_seconds':100}
-    provider=Scripted(actions or worker_actions())
-    tools=ResearchTools(tmp_path,spec,'test-double',provider,FakeSandbox,env)
-    return tools,provider,spec
-
-
-def cfg(required=None):return {**assignment(),'required_inputs':required or [],'environment':'music-python'}
-
-
-def test_actual_baseline_handoff_contains_no_labels(tmp_path):
-    tools,_,_=managed(tmp_path)
-    contract=resolve_inputs(['baseline:audiveris-enlarged'],tools.selected())
-    assert {x['sample'] for x in contract['files']}=={i for i,_ in tools.selected()}
-    assert all(x['source'].startswith('runs/first-benchmark/') for x in contract['files'])
-    deliver_inputs(contract,tmp_path/'workspace');verify_inputs(contract,tmp_path/'workspace')
-    first=tmp_path/'workspace'/contract['files'][0]['path'];first.write_text('changed')
-    with pytest.raises(ValueError,match='changed'):verify_inputs(contract,tmp_path/'workspace')
-
-
-def test_missing_input_prevents_dispatch_and_experiment_reservation(tmp_path,monkeypatch):
-    tools,provider,spec=managed(tmp_path)
-    runner=CoordinatorRunner(spec,tmp_path,Scripted([]),tools)
-    runner.state['known_evidence'] += ['dataset','baseline','evidence-source']
-    import goalagent.research as module
-    def missing(*args):raise ValueError('Missing required baseline prediction')
-    monkeypatch.setattr(module,'resolve_inputs',missing)
-    with pytest.raises(ValueError,match='Missing required'):
-        runner.validate_action(decision('run_experiment',cfg(['baseline:audiveris-enlarged']),['baseline']))
-    assert not provider.prompts and not runner.state['experiments']
-
-
-def test_baseline_sources_and_environment_are_sealed(tmp_path):
-    tools,provider,_=managed(tmp_path)
-    config=cfg(['baseline:audiveris-enlarged']);tools.prepare_assignment(decision('run_experiment',config))
-    r=tools.run_experiment(config,lambda:None,lambda:100)
-    folder=tmp_path/'experiments'/r['id'];seal=tools.verify_seal(folder)
-    assert 'environment.json' in seal['files']
-    assert 'baselines/' in provider.prompts[0] and 'input_contract' in provider.prompts[0]
-    assert not list((folder/'worker/workspace').rglob('reference*'))
-    assert all('research/data/' not in x for x in json.loads((folder/'source-snapshot.json').read_text()))
-    (folder/'environment.json').write_text('{}')
-    with pytest.raises(ValueError,match='integrity'):tools.verify_seal(folder)
-
-
-def test_setup_failure_does_not_consume_scientific_experiment(tmp_path):
-    class Blocked(FakeEnvironments):status='environment_blocked'
-    tools,workers,spec=managed(tmp_path,env=Blocked)
-    lead=Scripted([decision('inspect_dataset'),decision('baseline_summary'),decision('read_evidence','music-benchmark'),
-        decision('run_experiment',cfg(),['baseline']),decision('finish')])
-    runner=CoordinatorRunner(spec,tmp_path,lead,tools);s=runner.run()
-    assert not s['experiments'] and not s['evaluations'] and not workers.prompts
-    assert s['history'][3]['observation']['status']=='environment_blocked'
-    assert s['model_calls']==5
-
-
-def test_experiment_requests_setup_without_doing_it(tmp_path):
-    tools,_,_=managed(tmp_path,[action('write_file',{'path':'main.py','content':'# progress'}),
-                              action('request_environment','Need scipy==1.16.2; import scipy is unavailable')])
-    config=cfg();tools.prepare_assignment(decision('run_experiment',config));r=tools.run_experiment(config,lambda:None,lambda:100)
-    assert r['worker']['status']=='environment_blocked'
-    assert 'scipy' in r['worker']['last_observation']['requirements']
-    assert json.loads((tmp_path/'experiments'/r['id']/'source-snapshot.json').read_text())['main.py']=='# progress'
-
-
-def test_managed_commands_protect_baselines_and_disable_network(tmp_path):
-    (tmp_path/'inputs').mkdir();(tmp_path/'baselines').mkdir()
-    policy={**SPEC['worker'],'network':False,'managed_environment':True}
-    command=DockerSandbox(tmp_path,policy).command('python experiment.py')
-    assert command[command.index('--network')+1]=='none'
-    assert any('dst=/workspace/baselines,readonly' in x for x in command)
-    assert '--read-only' in command and 'PIP_NO_INDEX=1' in command
-    worker=ExperimentWorker(tmp_path.parent,{},Scripted([]),policy,FakeSandbox)
-    worker.workspace=tmp_path
-    with pytest.raises(ValueError,match='read-only'):
-        worker.execute(action('write_file',{'path':'baselines/result.krn','content':'fake'}),1)
+class Scripted:
+    def __init__(self, actions):
+        self.actions = iter(actions)
+        self.prompts = []
+    def call(self, prompt, *args, **kwargs):
+        self.prompts.append(prompt)
+        return next(self.actions), {'test_double': True}
 
 
 def test_log_keeps_first_failure_when_tail_is_noise(tmp_path):

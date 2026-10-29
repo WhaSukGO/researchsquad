@@ -1,1 +1,0 @@
-{"tool":"run","argument":"pwd && ls -la && find . -maxdepth 3 -type f | head -80 && command -v java; command -v tesseract; python -V","why":"Locate parent source, pilot images, and installed recognition dependencies before revising the pipeline."}

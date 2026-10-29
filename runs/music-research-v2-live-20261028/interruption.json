@@ -1,6 +1,0 @@
-{
-  "status": "interrupted_for_harness_fix",
-  "reason": "A second registry build reused the same Docker tag and invalidated the image handed to the worker. Preserve this attempt; restart after immutable publication fix.",
-  "time": "2026-10-28T23:16:51.670328+09:00",
-  "implementation_commit": "b30dcdd"
-}

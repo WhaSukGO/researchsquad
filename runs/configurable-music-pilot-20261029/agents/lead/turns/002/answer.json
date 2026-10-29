@@ -1,1 +1,0 @@
-{"tool":"read_file","argument":"{\"path\":\"brief.txt\",\"limit\":12000}","why":"Read the task brief and output requirements before defining distinct experiments or delegating implementation."}

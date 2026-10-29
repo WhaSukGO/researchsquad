@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-30",
+  "windows_gpu": {
+    "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "memory_mib": 16384,
+    "driver": "576.80"
+  },
+  "windows_cpu_logical_processors": 16,
+  "windows_ram_gib": 63.7,
+  "drive_d_free_gib_at_initial_probe": 28.6,
+  "wsl": {
+    "distribution": "Ubuntu-24.04",
+    "version": 2,
+    "gpu_visibility": "passed via /usr/lib/wsl/lib/nvidia-smi",
+    "later_startup": "HCS/ERROR_SHARING_VIOLATION attaching D:/wsl/ext4.vhdx",
+    "recovery": "No forced restart or disk detachment; used Windows Docker CLI for verification"
+  },
+  "docker": {
+    "server_version": "28.2.2",
+    "gpu_visibility": "passed with --gpus all",
+    "cuda_driver_kernel": {
+      "status": "passed",
+      "inputs": [
+        19,
+        23
+      ],
+      "output": 42,
+      "probe_script": "scripts/probe_cuda.py",
+      "scope": "Real CUDA kernel launch and device-to-host result; not PyTorch training or throughput utilization"
+    }
+  },
+  "current_agent_runtime": {
+    "gpu_grant": false,
+    "memory": "2g",
+    "cpus": 2,
+    "artifact_file_bytes": 16000000,
+    "artifact_bundle_bytes": 64000000,
+    "managed_training_job_tools": false,
+    "protected_model_checkpoint_evaluator": false
+  },
+  "not_measured": [
+    "PyTorch CUDA/backpropagation",
+    "Neural network training",
+    "GPU utilization under sustained learning",
+    "Samples per second",
+    "WSL assigned memory and CPU capacity",
+    "End-to-end learning-study quality"
+  ],
+  "planning_document": "docs/training-benchmark-plan-ko.md"
+}

@@ -20,6 +20,6 @@ This is a human-triggered workflow. There is no background listener, webhook, po
 
 A future automatic adapter would need an authorized-reviewer allowlist, event deduplication, superseded-comment handling, repository-scoped credentials, bounded context and an explicit trigger. It should treat quoted text and third-party comments as evidence, not executable commands. Build this only if manual review latency becomes a real bottleneck.
 
-## Checks included in this PR
+## Automated checks
 
-GitHub Actions installs the locked Python dependencies and runs the existing test suite for PRs and pushes to `main`. It uses a read-only repository token and no model API credentials. The ordinary test job skips the two opt-in Docker tests. A separate Docker job now runs those isolation/scoring tests and builds the prepared environment, checking a real synthetic export, OCR and reuse across separate workspaces. None of these checks establishes music recognition accuracy.
+GitHub Actions installs locked dependencies and runs the current regression suite for PRs and pushes to `main`, with a read-only repository token and no model credentials. The ordinary job skips opt-in Docker tests. A separate job checks real isolation, timeouts, immutable image publication, environment reuse, configurable tool reuse, unlimited accounting and checkpointed improvement with protected evaluation. These deterministic checks do not establish autonomous music recognition accuracy.

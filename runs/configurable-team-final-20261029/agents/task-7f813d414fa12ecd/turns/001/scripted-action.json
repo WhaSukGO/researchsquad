@@ -1,5 +1,0 @@
-{
-  "tool": "read_file",
-  "argument": "{\"path\": \"inputs/numbers.json\"}",
-  "why": "Deterministic integration verification"
-}

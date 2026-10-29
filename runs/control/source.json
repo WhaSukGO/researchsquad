@@ -1,7 +1,0 @@
-{
-  "dataset": "btrkeks/verovio-synth-omr",
-  "config": "default",
-  "split": "train",
-  "row": 0,
-  "note": "Publisher-released synthetic benchmark, used as an independent pipeline control, not one of the 32 user samples."
-}

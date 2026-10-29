@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-30",
+  "managed_pr": {
+    "number": 8,
+    "merged": true,
+    "merge_commit": "fd4ffd22ea8ec441176db7c5b41c16305a6fbdb8"
+  },
+  "cleanup_pr": 7,
+  "source_scope": "Updated old cleanup against managed main; retains policy v2 and the current nine roles",
+  "tests": {
+    "local_locked_container": {
+      "status": "passed",
+      "passed": 110,
+      "skipped": 3,
+      "seconds": 204.27,
+      "command": "docker run --rm --network none --memory 8g --cpus 8 --mount type=bind,source=REPO,target=/workspace,readonly researchsquad-verification:20261030 python -m pytest -q -p no:cacheprovider",
+      "dependencies": "uv 0.6.6, uv sync --locked --group dev",
+      "skips": "Real Docker cases; PR CI runs them with host Docker"
+    }
+  },
+  "relocated_baseline_files": 163,
+  "baseline_byte_parity_verified": true,
+  "protected_references_changed": false,
+  "generated_tracked_files_removed": 2812,
+  "legacy_modules_removed": 12,
+  "recovery_tag": "archive/pre-managed-cleanup-20261030",
+  "new_neural_training_performed": false,
+  "cuda_probe": "See hardware-training-readiness-20261030.json; actual GPU kernel, not a training benchmark",
+  "training_proposal": "../training-benchmark-plan-ko.md",
+  "ci": "Authoritative results are attached to PR #7 after publication"
+}

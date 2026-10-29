@@ -1,1 +1,0 @@
-{"tool":"run","argument":"ls -la; find . -maxdepth 3 -type f | head -80","why":"Locate input images and enlarged Audiveris baseline artifacts before implementing the isolated chord stage."}

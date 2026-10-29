@@ -36,9 +36,9 @@ builder remain the execution base. The host now supplies mandatory work and revi
 
 ## Repository and platform findings
 
-The branch started from `main` at `caad09f`. The separate legacy-cleanup PR was still
-open, so legacy runners and archived records are not removed by this change. Cleanup
-may need to reconcile the music adapter imports when merged.
+The branch started from `main` at `caad09f`. The initial managed-workflow PR deliberately left the separate cleanup open. The
+follow-up cleanup now retires those runners and reconciles the adapter with the
+retained MusicScorer; see repository-cleanup.md for the deletion/recovery record.
 
 Windows Git checkout converted notation line endings and the original-data check
 correctly refused to score. The fix preserves `.krn` Git bytes through attributes;
