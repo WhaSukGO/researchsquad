@@ -359,8 +359,10 @@ Only after a baseline has sufficient perceptual coverage should a verifier/repai
 
 ## Configurable research team
 
-The general-purpose entry point is `python -m goalagent.team`. Six default roles share one agent runtime; JSON definitions select models, prompts, tools and limits. The team can create specialist definitions and tested sandbox script tools during a run. See [configuration, tools, delegation and limitations](docs/configurable-team.md).
+The general-purpose entry point is `python -m goalagent.team`. Eight default roles share one agent runtime; JSON definitions select models, prompts, tools and limits. The team can create specialist definitions and tested sandbox script tools during a run. See [configuration, tools, delegation and limitations](docs/configurable-team.md).
 
 The existing music workflow remains available, and its experiment engineer now uses the shared runtime. A non-music Docker integration check is available with `python -m goalagent.team_check --run-dir runs/new-team-verification`; its decisions are scripted, not an autonomous research claim.
 
 New configurable music-team runs default to **unlimited research budgets**, including model-call and shell-command deadlines. Use `python -m goalagent.music_team --run-dir runs/new-unlimited-music` to start a fresh run, or add `--bounded` to retain the original pilot limits. General teams support task configuration `"unlimited": true` or CLI `--unlimited`. Usage accounting and execution isolation remain active; see [budget semantics and stop behavior](docs/configurable-team.md#unlimited-research-budgets).
+
+The [checkpoint and workflow implementation](docs/checkpoints-and-workflows.md) adds resumable worker work periods, stable artifact handoffs, partial failure reports, configurable research/product stages and protected gate decisions. Unlimited total budgets remain unlimited. Verify the real-container handoff and measured revision path with `python -m goalagent.checkpoint_check --run-dir runs/new-checkpoint-verification`.

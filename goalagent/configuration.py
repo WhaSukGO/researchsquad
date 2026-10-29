@@ -8,7 +8,8 @@ from .budgets import valid_limit
 FIELDS={'version','id','model','reasoning_effort','system_prompt','tools','limits'}
 
 def validate_agent(data):
-    if set(data)!=FIELDS or data['version']!=1:raise ValueError('Invalid agent definition fields/version')
+    if not FIELDS <= set(data) or set(data)-FIELDS-{'checkpoint_interval'} or data['version']!=1:raise ValueError('Invalid agent definition fields/version')
+    if 'checkpoint_interval' in data and (type(data['checkpoint_interval']) is not int or not 1 <= data['checkpoint_interval'] <= 1000):raise ValueError('checkpoint_interval must be 1..1000 actions; it is not an effort budget')
     if not isinstance(data['id'],str) or not re.fullmatch(r'[a-z][a-z0-9_-]{0,63}',data['id']):raise ValueError('Invalid agent id')
     if data['model'] is not None and (not isinstance(data['model'],str) or not data['model'].strip()):raise ValueError('Invalid model')
     if data['reasoning_effort'] not in {'low','medium','high'}:raise ValueError('Invalid reasoning effort')

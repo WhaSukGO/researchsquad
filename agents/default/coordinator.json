@@ -13,12 +13,18 @@
     "read_file",
     "write_file",
     "list_files",
-    "finish"
+    "finish",
+    "submit_report",
+    "read_artifact",
+    "continue_assignment",
+    "project_state",
+    "propose_decision"
   ],
   "limits": {
     "max_steps": 24,
     "max_seconds": 1800,
     "command_timeout": 120,
     "model_call_timeout": 180
-  }
+  },
+  "checkpoint_interval": 8
 }

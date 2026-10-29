@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-29",
+  "scope": "Implementation verification with scripted model decisions; not an autonomous research or music accuracy evaluation",
+  "runtime_fingerprint": "4e7bab3545009fa6b869e47bfe0c4cf70fe486a06b53cfb21ebe7f358e50a03b",
+  "checkpoint_fixture": {
+    "status": "passed",
+    "provider": "scripted decisions; no live model reasoning",
+    "real_docker": true,
+    "budget": {
+      "max_calls": null,
+      "max_seconds": null,
+      "max_assignments": null,
+      "max_depth": null
+    },
+    "calls_reserved": 11,
+    "assignments": 2,
+    "checkpoint_continuations": 1,
+    "protected_acceptance": [
+      false,
+      true
+    ],
+    "resume_added_calls": 0,
+    "scope": "Shell-created artifacts, exact input handoff, continuation, inherited inputs, measured branch revision and host-enforced completion. No music accuracy claim."
+  },
+  "tool_and_environment_fixture": {
+    "status": "passed",
+    "provider": "scripted (no model calls)",
+    "real_docker": true,
+    "agent_runtime": "Agent for all roles",
+    "specialist_created": "sorting_specialist",
+    "tool_registered": "script.sort_numbers",
+    "measurements": [
+      {
+        "accepted": false,
+        "exact_match": false,
+        "samples": 4,
+        "scope": "Software integration fixture; not research quality or generalization."
+      },
+      {
+        "accepted": true,
+        "exact_match": true,
+        "samples": 4,
+        "scope": "Software integration fixture; not research quality or generalization."
+      }
+    ],
+    "reserved_scripted_calls": 13,
+    "resume_added_calls": 0,
+    "scope": "Non-music integration and evidence-driven control-flow fixture; not autonomous research or transcription accuracy.",
+    "environment": {
+      "status": "passed",
+      "image": "sha256:86e4202fcd732f0cf2d9e2b9fc8f1d1096c441538a94fb9e401e1b1c178e6a9e",
+      "reuse": true,
+      "setup_attempts": 1,
+      "scope": "Real generic package-builder/readiness/reuse check, no model calls"
+    }
+  },
+  "tests": {
+    "full_regression_suite": "138 passed, 4 opt-in tests skipped before the final additional recovery regression",
+    "final_checkpoint_and_workflow_tests": "24 passed, including the additional committed-shell-receipt recovery regression",
+    "real_container_tests": "4 passed (unlimited execution, music isolation/scoring, environment publication); 42 unrelated cases deselected"
+  },
+  "limits": [
+    "Work periods yield between completed actions, not during a running unlimited command.",
+    "Artifact delivery and reviewer judgments are not independent scientific measurements.",
+    "A fresh live music study and comparative research evaluation have not been run."
+  ]
+}

@@ -33,7 +33,7 @@ def test_role_catalog_and_independent_model_selection(tmp_path):
         captured.append((c['id'],c['model'],c['reasoning_effort']))
         return Scripted([action('write_file',{'path':'report.txt','content':'done'}),action('finish',{'summary':'done','files':['report.txt']})])
     team=make(tmp_path,provider_factory=provider)
-    assert set(team.definitions)=={'coordinator','planner','researcher','experiment_engineer','environment_engineer','critic'}
+    assert set(team.definitions)=={'coordinator','planner','researcher','experiment_engineer','environment_engineer','critic','experience','strategy'}
     assert team.run()['status']=='submitted'
     assert not team.state['goal_met']
     assert captured==[('coordinator',None,'low')]
