@@ -11,7 +11,20 @@
           "criterion": "A research question and positive/negative/inconclusive outcome definitions are delivered for review",
           "path": "charter.md"
         }
-      ]
+      ],
+      "owner": "research",
+      "required_reviewers": [
+        "strategy",
+        "engineering",
+        "experience"
+      ],
+      "required_outputs": [
+        "charter.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "R1",
@@ -23,7 +36,23 @@
           "criterion": "Sources read, search limitations and competing explanations are documented",
           "path": "literature.md"
         }
-      ]
+      ],
+      "owner": "research",
+      "required_reviewers": [
+        "engineering",
+        "experience",
+        "auditor"
+      ],
+      "required_outputs": [
+        "literature.md"
+      ],
+      "required_tools": [
+        "web_search",
+        "web_fetch"
+      ],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "R2",
@@ -34,16 +63,21 @@
           "kind": "artifact",
           "criterion": "Metrics, baselines, material selection, exclusions and stopping conditions are documented",
           "path": "experiment-plan.md"
-        },
-        {
-          "id": "plan-reviewed",
-          "kind": "review",
-          "criterion": "An independent assignment reviews whether the planned observations distinguish the hypotheses",
-          "reviewers": [
-            "critic"
-          ]
         }
-      ]
+      ],
+      "owner": "research",
+      "required_reviewers": [
+        "engineering",
+        "strategy",
+        "auditor"
+      ],
+      "required_outputs": [
+        "experiment-plan.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "R3",
@@ -54,7 +88,22 @@
           "kind": "evaluation",
           "criterion": "Protected measurement exists for the pilot, including valid negative outcomes"
         }
-      ]
+      ],
+      "owner": "engineering",
+      "required_reviewers": [
+        "research",
+        "auditor"
+      ],
+      "required_outputs": [
+        "pilot-report.md",
+        "trace.json"
+      ],
+      "required_tools": [
+        "run"
+      ],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "R4",
@@ -64,8 +113,25 @@
           "id": "validation-measured",
           "kind": "evaluation",
           "criterion": "Protected measurement exists for the validation candidate"
+        },
+        {
+          "id": "validation-observation",
+          "kind": "external",
+          "criterion": "Original validation observations and their stated scope are supplied by the trusted operator"
         }
-      ]
+      ],
+      "owner": "research",
+      "required_reviewers": [
+        "engineering",
+        "auditor"
+      ],
+      "required_outputs": [
+        "validation-report.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "R5",
@@ -76,7 +142,19 @@
           "kind": "external",
           "criterion": "Independent execution or material and scope checks have been supplied through a trusted event"
         }
-      ]
+      ],
+      "owner": "research",
+      "required_reviewers": [
+        "engineering",
+        "auditor"
+      ],
+      "required_outputs": [
+        "confirmation-report.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "R6",
@@ -94,7 +172,42 @@
           "criterion": "The original protected completion predicate accepts this candidate",
           "accepted": true
         }
-      ]
+      ],
+      "owner": "research",
+      "required_reviewers": [
+        "experience",
+        "engineering",
+        "strategy",
+        "auditor",
+        "report_reader"
+      ],
+      "required_outputs": [
+        "report.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [
+        "report.md"
+      ],
+      "review_scopes": {
+        "report_reader": "report_only"
+      }
     }
-  ]
+  ],
+  "policy_version": 2,
+  "role_bindings": {
+    "research": "researcher",
+    "engineering": "experiment_engineer",
+    "experience": "experience",
+    "strategy": "strategy",
+    "auditor": "critic",
+    "orchestrator": "coordinator",
+    "environment": "environment_engineer",
+    "report_reader": "report_reader"
+  },
+  "work_policy": {
+    "max_attempts": 3,
+    "checkpoint_interval": 8,
+    "coordinator_checkpoint_interval": 1
+  }
 }

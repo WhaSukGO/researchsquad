@@ -13,17 +13,44 @@ def load_workflow(spec):
         spec = {'mode': 'research', 'stages': [{'id': 'research', 'description': 'Investigate, implement, measure and report',
                  'gates': [{'id': 'objective', 'kind': 'evaluation', 'criterion': 'Protected evaluator accepts the submitted candidate', 'accepted': True}]}]}
     spec = copy.deepcopy(spec)
-    if not isinstance(spec, dict) or set(spec) != {'mode', 'stages'} or spec['mode'] not in {'research', 'product'}:
+    managed = isinstance(spec,dict) and spec.get('policy_version') == 2
+    allowed = {'mode','stages','policy_version','role_bindings','work_policy','completion_stage'} if managed else {'mode','stages'}
+    if not isinstance(spec, dict) or set(spec)-allowed or not {'mode','stages'} <= set(spec) or spec['mode'] not in {'research', 'product'}:
         raise ValueError('workflow requires mode and stages')
+    if managed:
+        bindings=spec.get('role_bindings')
+        if not isinstance(bindings,dict) or not bindings or any(not isinstance(k,str) or not isinstance(v,str) for k,v in bindings.items()):
+            raise ValueError('Managed workflow requires role_bindings')
+        policy={'max_attempts':3,'checkpoint_interval':8,'coordinator_checkpoint_interval':1,**spec.get('work_policy',{})}
+        if set(policy)!={'max_attempts','checkpoint_interval','coordinator_checkpoint_interval'} or any(type(v) is not int or not 1<=v<=1000 for v in policy.values()):
+            raise ValueError('Invalid managed work policy')
+        spec['work_policy']=policy
     if not isinstance(spec['stages'], list) or not spec['stages']:
         raise ValueError('workflow stages are required')
     stage_ids, gate_ids = set(), set()
     for stage in spec['stages']:
-        if not isinstance(stage, dict) or set(stage) != {'id', 'description', 'gates'}:
+        fields={'id','description','gates','owner','required_reviewers','required_outputs','required_tools','required_candidates','report_paths','review_scopes'} if managed else {'id','description','gates'}
+        if not isinstance(stage, dict) or set(stage)-fields or not {'id','description','gates'} <= set(stage):
             raise ValueError('Each stage requires id, description and gates')
         text(stage['id'], 'stage id', 64); text(stage['description'], 'stage description')
         if stage['id'] in stage_ids: raise ValueError('Duplicate stage')
         stage_ids.add(stage['id'])
+        if managed:
+            text(stage.get('owner'),'stage owner')
+            for name in ('required_reviewers','required_outputs','required_tools','required_candidates','report_paths'):
+                values=strings(stage.get(name,[]),name,64)
+                if len(set(values))!=len(values):raise ValueError('Duplicate '+name)
+                stage[name]=values
+            scopes=stage.get('review_scopes',{})
+            if not isinstance(scopes,dict) or set(scopes)-set(stage['required_reviewers']) or any(v not in {'full','report_only'} for v in scopes.values()):
+                raise ValueError('Invalid reviewer scope')
+            stage['review_scopes']=scopes
+            for role in stage['required_reviewers']:
+                gate={'id':stage['id']+'-review-'+role,'kind':'review',
+                      'criterion':'Independent '+role+' review of this frozen stage submission',
+                      'reviewers':[spec['role_bindings'].get(role,role)]}
+                if any(g.get('id')==gate['id'] for g in stage['gates']):raise ValueError('Reserved managed review gate ID')
+                stage['gates'].append(gate)
         if not isinstance(stage['gates'], list) or not stage['gates']: raise ValueError('Stage requires gates')
         for gate in stage['gates']:
             if not isinstance(gate, dict) or set(gate) - {'id', 'kind', 'criterion', 'path', 'accepted', 'reviewers'}:
@@ -35,6 +62,8 @@ def load_workflow(spec):
             if gate['kind'] == 'artifact': text(gate.get('path'), 'required artifact path')
             if gate['kind'] == 'review': strings(gate.get('reviewers'), 'reviewers')
             if 'accepted' in gate and type(gate['accepted']) is not bool: raise ValueError('accepted must be boolean')
+    if managed and spec.get('completion_stage',spec['stages'][-1]['id']) not in stage_ids:
+        raise ValueError('Unknown managed completion stage')
     return spec
 
 
@@ -60,8 +89,8 @@ def gates(team, candidate):
                 status, evidence = 'PASS', [entry['receipt_id']]
         if rule['kind'] == 'evaluation' and candidate in team.state['evaluations']:
             team.verify_submission(candidate)
-            measured = team.state['evaluations'][candidate]
-            record = 'evaluation-' + candidate
+            measured = team.effective_evaluation(candidate)
+            record = team.state.get('acceptances',{}).get(candidate,{}).get('evidence_id','evaluation-' + candidate)
             team.evidence_record(record)
             status = 'PASS' if 'accepted' not in rule or measured['accepted'] == rule['accepted'] else 'FAIL'
             evidence = [record]
@@ -78,6 +107,8 @@ def gates(team, candidate):
                 status, evidence = event['verdict'], [event['evidence_id']]
         result.append({'gate_id': rule['id'], 'criterion': rule['criterion'], 'kind': rule['kind'],
                        'status': status, 'candidate': candidate, 'candidate_revision': revision, 'evidence_ids': evidence})
+    if getattr(team,'managed',None):
+        result.extend(team.managed.extra_gates(candidate))
     return result
 
 
@@ -105,9 +136,11 @@ def decide(team, agent, data, dispatch_id):
     next_status = 'ACTIVE'
     if kind == 'ADVANCE':
         if any(g['status'] != 'PASS' for g in checked): raise ValueError('Required gates are not all PASS')
-        if current == len(stages) - 1:
+        final = stages.index(team.workflow_spec.get('completion_stage', stages[-1]))
+        if current == final:
+            if target != workflow['stage']:raise ValueError('Cannot advance beyond the configured completion scope')
             # Valid negative research can succeed only if the owner-supplied evaluator accepts it.
-            if candidate not in team.state['evaluations'] or not team.state['evaluations'][candidate]['accepted']:
+            if final == len(stages)-1 and (candidate not in team.state['evaluations'] or not team.effective_evaluation(candidate)['accepted']):
                 raise ValueError('Project completion requires protected acceptance of this candidate')
             next_status = 'COMPLETED'
         else:
@@ -122,6 +155,7 @@ def decide(team, agent, data, dispatch_id):
         next_status = 'WAITING_EXTERNAL' if kind == 'WAIT_EXTERNAL' else 'ESCALATED'
     elif kind == 'STOP':
         next_status = 'STOPPED'
+    if getattr(team,'managed',None):team.managed.validate_decision(kind,candidate,data)
     fingerprint = digest({'artifacts': sorted(team.state['artifacts']), 'evaluations': team.state['evaluations'],
                           'candidate': candidate, 'gates': checked, 'stage': target})
     workflow['no_evidence_cycles'] = workflow['no_evidence_cycles'] + 1 if workflow['progress_fingerprint'] == fingerprint else 0
@@ -137,6 +171,7 @@ def decide(team, agent, data, dispatch_id):
     if kind in {'WAIT_EXTERNAL', 'ESCALATE'}:
         workflow['pending_external'] = {'request_id': dispatch_id, 'owner': data['owner'], 'resume_when': data['resume_when']}
     team.event('decision', record)
+    if getattr(team,'managed',None):team.managed.after_decision(kind,record)
     if next_status != 'ACTIVE':
         agent.state['status'] = {'WAITING_EXTERNAL': 'waiting_external', 'ESCALATED': 'escalated', 'STOPPED': 'stopped', 'COMPLETED': 'completed'}[next_status]
         agent.save()

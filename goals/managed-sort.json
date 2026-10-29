@@ -1,0 +1,29 @@
+{
+  "goal": "Write and execute a Python program that sorts the supplied numbers while retaining every duplicate.",
+  "acceptance": "The frozen result.json matches the supplied sorted list, the code ran, and every required independent review passes. This is a small integration fixture, not evidence of general algorithm or research quality.",
+  "inputs": {"numbers.json": "[4,1,3,1]"},
+  "assets": {},
+  "evaluator": "sorted_numbers",
+  "network": false,
+  "budget": {"max_calls": 80, "max_seconds": 900, "max_assignments": 30, "max_depth": 2},
+  "workflow": {
+    "mode": "product",
+    "policy_version": 2,
+    "role_bindings": {
+      "engineering": "experiment_engineer", "research": "researcher",
+      "experience": "experience", "strategy": "strategy", "auditor": "critic",
+      "environment": "environment_engineer", "report_reader": "report_reader"
+    },
+    "stages": [{
+      "id": "BUILD",
+      "description": "Create and execute a sorter, inspect its actual output, and document exactly what was checked",
+      "owner": "engineering",
+      "required_outputs": ["result.json", "report.md"],
+      "required_tools": ["run"],
+      "required_reviewers": ["auditor", "experience", "report_reader"],
+      "review_scopes": {"report_reader": "report_only"},
+      "report_paths": ["report.md"],
+      "gates": [{"id": "exact-result", "kind": "evaluation", "criterion": "Protected comparison accepts this frozen result", "accepted": true}]
+    }]
+  }
+}

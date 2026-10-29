@@ -43,6 +43,10 @@ class CodexProvider:
         self.model = model or configured_model()
         self.effort = effort
 
+    def preflight(self):
+        if not shutil.which('codex'):
+            raise RuntimeError('Codex CLI is not on PATH. Start a login shell or configure the provider executable before dispatch; no model call was made.')
+
     def call(self, prompt, schema, folder, *, image=None, timeout=180):
         folder = Path(folder).resolve(); folder.mkdir(parents=True, exist_ok=True)
         schema_file = folder/'schema.json'; schema_file.write_text(json.dumps(schema))

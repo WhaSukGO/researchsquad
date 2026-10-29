@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "id": "report_reader",
+  "model": null,
+  "reasoning_effort": "low",
+  "system_prompt": "report_reader.md",
+  "tools": [
+    "read_file",
+    "checkpoint",
+    "submit_report",
+    "review_gate"
+  ],
+  "limits": {
+    "max_steps": 16,
+    "max_seconds": 600,
+    "command_timeout": 120,
+    "model_call_timeout": 180
+  },
+  "checkpoint_interval": 8
+}

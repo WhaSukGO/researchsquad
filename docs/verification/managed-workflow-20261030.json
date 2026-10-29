@@ -1,0 +1,157 @@
+{
+  "date": "2026-10-30",
+  "base_commit": "caad09f",
+  "policy_version": 2,
+  "environment": {
+    "os": "Ubuntu 24.04 via WSL on Windows",
+    "python": "3.12.3",
+    "execution": "Docker Desktop Linux containers",
+    "native_windows_supported": false,
+    "docker": "28.2.2"
+  },
+  "tests": {
+    "full_suite": {
+      "status": "passed",
+      "passed": 166,
+      "skipped": 4,
+      "seconds": 98.77,
+      "command": "python -m pytest -q",
+      "skips": "Four opt-in Docker cases; separately executed and passed"
+    },
+    "opt_in_real_docker": {
+      "status": "passed",
+      "passed": 4,
+      "deselected": 40,
+      "command": "GOALAGENT_DOCKER_TESTS=1 python -m pytest -q tests/test_research.py tests/test_budgets.py tests/test_environments.py -k \"real_ or two_registries\""
+    }
+  },
+  "real_container_fixture": {
+    "status": "passed",
+    "command": "python -m goalagent.managed_check --run-dir /tmp/researchsquad-managed-real-final-03",
+    "model": "scripted choices, not actual model reasoning",
+    "work_id": "W-0001",
+    "owner_attempts": 2,
+    "protected_acceptance": [
+      false,
+      true
+    ],
+    "required_reviewers": [
+      "critic",
+      "experience",
+      "report_reader"
+    ],
+    "calls_reserved": 30,
+    "resume_added_calls": 0
+  },
+  "actual_model_fixture": {
+    "status": "COMPLETED",
+    "goal_met": true,
+    "reserved_calls": 35,
+    "actual_model_returns": 35,
+    "models": [
+      "gpt-6-astra"
+    ],
+    "seconds": 368.3682380499995,
+    "evaluations": {
+      "task-feb95b2824d2014c7d6e386f": {
+        "accepted": true,
+        "exact_match": true,
+        "samples": 4,
+        "scope": "Software integration fixture; not research quality or generalization."
+      }
+    },
+    "reviews": [
+      {
+        "gate_id": "BUILD-review-auditor",
+        "verdict": "PASS",
+        "scope": "Independent assignment review only; not an independent experiment or external observation"
+      },
+      {
+        "gate_id": "BUILD-review-experience",
+        "verdict": "PASS",
+        "scope": "Independent assignment review only; not an independent experiment or external observation"
+      },
+      {
+        "gate_id": "BUILD-review-report_reader",
+        "verdict": "PASS",
+        "scope": "Independent assignment review only; not an independent experiment or external observation"
+      }
+    ],
+    "run_directory": "tmp/managed-live-20261030-03",
+    "command": "python -m goalagent.team --task goals/managed-sort.json --run-dir tmp/managed-live-20261030-03",
+    "real_docker": true,
+    "resume_added_calls": 0,
+    "scope": "Sort four supplied numbers, preserve the duplicate, execute code, inspect result, separate required reviews and protected exact comparison. Not OMR accuracy or general research quality.",
+    "source_scope": "Stage/review fixes verified before the final web-source classification refinement. That independent refinement is covered by the final suite and actual network transport check.",
+    "recovered_error": "One invalid objection category/severity was rejected; the model corrected its report before completion."
+  },
+  "actual_web_transport": {
+    "actual_model_calls": 0,
+    "real_docker": true,
+    "search": {
+      "query": "Audiveris optical music recognition official command line",
+      "provider": "DuckDuckGo public HTML",
+      "exit_code": 0,
+      "status": "access_blocked",
+      "reason": "HTTP success contained a bot challenge; not successful search evidence"
+    },
+    "official_source": {
+      "url": "https://www.humdrum.org/rep/kern/",
+      "exit_code": 0,
+      "status": "retrieved",
+      "scope": "Actual page transport and readable text; no claim of a completed OMR candidate comparison"
+    }
+  },
+  "music_adapter_checks": {
+    "selected_samples": 32,
+    "images_delivered": 32,
+    "reference_labels_delivered": 0,
+    "empty_batch_samples": 32,
+    "empty_batch_parseable": 0,
+    "missing_outputs_retain_reference_denominators": true,
+    "bad_numeric_scores_cannot_be_overridden_by_human_pass": true,
+    "seven_sample_scope_cannot_complete_32_sample_goal": true,
+    "metric_equations_changed": false,
+    "reference_files_changed": false,
+    "fresh_omr_accuracy_run": false
+  },
+  "failed_attempts_and_fixes": [
+    {
+      "attempt": "tmp/managed-live-20261030-01",
+      "calls_reserved": 16,
+      "actual_model_returns": 0,
+      "result": "WAITING_EXTERNAL, goal_met false",
+      "cause": "Non-login WSL PATH omitted Codex",
+      "fix": "Provider preflight before model-call reservation, then use login shell"
+    },
+    {
+      "attempt": "tmp/managed-live-20261030-02",
+      "calls_reserved": 42,
+      "actual_model_returns": 42,
+      "result": "WAITING_EXTERNAL, goal_met false",
+      "cause": "Receipt ID used as review candidate; report-only assignment lacked readable file inventory",
+      "fix": "Distinct candidate/receipt instructions and correction; explicit filtered review_files paths"
+    },
+    {
+      "cause": "Withdrawn human PASS left stale goal flag after invalidating receipt",
+      "fix": "Recompute goal acceptance and preserve immutable historical receipts"
+    },
+    {
+      "cause": "New acceptance test changed a shared evaluator registry, causing three later tests to fail",
+      "fix": "Use test-scoped monkeypatch restoration; no production metric change"
+    },
+    {
+      "cause": "Windows checkout rewrote protected .krn line endings",
+      "fix": "Preserve exact Git bytes through .gitattributes; no notation or expected reference changes"
+    }
+  ],
+  "limits": [
+    "Execution is sequential; no claim of parallel scheduling.",
+    "Native Windows POSIX boundaries were not ported.",
+    "Public search can be blocked; operator material or another authorized provider is still needed in that case.",
+    "Receipt matching is not full semantic entailment or hallucination elimination.",
+    "No new HOMR/Audiveris installation comparison or held-out OMR accuracy was performed.",
+    "No new recognizer, MusicXML algorithm, or 100-percent transcription result.",
+    "CI runs after pull request publication; use the live checks for its result."
+  ]
+}

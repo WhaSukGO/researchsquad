@@ -11,7 +11,20 @@
           "criterion": "Objectives and mandatory criteria are documented",
           "path": "charter.md"
         }
-      ]
+      ],
+      "owner": "strategy",
+      "required_reviewers": [
+        "research",
+        "experience",
+        "engineering"
+      ],
+      "required_outputs": [
+        "charter.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "P1",
@@ -23,21 +36,45 @@
           "criterion": "Observed problems, existing alternatives and distinct candidate mechanisms are documented",
           "path": "alternatives.md"
         }
-      ]
+      ],
+      "owner": "experience",
+      "required_reviewers": [
+        "research",
+        "engineering",
+        "strategy"
+      ],
+      "required_outputs": [
+        "alternatives.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "P2",
       "description": "Select a candidate and the smallest discriminating test",
       "gates": [
         {
-          "id": "test-plan-reviewed",
-          "kind": "review",
-          "criterion": "The validation plan matches the stated decision and criteria",
-          "reviewers": [
-            "critic"
-          ]
+          "id": "test-plan-delivered",
+          "kind": "artifact",
+          "criterion": "The candidate and discriminating validation plan are delivered",
+          "path": "test-plan.md"
         }
-      ]
+      ],
+      "owner": "strategy",
+      "required_reviewers": [
+        "research",
+        "experience",
+        "engineering"
+      ],
+      "required_outputs": [
+        "test-plan.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "P3",
@@ -48,7 +85,20 @@
           "kind": "external",
           "criterion": "Required real participant observations meet the agreed value criterion"
         }
-      ]
+      ],
+      "owner": "experience",
+      "required_reviewers": [
+        "research",
+        "engineering",
+        "auditor"
+      ],
+      "required_outputs": [
+        "value-report.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "P4",
@@ -60,7 +110,22 @@
           "criterion": "Protected functional checks accept the implementation",
           "accepted": true
         }
-      ]
+      ],
+      "owner": "engineering",
+      "required_reviewers": [
+        "experience",
+        "research",
+        "auditor"
+      ],
+      "required_outputs": [
+        "implementation-report.md"
+      ],
+      "required_tools": [
+        "run"
+      ],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "P5",
@@ -71,7 +136,21 @@
           "kind": "external",
           "criterion": "Actual usage, repeated value, errors and operating costs meet the stated scope"
         }
-      ]
+      ],
+      "owner": "experience",
+      "required_reviewers": [
+        "engineering",
+        "research",
+        "strategy",
+        "auditor"
+      ],
+      "required_outputs": [
+        "pilot-report.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [],
+      "review_scopes": {}
     },
     {
       "id": "P6",
@@ -88,7 +167,42 @@
           "criterion": "The original protected completion predicate accepts the delivered candidate",
           "accepted": true
         }
-      ]
+      ],
+      "owner": "strategy",
+      "required_reviewers": [
+        "engineering",
+        "experience",
+        "research",
+        "auditor",
+        "report_reader"
+      ],
+      "required_outputs": [
+        "report.md"
+      ],
+      "required_tools": [],
+      "required_candidates": [],
+      "report_paths": [
+        "report.md"
+      ],
+      "review_scopes": {
+        "report_reader": "report_only"
+      }
     }
-  ]
+  ],
+  "policy_version": 2,
+  "role_bindings": {
+    "research": "researcher",
+    "engineering": "experiment_engineer",
+    "experience": "experience",
+    "strategy": "strategy",
+    "auditor": "critic",
+    "orchestrator": "coordinator",
+    "environment": "environment_engineer",
+    "report_reader": "report_reader"
+  },
+  "work_policy": {
+    "max_attempts": 3,
+    "checkpoint_interval": 8,
+    "coordinator_checkpoint_interval": 1
+  }
 }
