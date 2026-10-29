@@ -13,6 +13,5 @@ __pycache__/
 /snapshots/
 /runs/
 
-# Publish the maintained guide; historical reports live in the archive tag.
-/output/pdf/*
-!/output/pdf/researchsquad-operating-guide.pdf
+# Exported reports are generated artifacts; maintained guides live in docs/.
+/output/

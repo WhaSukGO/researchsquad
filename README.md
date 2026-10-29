@@ -1,80 +1,94 @@
 # ResearchSquad
 
-A configurable research team that assigns specific jobs, implements experiments, measures frozen outputs and preserves evidence for the next decision. Every role uses the same `Agent` loop; JSON configuration selects its model, prompt and tools. The Python host controls execution, handoffs, workflow gates and protected evaluation.
+A configurable research team with one reusable `Agent`, JSON/Markdown role definitions,
+explicit tools, host-managed work, independent reviews and protected evaluation.
+Product and research workflows select responsibilities and required evidence.
 
-Start with the **[operating and extension guide](docs/multi-agent-operating-guide.md)** or its **[PDF edition](output/pdf/researchsquad-operating-guide.pdf)**. It follows a run step by step and explains how to add agents, tools and evaluators.
+Start with the [Korean operating guide](docs/managed-workflow-ko.md),
+[configuration and recovery guide](docs/managed-workflow.md), and
+[implementation notes](docs/managed-workflow-notes.md).
+The [training benchmark proposal](docs/training-benchmark-plan-ko.md) describes nine
+projects and the work still needed to specialize this system for deep learning.
 
-![The shared agent loop](docs/diagrams/configurable-team-loop.png)
+![The reusable agent loop](docs/diagrams/configurable-team-loop.png)
 
-## Run the current system
+## Run
 
-Requirements: Python 3.12, `uv`, a running Docker daemon, and an authenticated Codex CLI for live model calls. The included verification fixtures use scripted decisions and need no model calls.
+Use Linux/WSL, Python 3.12, uv and Docker. Actual model calls additionally need the
+configured Codex CLI login. Scripted verification fixtures need no model calls.
 
 ```sh
 uv sync --locked --group dev
 docker pull python:3.12-slim@sha256:12316debbfb86890f6b2d825820612741ba527ad5a44e3902759141d572bfe8f
 
-# A small task with a protected sorting evaluator.
-uv run python -m goalagent.team \
-  --task goals/team-sort.json --run-dir runs/my-team \
-  --model gpt-6.1-sol --unlimited
+# Scripted choices and real containers: failure, improvement, reviews and restart.
+uv run python -m goalagent.managed_check --run-dir tmp/managed-check-01
 
-# Music research with prepared notation/OCR tools and protected labels.
-uv run python -m goalagent.music_team \
-  --run-dir runs/my-music-team --model gpt-6.1-sol
+# Actual model choices on a small protected sorting task.
+uv run python -m goalagent.team --task goals/managed-sort.json --run-dir runs/sort-01
+
+# Reviewed research-question scope; does not claim the music goal is complete.
+uv run python -m goalagent.music_team --run-dir runs/music-charter-01 --completion-stage R0
 ```
 
-Use a new run directory for each study. Music runs default to unlimited effort; the general CLI accepts `--unlimited` or a task with `"unlimited": true`. Usage is still recorded. Container resource limits, file/log bounds and protected completion checks remain active. Ctrl-C stops a foreground run and preserves its state.
+Use a fresh directory after changing code, prompts, grants, task or evaluator.
+Unchanged completed runs reuse their receipts. External waits and stopped runs need
+explicit operator transitions; see the operating guide.
 
-The same command resumes a run only while its frozen task, prompts, tools, implementation and evaluator contract still match. Stopped and externally waiting runs need an explicit operator transition; see the guide. After a code change, use a fresh run. Existing evidence is never rewritten to make it resume.
+Music defaults select all 32 development excerpts with 80 model calls and one active
+hour. `--unlimited` and `--sample-scope first_per_song` are explicit alternatives.
+A seven-sample pilot cannot satisfy the full music objective. The configured team
+still needs real recognition experiments; the current adapter is not an OMR model.
 
-## How work moves through the team
+## Responsibilities and files
 
-The coordinator gives a specialist a distinct objective, success criteria and explicit input files. The specialist chooses tool actions, writes and executes scripts in Docker, and returns a checkpoint or frozen submission. The coordinator can continue that assignment, commission a review, request protected evaluation, improve a measured candidate, or debug a failed one. Measurements and durable evidence records inform the next decision.
-
-Eight default roles are configured in [agents/default](agents/default): coordinator, planner, researcher, experiment engineer, environment engineer, critic, experience and strategy. Roles are available for assignment; they are not all automatically called. Delegation currently runs sequentially, and agents exchange explicit handoffs rather than a shared conversation.
-
-Agents can create specialists with a subset of an existing role's permissions and register tested Python scripts for later execution agents. They cannot register a replacement protected evaluator or grant themselves host shell access. An ordinary experiment script needs no tool registration.
-
-## What belongs where
+Nine roles live in `agents/default/`: coordinator, planner, researcher, experiment
+engineer, environment engineer, critic, experience, strategy and report reader.
+Policy version 2 automatically dispatches configured stage owners and every required
+reviewer. One sequential scheduler records stable work IDs, immutable attempts,
+checkpoints, dependency work and concrete revision conditions in team state.
+Custom version-1 workflows retain their coordinator-directed interface.
 
 | Location | Purpose |
 | --- | --- |
-| `goalagent/` | Current team, shared agent loop, tools, handoffs, workflow and protected adapters |
-| `agents/default/` | Editable role JSON and Markdown prompts, including the four pillars |
-| `workflows/` | Workflow templates and gate definitions |
-| `goals/` | Example tasks and the music evaluation/profile specification |
-| `environments/` | Reviewed notation/OCR recipe, locked dependencies and readiness test |
-| `research/data/`, `research/manifest.json` | Supplied music images and protected reference labels with original hashes |
-| `research/baselines/first-benchmark/` | Preserved prediction inputs and historical metrics, with SHA-256 provenance |
-| `scorebench/` | Standalone diagnostic benchmark and shared music metrics |
-| `tests/` | Current runtime, scoring, checkpoint and isolation regressions |
-| `runs/` | Local generated records, ignored by Git |
+| `agents/default/*.json`, `*.md` | Models, prompts, tool grants and role limits |
+| `workflows/` | Product/research owners, required outputs/actions and separate gates |
+| `goalagent/agent.py`, `team.py` | Common action loop and the sole state/event writer |
+| `goalagent/workboard.py`, `stage_runtime.py` | Work identity, dependencies, dispatch and rework |
+| `goalagent/music.py`, `music_team.py` | Protected music scoring and explicit input adapter |
+| `research/data/`, `research/manifest.json` | Original music images and protected labels |
+| `research/baselines/first-benchmark/` | Preserved baseline predictions and aggregate results |
+| `environments/`, `tests/` | Reviewed environments and current regression checks |
+| `runs/`, `tmp/`, `output/` | Local generated output, ignored by Git |
 
-Run records include the charter, effective configurations, assignment inputs, model prompts, actions, full command logs, checkpoints, artifacts, measurements and decisions. Read the guide's inspection section to follow who tried what and why.
+Default containers currently have no GPU grant, a 2 GB memory limit and two CPUs.
+GPU-enabled training, large checkpoint storage and managed long-running training
+jobs are proposed extensions, not implemented training capabilities. See the
+[hardware and training assessment](docs/training-benchmark-plan-ko.md).
 
-The music pilot supplies seven images and fourteen baseline/export artifacts. Labels stay with the evaluator. The delivered kern baseline has 101/130 melody errors and 38/38 chord errors, with three of seven files parseable. These are development diagnostics, not held-out accuracy. The conservative acceptance gate still requires all 32 excerpts, zero measured errors, successful transposition checks, audited chord timing and musician approval. A seven-sample pilot cannot complete that goal.
-
-## Verify changes
+## Verify
 
 ```sh
 uv run --no-sync pytest -q
-GOALAGENT_DOCKER_TESTS=1 uv run --no-sync pytest -q \
-  tests/test_sandbox.py tests/test_environments.py tests/test_budgets.py
-uv run --no-sync python -m goalagent.environment_check --run-dir runs/check-environment
-uv run --no-sync python -m goalagent.team_check --run-dir runs/check-team
-uv run --no-sync python -m goalagent.checkpoint_check --run-dir runs/check-checkpoints
+GOALAGENT_DOCKER_TESTS=1 uv run --no-sync pytest -q tests/test_sandbox.py tests/test_environments.py tests/test_budgets.py
+uv run --no-sync python -m goalagent.managed_check --run-dir tmp/managed-check-02
 ```
 
-Use fresh directories for verification. These checks exercise actual Docker execution, image reuse, isolation, extension registration, inherited artifacts, checkpoint continuation, failed evaluation followed by improvement, and protected completion. Scripted fixtures verify the machinery; they do not establish autonomous research quality.
+CI also runs environment, configurable-tool and checkpoint fixtures. A scripted
+fixture proves execution/control flow, not autonomous scientific quality. Protected
+labels, numeric criteria and scope requirements are maintainer-owned.
 
 ## Documentation and history
 
-- [Operating and extension guide](docs/multi-agent-operating-guide.md): step-by-step control of agents, actions, tools and evaluators.
-- [Configuration reference](docs/configurable-team.md): role definitions, capability grants and unlimited mode.
-- [Checkpoint and workflow protocol](docs/checkpoints-and-workflows.md): durable handoffs, decisions, reviews and external events.
-- [Environment operations](docs/environment-operations.md): setup ownership, immutable images and compact diagnostics.
-- [PR feedback workflow](docs/pr-review-workflow.md): review implementation and research evidence together.
-- [Cleanup and historical recovery](docs/repository-cleanup.md): removed entry points, retained inputs and archived records.
+- [Role configuration](docs/configurable-team.md)
+- [Checkpoint and workflow protocol](docs/checkpoints-and-workflows.md)
+- [Prepared environment operations](docs/environment-operations.md)
+- [Cleanup decisions and recovery](docs/repository-cleanup.md)
+- [Verification of managed workflows](docs/verification/managed-workflow-20261030.json)
 
-Older fixed-menu, coordinator/worker and blind-review runners have been retired from the active tree. Historical tracked runs and superseded reports remain in the `archive/pre-cleanup-20261030` tag and existing local files. The archive includes their original code and commands; do not run old state through the new runtime. Git history has not been rewritten.
+The supported team entry points are `goalagent.team` and `goalagent.music_team`.
+The standalone `scorebench` benchmark remains. Superseded fixed-menu,
+coordinator/worker and blind-review runners, their dedicated roles/goals/tests,
+generated tracked runs and obsolete exports are removed from the active tree.
+Git history and the archive tag retain prior versions. Current protected music
+inputs remain available without depending on generated runs.

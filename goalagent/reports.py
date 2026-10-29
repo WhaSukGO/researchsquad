@@ -27,7 +27,8 @@ def validate_progress(data):
 
 
 def validate_report(data, evidence_ids=(), targets=()):
-    allowed = {'status', 'summary', 'files', 'claims', 'objections', 'next_actions', 'open_questions', 'failure_kind'}
+    allowed = {'status', 'summary', 'files', 'claims', 'objections', 'next_actions', 'open_questions', 'failure_kind',
+               'work_items', 'execution_records', 'candidate_decisions'}
     if not isinstance(data, dict) or set(data) - allowed or data.get('status') not in {'DONE', 'NEEDS_INPUT', 'FAILED'}:
         raise ValueError('Report requires status DONE, NEEDS_INPUT or FAILED')
     text(data.get('summary'), 'summary')
@@ -42,8 +43,10 @@ def validate_report(data, evidence_ids=(), targets=()):
         if not isinstance(data.get(name, []), list) or len(data.get(name, [])) > 32:
             raise ValueError(f'Invalid {name}')
     for claim in data.get('claims', []):
-        if not isinstance(claim, dict) or set(claim) != {'statement', 'epistemic_status', 'evidence_ids', 'limitations'}:
+        if not isinstance(claim, dict) or set(claim)-{'scope'} != {'statement', 'epistemic_status', 'evidence_ids', 'limitations'}:
             raise ValueError('Claims require statement, epistemic_status, evidence_ids, limitations')
+        if 'scope' in claim and claim['scope'] not in {'document', 'empirical'}:
+            raise ValueError('Claim scope must be document or empirical')
         text(claim['statement'], 'claim'); text(claim['limitations'], 'limitations')
         if claim['epistemic_status'] not in {'observed', 'inferred', 'hypothesis', 'unknown'}:
             raise ValueError('Invalid claim status')
@@ -70,6 +73,32 @@ def validate_report(data, evidence_ids=(), targets=()):
         if type(item['requires_external']) is not bool:
             raise ValueError('requires_external must be boolean')
     strings(data.get('open_questions', []), 'open_questions', 32)
+    for name in ('work_items', 'execution_records', 'candidate_decisions'):
+        if not isinstance(data.get(name, []), list) or len(data.get(name, [])) > 16:
+            raise ValueError('Invalid '+name)
+    for record in data.get('execution_records', []):
+        if not isinstance(record, dict) or set(record) != {'action','target','evidence_ids'} or record['action'] not in {'searched','read','executed','image_received'}:
+            raise ValueError('Invalid execution record')
+        text(record['target'], 'execution target', 32000)
+        if not set(strings(record['evidence_ids'], 'evidence_ids', 32)) <= known:
+            raise ValueError('Unknown execution evidence')
+    for item in data.get('work_items', []):
+        if not isinstance(item, dict) or set(item) != {'existing_work_id','owner','objective','input_artifact_ids','required_tools','acceptance_check','blocking'}:
+            raise ValueError('Invalid work item')
+        if not isinstance(item['existing_work_id'], str) or type(item['blocking']) is not bool:
+            raise ValueError('Invalid work reference/blocking')
+        for key in ('owner','objective','acceptance_check'): text(item[key], key, 8000)
+        strings(item['input_artifact_ids'],'input_artifact_ids',256); strings(item['required_tools'],'required_tools',64)
+    for item in data.get('candidate_decisions', []):
+        if not isinstance(item, dict) or set(item) != {'candidate','decision','reason','evidence_ids','followup_action'}:
+            raise ValueError('Invalid candidate decision')
+        text(item['candidate'],'candidate'); text(item['reason'],'reason')
+        if item['decision'] not in {'SELECTED','REJECTED','DEFERRED','UNTESTED'}:
+            raise ValueError('Invalid candidate decision status')
+        if not set(strings(item['evidence_ids'],'evidence_ids',32)) <= known:
+            raise ValueError('Unknown candidate evidence')
+        if not isinstance(item['followup_action'],str):raise ValueError('followup_action must be text')
+        if item['decision'] in {'DEFERRED','UNTESTED'}: text(item['followup_action'],'followup_action')
     return data
 
 

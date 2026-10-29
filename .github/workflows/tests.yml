@@ -55,3 +55,5 @@ jobs:
 
       - name: Verify checkpoints, inherited artifacts and protected stage completion
         run: uv run --no-sync python -m goalagent.checkpoint_check --run-dir /tmp/checkpoint-verification
+      - name: Verify managed work, required reviewers and measured improvement
+        run: uv run --no-sync python -m goalagent.managed_check --run-dir /tmp/managed-workflow-verification

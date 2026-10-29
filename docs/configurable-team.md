@@ -1,6 +1,12 @@
 # A default research team that can specialize
 
-The general team now uses one `Agent` model/tool loop. Roles are JSON definitions plus Markdown prompts; assignments are separate data. Eight defaults are available: coordinator, planner, researcher, experiment engineer, environment engineer, critic, experience and strategy. The coordinator commissions only the roles needed. See [checkpoints, evidence and stage decisions](checkpoints-and-workflows.md) for the new operating protocol.
+Current extension: [managed workflows](managed-workflow.md) require owners and all
+configured reviewers while retaining the common Agent. There are now nine default
+roles, including a restricted report reader. Version-1 behavior and historical
+music results below are preserved as context; new music runs default to the managed
+32-sample finite-budget configuration.
+
+The general team uses one `Agent` model/tool loop. Roles are JSON definitions plus Markdown prompts; assignments are separate data. The defaults are coordinator, planner, researcher, experiment engineer, environment engineer, critic, experience, strategy and report reader. The coordinator commissions optional work; managed policy additionally enforces required contributions. See [checkpoints, evidence and stage decisions](checkpoints-and-workflows.md) for the earlier operating protocol.
 
 ## Start a team
 
@@ -91,26 +97,20 @@ The historical local verification is preserved under `runs/configurable-team-fin
 
 New checkpoints and reports preserve binary and text artifacts (up to 256 files, 16 MB per file and 64 MB per bundle); the legacy finish tool retains its 8 MB text contract. Protected text evaluators receive only a text view of explicitly submitted files. A production evaluator for a new scientific domain must define its artifact and acceptance contracts. The generic environment cache is run-local; its immutable image is reused across assignments, while Docker build layers can accelerate another run. Automatic image garbage collection is not included.
 
-## Live music pilot
+## Music execution and budgets
 
-`python -m goalagent.music_team --run-dir runs/new-music-team --model gpt-6.1-sol` connects the default configured team to the existing music inputs and protected scorer. It supplies seven images and fourteen prediction/export artifacts, with labels retained by the evaluator. It uses a fresh state and the prepared notation/OCR environment; it does not add a new agent class.
+The maintained music entry point selects the managed research workflow, all 32
+samples and finite 80-call/one-hour effort limits. Use `--sample-scope first_per_song`
+for the seven-sample pilot and `--unlimited` to remove effort limits explicitly.
+`--bounded` selects the finite default; it does not restore the historical 40-call
+pilot. See [managed operations](managed-workflow.md) for scope and external events.
 
-The historical 29 October assessment (`runs/configurable-music-retry-20261029/assessment.html` in the pre-cleanup archive) records an important limit: the 40-call run created a candidate but exhausted its budget before submission or evaluation. An unchanged, operator-recovered copy improved parse coverage from 3/7 to 5/7; melody errors stayed at 101/130 and chord errors at 38/38. This diagnostic score was not produced by the autonomous loop. The report distinguishes the initial interrupted interface-bug attempt, all three engineer assignments, and the remaining handoff/progress/evaluation gaps. The goal remains unmet.
+Training labels in a future training task must be explicit public training inputs;
+protected evaluation labels remain separate. The present generic text evaluator is
+not a model-checkpoint evaluator, and default containers do not receive a GPU.
+See [the training assessment](training-benchmark-plan-ko.md) for concrete gaps.
 
-## Unlimited research budgets
-
-New music-team runs now default to unlimited mode:
-
-```sh
-uv run python -m goalagent.music_team --run-dir runs/music-unlimited --model gpt-6.1-sol
-```
-
-For another task, set `"unlimited": true` in its task JSON or pass `--unlimited` to `goalagent.team`. The literature-review task enables this mode; the sorting verification fixture remains bounded. `--bounded` restores the historical 40-call music-pilot configuration.
-
-Unlimited mode replaces team call/time/assignment/depth limits and every role's step/time/model-call/command deadlines with JSON `null`. It also removes run-local specialist/tool-count and generic environment-build-attempt caps. A `null` budget can be set individually for a team or role limit; other finite values remain effective. No artificially large integer stands in for unlimited. Model subprocesses receive no timeout, and serialized contracts/context use `null`, never non-standard JSON Infinity.
-
-Usage is still counted and saved. The team can finish normally or be interrupted; use Ctrl-C to stop the CLI. A hung model or command can now wait indefinitely until interrupted. External provider quotas, resource availability, protected scoring and completion requirements still apply. Container CPU/memory/process limits, isolation, output/file/context size bounds, parser/HTTP operational timeouts and the bounded readiness bootstrap remain. A failed bootstrap can still be routed to the environment engineer; it does not end the research session.
-
-The previous live pilot had 40 calls, 1,800 team seconds, six assignments and depth two. Engineers had 16 steps, 600 seconds, 180-second model deadlines and 120-second command deadlines. Existing evidence is never rewritten to change these historical limits. Start a new run when changing budget mode.
-
-The checkpoint and artifact protocol now addresses repeated inspection without coordinator visibility and missing handoffs. Unlimited operation remains a user-selected execution policy, not a claim that research will converge. The earlier assessment is a historical record.
+Unlimited mode uses JSON `null`, keeps usage accounting and preserves container,
+file, evidence and evaluation boundaries. It does not provide GPU scheduling,
+asynchronous training jobs or convergence guarantees. Original historical runs and
+their original budgets remain available in the [archive](repository-cleanup.md).

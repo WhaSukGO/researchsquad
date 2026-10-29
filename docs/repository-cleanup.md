@@ -1,42 +1,71 @@
 # Repository cleanup — 30 October 2026
 
-The active repository now contains one configurable research-team architecture. The shared `Agent`, configuration loader, team scheduler, artifact/checkpoint protocol, workflows, prepared environments and protected evaluators remain. Unlimited research effort remains available and is still the music runner's default.
+The supported architecture is the common Agent with configurable roles, the Team
+state/event writer and managed product/research workflows. PR #8 was merged first;
+this cleanup updates the earlier PR #7 against that main without reverting its
+mandatory owners, separate reviewers, recovery or acceptance behavior.
 
-## Retired components
+## Removed active code
 
-The fixed-menu `goalagent.runner`, older `goalagent.coordinator` / `ExperimentWorker` path, blind-review runner, and their dedicated audits, reports, fork utility and timing helper are retired. Their music-only role definitions and old goal files were removed. Tests specific to those obsolete interfaces were removed; applicable scoring, transposition, input-isolation, environment-escalation and real-Docker checks were retained against the current runtime.
+The fixed-menu runner, old coordinator/ExperimentWorker path, blind-review runner,
+and their dedicated audits/reports/fork/timing helpers are retired. The 12 removed
+modules are `runner`, `coordinator`, `research`, `worker`, `roles`, `blind_review`,
+`blind_audit`, `audit`, `diagnostic_report`, `fork`, `report` and `timing` under
+`goalagent/`. Their music-only role files, obsolete goal files and interface-specific
+tests are also removed. Applicable scoring, transposition, environment-escalation,
+file-boundary and real-container checks are retained against the current runtime.
 
-The music domain module now contains `MusicScorer`, inspection and transposition checks. It no longer owns a recognition menu or dispatches experiments. The current music adapter calls this scorer directly; experiments continue through the same configurable `Agent` used by other tasks. Shared integrity helpers and the conservative music completion predicate remain unchanged.
+`music.py` now retains MusicScorer, inspection and transposition, without a recognition
+menu. The current music adapter imports that scorer. The common Agent, nine current
+roles, managed work/reviews, original metrics and completion predicate remain.
+Supported entry points are `goalagent.team` and `goalagent.music_team`; the standalone
+`scorebench` benchmark and current verification fixtures also remain.
 
-Unused legacy effort-limit fields were removed from the music profile specification. It still supplies sample scope, acceptance criteria and prepared-environment settings; actual team and role budgets are selected by the current runner.
+Version-1 custom workflow support is retained because it is still a tested interface.
+The retired runners are separate implementations, not the version-1 workflow mode.
+The music default remains managed/all-32/finite-80-calls-and-one-hour. Unlimited mode
+and the seven-sample pilot require explicit selection.
 
-The supported execution entry points are `goalagent.team` and `goalagent.music_team`. The standalone `scorebench` benchmark remains available. The `team_check`, `checkpoint_check` and `environment_check` fixtures remain in CI.
+## Inputs and generated output
 
-## Generated files and research inputs
+Generated tracked `runs/` files and superseded diagrams/PDF reports are removed from
+the active tree. Current local scratch runs remain ignored; no new local run or
+user dataset is published. Duplicate pre-managed operating guides/examples are
+retired in favor of the current Korean/English managed guides. Their earlier
+versions remain in Git history, including the original cleanup branch commit.
+Future report exports under `output/` are ignored.
 
-Generated `runs/` output is no longer tracked and is ignored for future sessions. Existing run directories are kept on this machine. Superseded PDF reports are also kept locally and in the archive, while the maintained operating guide and its diagram remain in the active tree. No generated run is silently rescored or migrated.
+Required baseline predictions and aggregate results are relocated byte-for-byte to
+`research/baselines/first-benchmark`. The provenance manifest covers 163 original
+files. Current execution no longer depends on generated `runs/first-benchmark`.
+Byte-pinned baseline JSON/XML/kern files are exempt from checkout line-ending
+conversion. Original images, protected references and the reference manifest remain.
+Baseline parity is a retention check, not a new recognition result.
 
-The music task previously depended on predictions inside `runs/first-benchmark`. Those required artifacts and historical aggregate results are copied unchanged into `research/baselines/first-benchmark`. `provenance.json` records each original path, SHA-256, byte count and source revision. The original music images, reference labels, manifest, research notes and source evidence remain.
+## Recovery
 
-The delivered baseline still has seven samples, three parseable outputs, 101 melody errors out of 130 and 38 chord errors out of 38. This is an artifact-parity check, not a new research result. Historical paths inside the preserved results JSON describe the archived run; current execution uses the new baseline directory.
-
-## Recover historical code and evidence
-
-The annotated tag `archive/pre-cleanup-20261030` points to pre-cleanup main revision `caad09f98dd985ae8e081aa7689280870ad08a83`. It preserves the older tracked implementation, runs and reports. Git history is not rewritten, so this cleanup reduces the active tree rather than the repository's historical object size.
-
-To inspect that snapshot separately:
+The existing annotated tag `archive/pre-cleanup-20261030` retains pre-managed main
+`caad09f`. The additional `archive/pre-managed-cleanup-20261030` tag retains main
+`fd4ffd2`, including the merged managed workflow and the former tracked output.
+No Git history is rewritten or purged. Cleanup reduces the active tree, not the
+repository's historical object size.
 
 ```sh
 git fetch origin --tags
-git worktree add --detach ../researchsquad-pre-cleanup archive/pre-cleanup-20261030
+git worktree add --detach ../researchsquad-archived archive/pre-managed-cleanup-20261030
 ```
 
-Use the archived checkout's documentation and locked dependencies for its commands. Original run state remains pinned to its original implementation and may contain machine-specific paths. Do not overwrite contracts or assume an archived run can resume on another machine unchanged.
+Use the archived version's dependencies and contracts for its commands. Do not
+resume old run state under changed implementation or rewrite it to match a new one.
 
-The archive tag covers previously committed records. Newer uncommitted local runs, including the checkpoint pilot and stopped unlimited session, remain untouched locally and are now ignored; this cleanup does not publish those large records. Copy or export selected evidence deliberately when it should be shared.
+## Validation and training scope
 
-## Verification expectations
+Current regression, managed Docker fixture, clean-tree input availability and PR CI
+are recorded in the cleanup verification JSON. Local Ubuntu startup hit a VHDX
+sharing violation; locked dependencies were therefore also tested through Docker
+from Windows, without forcing a WSL restart. GPU visibility and an actual CUDA
+kernel were checked separately. These are not neural-model training evidence.
 
-The regression suite checks current contracts, handoffs, workflow gates, environment reuse, protected completion, baseline parity and file boundaries. Docker checks exercise real execution, read-only inputs, compact logs, timeouts, immutable environment publication, tool reuse, checkpoint continuation and evidence-driven improvement on a deterministic fixture. A clean-tree export is tested to ensure ignored local run data is not required.
-
-No live model research run is required for this cleanup. These checks establish preserved interfaces and measurement behavior, not improved research accuracy.
+The [training benchmark proposal](training-benchmark-plan-ko.md) supplies nine
+learning projects and identifies required GPU/job/dataset/checkpoint/evaluator
+extensions. This cleanup does not silently claim those extensions are implemented.

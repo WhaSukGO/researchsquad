@@ -8,9 +8,15 @@ The configurable team separates experiment work from environment preparation. Th
 uv run python -m goalagent.music_team --run-dir runs/my-music-team --model gpt-6.1-sol
 ```
 
-Music runs default to unlimited research effort. Startup first tries the reviewed `environments/music-python` profile. It provides Python, Pillow, music21, converter21, Verovio and Tesseract. Audiveris is not installed; existing predictions and raw exports are supplied as inputs.
+Music defaults to managed research stages, 32 samples and finite effort. Managed
+execution prepares missing capabilities through the environment engineer when an
+actual assignment reports them. A prepared-image receipt is required before the
+original work resumes as a debug attempt. Existing assignments keep their image.
 
-This deterministic bootstrap does not call a setup model. Its operational readiness attempt remains bounded to 180 seconds; failure is recorded and the team can delegate environment work. That readiness timeout does not restore a total research budget. A reusable profile receipt lives under `.cache/research-environments`, and each run keeps its own copy of the build/readiness evidence.
+The reviewed `environments/music-python` profile can also be checked explicitly.
+It supplies notation/OCR packages, not Audiveris or a CUDA training stack. The
+legacy custom-workflow bootstrap remains a bounded compatibility path; it is not
+the new managed runner's automatic startup behavior.
 
 Verify the reviewed profile without live model calls:
 
@@ -40,9 +46,9 @@ The generic cache is run-local. A successful receipt and immutable image can be 
 
 ## Protect inputs and image identity
 
-The music adapter reads preserved predictions from `research/baselines/first-benchmark`, not generated `runs/` output. The provenance manifest records their original paths and hashes. The supplied reference labels remain in `research/data` and are read only by the protected scorer. The adapter delivers seven images and fourteen prediction/export artifacts to the coordinator; downstream engineers receive only explicitly delegated inputs.
+The music adapter reads preserved predictions from `research/baselines/first-benchmark`, not generated `runs/` output. The provenance manifest records their original paths and hashes. The supplied reference labels remain in `research/data` and are read only by the protected scorer. The adapter defaults to all 32 images and their catalogued prediction/export artifacts. The explicit seven-sample scope remains available. Downstream engineers receive only the selected inputs.
 
-Task assets are pinned by hash. Handoff manifests record actual files and their provenance; required inputs must exist before dispatch. Agent file tools cannot write input or baseline directories. Docker mounts assigned inputs read-only, mounts only that assignment's workspace, and provides no host Docker socket. Prepared experiment commands run without network. Research roles can use network tools only when the task and their role grants permit them.
+Task assets are pinned by hash. Handoff manifests record actual files and their provenance; required inputs must exist before dispatch. Agent file tools cannot write input or baseline directories. Docker mounts assigned inputs read-only, mounts only that assignment's workspace, and provides no host Docker socket. Readiness smoke tests run without network. Experiment and research networking is controlled by the frozen task and role grants.
 
 Each build receives a unique retained image tag and records its immutable image ID. A later build does not move the tag keeping a previously assigned image available. Reuse verifies readiness receipts, image identity and captured dependency locks. The reviewed-profile key also covers the recipe, dependency lock, platform, synthetic smoke test, sandbox and relevant resource policy.
 
@@ -50,7 +56,7 @@ Dependency resolution during a future rebuild may differ for system packages or 
 
 ## Read the evidence
 
-Inspect the run's `bootstrap/` records for reviewed-profile setup, `environments/` for generic preparation, and each assignment's `execution-policy.json` for the image it actually received. Shared evidence and the environment catalog expose compact receipts to the coordinator. See the [operating guide](multi-agent-operating-guide.md) for the complete record map.
+Inspect the run's `bootstrap/` records for reviewed-profile setup, `environments/` for generic preparation, and each assignment's `execution-policy.json` for the image it actually received. Shared evidence and the environment catalog expose compact receipts to the coordinator. See the [managed operating guide](managed-workflow.md) for the complete record map.
 
 Use a fresh run when changing code, the goal, role prompts, the environment profile or acceptance checks. A fresh research run uses new state and assignments; it may legitimately reuse a declared baseline and prepared image. Report cache warmth and setup time separately from research accuracy.
 
