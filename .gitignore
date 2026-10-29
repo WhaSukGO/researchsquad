@@ -4,17 +4,15 @@ __pycache__/
 .pytest_cache/
 .env
 .DS_Store
-
-# Local execution environments and generated scratch files
-/tmp/
-/snapshots/
-/runs/**/worker/workspace/
 *.pyc
 .env.*
 !.env.example
 
-# Process locks are local to the running host
-/runs/**/run.lock
-/runs/**/smoke-workspace/
-/runs/**/check-*/workspace/
-/runs/**/agents/*/workspace/
+# Local executions, caches, snapshots and scratch work are not source code.
+/tmp/
+/snapshots/
+/runs/
+
+# Publish the maintained guide; historical reports live in the archive tag.
+/output/pdf/*
+!/output/pdf/researchsquad-operating-guide.pdf

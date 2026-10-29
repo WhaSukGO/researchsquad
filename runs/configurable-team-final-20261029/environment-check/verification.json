@@ -1,7 +1,0 @@
-{
-  "status": "passed",
-  "image": "sha256:55cbf862ce56150a5a419990c92b542dde1c72131facc9042ebc0fb0c6ecebeb",
-  "reuse": true,
-  "setup_attempts": 1,
-  "scope": "Real generic package-builder/readiness/reuse check, no model calls"
-}

@@ -95,6 +95,6 @@ uv run pytest -q
 uv run python -m goalagent.checkpoint_check --run-dir runs/checkpoint-verification
 ```
 
-The second command runs real Docker commands with scripted model decisions. A first candidate removes duplicates, yields a checkpoint, resumes and fails protected comparison. A measured improvement branch inherits the original input, retains duplicates and passes. Restarting adds no model calls. This checks machinery and evidence-driven routing; it does not demonstrate autonomous reasoning, general research convergence, or improved music transcription. A fresh live music study remains the next empirical evaluation, including comparison with the earlier run and a single-agent baseline where practical.
+The second command runs real Docker commands with scripted model decisions. A first candidate removes duplicates, yields a checkpoint, resumes and fails protected comparison. A measured improvement branch inherits the original input, retains duplicates and passes. Restarting adds no model calls. This checks machinery and evidence-driven routing; it does not demonstrate autonomous reasoning, general research convergence, or improved music transcription. The later live checkpoint pilot is described in the operating guide. Further controlled studies, including a single-agent baseline where practical, are still needed to assess research quality.
 
 The [recorded local verification](verification/checkpoints-20261029.json) includes the fixture results, runtime fingerprint and test outcomes.

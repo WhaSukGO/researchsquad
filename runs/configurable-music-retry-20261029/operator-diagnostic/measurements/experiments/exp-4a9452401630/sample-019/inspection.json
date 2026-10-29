@@ -1,9 +1,0 @@
-{
-  "events": [],
-  "chords": [],
-  "parse_ok": false,
-  "render_ok": true,
-  "errors": [
-    "melody: ValueError('Parsed score contains no musical events')"
-  ]
-}

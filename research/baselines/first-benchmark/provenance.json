@@ -1,0 +1,985 @@
+{
+  "source_revision": "caad09f98dd985ae8e081aa7689280870ad08a83",
+  "source_archive": "archive/pre-cleanup-20261030",
+  "description": "Unchanged historical baseline metrics and prediction artifacts, retained as inputs; source paths inside results.json are historical provenance.",
+  "files": [
+    {
+      "path": "audiveris-enlarged/sample-001/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-001/converted.krn",
+      "sha256": "39032956c24ab4cb175ae1d737b831b65d5f76f5c08a632756b2ff06bb56a4e4",
+      "bytes": 87
+    },
+    {
+      "path": "audiveris-enlarged/sample-001/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-001/input.mxl",
+      "sha256": "8c0e279cbc1c8a7ffa9e9742f1533554e340c357246a5d57d9f35d3988ce187d",
+      "bytes": 1649
+    },
+    {
+      "path": "audiveris-enlarged/sample-001/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-001/prediction.musicxml",
+      "sha256": "e8b3bb3f91439ab2a2c0647328ecb83e02b04157ef94fb2fb205fe147e9969f0",
+      "bytes": 6486
+    },
+    {
+      "path": "audiveris-enlarged/sample-002/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-002/converted.krn",
+      "sha256": "b124ed4664cfce05771e2758704c7b62a1770e8ea26a5ff2ac17e847e23a027b",
+      "bytes": 72
+    },
+    {
+      "path": "audiveris-enlarged/sample-002/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-002/input.mxl",
+      "sha256": "8ebc1eff055089e6df5db727b022f3765240558fed7ea391fea0824a7b6b671e",
+      "bytes": 1563
+    },
+    {
+      "path": "audiveris-enlarged/sample-002/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-002/prediction.musicxml",
+      "sha256": "2bc91b538294635d12845beaeafbcd20e01170b9d7fd28f85c03f256fff40b23",
+      "bytes": 5235
+    },
+    {
+      "path": "audiveris-enlarged/sample-003/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-003/converted.krn",
+      "sha256": "833f98e3b2122bdbefe2dc0570653017b7186c269bf6017a1ae9c404f2eefad7",
+      "bytes": 146
+    },
+    {
+      "path": "audiveris-enlarged/sample-003/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-003/input.mxl",
+      "sha256": "b16bf97a6d68ecd35445d42837fd76d1e823beb14bb08f9222377b68ad62e2af",
+      "bytes": 1713
+    },
+    {
+      "path": "audiveris-enlarged/sample-003/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-003/prediction.musicxml",
+      "sha256": "33a32c1e53fd001c1c4fcf0ac71336a8200f29b52840ae10baff6037e4018de1",
+      "bytes": 7643
+    },
+    {
+      "path": "audiveris-enlarged/sample-004/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-004/converted.krn",
+      "sha256": "0521fde079d7fa8540714f35f7c052841e98d4af2db26555776eb3fc43c65b22",
+      "bytes": 125
+    },
+    {
+      "path": "audiveris-enlarged/sample-004/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-004/input.mxl",
+      "sha256": "d8740ff377c8d081e40afb3b8a4519ed4831ed08c5a01c61d34546fc100c2dd2",
+      "bytes": 1949
+    },
+    {
+      "path": "audiveris-enlarged/sample-004/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-004/prediction.musicxml",
+      "sha256": "525b2d249d5f6baee2f0f7448c41bea9a15286a7a09d04867afbd7416f26ea04",
+      "bytes": 9800
+    },
+    {
+      "path": "audiveris-enlarged/sample-005/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-005/converted.krn",
+      "sha256": "089356134b5027fba4d57ffe8dff39d0edff359331a8a683df6cb9b3fb8ed442",
+      "bytes": 83
+    },
+    {
+      "path": "audiveris-enlarged/sample-005/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-005/input.mxl",
+      "sha256": "9a64d0affca6aae8020b4082feb607ea21d05e14054d97a52e6f7f8604f86fd5",
+      "bytes": 1611
+    },
+    {
+      "path": "audiveris-enlarged/sample-005/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-005/prediction.musicxml",
+      "sha256": "453266f4674dd625c25779985c6b301a35b851b0dc855acc062a38f2411c2413",
+      "bytes": 6934
+    },
+    {
+      "path": "audiveris-enlarged/sample-006/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-006/converted.krn",
+      "sha256": "a92193d54f9973d00c77985730e196a4cf457a7a39cbc14f206db8e1f73916d8",
+      "bytes": 127
+    },
+    {
+      "path": "audiveris-enlarged/sample-006/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-006/input.mxl",
+      "sha256": "db1111fb7112eb9ee8a7cdadfaeb119be0e0332b658d74c0657dfb3e9bcaa286",
+      "bytes": 1942
+    },
+    {
+      "path": "audiveris-enlarged/sample-006/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-006/prediction.musicxml",
+      "sha256": "9b5b6d1969da2af5439a99a6a4ae138b6111647e5d3eade6c7f9182a8e4c4bb2",
+      "bytes": 8546
+    },
+    {
+      "path": "audiveris-enlarged/sample-007/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-007/converted.krn",
+      "sha256": "631b66a7c89ab04c1039836f2dca0159f983c569fcb83c764dc00c17ef9a4f32",
+      "bytes": 278
+    },
+    {
+      "path": "audiveris-enlarged/sample-007/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-007/input.mxl",
+      "sha256": "86165910ab22beb1f0ec148346c1d0cde260eb1551db9ea4d5a871a1198c2525",
+      "bytes": 2387
+    },
+    {
+      "path": "audiveris-enlarged/sample-007/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-007/prediction.musicxml",
+      "sha256": "66707c9b892070d719f05c039de98a4ed543106837fd662c45e666ae68c7f47e",
+      "bytes": 15748
+    },
+    {
+      "path": "audiveris-enlarged/sample-008/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-008/converted.krn",
+      "sha256": "d894770ba66dac0e2f34ae83c13e4d142e845f17cabf483fccc8735247c12035",
+      "bytes": 139
+    },
+    {
+      "path": "audiveris-enlarged/sample-008/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-008/input.mxl",
+      "sha256": "a823860710eccc3fc7c2302cbc1f57fa40d84b45c0522a6b72395f200f5f2990",
+      "bytes": 1787
+    },
+    {
+      "path": "audiveris-enlarged/sample-008/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-008/prediction.musicxml",
+      "sha256": "c182115f9a784e455e63cb016e30937f7045125d3b3d2fc756c5b44e3865440c",
+      "bytes": 9313
+    },
+    {
+      "path": "audiveris-enlarged/sample-009/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-009/converted.krn",
+      "sha256": "c1b659555da39caf75525cdf17c5709ad208b917a8c1ac8278e7621cd7208f2a",
+      "bytes": 165
+    },
+    {
+      "path": "audiveris-enlarged/sample-009/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-009/input.mxl",
+      "sha256": "e90895819ce3eb5456e75f5bce6f0f2ed67a39ba855621ebfee882131928c412",
+      "bytes": 2086
+    },
+    {
+      "path": "audiveris-enlarged/sample-009/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-009/prediction.musicxml",
+      "sha256": "e970374f8f23753afda69403b5ef463d08b5f22040b661159e3fc346c4835787",
+      "bytes": 12708
+    },
+    {
+      "path": "audiveris-enlarged/sample-010/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-010/converted.krn",
+      "sha256": "f0a9176da882d0b522d382cec6532b41ec5048e63b48c79403978e4ff1537e00",
+      "bytes": 159
+    },
+    {
+      "path": "audiveris-enlarged/sample-010/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-010/input.mxl",
+      "sha256": "0206113bfc24a5dc082380c75638f147949e3e9d36145f5392fa0e86a47c2a4a",
+      "bytes": 2037
+    },
+    {
+      "path": "audiveris-enlarged/sample-010/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-010/prediction.musicxml",
+      "sha256": "45875d7f6eb731dae1f9acde64571e416b898e3efd5f30e4c7c5a2d7a8cb72fa",
+      "bytes": 10778
+    },
+    {
+      "path": "audiveris-enlarged/sample-011/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-011/converted.krn",
+      "sha256": "ac61f7f775a803cb64d1ac1655a970c54c5360a867bf13bdb8ad9b92d91a0f38",
+      "bytes": 170
+    },
+    {
+      "path": "audiveris-enlarged/sample-011/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-011/input.mxl",
+      "sha256": "3881cfbc9b4302c799dfeb2f6b6fdafdaf4b59f588ddc73c8c5ce847e36233ec",
+      "bytes": 2032
+    },
+    {
+      "path": "audiveris-enlarged/sample-011/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-011/prediction.musicxml",
+      "sha256": "32040f71b9bff0efde4cebd95c8c7e7807728fcefc6f9b8aec8b4abb85f38b25",
+      "bytes": 11110
+    },
+    {
+      "path": "audiveris-enlarged/sample-012/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-012/converted.krn",
+      "sha256": "e7cebd6b2b821fba3c92e34bd91431dd76152fb0aabc33c5752617d1a30aa1ce",
+      "bytes": 375
+    },
+    {
+      "path": "audiveris-enlarged/sample-012/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-012/input.mxl",
+      "sha256": "6032d6c5d27db33d10a169b8812e1a2515b9cc4203e27ad9b7c57e8e9ce89fa4",
+      "bytes": 2304
+    },
+    {
+      "path": "audiveris-enlarged/sample-012/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-012/prediction.musicxml",
+      "sha256": "c15dd0d66baf21a30f6390106859426256bc1a68fee4efdaa6e1378d6c4c8f97",
+      "bytes": 16438
+    },
+    {
+      "path": "audiveris-enlarged/sample-013/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-013/converted.krn",
+      "sha256": "b6a7f9bf7f71900d72db59e00b35ebdeecc58160b29440681e2db28e0b47631b",
+      "bytes": 354
+    },
+    {
+      "path": "audiveris-enlarged/sample-013/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-013/input.mxl",
+      "sha256": "8f8760dc6cf821e26c0771cc31e8e93889bc2c9cb964913e676ddbaeade5b5e1",
+      "bytes": 2259
+    },
+    {
+      "path": "audiveris-enlarged/sample-013/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-013/prediction.musicxml",
+      "sha256": "f4693b69c8c70afb95e9464657fb1cf6d54980bf32e74fec671b42463d088cfd",
+      "bytes": 15294
+    },
+    {
+      "path": "audiveris-enlarged/sample-014/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-014/converted.krn",
+      "sha256": "255c99f22d667ed88b4eb7416a2e43807792fe5daf26328de5bad1fc6a15c667",
+      "bytes": 338
+    },
+    {
+      "path": "audiveris-enlarged/sample-014/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-014/input.mxl",
+      "sha256": "3ce7f18852b015e10e114c6978b9e3fee4d1c476a73e13573e6f57c6c8004563",
+      "bytes": 2354
+    },
+    {
+      "path": "audiveris-enlarged/sample-014/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-014/prediction.musicxml",
+      "sha256": "8dbb1dc1b0ec59fe6e729d234cf88a44741a05c7475ead505f60f4f3cc599a65",
+      "bytes": 17779
+    },
+    {
+      "path": "audiveris-enlarged/sample-015/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-015/converted.krn",
+      "sha256": "6b5ba5899dd8def6178b9f232744db599b3880cb981c499c4fc078c02dfb3e93",
+      "bytes": 344
+    },
+    {
+      "path": "audiveris-enlarged/sample-015/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-015/input.mxl",
+      "sha256": "e3d47af6f9391154cef1b5bb3aba833e1ac58d4732b36d5f2ac7d70b8fa0c2ef",
+      "bytes": 2279
+    },
+    {
+      "path": "audiveris-enlarged/sample-015/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-015/prediction.musicxml",
+      "sha256": "3e1d91d0d0de08e666cda227240f521aa9441cce214604a339fe39ba0a5c44fc",
+      "bytes": 13201
+    },
+    {
+      "path": "audiveris-enlarged/sample-016/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-016/converted.krn",
+      "sha256": "5fcc7588a4605ff921775a6bbd181e39e24e0f1fa095ff90f5853adbfa68157d",
+      "bytes": 287
+    },
+    {
+      "path": "audiveris-enlarged/sample-016/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-016/input.mxl",
+      "sha256": "a67dff0e2535a77a0e390c48ce9cd73e34a7964306ab3f8e6d026a71431cd2d5",
+      "bytes": 2357
+    },
+    {
+      "path": "audiveris-enlarged/sample-016/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-016/prediction.musicxml",
+      "sha256": "f2fc8f3399354c12ac10d498a13e34a61e5b41a225646c822dbd2a4eb0540092",
+      "bytes": 12007
+    },
+    {
+      "path": "audiveris-enlarged/sample-017/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-017/converted.krn",
+      "sha256": "5d01b0e3bdb36b9e7930af3d027453900c603bf1ce5f6ed0477102fe07b2dc32",
+      "bytes": 340
+    },
+    {
+      "path": "audiveris-enlarged/sample-017/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-017/input.mxl",
+      "sha256": "7a6407f808cda1b622097ed292a530d9dd8357acbd852c422d19a727aace07d9",
+      "bytes": 2313
+    },
+    {
+      "path": "audiveris-enlarged/sample-017/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-017/prediction.musicxml",
+      "sha256": "c2fabdfc1f083cc79d766aad7a99abb5ca7e80b8f593175e52fd971e71be831b",
+      "bytes": 16050
+    },
+    {
+      "path": "audiveris-enlarged/sample-018/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-018/converted.krn",
+      "sha256": "617fa3118c9413dbe2e8233bcc18110d94569acf767c026348c7ceb83ce4952c",
+      "bytes": 298
+    },
+    {
+      "path": "audiveris-enlarged/sample-018/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-018/input.mxl",
+      "sha256": "c81d8a3e3e2c29584cb5ff60f58b279638ba421044b3a502b72b163058f095a6",
+      "bytes": 2409
+    },
+    {
+      "path": "audiveris-enlarged/sample-018/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-018/prediction.musicxml",
+      "sha256": "e6f6d0d1ddb8cc29f5bead084568c3d92c1f67c6b210ef5d4a83c80aa9dc31a3",
+      "bytes": 14126
+    },
+    {
+      "path": "audiveris-enlarged/sample-019/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-019/converted.krn",
+      "sha256": "c898709de6fa6056c1b8bf683a2583457a8b77a269f370b3f5d7e0d42bcea120",
+      "bytes": 382
+    },
+    {
+      "path": "audiveris-enlarged/sample-019/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-019/input.mxl",
+      "sha256": "aedfaeaf66e58f00d32d9813742eb8705e9acc20bfabc4c02cd1f764de874a12",
+      "bytes": 2165
+    },
+    {
+      "path": "audiveris-enlarged/sample-019/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-019/prediction.musicxml",
+      "sha256": "ea8a314093035f74eb23b5e978ff09e3ea964dc307f38fce35fc93beba1270cd",
+      "bytes": 11270
+    },
+    {
+      "path": "audiveris-enlarged/sample-020/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-020/converted.krn",
+      "sha256": "f3b7174bb81b322bb80fc66596a61d3536cdea272ae65c81406c38562fd869ca",
+      "bytes": 326
+    },
+    {
+      "path": "audiveris-enlarged/sample-020/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-020/input.mxl",
+      "sha256": "daf983e3efdf04d26831b71515159cb5bfe0786e5ba3faeb7eabf1e34586fd6c",
+      "bytes": 2138
+    },
+    {
+      "path": "audiveris-enlarged/sample-020/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-020/prediction.musicxml",
+      "sha256": "0ff02a862ff6a37e9f9e5083c14811358712a6a88a2c8056b0ef2ec0af891e83",
+      "bytes": 10086
+    },
+    {
+      "path": "audiveris-enlarged/sample-021/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-021/converted.krn",
+      "sha256": "d06128cfdbdb4b5e977d160e3d87497a37b8ba0f54c436ed104755bd37f92f11",
+      "bytes": 338
+    },
+    {
+      "path": "audiveris-enlarged/sample-021/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-021/input.mxl",
+      "sha256": "443842cfd13d524aaa6f2ce988dfa51698ef4e2c44cae63fd6b3e7af6c5a2890",
+      "bytes": 2068
+    },
+    {
+      "path": "audiveris-enlarged/sample-021/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-021/prediction.musicxml",
+      "sha256": "2a5e7af4efabc2672a7fe84f961697bbac172932e627d9a68f18472b43b7ea47",
+      "bytes": 11233
+    },
+    {
+      "path": "audiveris-enlarged/sample-022/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-022/converted.krn",
+      "sha256": "0bce9896110f7ef39c940d84bd1495e377f7cdd3a95623190f7997d40f5b04d2",
+      "bytes": 352
+    },
+    {
+      "path": "audiveris-enlarged/sample-022/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-022/input.mxl",
+      "sha256": "5a70c5da22c4e1c52890d872398e09b78dfc219a7783f0c4ab319d45d2f67b9e",
+      "bytes": 2146
+    },
+    {
+      "path": "audiveris-enlarged/sample-022/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-022/prediction.musicxml",
+      "sha256": "7fc2e4c7cba192c2c44f7f1a5be25112457a607e07e066990f218e49b18eb9e1",
+      "bytes": 10298
+    },
+    {
+      "path": "audiveris-enlarged/sample-023/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-023/converted.krn",
+      "sha256": "9b4ee388490ce8487de4cbeb0d789aad99a4200a5a27f7473c8fe951d7dc8e5e",
+      "bytes": 252
+    },
+    {
+      "path": "audiveris-enlarged/sample-023/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-023/input.mxl",
+      "sha256": "02721b122610317284ce450d66a8ce7bc8289dd1ddd5aa64a49fee40b87ab619",
+      "bytes": 2033
+    },
+    {
+      "path": "audiveris-enlarged/sample-023/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-023/prediction.musicxml",
+      "sha256": "0b95f937e8249ba59ad0da1ec6dabe4d09af506f7b432db4de187375c4208585",
+      "bytes": 8882
+    },
+    {
+      "path": "audiveris-enlarged/sample-024/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-024/converted.krn",
+      "sha256": "05a2eac160acff5537b7a43b5ea4808d558dd17a00997b43eaa60dadf341b60a",
+      "bytes": 255
+    },
+    {
+      "path": "audiveris-enlarged/sample-024/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-024/input.mxl",
+      "sha256": "94cfa6be9c38ceb610fa451e0c7bef649928885e58d4cbb5d9a926786cdc906d",
+      "bytes": 2193
+    },
+    {
+      "path": "audiveris-enlarged/sample-024/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-024/prediction.musicxml",
+      "sha256": "f6baa1d01359811493b71b5e17dcae8df3b100e14b5f6d7b210835019d12f128",
+      "bytes": 10871
+    },
+    {
+      "path": "audiveris-enlarged/sample-025/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-025/converted.krn",
+      "sha256": "ca05e4dbae15d58792283572f99ecd778774183c1340ffa1fddb5a2a17f4a8ff",
+      "bytes": 284
+    },
+    {
+      "path": "audiveris-enlarged/sample-025/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-025/input.mxl",
+      "sha256": "ca69f607052bc2e4911d2146dacbc69effeaff6fd4ef70b87dc7ac56896b5e31",
+      "bytes": 2216
+    },
+    {
+      "path": "audiveris-enlarged/sample-025/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-025/prediction.musicxml",
+      "sha256": "981d52c643b6497a6b7f462973d515a98f7763fd29885f3e87500862d0c96086",
+      "bytes": 10964
+    },
+    {
+      "path": "audiveris-enlarged/sample-026/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-026/converted.krn",
+      "sha256": "7e51b3d0d3a365da56a8f2948193bf8a2b89ead250ba9083b7eabae713a87286",
+      "bytes": 199
+    },
+    {
+      "path": "audiveris-enlarged/sample-026/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-026/input.mxl",
+      "sha256": "3261fae7a8a2066e3084285ee1701314c1f80adc5f220c797531ca18a9ebd435",
+      "bytes": 1874
+    },
+    {
+      "path": "audiveris-enlarged/sample-026/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-026/prediction.musicxml",
+      "sha256": "62b62c4d65605a287c7dba743737c5c8b2965c2be96e9db3a6e0ed622f6287d7",
+      "bytes": 8678
+    },
+    {
+      "path": "audiveris-enlarged/sample-027/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-027/converted.krn",
+      "sha256": "bc97c87c3dc8f59d148336d117b69c0cab2c4fbb00bc71be3ab6d75671c54437",
+      "bytes": 196
+    },
+    {
+      "path": "audiveris-enlarged/sample-027/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-027/input.mxl",
+      "sha256": "f3f197e80a68ce9ca64489a94d105a84ac8a74c0b2a1dc1d942d7f202df0f338",
+      "bytes": 2055
+    },
+    {
+      "path": "audiveris-enlarged/sample-027/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-027/prediction.musicxml",
+      "sha256": "61b2b628caf22a75ef592e444af59e0987991023ab1460670061a4d36b474a71",
+      "bytes": 8468
+    },
+    {
+      "path": "audiveris-enlarged/sample-028/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-028/converted.krn",
+      "sha256": "02dad11988064e565cbce915e99dc1a41c7b32fb19d80e40db85c7432882ae48",
+      "bytes": 180
+    },
+    {
+      "path": "audiveris-enlarged/sample-028/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-028/input.mxl",
+      "sha256": "896966ba7d98ed8dadb943cb530a45f9e731d763fa771ea862ea60149f71f52e",
+      "bytes": 1999
+    },
+    {
+      "path": "audiveris-enlarged/sample-028/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-028/prediction.musicxml",
+      "sha256": "eb28ee6f217172455adb54df2a4b2d801d0785ab1737232d2d3262498882fed1",
+      "bytes": 6910
+    },
+    {
+      "path": "audiveris-enlarged/sample-029/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-029/input.mxl",
+      "sha256": "f41d190a8bb5366e17f74b9ff924aa227ab0f22d2d053f0d2bd2dff753bfc3be",
+      "bytes": 1516
+    },
+    {
+      "path": "audiveris-enlarged/sample-029/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-029/prediction.musicxml",
+      "sha256": "e123b1f53b80878a3b02fdfc236b10141c4eff6c07eacee6fef875c3ebcf0a08",
+      "bytes": 3767
+    },
+    {
+      "path": "audiveris-enlarged/sample-030/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-030/converted.krn",
+      "sha256": "5fc03d77e5ad4deadc13eec1ef7a4898462a5c9053ce5214a182abfbe4846775",
+      "bytes": 163
+    },
+    {
+      "path": "audiveris-enlarged/sample-030/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-030/input.mxl",
+      "sha256": "48f57e99be618c65a8ae8758b342b077a1c69276f10166239a883ad2d8ab4ca9",
+      "bytes": 1907
+    },
+    {
+      "path": "audiveris-enlarged/sample-030/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-030/prediction.musicxml",
+      "sha256": "1f324f509b446cf38c51f2e10e45fac50fe69f46ffa7c2c254b4f6fc7bdfedde",
+      "bytes": 6982
+    },
+    {
+      "path": "audiveris-enlarged/sample-031/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-031/converted.krn",
+      "sha256": "fea8960b6f0fd45c9cf417f412561e4381b1f623c2adebcc308badaa0cc25d04",
+      "bytes": 248
+    },
+    {
+      "path": "audiveris-enlarged/sample-031/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-031/input.mxl",
+      "sha256": "e8e64137e3034c2f714eac2ae521aa978bfadf17100d0011cd4444882e3bdb8e",
+      "bytes": 2204
+    },
+    {
+      "path": "audiveris-enlarged/sample-031/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-031/prediction.musicxml",
+      "sha256": "9220b9fc6ef880ddf78d38a79c58023b308b94eb786b443b48ca40fbd12538b1",
+      "bytes": 13104
+    },
+    {
+      "path": "audiveris-enlarged/sample-032/converted.krn",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-032/converted.krn",
+      "sha256": "a8733d8e04a8719b5d0902794485f0051f1f28ab0fd8086fd88067aef75630cd",
+      "bytes": 170
+    },
+    {
+      "path": "audiveris-enlarged/sample-032/input.mxl",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-032/input.mxl",
+      "sha256": "c5c13c669e5f39d2686e151de87b05122927a5f325cb45fd7bb3f861c3478e85",
+      "bytes": 2107
+    },
+    {
+      "path": "audiveris-enlarged/sample-032/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-enlarged/sample-032/prediction.musicxml",
+      "sha256": "55d473a31a8b34a8bb7cb7ef6ff56532482e10bb9c6809b73b70b690980118dc",
+      "bytes": 11960
+    },
+    {
+      "path": "audiveris-raw/sample-006/converted.krn",
+      "source": "runs/first-benchmark/audiveris-raw/sample-006/converted.krn",
+      "sha256": "56d74f8b437737339e2a817b4423f7b59dc05d6836446cfa9366716b5904b08e",
+      "bytes": 216
+    },
+    {
+      "path": "audiveris-raw/sample-006/input.mxl",
+      "source": "runs/first-benchmark/audiveris-raw/sample-006/input.mxl",
+      "sha256": "cd660e94ac9b7f5cdf144c31a1a2e362e3a82a38d53a8d5705ab47d2c399956a",
+      "bytes": 1971
+    },
+    {
+      "path": "audiveris-raw/sample-006/prediction.musicxml",
+      "source": "runs/first-benchmark/audiveris-raw/sample-006/prediction.musicxml",
+      "sha256": "ee55f393aa8d930c9bac1ca73805539300249f906536ffffc6d6a7d8651cbea9",
+      "bytes": 13012
+    },
+    {
+      "path": "results.json",
+      "source": "runs/first-benchmark/results.json",
+      "sha256": "b2486ab6ca3c2398f8b582b54e6de8eaa243101c01a8ca24eca660a296132090",
+      "bytes": 2936586
+    },
+    {
+      "path": "transcoda-greedy/sample-001/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-001/adapted.krn",
+      "sha256": "a0d2b66d196fcdf6b38ea4fb55a8b19b75a179a810084bf17d0776ff9911c63f",
+      "bytes": 99
+    },
+    {
+      "path": "transcoda-greedy/sample-001/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-001/prediction.krn",
+      "sha256": "b7f94e84ab4a9088b4fbcfaf83ec9289435a372ff7ff7a5f9c0d9e8e1fdeee99",
+      "bytes": 88
+    },
+    {
+      "path": "transcoda-greedy/sample-002/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-002/adapted.krn",
+      "sha256": "2a4e08bd3e4ac4a8ced76fd0eddd47fa61030de484870b94beac4c97e54ec48e",
+      "bytes": 1693
+    },
+    {
+      "path": "transcoda-greedy/sample-002/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-002/prediction.krn",
+      "sha256": "62d4ac69149decb61e55b734e02c346402d91d30d67071b4c3bb7de724648f79",
+      "bytes": 1682
+    },
+    {
+      "path": "transcoda-greedy/sample-003/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-003/adapted.krn",
+      "sha256": "a8050c07d2d7e78c954c325f2750dd994391cb44d2c3435fa913829f682ec62f",
+      "bytes": 93
+    },
+    {
+      "path": "transcoda-greedy/sample-003/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-003/prediction.krn",
+      "sha256": "ed27a37f0de5830719f0983d9c286d22dfc009750868964e7471d481485fbc7a",
+      "bytes": 82
+    },
+    {
+      "path": "transcoda-greedy/sample-004/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-004/adapted.krn",
+      "sha256": "2619421f6070d18b55640e632575d52047fdfab20653bbaf15d11bb27410d26e",
+      "bytes": 117
+    },
+    {
+      "path": "transcoda-greedy/sample-004/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-004/prediction.krn",
+      "sha256": "7eb70b5dec14a7b9cf82ad8d05e624d2187769bcd634e6214dd9e6e9ffd18982",
+      "bytes": 106
+    },
+    {
+      "path": "transcoda-greedy/sample-005/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-005/adapted.krn",
+      "sha256": "991764b8816322705ca9185b5f7377293bb6ea5918b7c56a3694853e01227c18",
+      "bytes": 2208
+    },
+    {
+      "path": "transcoda-greedy/sample-005/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-005/prediction.krn",
+      "sha256": "8cf35f449c6867b0cb69fbd2628589757563bea0d62373c33fd9a9cadec2a17f",
+      "bytes": 2197
+    },
+    {
+      "path": "transcoda-greedy/sample-006/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-006/adapted.krn",
+      "sha256": "7fa0df9aae9448842162e16d48ee2f764de45c7fb82860f12367b261f93b012a",
+      "bytes": 152
+    },
+    {
+      "path": "transcoda-greedy/sample-006/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-006/prediction.krn",
+      "sha256": "c1abc1a452bd22bf23c270ba3d8bd85eecc0a12428070ef47ab76d8308743b5b",
+      "bytes": 141
+    },
+    {
+      "path": "transcoda-greedy/sample-007/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-007/adapted.krn",
+      "sha256": "b4e32ee3c944b834e10bf8a1f148fbc552be3c9309ab6d125a91742d8be021f2",
+      "bytes": 203
+    },
+    {
+      "path": "transcoda-greedy/sample-007/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-007/prediction.krn",
+      "sha256": "3233cc9e6b98d307ec79d5f761e01722d56686dc3c8770e7840ac9d01930da9d",
+      "bytes": 192
+    },
+    {
+      "path": "transcoda-greedy/sample-008/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-008/adapted.krn",
+      "sha256": "faf8cf8dc8320602530480f1922dd48802821e49d7f494abbc2a0162d80f4c35",
+      "bytes": 216
+    },
+    {
+      "path": "transcoda-greedy/sample-008/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-008/prediction.krn",
+      "sha256": "320172cca0f6b8e21dd48536f357742ebc6d8ba380be7700d557f1c353e54ef7",
+      "bytes": 205
+    },
+    {
+      "path": "transcoda-greedy/sample-009/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-009/adapted.krn",
+      "sha256": "58f8bbca352ff9dba0067bc3557a39f268ac0f215afb7b13597959c6fa86a83e",
+      "bytes": 249
+    },
+    {
+      "path": "transcoda-greedy/sample-009/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-009/prediction.krn",
+      "sha256": "2d73eb4021cf7948a27fdc6814cecb9b966994b5c609338102d696f3a78b8279",
+      "bytes": 238
+    },
+    {
+      "path": "transcoda-greedy/sample-010/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-010/adapted.krn",
+      "sha256": "5aa577a37fc19a744e3febfd715ad95dc1a683f0ae65f5be9479ec1a3e69b528",
+      "bytes": 167
+    },
+    {
+      "path": "transcoda-greedy/sample-010/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-010/prediction.krn",
+      "sha256": "ab5f3471f95ffb0e0f31bf95c3fd6b77f37ca469a5e6965bc0a358cdab3abcf8",
+      "bytes": 156
+    },
+    {
+      "path": "transcoda-greedy/sample-011/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-011/adapted.krn",
+      "sha256": "36ff69b7cb53f387ecc6a5536f756ab6e5d5a2d0e7845ae02c37bcbf0f666ad0",
+      "bytes": 157
+    },
+    {
+      "path": "transcoda-greedy/sample-011/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-011/prediction.krn",
+      "sha256": "8bb842bc5a5c86342a9348bfe934d8e23ac27c531dde79bacd2e9ac76290d010",
+      "bytes": 146
+    },
+    {
+      "path": "transcoda-greedy/sample-012/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-012/adapted.krn",
+      "sha256": "ec673a356f0a0fb918b5623c24c3430d1596e71a9338bb97ceb04b79a216a15c",
+      "bytes": 402
+    },
+    {
+      "path": "transcoda-greedy/sample-012/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-012/prediction.krn",
+      "sha256": "04c431aee5c3c4bfd8e4b7c4e0c7ee4695b9a43d83b9427ed7d77a68f2135ddc",
+      "bytes": 391
+    },
+    {
+      "path": "transcoda-greedy/sample-013/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-013/adapted.krn",
+      "sha256": "aae7c6b48918d23a0eadc33db3c35e251da1e11337e634cea9962fb2af5b4c15",
+      "bytes": 2330
+    },
+    {
+      "path": "transcoda-greedy/sample-013/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-013/prediction.krn",
+      "sha256": "2e341960fca88d08d209914af459f85ebae45b4255a274026ffbb37c8802b22d",
+      "bytes": 2319
+    },
+    {
+      "path": "transcoda-greedy/sample-014/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-014/adapted.krn",
+      "sha256": "fbc0eb0cf1a9bec1c1c1415a5444617bd5c08b82173cafd5699b5357fec11f09",
+      "bytes": 460
+    },
+    {
+      "path": "transcoda-greedy/sample-014/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-014/prediction.krn",
+      "sha256": "c7ed6b6ef75e74e6dce6ab3f8de824c69024a81061bd8b4aa42b509ff9f15d9b",
+      "bytes": 449
+    },
+    {
+      "path": "transcoda-greedy/sample-015/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-015/adapted.krn",
+      "sha256": "bef022e8860da12bbeffc703002acbaf1e1fe7e23101f2bc6851ff285f7fff8c",
+      "bytes": 319
+    },
+    {
+      "path": "transcoda-greedy/sample-015/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-015/prediction.krn",
+      "sha256": "8c90be4937ec28083a62eace505e5f760bafc0667d9ab8c7268d7835ba0cea1b",
+      "bytes": 308
+    },
+    {
+      "path": "transcoda-greedy/sample-016/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-016/adapted.krn",
+      "sha256": "dc875bbbea5ed948d6cb2a660f21bafc425e1881993b0171b3f232c6282f8f7e",
+      "bytes": 269
+    },
+    {
+      "path": "transcoda-greedy/sample-016/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-016/prediction.krn",
+      "sha256": "11d60101bec67f1ea6352e17a788f4a91d554ad1a7fe29d1880eb04825c1b672",
+      "bytes": 258
+    },
+    {
+      "path": "transcoda-greedy/sample-017/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-017/adapted.krn",
+      "sha256": "e084653b30585d5d86e7b3674f9b26eb8875f9ae91259b51d7ccaccbefbb921e",
+      "bytes": 2598
+    },
+    {
+      "path": "transcoda-greedy/sample-017/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-017/prediction.krn",
+      "sha256": "d77778cf7a5094c002c3edf8af38d2bdb1989e090ee7933a312e0f1b8efd24b7",
+      "bytes": 2588
+    },
+    {
+      "path": "transcoda-greedy/sample-018/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-018/adapted.krn",
+      "sha256": "836c9f5e083c4629381e91611cae597d3f2c52a156f68559016aa76cf229690d",
+      "bytes": 284
+    },
+    {
+      "path": "transcoda-greedy/sample-018/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-018/prediction.krn",
+      "sha256": "38183da5a5bcb0b990e68ac01de9f116e9af5e1c9192bf2fc7b25b9c91eb67c2",
+      "bytes": 273
+    },
+    {
+      "path": "transcoda-greedy/sample-019/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-019/adapted.krn",
+      "sha256": "212080a5f61370263c9ebdb7e420eea302b171cf9fe9b4f3b9a9c027b2a484ce",
+      "bytes": 187
+    },
+    {
+      "path": "transcoda-greedy/sample-019/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-019/prediction.krn",
+      "sha256": "0fea8c003786bf8313bc302881667be00903c4d541f22f44abb0e832a209fb0b",
+      "bytes": 176
+    },
+    {
+      "path": "transcoda-greedy/sample-020/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-020/adapted.krn",
+      "sha256": "beaea94f60a700b45b910860332e269d7cd9f77c01411adbaab0e6c7b517feb1",
+      "bytes": 212
+    },
+    {
+      "path": "transcoda-greedy/sample-020/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-020/prediction.krn",
+      "sha256": "b1bc33d8fba3f4e665fa7d73774bb0eae822db9b2523e38dbd5cfb839eddc3de",
+      "bytes": 201
+    },
+    {
+      "path": "transcoda-greedy/sample-021/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-021/adapted.krn",
+      "sha256": "86b4dca1c4960af8f014f15f3d1a2fb3581d0febad9df275b0bb54361328b2ed",
+      "bytes": 123
+    },
+    {
+      "path": "transcoda-greedy/sample-021/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-021/prediction.krn",
+      "sha256": "1977b47d1f1ffedc7e7a0c91ce3dc90bd027b20a858e23c1c04be4b7c31b2c8e",
+      "bytes": 112
+    },
+    {
+      "path": "transcoda-greedy/sample-022/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-022/adapted.krn",
+      "sha256": "466e60d5e080e0c323c795348f6724edd4cca95bf11aa98cf5caec89884fea6f",
+      "bytes": 120
+    },
+    {
+      "path": "transcoda-greedy/sample-022/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-022/prediction.krn",
+      "sha256": "adc697244bde0c871ee374e14e11db0e2c2d9f2512f38431724de83c0cc0f851",
+      "bytes": 109
+    },
+    {
+      "path": "transcoda-greedy/sample-023/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-023/adapted.krn",
+      "sha256": "57f3f111eae51edf3315fb18e443c9e96322e16f630d49d52415a3960031a3b3",
+      "bytes": 121
+    },
+    {
+      "path": "transcoda-greedy/sample-023/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-023/prediction.krn",
+      "sha256": "2584c35ca9e227eedb836b4b6483d26afacfb3b0e05d6b9bbf043779d851c9e5",
+      "bytes": 110
+    },
+    {
+      "path": "transcoda-greedy/sample-024/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-024/adapted.krn",
+      "sha256": "45d776da70cfde535532ec00681f81730eb1211a9369f8b9e4a8b80a8db03a70",
+      "bytes": 127
+    },
+    {
+      "path": "transcoda-greedy/sample-024/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-024/prediction.krn",
+      "sha256": "63190b79ef0df315b99bed125113c3800b24195640d388e8335b3905fcf753ea",
+      "bytes": 116
+    },
+    {
+      "path": "transcoda-greedy/sample-025/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-025/adapted.krn",
+      "sha256": "0ec05bbf6f85526a4b04004cfc5b46489f62b3484c77553a35d133dbcf847374",
+      "bytes": 126
+    },
+    {
+      "path": "transcoda-greedy/sample-025/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-025/prediction.krn",
+      "sha256": "7a970b3fcc19414f2933da2257cdb04b054be11b6ff8a3b1fba8eda9f9874cd5",
+      "bytes": 115
+    },
+    {
+      "path": "transcoda-greedy/sample-026/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-026/adapted.krn",
+      "sha256": "9db66459c20c51b0c965e115189dea4b98cc71cc11a5448e87341a267636d580",
+      "bytes": 114
+    },
+    {
+      "path": "transcoda-greedy/sample-026/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-026/prediction.krn",
+      "sha256": "3bb226e0dcee09b0cd28b446bda06e9f72cca6a6c44011e89349326a6d8747a2",
+      "bytes": 103
+    },
+    {
+      "path": "transcoda-greedy/sample-027/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-027/adapted.krn",
+      "sha256": "1d01e0f4984cfe94e683d6e83fa572670fa8758e303ba4d950b0dc331b0d3e60",
+      "bytes": 96
+    },
+    {
+      "path": "transcoda-greedy/sample-027/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-027/prediction.krn",
+      "sha256": "0d4bb188f499e61518beaad6ebe961602ecaee452e10c766570b2372e16116b0",
+      "bytes": 85
+    },
+    {
+      "path": "transcoda-greedy/sample-028/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-028/adapted.krn",
+      "sha256": "1698cf62eaa87a42cbaf087cab7e28add56e20c20fa6e6977cf8a1fa21fa2f6e",
+      "bytes": 67
+    },
+    {
+      "path": "transcoda-greedy/sample-028/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-028/prediction.krn",
+      "sha256": "5ac4bc9faef65fa0841aa9353236f9a195bf55022701bc7e83fb575c41c7e3bf",
+      "bytes": 56
+    },
+    {
+      "path": "transcoda-greedy/sample-029/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-029/adapted.krn",
+      "sha256": "56af4674e35f495ce2b6f7c5e1602df3f38f5b91adb049364f3c1b7764344343",
+      "bytes": 272
+    },
+    {
+      "path": "transcoda-greedy/sample-029/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-029/prediction.krn",
+      "sha256": "99bb39bfebb8f0c4b25823c429c4cbe934d524482b822359d72469c3331b361a",
+      "bytes": 251
+    },
+    {
+      "path": "transcoda-greedy/sample-030/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-030/adapted.krn",
+      "sha256": "487723456bb4e868bcd09901eeb5d3e60fa9d45f65ff1e5d02231bdbffbf4a74",
+      "bytes": 2070
+    },
+    {
+      "path": "transcoda-greedy/sample-030/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-030/prediction.krn",
+      "sha256": "8a863883bb2ad69a578a6c2871ec335926e0c204d8dca0302f0eb3f2cf9bdebb",
+      "bytes": 2059
+    },
+    {
+      "path": "transcoda-greedy/sample-031/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-031/adapted.krn",
+      "sha256": "221df8ae0f5cccf70e453a02c2365ba605b0ce7b1d708072234d03bccba58a43",
+      "bytes": 173
+    },
+    {
+      "path": "transcoda-greedy/sample-031/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-031/prediction.krn",
+      "sha256": "2e711eaddd5c153e64eb1586a3b83b4d17f185981651dc44a2c4cdb14a98b6f5",
+      "bytes": 162
+    },
+    {
+      "path": "transcoda-greedy/sample-032/adapted.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-032/adapted.krn",
+      "sha256": "ddc3c04585645733d838f3a832c87cc12386b82a4793242391b704625f8b9985",
+      "bytes": 4466
+    },
+    {
+      "path": "transcoda-greedy/sample-032/prediction.krn",
+      "source": "runs/first-benchmark/transcoda-greedy/sample-032/prediction.krn",
+      "sha256": "21de89196cc18932dda6006fa20a9cb62c1ab4ec7fefba1fd24ef89a4d907520",
+      "bytes": 4456
+    }
+  ]
+}

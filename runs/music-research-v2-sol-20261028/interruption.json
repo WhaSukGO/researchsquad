@@ -1,5 +1,0 @@
-{
-  "status": "interrupted_after_repeated_decision_timeouts",
-  "reason": "Two consecutive 180-second timeouts choosing the first experiment after dataset/baseline/source review; no new predictions or accuracy result. Human-facing verification remains inconclusive.",
-  "timestamp": "2026-10-28T14:41:37.973868+00:00"
-}

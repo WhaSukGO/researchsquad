@@ -1,5 +1,0 @@
-{
-  "tool": "create_specialist",
-  "argument": "{\"id\": \"sorting_specialist\", \"template\": \"experiment_engineer\", \"system_prompt\": \"Use registered tools to sort the complete assigned public input. Submit result.json.\", \"tools\": [\"read_file\", \"write_file\", \"run\", \"finish\"]}",
-  "why": "Deterministic integration verification"
-}

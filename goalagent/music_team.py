@@ -7,13 +7,13 @@ from pathlib import Path
 from .contracts import atomic_json,digest,success_gate
 from .environments import EnvironmentManager
 from .inputs import baseline_inventory
-from .music import MusicTools
+from .music import MusicScorer
 from .team import Team,ROOT
 from .team_evaluators import Evaluator
 
 
 def music_evaluator(folder,spec,remaining=lambda:180):
-    domain=MusicTools(Path(folder)/'measurements',spec)
+    domain=MusicScorer(Path(folder)/'measurements',spec)
     domain.assert_originals()
     def score(snapshot,task):
         domain.assert_originals()
@@ -53,7 +53,7 @@ Use request_environment for missing capabilities. Tool registration and extra sp
 This is a development pilot, not held-out accuracy. Seven samples cannot complete the 32-sample acceptance gate; chord timing audit and musician review remain outstanding. Finish with measured deltas, limitations and next steps, even if the goal is unmet.
 '''
     return assets,{'brief.txt':brief,'samples.json':json.dumps([f'sample-{i:03}' for i,_ in selected]),
-                   'baseline.json':json.dumps(domain.execute('baseline_summary','',None,None))}
+                   'baseline.json':json.dumps(domain.baseline_summary())}
 
 
 def run(folder,model='gpt-6.1-sol',*,unlimited=True):
@@ -75,10 +75,9 @@ def run(folder,model='gpt-6.1-sol',*,unlimited=True):
         'reference_labels_delivered':0,'budget':team.task['budget'],'unlimited':unlimited,'comparison_limit':'Different architecture and total budget from old runs; not a controlled causal ablation.'})
     # Deterministic readiness reuses the reviewed profile; no setup model is needed on a cache hit.
     if team.state['environment'] is None:
-        from .research import DEFAULT_WORKER_POLICY
         class NoSetupModel:
             def call(self,*args,**kwargs):raise RuntimeError('Automatic bootstrap repair unavailable; delegate an environment engineer')
-        manager=EnvironmentManager(folder/'bootstrap',{'max_attempts':1,'max_model_calls':1,'max_seconds':180},DEFAULT_WORKER_POLICY,NoSetupModel())
+        manager=EnvironmentManager(folder/'bootstrap',{'max_attempts':1,'max_model_calls':1,'max_seconds':180},spec['worker'],NoSetupModel())
         started=time.monotonic()
         receipt=manager.ensure(lambda:None,lambda:180-(time.monotonic()-started))
         team.state['active_seconds']+=time.monotonic()-started

@@ -1,9 +1,0 @@
-{
-  "step": 7,
-  "decision": null,
-  "observation": {
-    "id": "decision-error-7",
-    "error": "TimeoutExpired",
-    "detail": "Command '['/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex', 'exec', '--ignore-user-config', '--sandbox', 'read-only', '--skip-git-repo-check', '--ephemeral', '-c', 'features.shell_tool=false', '-c', 'web_search=\"disabled\"', '-c', 'model_reasoning_effort=\"low\"', '--json', '--model', 'gpt-6-astra', '--output-schema', '/var/folders/xd/bvcs0ptd2sdclnhm16qmrk3w0000gn/T/score-agent-input-cduc9op6/schema.json', '-o', '/var/folders/xd/bvcs0ptd2sdclnhm16qmrk3w0000gn/T/score-agent-input-cduc9op6/answer.json', '-']' timed out after 180 seconds"
-  }
-}

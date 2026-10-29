@@ -1,5 +1,0 @@
-{
-  "tool": "delegate",
-  "argument": "{\"agent\": \"experiment_engineer\", \"objective\": \"Build a reusable numeric sorting tool and submit its initial test result\", \"success_criteria\": \"A registered tested tool and result.json\", \"inputs\": {}}",
-  "why": "Deterministic integration verification"
-}

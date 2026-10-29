@@ -1,1 +1,0 @@
-import pathlib,sys; p=pathlib.Path('/workspace/tmp/probe');p.write_text('ready');assert p.read_text()=='ready';assert sys.version_info.major==3;print('READY: Python and writable temp')

@@ -1,7 +1,0 @@
-{
-  "mode": "debug",
-  "parent": "exp-ee56f2b32016",
-  "approach": "Install the specifically missing GTK 3 runtime and verify native-library resolution before a bounded Audiveris export preflight.",
-  "objective": "Reproduce the inherited gtk-3 loading failure, install the distribution's GTK 3 runtime package and verify libgtk-3 resolves, recording package names and runtime versions. Retain Java 25 and Audiveris 5.11 plus unchanged OCR thresholds and melody conversion. Within 240 seconds obtain a genuine MusicXML export from one pilot image; stop with exact diagnostics if this fails. If successful, run the existing pipeline on all seven pilot images, independently validate complete kern outputs, and repair only parser-confirmed serialization defects. Preserve raw recognition outputs and chord bounding boxes. Do not fabricate notes or use references; mark chord timing unaudited.",
-  "success_criteria": "Deliver native-library verification and either a real single-image MusicXML export or a reproducible failure report. If preflight succeeds, submit seven sealed predictions with per-image parsing diagnostics and actual-output upward-major-second transposition checks for melody, chord roots and slash basses. Protected evaluation should compare parseability against 0/7, melody errors against baseline 87/130 and prior experiments' 1.0 rate, and chord errors against the best experiment's 25/38 and baseline 30/38. Report regressions and untested cases explicitly; startup, parsing and synthetic checks do not establish musical correctness."
-}

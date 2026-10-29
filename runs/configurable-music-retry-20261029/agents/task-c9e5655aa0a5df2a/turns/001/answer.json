@@ -1,1 +1,0 @@
-{"tool":"run","argument":"cat inputs/brief.txt && cat inputs/samples.json && cat inputs/delivered-baseline.json","why":"Inspect the explicit assignment inputs and baseline evidence before choosing repairs."}

@@ -1,80 +1,57 @@
-# Prepared research environments
+# Research environment operations
 
-The environment and input-handoff design is implemented as an opt-in research mode. Old goal files keep their existing behavior; old recorded results are not migrated or rescored silently.
+The configurable team separates experiment work from environment preparation. The experiment engineer implements the candidate; the environment engineer proposes missing capabilities; the host validates and builds a Docker image. The protected evaluator measures the submitted candidate independently.
 
-Run a new session:
+## Start and reuse the music environment
 
 ```sh
-docker pull python:3.12-slim@sha256:12316debbfb86890f6b2d825820612741ba527ad5a44e3902759141d572bfe8f
-uv run python -m goalagent.coordinator --goal goals/music-research-v2.json --run-dir runs/my-v2-research --model gpt-6-astra
+uv run python -m goalagent.music_team --run-dir runs/my-music-team --model gpt-6.1-sol
 ```
 
-Use the same command to resume. Use a new run directory if the goal, protected code, environment profile, locked base requirements or acceptance criteria change. Do not edit those while a run is active.
+Music runs default to unlimited research effort. Startup first tries the reviewed `environments/music-python` profile. It provides Python, Pillow, music21, converter21, Verovio and Tesseract. Audiveris is not installed; existing predictions and raw exports are supplied as inputs.
 
-## Who owns what
+This deterministic bootstrap does not call a setup model. Its operational readiness attempt remains bounded to 180 seconds; failure is recorded and the team can delegate environment work. That readiness timeout does not restore a total research budget. A reusable profile receipt lives under `.cache/research-environments`, and each run keeps its own copy of the build/readiness evidence.
 
-The research lead selects the experiment and declares required prediction artifacts. The experiment engineer implements the recognition intervention in a prepared environment. The environment engineer proposes package changes only when requested or when readiness fails. The host validates and builds the recipe, runs readiness tests and owns the registry. The protected evaluator still reads labels and scores frozen outputs.
+Verify the reviewed profile without live model calls:
 
-The environment engineer has a structured package-proposal interface, not host shell access. It cannot change the pinned base image, the fixed readiness test, evaluator code, or label permissions. This initial implementation supports package-based additions to the reviewed Python/notation/OCR profile. It does not automatically author arbitrary Dockerfiles, provision GPUs, install arbitrary downloaded model bundles or promise an Audiveris runtime. Such capabilities need a reviewed profile and an appropriate end-to-end readiness test.
+```sh
+uv run python -m goalagent.environment_check --run-dir runs/environment-verification
+```
 
-## Inputs are a contract
+The check exercises synthetic export, parsing and OCR, then independent command workspaces using the same immutable image. It does not use research labels or establish transcription accuracy.
 
-Every managed assignment includes:
+## Ask for additional capabilities
+
+An experiment engineer calls `request_environment` with the missing capability and observed failure. The assignment returns `environment_blocked`, preserving its work. The coordinator can delegate a distinct setup assignment to the configured environment engineer, then start a new engineering assignment with the prepared environment and relevant inherited artifacts. Continuing an existing assignment does not change its frozen execution policy.
+
+The generic environment engineer can write a synthetic smoke script and call `prepare_environment` with:
 
 ```json
 {
-  "mode": "explore",
-  "parent": null,
-  "approach": "A specific recognition intervention",
-  "objective": "A distinct local task, not the overall goal",
-  "success_criteria": "Measurable output and comparison requirements",
-  "required_inputs": ["baseline:audiveris-enlarged"],
-  "environment": "music-python"
+  "system_packages": ["tesseract-ocr"],
+  "python_packages": ["Pillow==11.3.0"],
+  "smoke_script": "smoke.py"
 }
 ```
 
-The dataset inspection tool returns an artifact catalog. Declared baseline predictions must exist, be nonempty and pass hashes before dispatch. The host copies only allowlisted prediction artifacts from the benchmark directory, including original model exports when available. It never searches reference labels as a fallback. The assignment contains an inventory and checksums. The baseline directory is mounted read-only and checked again after execution; source snapshots cannot overwrite it.
+These values illustrate the interface, not a complete music environment. Include the packages actually needed by the capability under test. The host fixes the base image, validates package syntax, builds an isolated context and executes the smoke script. The build never mounts the project, reference data, host credentials or Docker socket. The proposed smoke test proves execution of that capability; it is not a replacement for protected evaluation.
 
-The host validates declared dependencies, not the semantics of arbitrary prose. A lead that fails to declare an implied dependency can still make a poor assignment. The prompt explicitly requires declaring predictions when preserving baseline melody; complete semantic enforcement is not claimed.
+The generic cache is run-local. A successful receipt and immutable image can be reused by later assignments; Docker layers may also accelerate a fresh run. Unlimited mode removes the generic build-attempt cap. Full logs stay on disk; returned observations contain the first diagnostic and a bounded tail.
 
-All supplied labels remain available to the evaluator. Supervised training access is not added by this change; it requires a separately declared training split. The existing development set is not a held-out evaluation set.
+## Protect inputs and image identity
 
-## Environment reuse and readiness
+The music adapter reads preserved predictions from `research/baselines/first-benchmark`, not generated `runs/` output. The provenance manifest records their original paths and hashes. The supplied reference labels remain in `research/data` and are read only by the protected scorer. The adapter delivers seven images and fourteen prediction/export artifacts to the coordinator; downstream engineers receive only explicitly delegated inputs.
 
-The reviewed profile provides Python, Pillow, music21, converter21, Verovio and Tesseract. The base image is digest-pinned; base Python requirements are exported from the project lockfile with hashes. Additional Python requirements are exact-version pins. Resolved Python and Debian package versions are captured with the immutable resulting image identity.
+Task assets are pinned by hash. Handoff manifests record actual files and their provenance; required inputs must exist before dispatch. Agent file tools cannot write input or baseline directories. Docker mounts assigned inputs read-only, mounts only that assignment's workspace, and provides no host Docker socket. Prepared experiment commands run without network. Research roles can use network tools only when the task and their role grants permit them.
 
-The registry key covers the recipe, base dependency lock, platform, smoke-test contents, sandbox code and relevant resource policy. Cache reuse checks the image identity and resolved-lock checksum. A changed key or missing image/lock cannot silently reuse readiness. A published image is reused while each experiment gets a separate writable workspace. Each build receives a unique retained tag, even for the same recipe key in different registries; a later build cannot move the tag that keeps a running experiment’s image available. The cache key also includes the worker user/group IDs.
+Each build receives a unique retained image tag and records its immutable image ID. A later build does not move the tag keeping a previously assigned image available. Reuse verifies readiness receipts, image identity and captured dependency locks. The reviewed-profile key also covers the recipe, dependency lock, platform, synthetic smoke test, sandbox and relevant resource policy.
 
-Readiness runs in a fresh container with the same non-root user, read-only root, no network and resource limits as experiment commands. It checks writable temporary storage, a real synthetic MusicXML-to-kern export, nonempty notes parsed from the exported kern, and OCR on synthetic chord text. No research images or labels are used. This proves these capabilities execute; it does not prove transcription accuracy or Audiveris functionality.
+Dependency resolution during a future rebuild may differ for system packages or transitive additions. The resolved lock and image ID record what actually ran; byte-for-byte reproducibility of every future rebuild is not claimed. Automatic image garbage collection is not implemented.
 
-The base dependency lock is reproducible. Debian package requests and newly added transitive dependencies can still resolve differently when rebuilding after registry/package changes; the resolved lock and image ID disclose that. Image reuse is immutable, but byte-for-byte reproducible rebuilds of every future package change are not claimed. Preserve/export the built image if long-term offline reconstruction is needed.
+## Read the evidence
 
-## Setup budget and escalation
+Inspect the run's `bootstrap/` records for reviewed-profile setup, `environments/` for generic preparation, and each assignment's `execution-policy.json` for the image it actually received. Shared evidence and the environment catalog expose compact receipts to the coordinator. See the [operating guide](multi-agent-operating-guide.md) for the complete record map.
 
-The v2 goal allows 3 setup attempts, 2 environment-engineer model calls and 900 setup seconds, all within the same 80-call / 3,600-second total research budget. The four scientific experiments are a separate limit.
+Use a fresh run when changing code, the goal, role prompts, the environment profile or acceptance checks. A fresh research run uses new state and assignments; it may legitimately reuse a declared baseline and prepared image. Report cache warmth and setup time separately from research accuracy.
 
-A failed setup before an experiment engineer starts returns `environment_blocked` and releases that scientific experiment reservation. It produces no fake accuracy result. Setup attempts and calls are reserved before execution and recorded durably. Interrupted setup time is conservatively charged on recovery.
-
-An experiment engineer can use `request_environment` to report a missing dependency and stop. Work already dispatched remains a scientific experiment, with its partial source and failure evidence retained. The lead can use `prepare_environment` to request a bounded package repair, then assign a new experiment or choose another approach. The engineer does not continue quietly installing packages.
-
-Network access is disabled for managed experiment commands, system packages are read-only, and package installation is disabled in the prepared environment by default. This is an execution boundary, not a claim that a Python process can never write code: locally generated modules and scripts remain allowed. A writable workspace is necessary for experiments.
-
-## Durable evidence and context
-
-Every run records setup attempt/call counts, active setup time, image and lock identity, readiness receipts and cache hits. Build recipes, build logs, smoke logs and resolved locks are copied from the registry into run-owned artifacts. Full output stays on disk; receipts return the first diagnostic and a bounded tail. The environment engineer sees the request and compact failure evidence, not the research conversation or labels.
-
-The existing experiment seals now include the environment receipt. Changes to protected code or profile inputs require a new run. Pending actions retain the existing durable replay behavior; shell/build side effects are not guaranteed exactly once after process death. A successful readiness receipt can be reused after a crash without rerunning model decisions. Existing completion checks remain unchanged.
-
-## Verification
-
-Unit tests cover missing-input rejection, label exclusion, read-only baseline handoff, setup capacity, context boundaries, cache invalidation, package-input validation and bounded diagnostics. Docker tests verify isolation and protected scoring. A live research rerun must additionally report parseability, melody/chord error, model calls, setup time and reuse.
-
-A fresh research session means a new state directory, new assignments, no inherited experiment workspaces, and no previous session's conclusions in the prompt. It can still use the same declared benchmark and a prepared image. Report Docker layer/image cache warmth explicitly, and separate cold validation/build cost from reuse cost. One old run and one new run are a diagnostic comparison, not a controlled causal ablation.
-
-### 28 October 2026 verification outcome
-
-Implementation revision `c578de9` passed 87 regression tests and three separate real-Docker tests; both CI jobs passed. The initial live attempt exposed image-tag reuse across registries, which was fixed with unique retained publication tags and a real regression test.
-
-**Live research verification is inconclusive.** The first attempt dispatched an engineer with 14 baseline artifacts, but produced no predictions after the missing-image failure. Two fresh post-fix attempts (original model, then an explicitly separate alternate-model attempt) completed initial reviews but repeatedly timed out choosing an experiment. They were interrupted and preserved; neither dispatched an experiment engineer or produced a new accuracy measurement. PR #3 remains draft.
-
-Read the [team verification report](../output/pdf/prepared-environment-verification.pdf) and [machine-readable attempt summary](../runs/environment-followup-verification-20261028.json). Interruption records describe the actual stopped status; durable checkpoints remain unchanged with their pending actions. The two post-fix checkpoint audits passed, but that is not evidence of successful research completion. No process was left running. Timeout/interruption calls lack completed usage receipts, so complete token and dollar costs are unavailable.
+The earlier opt-in coordinator workflow and its reports are historical. Their source, commands and tracked evidence are preserved in the [pre-cleanup archive](repository-cleanup.md); they are no longer active entry points.

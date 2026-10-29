@@ -1,5 +1,0 @@
-{
-  "tool": "finish",
-  "argument": "{\"summary\": \"Integration fixture passed\", \"files\": [\"report.txt\"]}",
-  "why": "Deterministic integration verification"
-}

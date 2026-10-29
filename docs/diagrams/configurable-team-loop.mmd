@@ -1,0 +1,15 @@
+flowchart LR
+    task["Task and role config"] --> context["Agent context"]
+    context --> model["Model proposes action"]
+    model --> check["Host validates"]
+    check --> workspace["File tools"]
+    check --> docker["Docker command"]
+    check --> team["Delegate or evaluate"]
+    workspace --> record["Saved observation"]
+    docker --> record
+    team --> record
+    record --> context
+    classDef fixed fill:#eaf0f7,stroke:#64748b,color:#17243b;
+    classDef choice fill:#dceffd,stroke:#176c9e,color:#17243b;
+    class task,context,check,workspace,docker,team,record fixed;
+    class model choice;

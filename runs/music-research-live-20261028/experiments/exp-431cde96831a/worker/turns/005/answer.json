@@ -1,1 +1,0 @@
-{"tool":"run","argument":"cat bounded_preflight.py; cat diagnostics/gtk-repair-start.json; sed -n '1,45p' integrate.py; ls diagnostics; /sbin/ldconfig -p | grep -E 'libgtk-3|libGL.so|libasound'","why":"Read the exact inherited download URLs and deadline before restoring the missing runtimes; check native-library availability without changing OCR or conversion."}

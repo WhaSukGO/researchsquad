@@ -1,5 +1,0 @@
-{"type":"thread.started","thread_id":"01a18341-f632-73b2-8be3-5297bc5f7037"}
-{"type":"turn.started"}
-{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I’ll freeze a reproducible candidate, preserving usable supplied melody and documenting source-supported chords, parse checks, and unresolved timing.\n"}}
-{"type":"item.completed","item":{"id":"item_1","type":"agent_message","text":"{\"tool\":\"view_image\",\"argument\":\"source-contact-sheet.png\",\"why\":\"Inspect the supplied score images before choosing image-supported chord labels; prior OCR is ambiguous, and chord timing must remain explicitly uncertain where alignment cannot be established.\"}"}}
-{"type":"turn.completed","usage":{"input_tokens":25956,"cached_input_tokens":0,"cache_write_input_tokens":0,"output_tokens":207,"reasoning_output_tokens":119}}
