@@ -1,0 +1,6 @@
+# Keep protected notation bytes stable across Windows and Linux checkouts.
+*.krn -text
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf

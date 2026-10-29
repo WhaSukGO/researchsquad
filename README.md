@@ -1,5 +1,33 @@
 # Goalagent: an evidence-driven research coordinator
 
+## Managed roles and workflows
+
+The common `Agent` now supports a host-managed workflow (`policy_version: 2`).
+JSON/Markdown still define role behavior and tool grants. Workflow configuration
+now requires stage owners, each independent reviewer, concrete work/rework,
+actual action receipts and candidate decisions. One sequential host scheduler
+dispatches the work; there are no role-specific Agent subclasses.
+
+Start with [the managed operating guide](docs/managed-workflow.md) for configuration,
+the exact files to change, recovery and music usage. [Implementation notes](docs/managed-workflow-notes.md)
+separate changes, verification and remaining limits.
+The [Korean implementation guide](docs/managed-workflow-ko.md) explains responsibility,
+artifact handoffs, disagreement and the changes from the previous team's operation.
+
+```sh
+uv run python -m goalagent.managed_check --run-dir tmp/managed-check-01
+uv run python -m goalagent.team --task goals/managed-sort.json --run-dir tmp/managed-live-01
+uv run python -m goalagent.music_team --run-dir tmp/music-charter-01 --completion-stage R0
+```
+
+The first command uses scripted decisions with real Docker; the others use the
+configured model login. Prepare the execution image as described in the guide.
+Music defaults now mean all 32 development samples, managed research stages and
+finite effort; `--unlimited` and the seven-sample scope are explicit choices.
+Existing custom workflows without version 2 retain coordinator-directed behavior.
+Changed code/configuration always needs a fresh run. Historical run descriptions
+below retain their original policies and do not describe the new defaults.
+
 New research runs use a coordinator with independent coding workers and a protected
 music evaluator. The coordinator gives each worker a specific objective and chooses
 whether to explore a new approach, improve a measured candidate, or debug a failed

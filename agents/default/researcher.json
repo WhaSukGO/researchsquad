@@ -17,7 +17,8 @@
     "finish",
     "checkpoint",
     "submit_report",
-    "read_artifact"
+    "read_artifact",
+    "review_gate"
   ],
   "limits": {
     "max_steps": 16,

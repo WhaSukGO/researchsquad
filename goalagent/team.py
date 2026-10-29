@@ -90,6 +90,7 @@ class Team:
         self.state.setdefault('claims', {})
         self.state.setdefault('objections', {})
         self.state.setdefault('trusted_events', {})
+        self.state.setdefault('acceptances', {})
         self.state.setdefault('events', [])
         self.state.setdefault('workflow', workflow.initial_state(self.workflow_spec))
         self.artifact_store = ArtifactStore(self.folder / 'artifacts')
@@ -102,6 +103,10 @@ class Team:
         for config in self.state['specialists'].values():self.definitions[config['id']]=validate_agent(config)
         for extension in self.state['extensions'].values():self.install_extension(extension)
         self.started=None
+        self.managed=None
+        if self.workflow_spec.get('policy_version')==2:
+            from .stage_runtime import StageRuntime
+            self.managed=StageRuntime(self)
 
     def close(self):
         if getattr(self,'_lock',None) and not self._lock.closed:self._lock.close()
@@ -154,6 +159,7 @@ class Team:
     def run_agent(self,id,config,assignment,continuation=None):
         folder=self.folder/'agents'/id
         effective=copy.deepcopy(config)
+        if self.managed:effective['system_prompt'] += self.managed.instructions(assignment)
         # Scripts are sandbox capabilities; read-only roles never gain execution.
         if 'run' in effective['tools']:
             effective['tools']+=sorted(self.state['extensions'])
@@ -163,12 +169,16 @@ class Team:
         policy_path=folder/'execution-policy.json'
         if policy_path.exists():policy=json.loads(policy_path.read_text())
         else:policy=self.policy(effective);atomic_json(policy_path,policy)
-        instance=Agent(folder,assignment,self.provider_factory(effective),policy,effective,self.registry,self.sandbox_factory)
+        provider=self.provider_factory(effective)
+        if isinstance(provider,CodexProvider):provider.preflight()
+        instance=Agent(folder,assignment,provider,policy,effective,self.registry,self.sandbox_factory)
         instance.validate_report = lambda report: self.validate_assignment_report(report,assignment)
         instance.record_action = lambda record: self.action_evidence(id, record, folder)
         instance.team_context = lambda: {'run_id': self.folder.name, 'state_revision': self.state['workflow']['state_revision'],
             'stage': self.state['workflow']['stage'], 'run_status': self.state['workflow']['run_status'],
             'calls_used': self.state['calls'], 'unlimited': self.task.get('unlimited', False)}
+        if self.managed:
+            instance.team_context=lambda:self.managed.context(assignment)
         # Tools are frozen at dispatch. Their source is host-owned, mounted as inputs.
         for name in effective['tools']:
             if name.startswith('script.'):
@@ -176,11 +186,13 @@ class Team:
                 target=instance.workspace/'inputs'/'tools'/f'{extension["hash"]}.py'
                 target.parent.mkdir(parents=True,exist_ok=True);target.write_text(extension['source'])
         # Team-owned environment escalation is available even before first build.
-        return instance.run(self.charge,self.remaining, checkpoint_interval=None if id=='lead' else effective.get('checkpoint_interval',8), continuation=continuation)
+        return instance.run(self.charge,self.remaining, checkpoint_interval=(self.workflow_spec['work_policy']['coordinator_checkpoint_interval'] if id=='lead' else self.workflow_spec['work_policy']['checkpoint_interval']) if self.managed else (None if id=='lead' else effective.get('checkpoint_interval',8)), continuation=continuation)
 
     def validate_assignment_report(self, report, assignment):
         validate_report(report,self.state['evidence'],set(self.state['artifacts']) | set(self.state['assignments']) |
-            set(self.state['claims']) | {g['id'] for s in self.workflow_spec['stages'] for g in s['gates']})
+            set(self.state['claims']) | {g['id'] for s in self.workflow_spec['stages'] for g in s['gates']} |
+            (set(self.managed.board.jobs) if self.managed else set()))
+        if self.managed:self.managed.validate_report(report,assignment)
         if report['status']=='DONE' and not {o['path'] for o in assignment.get('required_outputs',[])}<=set(report['files']):
             raise ValueError('DONE report omits required outputs; use NEEDS_INPUT or FAILED with partial work')
 
@@ -193,8 +205,18 @@ class Team:
             artifacts.append(self.register_artifact(raw, owner=id, path='logs/'+log.name)['artifact_id'])
         evidence_id = f"action-{id}-{record['step']:06}"
         self.record(evidence_id, {'kind':'tool_result','verification':'PENDING', 'verified_scope':'Execution receipt only; claims require separate verification',
-                                  'assignment_id':id,'receipt':record,'artifact_ids':artifacts})
+                                  'assignment_id':id,'target':self.action_target(record),'receipt':record,'artifact_ids':artifacts})
         return evidence_id
+    @staticmethod
+    def action_target(record):
+        argument=record.get('argument','')
+        if record.get('tool') in {'read_file','write_file','read_artifact','read_evidence'}:
+            try:
+                data=json.loads(argument)
+                return data.get('path',data.get('id',argument))
+            except (ValueError,TypeError):pass
+        return argument
+
     def dispatch_id(self, agent, action):
         return 'dispatch-' + digest({'caller':str(agent.folder.relative_to(self.folder)), 'step':agent.state['steps'], 'action':action})[:24]
 
@@ -208,8 +230,12 @@ class Team:
         return str(path.relative_to('/input-check'))
 
     def delegate(self, agent, action, timeout):
+        if self.managed:return self.managed.delegate(agent,action,timeout)
+        return self._delegate(agent,action,timeout)
+
+    def _delegate(self, agent, action, timeout, *, defer=False, dispatch_override=None):
         data=json.loads(action['argument'])
-        if not isinstance(data,dict) or set(data)-{'agent','objective','success_criteria','inputs','input_artifact_ids','parent','mode','review_of','required_outputs','acceptance_checks'}:
+        if not isinstance(data,dict) or set(data)-{'agent','objective','success_criteria','inputs','input_artifact_ids','parent','mode','review_of','required_outputs','acceptance_checks','work_id','review_scope','report_paths'}:
             raise ValueError('Unknown assignment fields')
         required_outputs,acceptance_checks=assignment_requirements(data)
         for output in required_outputs:
@@ -222,25 +248,33 @@ class Team:
         if data['objective'].strip()==self.task['goal'].strip():raise ValueError('Translate the goal into a distinct task')
         depth=agent.assignment.get('depth',0)+1
         if depth>limit(self.task['budget']['max_depth']):raise ValueError('Delegation depth exceeded')
-        dispatch=self.dispatch_id(agent,action)
-        if dispatch in self.state['dispatches']:return self.receipt(self.state['dispatches'][dispatch])
+        dispatch=dispatch_override or self.dispatch_id(agent,action)
+        if dispatch in self.state['dispatches'] and not defer:return self.receipt(self.state['dispatches'][dispatch])
         mode=data.get('mode','explore');parent=data.get('parent')
-        if mode not in {'explore','improve','debug'}:raise ValueError('Unknown branch mode')
+        if mode not in ({'explore','improve','debug','revise'} if self.managed else {'explore','improve','debug'}):raise ValueError('Unknown branch mode')
         if mode=='explore' and parent is not None:raise ValueError('Explore has no parent')
         if mode!='explore':
             if parent not in self.state['assignments']:raise ValueError('Unknown parent')
             if mode=='improve' and parent not in self.state['evaluations']:raise ValueError('Measure parent before improvement')
             if mode=='debug' and self.state['assignments'][parent].get('outcome',{}).get('status') not in {'budget_exhausted','environment_blocked','execution_error','needs_input','failed','interrupted'}:
                 raise ValueError('Debug requires failed execution')
+            if mode=='revise':
+                if not any(r['candidate']==parent and r['candidate_revision']==self.state['assignments'][parent]['candidate_revision'] and r['verdict']=='FAIL' for r in self.state['workflow']['reviews']):
+                    raise ValueError('Revise requires a failed review of the current frozen parent')
         review_of=data.get('review_of')
         if review_of is not None and review_of not in self.state['assignments']:raise ValueError('Unknown review candidate')
+        report_only=data.get('review_scope')=='report_only'
+        if data.get('review_scope','full') not in {'full','report_only'} or report_only and not review_of:
+            raise ValueError('Report-only scope requires a review candidate')
+        if report_only and (data.get('inputs') or data.get('input_artifact_ids') or parent):
+            raise ValueError('Report-only review cannot add unrelated inputs')
         id='task-'+dispatch[len('dispatch-'):]
         if id not in self.state['assignments']:
             if len(self.state['assignments'])>=limit(self.task['budget']['max_assignments']):raise ValueError('Assignment budget exhausted')
             inputs=data.get('inputs',{});ids=data.get('input_artifact_ids',{})
             if not isinstance(inputs,dict) or not isinstance(ids,dict) or len(inputs)+len(ids)>256:raise ValueError('Invalid input inventory')
             inventory={};raw_inputs={}
-            if parent or review_of:
+            if (parent or review_of) and not report_only:
                 source_id=parent or review_of
                 self.verify_submission(source_id)
                 for dest, original in self.state['assignments'][source_id]['assignment']['inputs'].items():
@@ -273,19 +307,34 @@ class Team:
                         'remaining_budget':{'model_calls':visible_remaining(limit(self.task['budget']['max_calls'])-self.state['calls']),
                                             'execution_seconds':visible_remaining(self.remaining())},
                         'parent_evaluation':self.state['evaluations'].get(parent),'environment':self.state['environment'],
-                        'review_of':review_of}
+                        'review_of':review_of,'work_id':data.get('work_id'),
+                        'review_scope':data.get('review_scope','full')}
+            if self.managed:assignment['managed']=True
             inherited=[]
             if parent or review_of:
                 source_id=parent or review_of
                 self.verify_submission(source_id)
                 source_entry=self.state['assignments'][source_id]
-                for artifact_id in source_entry.get('artifact_ids',[]):
+                chosen=source_entry.get('submitted_artifact_ids',[]) if report_only else source_entry.get('artifact_ids',[])
+                if report_only:
+                    paths=data.get('report_paths',[])
+                    if not paths:raise ValueError('Report-only scope needs configured report paths')
+                    chosen=[a for a in chosen if self.state['artifacts'][a]['path'] in paths]
+                    if {self.state['artifacts'][a]['path'] for a in chosen}!=set(paths):
+                        raise ValueError('Required report-only files are missing')
+                for artifact_id in chosen:
                     record=self.state['artifacts'][artifact_id];raw=self.artifact_store.read(record)
                     inherited.append(artifact_id)
                     target=workspace_path(self.folder/'agents'/id/'workspace'/'inputs'/'parent',record['path'])
                     target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
                 assignment['parent_artifacts']=inherited
                 assignment['review_revision']=source_entry['candidate_revision'] if review_of else None
+                assignment['candidate_receipt_id']=source_entry['receipt_id']
+                if report_only:
+                    assignment['goal']='Review only the supplied report for comprehension and scoped claims'
+                    assignment['review_files']=['inputs/parent/'+self.state['artifacts'][a]['path'] for a in chosen]
+                    assignment.pop('parent_evaluation',None)
+                    assignment.pop('environment',None)
             for dest,raw in raw_inputs.items():
                 target=workspace_path(self.folder/'agents'/id/'workspace'/'inputs',dest)
                 target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
@@ -293,12 +342,14 @@ class Team:
                 'caller':str(agent.folder.relative_to(self.folder)),'periods':0}
             atomic_json(self.folder/'tasks'/f'{id}.json',assignment)
             self.event('assignment',{'assignment_id':id,'agent':config['id'],'objective':data['objective'],'input_artifact_ids':[v['artifact_id'] for v in inventory.values()]})
+        if defer:return id,dispatch
         return self.execute_assignment(agent,id,dispatch)
 
     def receipt(self, id):
         return {'evidence_id':id,**self.evidence_record(id)}
 
     def continue_assignment(self, agent, action, timeout):
+        if self.managed:return self.managed.continue_assignment(agent,action,timeout)
         data=json.loads(action['argument'])
         if not isinstance(data,dict) or set(data)!={'assignment_id','checkpoint_id','guidance'}:raise ValueError('Invalid continuation fields')
         text(data['guidance'],'guidance',8000)
@@ -394,11 +445,14 @@ class Team:
                        'source_snapshot':entry.get('submission_hash'), 'evaluator_version':evaluator.version if evaluator else None})
 
     def project_state(self, agent, action, timeout):
+        if self.managed and agent.assignment.get('review_of'):
+            return self.managed.context(agent.assignment)
         state=copy.deepcopy(self.state['workflow'])
         state['gates']=workflow.gates(self,state['candidate'])
         state['decisions']=state['decisions'][-8:]
         state['reviews']=state['reviews'][-8:]
         return {'workflow':state,'definition':self.workflow_spec,'goal_met':self.state['goal_met'],
+                'work':self.managed.board.summary() if self.managed else [],
                 'assignments':{id:{'agent':entry['agent'],'objective':entry['assignment']['objective'],
                     'status':entry.get('outcome',{}).get('status','running'),'checkpoint_id':entry.get('checkpoint_id'),
                     'receipt_id':entry.get('receipt_id'),'parent':entry['assignment'].get('parent')}
@@ -416,17 +470,21 @@ class Team:
         if data['verdict'] not in {'PASS','FAIL','UNKNOWN'}:raise ValueError('Invalid review verdict')
         id=agent.folder.name
         candidate=data['candidate']
+        if candidate!=agent.assignment.get('review_of'):
+            raise ValueError('Review requires a separate assignment: candidate must equal assignment.review_of='+
+                str(agent.assignment.get('review_of'))+'; put candidate_receipt_id in evidence_ids, not candidate')
         entry=self.state['assignments'][candidate]
         self.verify_submission(candidate)
         if agent.assignment.get('review_of')!=candidate or agent.assignment.get('review_revision')!=entry['candidate_revision'] or id==candidate:
             raise ValueError('Review requires a separate assignment bound to the current candidate')
         rules=[g for s in self.workflow_spec['stages'] for g in s['gates'] if g['id']==data['gate_id']]
+        if self.managed:rules += self.managed.review_rules(data['gate_id'])
         if not rules or rules[0]['kind']!='review' or agent.config['id'] not in rules[0]['reviewers']:
             raise ValueError('Reviewer is not authorized for this gate')
         ids=strings(data['evidence_ids'],'evidence_ids',32)
         if data['verdict']=='PASS' and not ids:raise ValueError('Review PASS requires inspected evidence')
         if data['verdict']=='PASS' and not {entry['receipt_id'],'evaluation-'+candidate}.intersection(ids):
-            raise ValueError('Review must cite the current candidate receipt or measurement')
+            raise ValueError('Review evidence_ids must include candidate_receipt_id='+entry['receipt_id']+' or evaluation-'+candidate)
         for item in ids:self.evidence_record(item)
         evidence_id='review-'+self.dispatch_id(agent,action)
         record={**data,'candidate_revision':entry['candidate_revision'],'reviewer_assignment':id,
@@ -451,6 +509,8 @@ class Team:
             raise ValueError('External files must be bytes, at most 64 MB total')
         gate_verdicts=gate_verdicts or {}
         external_gates={g['id'] for s in self.workflow_spec['stages'] for g in s['gates'] if g['kind']=='external'}
+        if self.managed:
+            external_gates.update(j['work_id'] for j in self.managed.board.jobs.values() if j['owner'] in {'operator','executor'})
         if any(k not in external_gates or v not in {'PASS','FAIL','UNKNOWN'} for k,v in gate_verdicts.items()):
             raise ValueError('Only external gates accept trusted external verdicts')
         event_digest=digest({'request_id':request_id,'event_id':event_id,'summary':summary,
@@ -469,6 +529,8 @@ class Team:
         self.record(evidence_id,record)
         for gate_id,verdict in gate_verdicts.items():
             state['external'][gate_id]={**record,'verdict':verdict,'evidence_id':evidence_id}
+        self.state['acceptances'].pop(state['candidate'],None)
+        self.state['goal_met']=any(self.effective_evaluation(aid)['accepted'] for aid in self.state['evaluations'])
         state['pending_external']=None;state['run_status']='ACTIVE';state['state_revision']+=1
         self.state['trusted_events'][evidence_id]=event_digest
         lead=self.folder/'agents'/'lead'/'worker-state.json'
@@ -476,6 +538,7 @@ class Team:
             saved=json.loads(lead.read_text());saved['status']='running'
             saved['guidance']={'external_event':evidence_id,'summary':summary,'artifact_ids':artifacts}
             atomic_json(lead,saved)
+        if self.managed:self.managed.external_received(record)
         self.event('external_event',{'evidence_id':evidence_id,'request_id':request_id})
         return self.receipt(evidence_id)
 
@@ -490,6 +553,23 @@ class Team:
             saved=json.loads(lead.read_text());saved['status']='running';saved['guidance']=reason
             atomic_json(lead,saved)
         self.event('operator_resume',{'reason':reason,'scope':'Same pinned goal, evaluator, tools and budget'})
+
+    def retry_uncertain_action(self, assignment_id, reason):
+        """Operator-only recovery, never a model tool or automatic shell replay."""
+        if not self.managed:raise ValueError('Explicit execution retry is for managed workflows')
+        text(reason,'retry reason')
+        entry=self.state['assignments'][assignment_id]
+        path=self.folder/'agents'/assignment_id/'worker-state.json'
+        saved=json.loads(path.read_text())
+        step=saved.get('pending_execution_step')
+        receipt=self.folder/'agents'/assignment_id/'actions'/f'{step:03}.json' if step else None
+        if not step or receipt.exists() or not saved.get('pending'):
+            raise ValueError('No uncertain execution awaiting an operator decision')
+        saved.pop('pending_execution_step');saved['status']='running';atomic_json(path,saved)
+        job=next(j for j in self.managed.board.jobs.values() if j['assignment_id']==assignment_id)
+        entry.pop('outcome',None);job['status']='CHECKPOINTED'
+        self.state['workflow'].update(run_status='ACTIVE',pending_external=None)
+        self.event('execution_retry_authorized',{'assignment_id':assignment_id,'step':step,'reason':reason})
 
     def create_specialist(self,agent,action,timeout):
         data=json.loads(action['argument']);template=self.definitions[data['template']]
@@ -526,9 +606,19 @@ class Team:
         if result.get('exit_code')!=0 or result.get('interrupted'):return {'status':'test_failed','diagnostic':result}
         self.state['extensions'][name]=extension;self.save();self.install_extension(extension)
         return self.record('tool-'+extension['hash'][:16],{'registered':name,'test':result,'note':'Available to future execution agents. This smoke test is not protected scientific evaluation.'})
+    def _peer_review(self,agent,record):
+        candidate=agent.assignment.get('review_of')
+        if not self.managed or not candidate:return False
+        reviewer=record.get('reviewer_assignment')
+        if record.get('candidate')==candidate and reviewer not in (None,agent.folder.name):return True
+        source=record.get('assignment_id')
+        return source!=agent.folder.name and self.state['assignments'].get(source,{}).get('assignment',{}).get('review_of')==candidate
+
     def read_evidence(self,agent,action,timeout):
         data=json.loads(action['argument']);id=data['id']
         record=self.evidence_record(id)
+        if self._peer_review(agent,record):
+            raise ValueError('Independent reviewers cannot read peer review conclusions')
         offset=data.get('offset',0)
         if type(offset)is not int or offset<0:raise ValueError('Invalid offset')
         text=json.dumps(record);return {'id':id,'text':text[offset:offset+6000],'chars':len(text)}
@@ -536,6 +626,8 @@ class Team:
         data=json.loads(action['argument']);id=data['id'];offset=data.get('offset',0)
         if type(offset)is not int or offset<0:raise ValueError('Invalid offset')
         if id not in self.state['artifacts']:raise ValueError('Unknown artifact ID')
+        if self._peer_review(agent,{'assignment_id':self.state['artifacts'][id]['owner']}):
+            raise ValueError('Independent reviewers cannot read peer review artifacts')
         record=self.state['artifacts'][id];raw=self.artifact_store.read(record)
         return {'artifact':record,'offset':offset,'text':raw[offset:offset+6000].decode('utf-8',errors='replace')}
     def evaluate(self,agent,action,timeout):
@@ -548,9 +640,32 @@ class Team:
             result=evaluator(copy.deepcopy(snapshot),copy.deepcopy(self.task))
             if not isinstance(result,dict) or type(result.get('accepted')) is not bool:raise ValueError('Invalid evaluator verdict')
             self.state['evaluations'][id]=result;self.state['goal_met']|=result['accepted'];self.save()
-        return self.record('evaluation-'+id,{'assignment_id':id,'submission_hash':entry['submission_hash'],
+        base=self.record('evaluation-'+id,{'assignment_id':id,'submission_hash':entry['submission_hash'],
             'verification':'VERIFIED','verified_scope':'Protected evaluation of this frozen submission only',
             'evaluator_version':evaluator.version,'measurement':self.state['evaluations'][id]})
+        finalize=getattr(evaluator,'finalize',None)
+        if finalize:
+            external={gate:record for gate,record in self.state['workflow']['external'].items()
+                if record['candidate']==id and record['candidate_revision']==entry['candidate_revision']}
+            if external:
+                for record in external.values():
+                    self.evidence_record(record['evidence_id'])
+                    for artifact_id in record['artifact_ids']:self.artifact_store.read(self.state['artifacts'][artifact_id])
+                result=finalize(copy.deepcopy(self.state['evaluations'][id]),copy.deepcopy(external))
+                if not isinstance(result,dict) or type(result.get('accepted')) is not bool:raise ValueError('Invalid protected final acceptance')
+                eid='acceptance-'+id+'-'+digest(external)[:20]
+                receipt=self.record(eid,{'assignment_id':id,'submission_hash':entry['submission_hash'],
+                    'measurement':result,'evaluator_version':evaluator.version,
+                    'external_evidence_ids':[r['evidence_id'] for r in external.values()],
+                    'verified_scope':'Protected measurement plus explicit trusted verdicts for this same frozen candidate'})
+                self.state['acceptances'][id]={'evidence_id':eid,'measurement':result}
+                self.state['goal_met'] |= result['accepted'];self.save()
+                return receipt
+        return base
+
+    def effective_evaluation(self,id):
+        accepted=self.state['acceptances'].get(id)
+        return accepted['measurement'] if accepted else self.state['evaluations'].get(id)
     def prepare_environment(self,agent,action,timeout):
         from .team_environment import prepare
         started=time.monotonic()
@@ -562,11 +677,23 @@ class Team:
     def web(self,agent,action,timeout):
         if not agent.policy['network']:raise ValueError('Network access not granted by task owner')
         from urllib.parse import quote
+        from .web_sources import source_status, readable_html
         url='https://html.duckduckgo.com/html/?q='+quote(action['argument']) if action['tool']=='web_search' else action['argument']
         if not url.startswith(('http://','https://')):raise ValueError('HTTP(S) URL required')
-        script="import urllib.request;u="+repr(url)+";r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'ResearchSquad/1.0'}),timeout=30);b=r.read(1000001);assert len(b)<=1000000,'Response exceeds 1 MB';open('web-source.html','wb').write(b);print(b[:6000].decode('utf-8',errors='replace'))"
+        source=f'web-source-{agent.state["steps"]:03}.html'
+        text_file=f'web-source-{agent.state["steps"]:03}.txt'
+        script="import urllib.request;u="+repr(url)+";r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'ResearchSquad/1.0'}),timeout=30);b=r.read(1000001);assert len(b)<=1000000,'Response exceeds 1 MB';open("+repr(source)+",'wb').write(b);print(b[:6000].decode('utf-8',errors='replace'))"
         result=agent.sandbox.run('python -c '+shlex.quote(script),agent.folder/'logs'/f'{agent.state["steps"]:03}.log',timeout)
-        return {'url':url,'source_file':'web-source.html','result':result,'note':'Public search may deny automation; errors are not evidence of an exhaustive search.'}
+        status='retrieval_failed';excerpt=''
+        if result.get('exit_code')==0 and not result.get('interrupted'):
+            raw=read_file(agent.workspace,source,limit=1000000).decode('utf-8',errors='replace')
+            status=source_status(raw);readable=readable_html(raw,url)
+            workspace_path(agent.workspace,text_file).write_text(readable)
+            excerpt=readable[:6000]
+        return {'url':url,'status':status,'source_file':source,'text_file':text_file if status!='retrieval_failed' else None,
+                'text_excerpt':excerpt,'result':result,
+                'note':('Access blocked: this is not usable search/source evidence. Fetch a known official source or request an authorized alternative provider/original operator material.'
+                        if status=='access_blocked' else 'Retrieved transport is not semantic verification or an exhaustive search; inspect the saved source and text.')}
     def run(self):
         if self._lock.closed:
             self._lock=(self.folder/'run.lock').open('w')
@@ -584,6 +711,7 @@ class Team:
                     p=workspace_path(self.folder/'agents'/'lead'/'workspace'/'inputs',name);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)
                 for name,raw in self.assets.items():
                     p=workspace_path(self.folder/'agents'/'lead'/'workspace'/'inputs',name);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
+                if self.managed:return self.managed.run(assignment)
                 result=self.run_agent('lead',self.definitions['coordinator'],assignment)
                 self.state['outcome']=result
                 if self.state['workflow']['run_status']=='ACTIVE':
@@ -605,8 +733,11 @@ def main():
     parser.add_argument('--agents-dir');parser.add_argument('--model')
     parser.add_argument('--unlimited',action='store_true',help='Remove team/agent effort budgets and model/command deadlines')
     parser.add_argument('--workflow',help='Owner-selected research/product template or workflow JSON path; pinned for this run')
+    parser.add_argument('--completion-stage',help='Explicit partial completion scope for a managed workflow')
     parser.add_argument('--external-event',help='Trusted operator event JSON with request_id, event_id, summary, files and optional gate_verdicts')
     parser.add_argument('--resume-stopped',metavar='REASON',help='Explicitly continue a stopped run under its unchanged contract')
+    parser.add_argument('--retry-action',metavar='ASSIGNMENT_ID',help='Operator decision to repeat an uncertain managed execution')
+    parser.add_argument('--retry-reason',help='Why repeating that execution is safe')
     args=parser.parse_args()
     from .team_evaluators import EVALUATORS
     task=json.loads(Path(args.task).read_text())
@@ -614,13 +745,14 @@ def main():
     if args.workflow:
         path=ROOT/'workflows'/f'{args.workflow}.json' if args.workflow in {'research','product'} else Path(args.workflow)
         task['workflow']=json.loads(path.read_text())
+    if args.completion_stage:
+        if task.get('workflow',{}).get('policy_version')!=2:raise ValueError('Partial scope requires a managed workflow')
+        task['workflow']['completion_stage']=args.completion_stage
     task['assets']={name:str((Path(args.task).resolve().parent/path).resolve()) for name,path in task.get('assets',{}).items()}
     team=Team(args.run_dir,task,agents_dir=args.agents_dir,model=args.model,evaluators=EVALUATORS)
-    if args.external_event:
-        event_path=Path(args.external_event).resolve();event=json.loads(event_path.read_text())
-        event['files']={name:read_file((event_path.parent/source).resolve().parent,(event_path.parent/source).resolve().name,limit=MAX_FILE) for name,source in event['files'].items()}
-        team.accept_external(**event)
-    if args.resume_stopped:team.reopen_stopped(args.resume_stopped)
+    from .operator_controls import apply_controls
+    apply_controls(team,external_event=args.external_event,resume_stopped=args.resume_stopped,
+                   retry_action=args.retry_action,retry_reason=args.retry_reason)
     print(json.dumps({'outcome':team.run(),'goal_met':team.state['goal_met'],'calls':team.state['calls']}))
 
 if __name__=='__main__':main()

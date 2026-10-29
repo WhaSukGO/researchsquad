@@ -1,6 +1,12 @@
 # A default research team that can specialize
 
-The general team now uses one `Agent` model/tool loop. Roles are JSON definitions plus Markdown prompts; assignments are separate data. Eight defaults are available: coordinator, planner, researcher, experiment engineer, environment engineer, critic, experience and strategy. The coordinator commissions only the roles needed. See [checkpoints, evidence and stage decisions](checkpoints-and-workflows.md) for the new operating protocol.
+Current extension: [managed workflows](managed-workflow.md) require owners and all
+configured reviewers while retaining the common Agent. There are now nine default
+roles, including a restricted report reader. Version-1 behavior and historical
+music results below are preserved as context; new music runs default to the managed
+32-sample finite-budget configuration.
+
+The general team uses one `Agent` model/tool loop. Roles are JSON definitions plus Markdown prompts; assignments are separate data. The defaults are coordinator, planner, researcher, experiment engineer, environment engineer, critic, experience, strategy and report reader. The coordinator commissions optional work; managed policy additionally enforces required contributions. See [checkpoints, evidence and stage decisions](checkpoints-and-workflows.md) for the earlier operating protocol.
 
 ## Start a team
 

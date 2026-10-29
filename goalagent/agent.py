@@ -161,16 +161,27 @@ class Agent:
                     else:
                         observation = saved_receipt['observation']
                 else:
+                    unsafe = action.get('tool') in {'run','prepare_environment'} or str(action.get('tool','')).startswith('script.')
+                    guarded = self.assignment.get('managed') and unsafe
+                    if guarded and self.state.get('pending_execution_step') == self.state['steps']:
+                        self.state['status'] = 'action_uncertain'
+                        self.state['uncertain_reason'] = 'Reserved external execution has no committed receipt; operator retry decision required'
+                        self.save()
+                        break
+                    if guarded:
+                        self.state['pending_execution_step'] = self.state['steps']
+                        self.save()
                     try:
                         observation = self.execute(action, min(limit(self.policy["command_timeout"]), remaining()))
                     except Exception as error:
                         observation = {"error": type(error).__name__, "detail": str(error)[:2000]}
-                record = {"step": self.state["steps"], "tool": action.get("tool"),
+                record = {"step": self.state["steps"], "tool": action.get("tool"), "argument":action.get('argument',''),
                           "why": str(action.get("why", ""))[:1000], "observation": observation}
                 atomic_json(self.folder / "actions" / f'{self.state["steps"]:03}.json',
                             {"action": action, **record})
                 self.state["history"].append(record)
                 self.state["pending"] = None
+                self.state.pop('pending_execution_step',None)
                 if hasattr(self, 'record_action'):
                     record['evidence_id'] = self.record_action(record)
                 self.state["active_seconds"] = base + time.monotonic() - started
@@ -181,5 +192,6 @@ class Agent:
 
     def outcome(self):
         return {"status": self.state["status"], "steps": self.state["steps"],
+                "uncertain_reason": self.state.get('uncertain_reason'),
                 "report": self.state.get('report'), "progress": self.state.get('progress'),
                 "last_observation": self.state["history"][-1]["observation"] if self.state["history"] else {}}
