@@ -29,7 +29,7 @@ class StageRuntime:
                 if 'review_gate' not in config['tools']:
                     raise ValueError('Required reviewer needs review_gate grant')
                 if stage['review_scopes'].get(role) == 'report_only':
-                    if set(config['tools']) - {'read_file','view_image','checkpoint','submit_report','review_gate'}:
+                    if set(config['tools']) - {'read_file','view_image','checkpoint','submit_report','check_report','review_gate'}:
                         raise ValueError('Report-only reviewer has excessive tool grants')
                     if not stage['report_paths']:
                         raise ValueError('Report-only reviewer needs report_paths')

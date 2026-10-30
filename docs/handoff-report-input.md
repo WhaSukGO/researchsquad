@@ -20,3 +20,23 @@ job_output_files context. Tool permission and job ownership are both required.
 This change is committed independently before report-input work. Negative tests
 cover running/foreign jobs, traversal, read-only inputs, symlinks and overwrites;
 the positive test preserves exact bytes through the existing submission snapshot.
+
+## 2. Structured report input and preflight
+
+The model action schema now allows a typed report argument object for submit_report
+and check_report. Nested claims require document/empirical scope, and objections
+provide the actual category/severity enums. Unused sections are empty arrays;
+failure_kind is null unless appropriate. The common Agent serializes this object
+into the existing host tool protocol; old string arguments remain compatible.
+No scope, evidence, category or conclusion is inferred or silently repaired.
+
+check_report runs the same current assignment/evidence checks and artifact capture
+checks as submission, but does not submit or change assignment status. It can save
+a local immutable validation snapshot and its ordinary action receipt. A successful
+preflight is not a review or scientific acceptance; submission validates again.
+Optional preflight is not a mandatory extra model call. Semantic evidence mismatch
+may still be rejected even when constrained decoding produces valid structure.
+
+This is a separate commit. Tests cover typed normalization, required scope/enums,
+unknown evidence rejection in preflight and submission, protected input exclusion,
+and a typed response running through the common Agent loop.
