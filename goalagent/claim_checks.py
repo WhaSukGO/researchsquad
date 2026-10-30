@@ -13,7 +13,8 @@ def successful(receipt):
     result = observation.get('result')
     if isinstance(result, dict) and (result.get('exit_code', 0) != 0 or result.get('interrupted')):
         return False
-    return observation.get('status') not in {'test_failed', 'environment_blocked', 'access_blocked', 'retrieval_failed'}
+    return observation.get('status') not in {'test_failed', 'environment_blocked', 'access_blocked', 'retrieval_failed',
+        'FAILED','CANCELLED','LOST','START_FAILED','START_UNCERTAIN'}
 
 
 def validate_claims(team, report, assignment):
@@ -24,7 +25,8 @@ def validate_claims(team, report, assignment):
             if successful(record['receipt']):
                 receipts[eid] = record
     actions = {'searched': {'web_search'}, 'read': {'web_fetch', 'read_file', 'read_artifact', 'read_evidence'},
-               'executed': {'run'}, 'image_received': {'view_image'}}
+               'executed': {'run'}, 'image_received': {'view_image'},
+               'job_started':{'start_job','resume_job'},'job_completed':{'job_status','await_job'}}
     for action in report.get('execution_records', []):
         matches = [receipts.get(eid) for eid in action['evidence_ids']]
         if not matches or any(not r or r['assignment_id'] != assignment['task_id'] or
@@ -32,6 +34,8 @@ def validate_claims(team, report, assignment):
             raise ValueError('Execution assertion requires successful actions by this assignment')
         if not any(r.get('target') == action['target'] for r in matches):
             raise ValueError('Execution assertion target does not match receipt')
+        if action['action']=='job_completed' and not all(r['receipt']['observation'].get('status')=='SUCCEEDED' for r in matches):
+            raise ValueError('Job completion requires an observed SUCCEEDED job, not a start receipt')
     delivered = {v['artifact_id'] for v in assignment.get('inputs', {}).values()}
     delivered.update(assignment.get('parent_artifacts', []))
     for claim in report.get('claims', []):

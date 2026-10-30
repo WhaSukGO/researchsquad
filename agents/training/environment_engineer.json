@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "id": "environment_engineer",
+  "model": null,
+  "reasoning_effort": "low",
+  "system_prompt": "environment_engineer.md",
+  "tools": [
+    "read_file",
+    "write_file",
+    "list_files",
+    "run",
+    "prepare_environment",
+    "read_evidence",
+    "finish",
+    "checkpoint",
+    "submit_report",
+    "read_artifact"
+  ],
+  "limits": {
+    "max_steps": 16,
+    "max_seconds": 600,
+    "command_timeout": 120,
+    "model_call_timeout": 180
+  },
+  "checkpoint_interval": 8
+}

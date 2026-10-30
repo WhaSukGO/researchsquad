@@ -8,7 +8,9 @@ Start with the [Korean operating guide](docs/managed-workflow-ko.md),
 [configuration and recovery guide](docs/managed-workflow.md), and
 [implementation notes](docs/managed-workflow-notes.md).
 The [training benchmark proposal](docs/training-benchmark-plan-ko.md) describes nine
-projects and the work still needed to specialize this system for deep learning.
+research projects. [Training operations](docs/training-runtime.md) and the
+[measured implementation report](docs/training-runtime-results-ko.md) describe the
+implemented job/checkpoint/trace path and its remaining research limitations.
 
 ![The reusable agent loop](docs/diagrams/configurable-team-loop.png)
 
@@ -62,9 +64,10 @@ Custom version-1 workflows retain their coordinator-directed interface.
 | `runs/`, `tmp/`, `output/` | Local generated output, ignored by Git |
 
 Default containers currently have no GPU grant, a 2 GB memory limit and two CPUs.
-GPU-enabled training, large checkpoint storage and managed long-running training
-jobs are proposed extensions, not implemented training capabilities. See the
-[hardware and training assessment](docs/training-benchmark-plan-ko.md).
+Opt-in GPU profiles, detached jobs, large dataset/model references and observable
+traces are now implemented; see [training operations](docs/training-runtime.md).
+The [benchmark plan](docs/training-benchmark-plan-ko.md) describes the research
+quality questions beyond the included fixed learning fixture.
 
 ## Verify
 

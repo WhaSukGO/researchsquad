@@ -32,9 +32,16 @@ def workspace_path(root, relative):
 
 def read_file(root, relative, limit=1_000_000):
     path = workspace_path(root, relative)
-    # Container commands have completed before host file operations. O_NOFOLLOW
-    # adds a final-component check; nlink rejects worker-created hard links.
-    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    # Detached jobs can still mutate output directories: pin every parent with
+    # openat/O_NOFOLLOW, not just the final filename, to avoid symlink races.
+    relative_parts=path.relative_to(Path(root).resolve()).parts
+    directory=os.open(Path(root).resolve(),os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+    try:
+        for part in relative_parts[:-1]:
+            next_directory=os.open(part,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=directory)
+            os.close(directory);directory=next_directory
+        fd=os.open(relative_parts[-1],os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK,dir_fd=directory)
+    finally:os.close(directory)
     try:
         import stat
         info = os.fstat(fd)

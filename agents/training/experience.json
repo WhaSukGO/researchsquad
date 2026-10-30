@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "id": "experience",
+  "model": null,
+  "reasoning_effort": "low",
+  "system_prompt": "experience.md",
+  "tools": [
+    "read_file",
+    "list_files",
+    "search_files",
+    "write_file",
+    "read_evidence",
+    "finish",
+    "checkpoint",
+    "submit_report",
+    "read_artifact",
+    "review_gate"
+  ],
+  "limits": {
+    "max_steps": 16,
+    "max_seconds": 600,
+    "command_timeout": 120,
+    "model_call_timeout": 180
+  },
+  "checkpoint_interval": 8
+}

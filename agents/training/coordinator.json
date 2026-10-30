@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "coordinator",
+  "model": null,
+  "reasoning_effort": "low",
+  "system_prompt": "coordinator.md",
+  "tools": [
+    "catalog",
+    "delegate",
+    "create_specialist",
+    "evaluate",
+    "read_evidence",
+    "read_file",
+    "write_file",
+    "list_files",
+    "finish",
+    "submit_report",
+    "read_artifact",
+    "continue_assignment",
+    "project_state",
+    "propose_decision",
+    "training_catalog",
+    "start_job",
+    "job_status",
+    "await_job",
+    "cancel_job",
+    "resume_job",
+    "register_model",
+    "evaluate_model",
+    "record_decision",
+    "register_dataset",
+    "read_job_output"
+  ],
+  "limits": {
+    "max_steps": 24,
+    "max_seconds": 1800,
+    "command_timeout": 120,
+    "model_call_timeout": 180
+  },
+  "checkpoint_interval": 8
+}
