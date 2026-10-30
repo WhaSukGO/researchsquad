@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "id": "researcher",
+  "model": null,
+  "reasoning_effort": "low",
+  "system_prompt": "researcher.md",
+  "tools": [
+    "read_file",
+    "write_file",
+    "list_files",
+    "search_files",
+    "run",
+    "web_search",
+    "web_fetch",
+    "view_image",
+    "read_evidence",
+    "finish",
+    "checkpoint",
+    "submit_report",
+    "read_artifact",
+    "review_gate",
+    "training_catalog",
+    "register_dataset",
+    "record_decision"
+  ],
+  "limits": {
+    "max_steps": 16,
+    "max_seconds": 600,
+    "command_timeout": 120,
+    "model_call_timeout": 180
+  },
+  "checkpoint_interval": 8
+}

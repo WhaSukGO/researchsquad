@@ -1,5 +1,7 @@
 {
   "date": "2026-10-30",
+  "record_scope": "Historical readiness probe before training-runtime implementation; values below are not the current implementation status",
+  "superseded_by": "docs/verification/training-runtime-20261030.json",
   "windows_gpu": {
     "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
     "memory_mib": 16384,

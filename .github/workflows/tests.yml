@@ -57,3 +57,5 @@ jobs:
         run: uv run --no-sync python -m goalagent.checkpoint_check --run-dir /tmp/checkpoint-verification
       - name: Verify managed work, required reviewers and measured improvement
         run: uv run --no-sync python -m goalagent.managed_check --run-dir /tmp/managed-workflow-verification
+      - name: Verify detached job recovery, deadlines, cancellation and large storage
+        run: uv run --no-sync python -m goalagent.training_check --run-dir /tmp/training-runtime-verification

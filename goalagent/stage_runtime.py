@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import copy
 import json
+import time
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -72,8 +73,9 @@ Use the SAME Agent loop: write files, run tools and inspect actual outputs befor
 submit_report. Saving code and executing it are steps of the same work ID.
 Each claim has scope=document or empirical. Attribute another worker's measurement;
 do not call reading a report an independent execution. execution_records entries
-{action:searched|read|executed|image_received,target,evidence_ids} must match your
+{action:searched|read|executed|image_received|job_started|job_completed,target,evidence_ids} must match your
 successful action receipts. Copy the target from that receipt.
+job_completed requires an observed SUCCEEDED job_status/await_job receipt; a started job is not completed training.
 Optional report work_items have {existing_work_id,owner,objective,input_artifact_ids,
 required_tools,acceptance_check,blocking}. Use an existing W-ID when referring to
 the same job, and an empty existing_work_id only for new work. Missing data or
@@ -372,6 +374,12 @@ next_actions are recorded proposals; only typed work_items request additional di
 
     def _wake(self):
         for job in self.board.jobs.values():
+            if job.get('wait_kind')=='training':
+                entry=self.team.state['assignments'][job['assignment_id']]
+                jid=entry.get('waiting_training_job')
+                if jid and self.team.training.status(self.team.training.state['jobs'][jid])['status'] in {'RUNNING','STARTING'}:continue
+                entry.pop('waiting_training_job',None);job.pop('wait_kind',None)
+                self.board.set_status(job,'CHECKPOINTED');continue
             if job['status']=='WAITING' and job['depends_on'] and all(self.board.jobs[d]['status']=='DONE' for d in job['depends_on']):
                 for dep in job['depends_on']:
                     for aid in self.board.jobs[dep]['result_artifact_ids']:
@@ -460,14 +468,19 @@ next_actions are recorded proposals; only typed work_items request additional di
             self.seed();self._wake()
             ready=[j for j in self.board.ready(self.stage()['id']) if j['blocking']]
             if ready:
+                entry=self.team.state['assignments'].get(ready[0]['assignment_id'],{})
+                if entry.get('waiting_training_job'):
+                    ready[0]['wait_kind']='training';self.board.set_status(ready[0],'WAITING');continue
                 try:self._period(ready[0])
                 except (OSError,ValueError,RuntimeError) as error:
                     self.board.set_status(ready[0],'WAITING',str(error))
                 continue
-            blocked=[j for j in self.board.pending(self.stage()['id']) if j['status']=='WAITING']
+            blocked=[j for j in self.board.pending(self.stage()['id']) if j['status']=='WAITING' and j.get('wait_kind')!='training']
             if blocked:
                 self._wait('; '.join(j['work_id']+' '+j['owner']+': '+'; '.join(j['feedback'][-2:]) for j in blocked))
                 break
+            if any(j.get('wait_kind')=='training' for j in self.board.pending(self.stage()['id'])):
+                time.sleep(.5);continue
             lead_file=self.team.folder/'agents'/'lead'/'worker-state.json'
             continuation=None
             if lead_file.exists():

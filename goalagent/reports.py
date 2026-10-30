@@ -77,7 +77,7 @@ def validate_report(data, evidence_ids=(), targets=()):
         if not isinstance(data.get(name, []), list) or len(data.get(name, [])) > 16:
             raise ValueError('Invalid '+name)
     for record in data.get('execution_records', []):
-        if not isinstance(record, dict) or set(record) != {'action','target','evidence_ids'} or record['action'] not in {'searched','read','executed','image_received'}:
+        if not isinstance(record, dict) or set(record) != {'action','target','evidence_ids'} or record['action'] not in {'searched','read','executed','image_received','job_started','job_completed'}:
             raise ValueError('Invalid execution record')
         text(record['target'], 'execution target', 32000)
         if not set(strings(record['evidence_ids'], 'evidence_ids', 32)) <= known:

@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-30",
+  "scope": "First local training/runtime/observable-trace implementation; not autonomous research evaluation",
+  "environment": {
+    "platform": "Ubuntu 24.04 WSL2 + Docker on Windows",
+    "python": "3.12",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "vram_mib": 16384,
+    "driver": "576.80",
+    "torch": "2.9.1+cu128",
+    "cuda": "12.8",
+    "image_id": "sha256:c58935a25f5b8a96de0bd7beae77dd88889433c4b964697a29376b0ae049a97b",
+    "package_snapshot": "environments/training-cuda/resolved-packages.txt",
+    "rebuild_scope": "Runtime pins immutable resulting image; Dockerfile does not fully lock transitive dependencies"
+  },
+  "regression": {
+    "command": "python -m pytest -q",
+    "passed": 122,
+    "skipped": 3,
+    "seconds": 135.6,
+    "skipped_scope": "Three explicit opt-in real Docker tests, all passed separately",
+    "opt_in_command": "GOALAGENT_DOCKER_TESTS=1 python -m pytest -q tests/test_sandbox.py tests/test_environments.py tests/test_budgets.py -k \"real_ or two_registries or unlimited_command\"",
+    "opt_in_passed": 3,
+    "opt_in_seconds": 14.58,
+    "targeted_passed": 32,
+    "targeted_scope": "training and managed workflow tests"
+  },
+  "cpu_lifecycle": {
+    "status": "passed",
+    "real_docker": true,
+    "actual_model_calls": 0,
+    "detached_host_reopen": "SUCCEEDED",
+    "large_checkpoint_bytes": 20000000,
+    "deadline_exit_code": 124,
+    "cancel_status": "CANCELLED",
+    "scope": "Runtime lifecycle and storage; not GPU training"
+  },
+  "managed_workflow": {
+    "status": "passed",
+    "model": "scripted decisions; no live reasoning",
+    "real_docker": true,
+    "work_id": "W-0001",
+    "owner_attempts": 2,
+    "protected_acceptance": [
+      false,
+      true
+    ],
+    "required_reviewers": [
+      "critic",
+      "experience",
+      "report_reader"
+    ],
+    "reserved_calls": 30,
+    "resume_added_calls": 0,
+    "scope": "Execution, work identity, protected failure/improvement, report-only handoff and all-role reviews; not research quality"
+  },
+  "fashion_mnist": {
+    "status": "passed",
+    "provider": "scripted validation choices, not live model reasoning",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "torch": "2.9.1+cu128",
+    "cuda": "12.8",
+    "training": [
+      {
+        "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+        "torch": "2.9.1+cu128",
+        "cuda": "12.8",
+        "resumed_from_epoch": 0,
+        "completed_epochs": 1,
+        "optimizer_steps": 108,
+        "finite_gradients": true,
+        "parameter_delta_norm": 0.4814680516719818,
+        "peak_vram_bytes": 479848448,
+        "elapsed_seconds": 2.5494914739974774,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 0.6275469402443279,
+            "validation_accuracy": 0.8444,
+            "optimizer_steps": 108
+          }
+        ],
+        "train_samples": 55000,
+        "validation_samples": 5000
+      },
+      {
+        "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+        "torch": "2.9.1+cu128",
+        "cuda": "12.8",
+        "resumed_from_epoch": 1,
+        "completed_epochs": 2,
+        "optimizer_steps": 216,
+        "finite_gradients": true,
+        "parameter_delta_norm": 0.7030189633369446,
+        "peak_vram_bytes": 493875200,
+        "elapsed_seconds": 3.0053474720007216,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 0.6275469402443279,
+            "validation_accuracy": 0.8444,
+            "optimizer_steps": 108
+          },
+          {
+            "epoch": 2,
+            "loss": 0.37029236661737613,
+            "validation_accuracy": 0.8788,
+            "optimizer_steps": 216
+          }
+        ],
+        "train_samples": 55000,
+        "validation_samples": 5000
+      },
+      {
+        "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+        "torch": "2.9.1+cu128",
+        "cuda": "12.8",
+        "resumed_from_epoch": 0,
+        "completed_epochs": 2,
+        "optimizer_steps": 216,
+        "finite_gradients": true,
+        "parameter_delta_norm": 0.7030189633369446,
+        "peak_vram_bytes": 479848448,
+        "elapsed_seconds": 4.486792800002149,
+        "history": [
+          {
+            "epoch": 1,
+            "loss": 0.6275469402443279,
+            "validation_accuracy": 0.8444,
+            "optimizer_steps": 108
+          },
+          {
+            "epoch": 2,
+            "loss": 0.37029236661737613,
+            "validation_accuracy": 0.8788,
+            "optimizer_steps": 216
+          }
+        ],
+        "train_samples": 55000,
+        "validation_samples": 5000
+      }
+    ],
+    "checkpoint_bytes": 38913781,
+    "resume_comparison": {
+      "max_abs_difference": 0.0,
+      "identical": true
+    },
+    "evaluations": [
+      {
+        "accepted": true,
+        "test": {
+          "accuracy": 0.8697,
+          "loss": 0.3524301143884659,
+          "samples": 10000
+        },
+        "untrained": {
+          "accuracy": 0.1448,
+          "loss": 2.3015141620635986,
+          "samples": 10000
+        },
+        "scope": "Fixed short-run training validation, not architecture research or multi-seed comparison"
+      },
+      {
+        "accepted": true,
+        "test": {
+          "accuracy": 0.8697,
+          "loss": 0.3524301143884659,
+          "samples": 10000
+        },
+        "untrained": {
+          "accuracy": 0.1448,
+          "loss": 2.3015141620635986,
+          "samples": 10000
+        },
+        "scope": "Fixed short-run training validation, not architecture research or multi-seed comparison"
+      }
+    ],
+    "dataset_id": "dataset-8c682cf5484af479b2eeaaf1",
+    "test_labels_delivered_to_training": false,
+    "reserved_scripted_calls": 26,
+    "resume_added_calls": 0,
+    "scope": "Real learning/storage/exact epoch-resume/isolated CPU evaluation; one seed, fixed architecture, not autonomous research performance"
+  },
+  "actual_provider_trace": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "actual_model_calls": 3,
+    "selected_actions": [
+      "read_file",
+      "write_file",
+      "submit_report"
+    ],
+    "span_count": 8,
+    "goal_met": false,
+    "scope": "Read supplied text, write file, submit report; no learning or scientific acceptance",
+    "source_changes_after_this_run": [
+      "fashion_check.py"
+    ]
+  },
+  "final_code_fixtures": {
+    "fashion-gpu-final-verified": {
+      "changed_modules_since_run": []
+    },
+    "training-lifecycle-verified": {
+      "changed_modules_since_run": [
+        "fashion_check.py"
+      ]
+    },
+    "managed-training-release": {
+      "changed_modules_since_run": [
+        "fashion_check.py"
+      ]
+    }
+  },
+  "failure_record": [
+    {
+      "run": "training-lifecycle-01",
+      "blocked_step": "Container launch",
+      "cause": "Docker local log driver compression/max-file option conflict",
+      "fix": "Explicit compress=false and preserve stderr"
+    },
+    {
+      "run": "training-lifecycle-02",
+      "blocked_step": "Reopen detached Team under DrvFS",
+      "cause": "Relative cwd became unavailable",
+      "fix": "Resolve run folders to absolute paths before launch"
+    },
+    {
+      "run": "training-lifecycle-03",
+      "blocked_step": "Terminate nonroot child at deadline",
+      "cause": "Supervisor lacked KILL after dropping capabilities",
+      "fix": "Supervisor-only KILL capability; child inherits no capabilities"
+    },
+    {
+      "run": "fashion-gpu-01",
+      "blocked_step": "Load safetensors.torch before training",
+      "cause": "Missing packaging dependency",
+      "fix": "Pin packaging and add build import/backprop check"
+    },
+    {
+      "run": "fashion-gpu-01",
+      "blocked_step": "Stop fixture after failed job",
+      "cause": "Fixed step scenario continued on success path",
+      "fix": "Fail fast with FAILED report instead of consuming all scripted choices"
+    }
+  ],
+  "limitations": [
+    "Fashion-MNIST task/review choices are scripted; not a live autonomous research study",
+    "One seed and fixed CNN, only two epochs; no architecture or multi-seed comparison",
+    "Epoch-boundary equivalence only; arbitrary optimizer/scheduler/mid-batch restore remains experiment code responsibility",
+    "Not GPU saturation/throughput telemetry or VRAM hard quota; unrelated GPU apps are not excluded",
+    "Run-local blob storage; no garbage collection, cross-run deduplication or automatic large-file backup",
+    "Output monitoring is periodic rather than hard disk quota",
+    "START_UNCERTAIN/LOST requires owner intervention; no blind relaunch",
+    "Local trace viewer with best-effort redaction, not hosted LangSmith or hidden reasoning collection",
+    "New model architectures require reviewed registered evaluator adapters; generic CLI does not auto-load them",
+    "Linux/WSL execution only, not native Windows"
+  ],
+  "local_runs": {
+    "fashion": "tmp/fashion-gpu-final-verified",
+    "cpu": "tmp/training-lifecycle-verified",
+    "managed": "tmp/managed-training-release",
+    "actual_provider": "tmp/live-trace-verified"
+  },
+  "report": "docs/training-runtime-results-ko.md",
+  "ci": "GitHub check status on PR head is authoritative; GPU evidence is local manual verification"
+}
