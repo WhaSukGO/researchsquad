@@ -20,6 +20,11 @@ Direct job output publication and typed report input are described in
 Engineering packaging and no missing report-field errors, but no reduction in
 overall calls or repeated reading. It records both improvements and remaining gaps.
 
+[Actual-agent recovery validation](recovery-results-ko.md) exercises an externally
+killed training container, invalid input dimensions and nonfinite loss. The source
+and replay guide are in research/recovery/; these bounded seeded incidents do not
+establish generic recovery from arbitrary failures.
+
 ## Order and file ownership
 
 Define contracts first, implement the runtime and tracing together, verify CPU

@@ -1,0 +1,1983 @@
+{
+  "scope": "Actual model diagnosis/repair/reviews; fixed seeded faults and host interruption, not scripted recovery actions",
+  "cases": [
+    {
+      "case": "case-01",
+      "goal_met": true,
+      "run_status": "COMPLETED",
+      "reservations": 93,
+      "returned_actions": 91,
+      "models": [
+        "gpt-6-astra"
+      ],
+      "wall_seconds": 1159.303025,
+      "verification": {
+        "accepted": true,
+        "kind": "interruption",
+        "initial_job": "job-9f51b07ab341230464cc97ea",
+        "recovered_job": "job-cab7c250cb5a175d2ba068cd",
+        "model_id": "model-7f6800ebd1a8c810e112b021",
+        "validation": {
+          "accuracy": 0.8582,
+          "loss": 0.39737747421264646,
+          "samples": 5000,
+          "spec": {
+            "family": "mlp",
+            "width": 16,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "scope": "Independent validation inference, not official test or general recovery proof",
+        "resume_comparison": {
+          "max_abs_difference": 0.0,
+          "identical": true
+        },
+        "resumed_from_epoch": 1,
+        "injection": {
+          "job_id": "job-9f51b07ab341230464cc97ea",
+          "action": "external Docker SIGKILL",
+          "returncode": 0,
+          "boundary": {
+            "epoch": 1,
+            "steps": 108
+          },
+          "time": 1793379679.2812383
+        }
+      },
+      "roles": [
+        {
+          "assignment": "task-feb95b2824d2014c7d6e386f",
+          "role": "experiment_engineer",
+          "scope": "full",
+          "status": "submitted",
+          "steps": 37,
+          "report": {
+            "status": "DONE",
+            "summary": "Recovered training through checkpoint continuation using two launches and unchanged source. Required deliverables and final weights are preserved; protected evaluation and independent reviews remain pending.",
+            "files": [
+              "report.md",
+              "recovery.json",
+              "train.py",
+              "fashion_model.py",
+              "fashion_study_models.py",
+              "outputs/initial/boundary.json",
+              "outputs/initial/checkpoint.pt",
+              "outputs/recovered/metrics.json",
+              "outputs/recovered/checkpoint.pt",
+              "outputs/recovered/weights.safetensors",
+              "outputs/recovered/job-result.json"
+            ],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "document",
+                "statement": "The delivered report documents the initial failure, checkpoint continuation, reported learning metrics, final model registration, preserved outputs and unresolved termination cause.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000035"
+                ],
+                "limitations": "Reading the report verifies its contents, not independent scientific validity."
+              },
+              {
+                "scope": "empirical",
+                "statement": "The successful continuation receipt and improving training-produced metrics support restored learning after interruption.",
+                "epistemic_status": "inferred",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000010",
+                  "action-task-feb95b2824d2014c7d6e386f-000018",
+                  "action-task-feb95b2824d2014c7d6e386f-000019"
+                ],
+                "limitations": "Protected saved-weight evaluation remains pending. The initiating termination cause and bitwise equivalence to uninterrupted training are unestablished."
+              }
+            ],
+            "objections": [],
+            "next_actions": [
+              {
+                "action": "Evaluate registered model model-7f6800ebd1a8c810e112b021 with the protected recovery evaluator and dispatch the required research, critic and report-reader reviews.",
+                "owner": "coordinator",
+                "expected_information": "Independent validation of saved weights and review of recovery lineage, preserved constraints and report clarity.",
+                "acceptance_check": "Protected measurement and all required frozen-stage reviews pass before advancement.",
+                "requires_external": false
+              }
+            ],
+            "open_questions": [
+              "What initiated the initial process termination?",
+              "Will protected evaluation and required reviews accept the frozen candidate?"
+            ],
+            "work_items": [],
+            "execution_records": [
+              {
+                "action": "read",
+                "target": "report.md",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000035"
+                ]
+              },
+              {
+                "action": "job_completed",
+                "target": "job-cab7c250cb5a175d2ba068cd",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000018"
+                ]
+              }
+            ],
+            "candidate_decisions": []
+          },
+          "input_names": [
+            "protocol.txt",
+            "starter.py",
+            "fashion_model.py",
+            "fashion_study_models.py"
+          ],
+          "parent_paths": []
+        },
+        {
+          "assignment": "task-fb7c7fc996346ab229207b7d",
+          "role": "researcher",
+          "scope": "full",
+          "status": "submitted",
+          "steps": 18,
+          "report": {
+            "status": "DONE",
+            "summary": "Completed independent research review and recorded PASS for RECOVERY-review-research. Reviewed evidence supports genuine checkpoint continuation and restored learning; protected saved-weight performance remains a separate coordinator gate.",
+            "files": [],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "document",
+                "statement": "The research review gate records PASS for the frozen candidate task-feb95b2824d2014c7d6e386f.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-fb7c7fc996346ab229207b7d-000017"
+                ],
+                "limitations": "This is an independent review, not independent training execution or protected evaluation."
+              },
+              {
+                "scope": "empirical",
+                "statement": "Exact file comparisons passed for the frozen training source and both helpers against the supplied originals.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-fb7c7fc996346ab229207b7d-000016"
+                ],
+                "limitations": "Source equality establishes preservation of the supplied implementation, not scientific validity by itself."
+              },
+              {
+                "scope": "document",
+                "statement": "Inspected receipts establish failed-job checkpoint registration and final recovered-model registration. Reviewed runtime evidence supports continuation through epoch 3 and improving reported learning, including final validation accuracy 0.8582.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-fb7c7fc996346ab229207b7d-000014",
+                  "action-task-fb7c7fc996346ab229207b7d-000012",
+                  "action-task-fb7c7fc996346ab229207b7d-000017"
+                ],
+                "limitations": "Metrics are attributed to the recovered worker run. The initiating termination cause, uninterrupted-run equivalence, and protected saved-weight performance remain unresolved."
+              }
+            ],
+            "objections": [],
+            "next_actions": [
+              {
+                "action": "Evaluate the frozen registered final weights using the protected recovery evaluator and assess remaining required gates.",
+                "owner": "coordinator",
+                "expected_information": "Independent saved-weight validation performance and project acceptance.",
+                "acceptance_check": "Protected recovery evaluation and all required reviews pass.",
+                "requires_external": false
+              }
+            ],
+            "open_questions": [
+              "What initiated the original termination?",
+              "Does the registered final model pass the protected recovery evaluation?"
+            ],
+            "work_items": [],
+            "execution_records": [],
+            "candidate_decisions": []
+          },
+          "input_names": [
+            "protocol.txt",
+            "starter.py",
+            "fashion_model.py",
+            "fashion_study_models.py"
+          ],
+          "parent_paths": [
+            "report.md",
+            "recovery.json",
+            "train.py",
+            "fashion_model.py",
+            "fashion_study_models.py",
+            "outputs/initial/boundary.json",
+            "outputs/initial/checkpoint.pt",
+            "outputs/recovered/metrics.json",
+            "outputs/recovered/checkpoint.pt",
+            "outputs/recovered/weights.safetensors",
+            "outputs/recovered/job-result.json"
+          ]
+        },
+        {
+          "assignment": "task-c3cc77896c7949f537ac345d",
+          "role": "critic",
+          "scope": "full",
+          "status": "submitted",
+          "steps": 30,
+          "report": {
+            "status": "DONE",
+            "summary": "Completed the frozen-candidate evidence audit and recorded PASS for RECOVERY-review-auditor. No significant unresolved defect was found within the inspected scope. This review does not establish independent reproduction or protected model performance.",
+            "files": [],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "document",
+                "statement": "The assigned audit gate recorded PASS for frozen candidate task-feb95b2824d2014c7d6e386f, revision 454af744a64cdb94907aa6932d3986e6104678001808ae910eb0bc07cef814f6.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-c3cc77896c7949f537ac345d-000029"
+                ],
+                "limitations": "Scoped evidence review only; other gates and project acceptance remain under host authority."
+              },
+              {
+                "scope": "document",
+                "statement": "Inspected receipts document unchanged source copying and the required initial GPU launch configuration.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-c3cc77896c7949f537ac345d-000024",
+                  "action-task-c3cc77896c7949f537ac345d-000025"
+                ],
+                "limitations": "Receipt inspection is not an independent execution."
+              },
+              {
+                "scope": "empirical",
+                "statement": "The candidate's published metrics support restored learning: reported loss decreased from 0.7801 to 0.4353 and validation accuracy increased from 0.8218 to 0.8582, with continuation from epoch 1, 324 optimizer steps and finite gradients.",
+                "epistemic_status": "inferred",
+                "evidence_ids": [
+                  "action-task-c3cc77896c7949f537ac345d-000028"
+                ],
+                "limitations": "Measurements belong to the candidate's training run. Independently scoring saved weights requires the protected evaluator; metrics alone do not establish that result."
+              }
+            ],
+            "objections": [],
+            "next_actions": [],
+            "open_questions": [
+              "The initiating interruption cause remains unresolved.",
+              "Protected saved-weight evaluation and overall project acceptance remain for the host."
+            ],
+            "work_items": [],
+            "execution_records": [
+              {
+                "action": "read",
+                "target": "inputs/protocol.txt",
+                "evidence_ids": [
+                  "action-task-c3cc77896c7949f537ac345d-000027"
+                ]
+              },
+              {
+                "action": "read",
+                "target": "inputs/parent/outputs/recovered/metrics.json",
+                "evidence_ids": [
+                  "action-task-c3cc77896c7949f537ac345d-000028"
+                ]
+              }
+            ],
+            "candidate_decisions": []
+          },
+          "input_names": [
+            "protocol.txt",
+            "starter.py",
+            "fashion_model.py",
+            "fashion_study_models.py"
+          ],
+          "parent_paths": [
+            "report.md",
+            "recovery.json",
+            "train.py",
+            "fashion_model.py",
+            "fashion_study_models.py",
+            "outputs/initial/boundary.json",
+            "outputs/initial/checkpoint.pt",
+            "outputs/recovered/metrics.json",
+            "outputs/recovered/checkpoint.pt",
+            "outputs/recovered/weights.safetensors",
+            "outputs/recovered/job-result.json"
+          ]
+        },
+        {
+          "assignment": "task-dca96872595168b28b9edf4f",
+          "role": "report_reader",
+          "scope": "report_only",
+          "status": "submitted",
+          "steps": 4,
+          "report": {
+            "status": "DONE",
+            "summary": "Completed report-only comprehension review and recorded PASS with minor clarification requests. Recovery, reported learning, unresolved termination cause and pending evaluation are clearly scoped. This review is not independent execution or product acceptance.",
+            "files": [],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "document",
+                "statement": "The report describes checkpoint continuation, attributes metrics to training outputs and explicitly states unresolved cause and pending protected evaluation.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "limitations": "Only the delivered report was inspected; underlying experiments and artifacts were not verified."
+              },
+              {
+                "scope": "document",
+                "statement": "The report-reader gate was recorded as PASS with minor clarification requests.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000002"
+                ],
+                "limitations": "The verdict addresses comprehension and claim presentation only."
+              }
+            ],
+            "objections": [
+              {
+                "target_id": "task-feb95b2824d2014c7d6e386f",
+                "category": "EXPERIENCE",
+                "severity": "MINOR",
+                "statement": "The table heading “Training loss” leaves the loss function and aggregation method unspecified.",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "resolution_test": "Name the loss function and explain epoch aggregation, including weighting across batches or examples."
+              },
+              {
+                "target_id": "task-feb95b2824d2014c7d6e386f",
+                "category": "EXPERIENCE",
+                "severity": "MINOR",
+                "statement": "“Validation accuracy” and “0.8582” do not explicitly define the metric or its units.",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "resolution_test": "Define accuracy, confirm values are fractions and specify whether evaluation covers all 5,000 validation examples."
+              },
+              {
+                "target_id": "task-feb95b2824d2014c7d6e386f",
+                "category": "EXPERIENCE",
+                "severity": "MINOR",
+                "statement": "“The recovery uses the fixed architecture” and “dataset `dataset-47ecb8520382bd72b45fdd58`” leave the architecture and dataset/task unnamed for a report-only reader.",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "resolution_test": "Briefly name the architecture and dataset/task alongside the existing identifier."
+              }
+            ],
+            "next_actions": [],
+            "open_questions": [
+              "Which loss function and epoch aggregation produced training loss?",
+              "How is validation accuracy defined, and are values fractions over all 5,000 validation examples?",
+              "What architecture and dataset/task are referenced?"
+            ],
+            "work_items": [],
+            "execution_records": [
+              {
+                "action": "read",
+                "target": "inputs/parent/report.md",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ]
+              }
+            ],
+            "candidate_decisions": []
+          },
+          "input_names": [],
+          "parent_paths": [
+            "report.md"
+          ]
+        },
+        {
+          "assignment": "lead",
+          "role": "coordinator",
+          "scope": null,
+          "status": "completed",
+          "steps": 4,
+          "report": null,
+          "input_names": [],
+          "parent_paths": []
+        }
+      ],
+      "decisions": [
+        {
+          "role": "experiment_engineer",
+          "step": 13,
+          "summary": "The unchanged initial job job-9f51b07ab341230464cc97ea failed with exit 137 after completing epoch 1; Docker reported OOMKilled=false. Logs show loss 0.7801373763604598, validation accuracy 0.8218 and 108 optimizer steps, and boundary.json confirms epoch 1/108 steps. Evidence: action-task-feb95b2824d2014c7d6e386f-000010, action-task-feb95b2824d201c7d6e386f-000011, action-task-feb95b2824d2014c7d6e386f-000012. Working diagnosis is process interruption compatible with SIGKILL; the initiating cause is unknown. This is not a scientific negative result. Select registration and genuine continuation from checkpoint.pt, retaining the unchanged source and failed job. The next test must demonstrate restored epoch and optimizer steps, restored RNG/sample order, and completion through epoch 3 with finite training and validation metrics.",
+          "candidates": [
+            {
+              "kind": "recovery",
+              "target": "register checkpoint.pt from job-9f51b07ab341230464cc97ea and resume_job",
+              "status": "SELECTED",
+              "reason": "An epoch-boundary checkpoint exists after 108 steps. Test its usability and continuation before considering a source repair or restart; evidence action-task-feb95b2824d2014c7d6e386f-000011 and action-task-feb95b2824d2014c7d6e386f-000012."
+            },
+            {
+              "kind": "diagnosis",
+              "target": "External process interruption",
+              "status": "SELECTED",
+              "reason": "Leading working explanation for exit 137 without a Python traceback; exact termination source remains unproven. Evidence action-task-feb95b2824d2014c7d6e386f-000011."
+            },
+            {
+              "kind": "diagnosis",
+              "target": "Memory exhaustion",
+              "status": "DEFERRED",
+              "reason": "Docker OOMKilled=false weighs against a container OOM kill but does not establish the termination source. If continuation fails, inspect its termination status and logs for memory evidence before requesting environment recovery."
+            },
+            {
+              "kind": "diagnosis",
+              "target": "Numerical or implementation defect",
+              "status": "DEFERRED",
+              "reason": "The available log reports finite epoch-1 loss and no numerical exception. Resume with unchanged finite checks; any resulting traceback or nonfinite check failure will discriminate this explanation."
+            }
+          ]
+        }
+      ],
+      "errors": [
+        {
+          "role": "experiment_engineer",
+          "step": null,
+          "tool": "model",
+          "error": {
+            "error": "Structured report argument requires report tool"
+          }
+        },
+        {
+          "role": "experiment_engineer",
+          "step": 28,
+          "tool": "submit_report",
+          "error": {
+            "error": "ValueError",
+            "detail": "Observed empirical claim needs successful source/execution evidence"
+          }
+        },
+        {
+          "role": "experiment_engineer",
+          "step": 29,
+          "tool": "checkpoint",
+          "error": {
+            "error": "ValueError",
+            "detail": "Cannot preserve inputs/starter.py: Submit authored files, not read-only inputs"
+          }
+        },
+        {
+          "role": "experiment_engineer",
+          "step": 34,
+          "tool": "check_report",
+          "error": {
+            "error": "ValueError",
+            "detail": "Observed document claim needs evidence for delivered material"
+          }
+        },
+        {
+          "role": "researcher",
+          "step": null,
+          "tool": "model",
+          "error": {
+            "error": "Structured report argument requires report tool"
+          }
+        },
+        {
+          "role": "report_reader",
+          "step": 3,
+          "tool": "submit_report",
+          "error": {
+            "error": "ValueError",
+            "detail": "Unknown objection target"
+          }
+        }
+      ],
+      "unvalidated_decision_citation_typos": [
+        {
+          "role": "experiment_engineer",
+          "step": 13,
+          "unregistered_text_id": "action-task-feb95b2824d201c7d6e386f-000011"
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job-9f51b07ab341230464cc97ea",
+          "status": "FAILED",
+          "parent": null,
+          "request": {
+            "profile": "gpu",
+            "code_files": [
+              "train.py",
+              "fashion_model.py",
+              "fashion_study_models.py"
+            ],
+            "entrypoint": "train.py",
+            "args": [
+              "--data",
+              "/datasets/dataset-47ecb8520382bd72b45fdd58",
+              "--epochs",
+              "3"
+            ],
+            "dataset_ids": [
+              "dataset-47ecb8520382bd72b45fdd58"
+            ]
+          },
+          "source": "\"\"\"Training executable supplied for incident reproduction and recovery.\"\"\"\nimport os\nos.environ['CUBLAS_WORKSPACE_CONFIG']=':4096:8'\nimport argparse\nimport json\nfrom pathlib import Path\nimport time\nimport torch\nfrom safetensors.torch import save_file\nfrom fashion_model import images,labels\nfrom fashion_study_models import build\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--data',required=True);p.add_argument('--epochs',type=int,default=3);p.add_argument('--control',action='store_true');a=p.parse_args()\n    torch.set_num_threads(4);torch.manual_seed(1337);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False\n    assert torch.cuda.is_available(),'CUDA required'\n    spec={'family':'mlp','width':16,'hidden':256,'dropout':.2}\n    model=build(spec).cuda();optimizer=torch.optim.Adam(model.parameters(),lr=.001)\n    x=images(Path(a.data)/'images.gz');y=labels(Path(a.data)/'labels.gz')\n    train_x=x[:55000].cuda();train_y=y[:55000].cuda();val_x=x[55000:].cuda();val_y=y[55000:].cuda()\n    # INPUT_TRANSFORM\n    begin=0;steps=0;history=[];resume=Path('/checkpoints/resume')\n    if resume.exists():\n        saved=torch.load(resume,map_location='cuda',weights_only=True)\n        model.load_state_dict(saved['model']);optimizer.load_state_dict(saved['optimizer'])\n        begin=saved['epoch'];steps=saved['steps'];history=saved['history']\n        torch.set_rng_state(saved['torch_rng'].cpu());torch.cuda.set_rng_state_all([v.cpu() for v in saved['cuda_rng']])\n    print(json.dumps({'resumed_from_epoch':begin,'restored_optimizer_steps':steps,'input_shape':list(train_x.shape),'device':torch.cuda.get_device_name()}),flush=True)\n    for epoch in range(begin,a.epochs):\n        model.train();order=torch.randperm(len(train_y));total=0\n        for i in range(0,len(order),512):\n            ids=order[i:i+512].cuda();optimizer.zero_grad(set_to_none=True);logits=model(train_x[ids])\n            loss=torch.nn.functional.cross_entropy(logits,train_y[ids])\n            if not bool(torch.isfinite(loss)):\n                diagnostic={'epoch':epoch+1,'step':steps,'loss':str(float(loss.detach())),\n                    'logits_min':float(logits.detach().min()),'logits_max':float(logits.detach().max()),'input_finite':bool(torch.isfinite(train_x[ids]).all())}\n                Path('failure.json').write_text(json.dumps(diagnostic));print(json.dumps(diagnostic),flush=True)\n                raise FloatingPointError('non-finite training loss before backward; inspect failure.json')\n            loss.backward()\n            if not all(bool(torch.isfinite(v.grad).all()) for v in model.parameters() if v.grad is not None):raise FloatingPointError('non-finite gradient')\n            optimizer.step();steps+=1;total+=float(loss.detach())*len(ids)\n        model.eval();correct=0\n        with torch.inference_mode():\n            for i in range(0,len(val_y),256):correct+=int((model(val_x[i:i+256]).argmax(1)==val_y[i:i+256]).sum())\n        history.append({'epoch':epoch+1,'loss':total/len(train_y),'validation_accuracy':correct/len(val_y),'optimizer_steps':steps})\n        saved={'model':model.state_dict(),'optimizer':optimizer.state_dict(),'epoch':epoch+1,'steps':steps,'history':history,\n            'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all()}\n        torch.save(saved,'checkpoint.tmp');os.replace('checkpoint.tmp','checkpoint.pt')\n        print(json.dumps(history[-1]),flush=True)\n        if epoch==0 and begin==0 and not a.control:\n            Path('boundary.json').write_text(json.dumps({'epoch':1,'steps':steps}))\n            time.sleep(30)\n    save_file({k:v.detach().cpu().contiguous() for k,v in model.state_dict().items()},'weights.safetensors',metadata={'spec':json.dumps(spec)})\n    Path('metrics.json').write_text(json.dumps({'spec':spec,'seed':1337,'optimizer':'Adam','lr':.001,'batch_size':512,\n        'train_samples':55000,'validation_samples':5000,'resumed_from_epoch':begin,'optimizer_steps':steps,'finite_gradients':True,'history':history},indent=2))\n\nif __name__=='__main__':main()\n",
+          "metrics": null,
+          "terminal_observation": {
+            "job_id": "job-9f51b07ab341230464cc97ea",
+            "status": "FAILED",
+            "docker": {
+              "Status": "exited",
+              "Running": false,
+              "Paused": false,
+              "Restarting": false,
+              "OOMKilled": false,
+              "Dead": false,
+              "Pid": 0,
+              "ExitCode": 137,
+              "Error": "",
+              "StartedAt": "2026-10-30T17:01:11.980021168Z",
+              "FinishedAt": "2026-10-30T17:01:19.213384708Z"
+            }
+          },
+          "log": "{\"resumed_from_epoch\": 0, \"restored_optimizer_steps\": 0, \"input_shape\": [55000, 1, 28, 28], \"device\": \"NVIDIA GeForce RTX 3080 Laptop GPU\"}\n{\"epoch\": 1, \"loss\": 0.7801373763604598, \"validation_accuracy\": 0.8218, \"optimizer_steps\": 108}\n"
+        },
+        {
+          "id": "job-cab7c250cb5a175d2ba068cd",
+          "status": "SUCCEEDED",
+          "parent": "job-9f51b07ab341230464cc97ea",
+          "request": {
+            "profile": "gpu",
+            "code_files": [
+              "train.py",
+              "fashion_model.py",
+              "fashion_study_models.py"
+            ],
+            "entrypoint": "train.py",
+            "args": [
+              "--data",
+              "/datasets/dataset-47ecb8520382bd72b45fdd58",
+              "--epochs",
+              "3"
+            ],
+            "dataset_ids": [
+              "dataset-47ecb8520382bd72b45fdd58"
+            ],
+            "resume_model": "model-687622b7eebe3480dc8fefa1"
+          },
+          "source": "\"\"\"Training executable supplied for incident reproduction and recovery.\"\"\"\nimport os\nos.environ['CUBLAS_WORKSPACE_CONFIG']=':4096:8'\nimport argparse\nimport json\nfrom pathlib import Path\nimport time\nimport torch\nfrom safetensors.torch import save_file\nfrom fashion_model import images,labels\nfrom fashion_study_models import build\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--data',required=True);p.add_argument('--epochs',type=int,default=3);p.add_argument('--control',action='store_true');a=p.parse_args()\n    torch.set_num_threads(4);torch.manual_seed(1337);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False\n    assert torch.cuda.is_available(),'CUDA required'\n    spec={'family':'mlp','width':16,'hidden':256,'dropout':.2}\n    model=build(spec).cuda();optimizer=torch.optim.Adam(model.parameters(),lr=.001)\n    x=images(Path(a.data)/'images.gz');y=labels(Path(a.data)/'labels.gz')\n    train_x=x[:55000].cuda();train_y=y[:55000].cuda();val_x=x[55000:].cuda();val_y=y[55000:].cuda()\n    # INPUT_TRANSFORM\n    begin=0;steps=0;history=[];resume=Path('/checkpoints/resume')\n    if resume.exists():\n        saved=torch.load(resume,map_location='cuda',weights_only=True)\n        model.load_state_dict(saved['model']);optimizer.load_state_dict(saved['optimizer'])\n        begin=saved['epoch'];steps=saved['steps'];history=saved['history']\n        torch.set_rng_state(saved['torch_rng'].cpu());torch.cuda.set_rng_state_all([v.cpu() for v in saved['cuda_rng']])\n    print(json.dumps({'resumed_from_epoch':begin,'restored_optimizer_steps':steps,'input_shape':list(train_x.shape),'device':torch.cuda.get_device_name()}),flush=True)\n    for epoch in range(begin,a.epochs):\n        model.train();order=torch.randperm(len(train_y));total=0\n        for i in range(0,len(order),512):\n            ids=order[i:i+512].cuda();optimizer.zero_grad(set_to_none=True);logits=model(train_x[ids])\n            loss=torch.nn.functional.cross_entropy(logits,train_y[ids])\n            if not bool(torch.isfinite(loss)):\n                diagnostic={'epoch':epoch+1,'step':steps,'loss':str(float(loss.detach())),\n                    'logits_min':float(logits.detach().min()),'logits_max':float(logits.detach().max()),'input_finite':bool(torch.isfinite(train_x[ids]).all())}\n                Path('failure.json').write_text(json.dumps(diagnostic));print(json.dumps(diagnostic),flush=True)\n                raise FloatingPointError('non-finite training loss before backward; inspect failure.json')\n            loss.backward()\n            if not all(bool(torch.isfinite(v.grad).all()) for v in model.parameters() if v.grad is not None):raise FloatingPointError('non-finite gradient')\n            optimizer.step();steps+=1;total+=float(loss.detach())*len(ids)\n        model.eval();correct=0\n        with torch.inference_mode():\n            for i in range(0,len(val_y),256):correct+=int((model(val_x[i:i+256]).argmax(1)==val_y[i:i+256]).sum())\n        history.append({'epoch':epoch+1,'loss':total/len(train_y),'validation_accuracy':correct/len(val_y),'optimizer_steps':steps})\n        saved={'model':model.state_dict(),'optimizer':optimizer.state_dict(),'epoch':epoch+1,'steps':steps,'history':history,\n            'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all()}\n        torch.save(saved,'checkpoint.tmp');os.replace('checkpoint.tmp','checkpoint.pt')\n        print(json.dumps(history[-1]),flush=True)\n        if epoch==0 and begin==0 and not a.control:\n            Path('boundary.json').write_text(json.dumps({'epoch':1,'steps':steps}))\n            time.sleep(30)\n    save_file({k:v.detach().cpu().contiguous() for k,v in model.state_dict().items()},'weights.safetensors',metadata={'spec':json.dumps(spec)})\n    Path('metrics.json').write_text(json.dumps({'spec':spec,'seed':1337,'optimizer':'Adam','lr':.001,'batch_size':512,\n        'train_samples':55000,'validation_samples':5000,'resumed_from_epoch':begin,'optimizer_steps':steps,'finite_gradients':True,'history':history},indent=2))\n\nif __name__=='__main__':main()\n",
+          "metrics": {
+            "spec": {
+              "family": "mlp",
+              "width": 16,
+              "hidden": 256,
+              "dropout": 0.2
+            },
+            "seed": 1337,
+            "optimizer": "Adam",
+            "lr": 0.001,
+            "batch_size": 512,
+            "train_samples": 55000,
+            "validation_samples": 5000,
+            "resumed_from_epoch": 1,
+            "optimizer_steps": 324,
+            "finite_gradients": true,
+            "history": [
+              {
+                "epoch": 1,
+                "loss": 0.7801373763604598,
+                "validation_accuracy": 0.8218,
+                "optimizer_steps": 108
+              },
+              {
+                "epoch": 2,
+                "loss": 0.48705793815526094,
+                "validation_accuracy": 0.8472,
+                "optimizer_steps": 216
+              },
+              {
+                "epoch": 3,
+                "loss": 0.4353128329103643,
+                "validation_accuracy": 0.8582,
+                "optimizer_steps": 324
+              }
+            ]
+          },
+          "terminal_observation": {
+            "job_id": "job-cab7c250cb5a175d2ba068cd",
+            "status": "SUCCEEDED",
+            "docker": {
+              "Status": "exited",
+              "Running": false,
+              "Paused": false,
+              "Restarting": false,
+              "OOMKilled": false,
+              "Dead": false,
+              "Pid": 0,
+              "ExitCode": 0,
+              "Error": "",
+              "StartedAt": "2026-10-30T17:03:01.614708158Z",
+              "FinishedAt": "2026-10-30T17:03:09.147752404Z"
+            }
+          },
+          "log": "{\"resumed_from_epoch\": 1, \"restored_optimizer_steps\": 108, \"input_shape\": [55000, 1, 28, 28], \"device\": \"NVIDIA GeForce RTX 3080 Laptop GPU\"}\n{\"epoch\": 2, \"loss\": 0.48705793815526094, \"validation_accuracy\": 0.8472, \"optimizer_steps\": 216}\n{\"epoch\": 3, \"loss\": 0.4353128329103643, \"validation_accuracy\": 0.8582, \"optimizer_steps\": 324}\n"
+        }
+      ],
+      "source_patch": "",
+      "review_verdicts": [
+        {
+          "gate_id": "RECOVERY-review-research",
+          "candidate": "task-feb95b2824d2014c7d6e386f",
+          "verdict": "PASS",
+          "evidence_ids": [
+            "task-feb95b2824d2014c7d6e386f-dispatch-008fbd8294b1e6206503888e",
+            "action-task-fb7c7fc996346ab229207b7d-000016",
+            "action-task-fb7c7fc996346ab229207b7d-000011",
+            "action-task-fb7c7fc996346ab229207b7d-000012",
+            "action-task-fb7c7fc996346ab229207b7d-000014",
+            "action-task-fb7c7fc996346ab229207b7d-000015"
+          ],
+          "summary": "PASS for the scoped research review. Exact source comparison confirms that training and both helpers remain unchanged. Inspected receipts establish registration of the failed run's checkpoint, resume_job lineage and final model registration. Previously inspected runtime evidence records initial exit 137 with OOMKilled=false, followed by successful continuation through epoch 3 with restored optimizer steps. Reported decreasing training loss and validation accuracy reaching 0.8582 support restored learning beyond a successful exit. These are reviewed worker outputs, not independent training or protected performance measurements. The initiating termination cause and equivalence to an uninterrupted run remain unresolved. Protected saved-weight evaluation remains the coordinator's separate responsibility; this verdict does not approve that gate.",
+          "candidate_revision": "454af744a64cdb94907aa6932d3986e6104678001808ae910eb0bc07cef814f6",
+          "reviewer_assignment": "task-fb7c7fc996346ab229207b7d",
+          "scope": "Independent assignment review only; not an independent experiment or external observation",
+          "evidence_id": "review-dispatch-f87f0c8e958329dd5439b50b"
+        },
+        {
+          "gate_id": "RECOVERY-review-auditor",
+          "candidate": "task-feb95b2824d2014c7d6e386f",
+          "verdict": "PASS",
+          "evidence_ids": [
+            "task-feb95b2824d2014c7d6e386f-dispatch-008fbd8294b1e6206503888e",
+            "action-task-c3cc77896c7949f537ac345d-000023",
+            "action-task-c3cc77896c7949f537ac345d-000024",
+            "action-task-c3cc77896c7949f537ac345d-000025",
+            "action-task-c3cc77896c7949f537ac345d-000027",
+            "action-task-c3cc77896c7949f537ac345d-000028"
+          ],
+          "summary": "Scoped independent evidence review completed with no significant unresolved defect. Preserved audit findings cover original failure, checkpoint continuation, terminal success, model registration, unchanged helpers and direct output publication. Additional receipts verify successful unchanged source copying and the required initial GPU launch configuration. Published metrics report continuation from epoch 1, 324 optimizer steps, finite gradients, decreasing loss (0.7801 to 0.4353), and increasing validation accuracy (0.8218 to 0.8582), supporting restored learning beyond successful exit. This is source and receipt inspection, not independent training reproduction or protected scoring of saved weights. The initiating interruption cause remains unresolved; project acceptance and performance verification remain with the protected host evaluator.",
+          "candidate_revision": "454af744a64cdb94907aa6932d3986e6104678001808ae910eb0bc07cef814f6",
+          "reviewer_assignment": "task-c3cc77896c7949f537ac345d",
+          "scope": "Independent assignment review only; not an independent experiment or external observation",
+          "evidence_id": "review-dispatch-4390bb1811cd7f2447c0ba51"
+        },
+        {
+          "gate_id": "RECOVERY-review-report_reader",
+          "candidate": "task-feb95b2824d2014c7d6e386f",
+          "verdict": "PASS",
+          "evidence_ids": [
+            "task-feb95b2824d2014c7d6e386f-dispatch-008fbd8294b1e6206503888e",
+            "action-task-dca96872595168b28b9edf4f-000001"
+          ],
+          "summary": "Report-only review: the incident, continuation action, reported results, unresolved termination cause and pending evaluation are clearly scoped. No independent reproduction or product acceptance is established by this review. Minor clarification requests: for ‘Training loss’, identify the loss function and epoch aggregation; for ‘Validation accuracy’, specify the accuracy definition and confirm values are fractions; for ‘fixed architecture’ and dataset ‘dataset-47ecb8520382bd72b45fdd58’, briefly name the architecture and dataset/task so the report is understandable without source inspection. These omissions do not obscure the operational recovery claim or its stated limitations.",
+          "candidate_revision": "454af744a64cdb94907aa6932d3986e6104678001808ae910eb0bc07cef814f6",
+          "reviewer_assignment": "task-dca96872595168b28b9edf4f",
+          "scope": "Independent assignment review only; not an independent experiment or external observation",
+          "evidence_id": "review-dispatch-47011cccad5c0b4ff23f97d7"
+        }
+      ],
+      "provider_errors": [],
+      "wire_rejected_outputs": [
+        {
+          "source": "agents/task-fb7c7fc996346ab229207b7d/turns/001/answer.json",
+          "action": {
+            "tool": "list_files",
+            "argument": {
+              "status": "DONE",
+              "summary": "",
+              "files": [],
+              "failure_kind": null,
+              "claims": [],
+              "objections": [],
+              "next_actions": [],
+              "open_questions": [],
+              "work_items": [],
+              "execution_records": [],
+              "candidate_decisions": []
+            },
+            "why": "Locate frozen parent artifacts and review inputs."
+          }
+        },
+        {
+          "source": "agents/task-feb95b2824d2014c7d6e386f/turns/001/answer.json",
+          "action": {
+            "tool": "read_file",
+            "argument": {
+              "status": "NEEDS_INPUT",
+              "summary": "",
+              "files": [],
+              "failure_kind": null,
+              "claims": [],
+              "objections": [],
+              "next_actions": [],
+              "open_questions": [],
+              "work_items": [],
+              "execution_records": [],
+              "candidate_decisions": []
+            },
+            "why": "Read assignment source before unchanged reproduction."
+          }
+        }
+      ],
+      "injection": {
+        "job_id": "job-9f51b07ab341230464cc97ea",
+        "action": "external Docker SIGKILL",
+        "returncode": 0,
+        "boundary": {
+          "epoch": 1,
+          "steps": 108
+        },
+        "time": 1793379679.2812383
+      }
+    },
+    {
+      "case": "case-02",
+      "goal_met": true,
+      "run_status": "COMPLETED",
+      "reservations": 74,
+      "returned_actions": 72,
+      "models": [
+        "gpt-6-astra"
+      ],
+      "wall_seconds": 995.715316,
+      "verification": {
+        "accepted": true,
+        "kind": "shape",
+        "initial_job": "job-07db9d86b4e096625a0472d5",
+        "recovered_job": "job-60c88d110aff9fbb0cbb75dd",
+        "model_id": "model-d08af4af3b031610cef35669",
+        "validation": {
+          "accuracy": 0.8582,
+          "loss": 0.39737747421264646,
+          "samples": 5000,
+          "spec": {
+            "family": "mlp",
+            "width": 16,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "scope": "Independent validation inference, not official test or general recovery proof"
+      },
+      "roles": [
+        {
+          "assignment": "task-feb95b2824d2014c7d6e386f",
+          "role": "experiment_engineer",
+          "scope": "full",
+          "status": "submitted",
+          "steps": 35,
+          "report": {
+            "status": "DONE",
+            "summary": "Recovered the incident on launch 2 of 5 by removing the training-only resize to 27×27. The recovered job completed three epochs, and final weights were registered as model-d08af4af3b031610cef35669. Required documents and original outputs are preserved. Protected evaluation and independent reviews remain pending.",
+            "files": [
+              "report.md",
+              "recovery.json",
+              "train.py",
+              "fashion_model.py",
+              "fashion_study_models.py",
+              "repair.patch",
+              "outputs/failed/job-result.json",
+              "outputs/recovered/job-result.json",
+              "outputs/recovered/metrics.json",
+              "outputs/recovered/weights.safetensors",
+              "outputs/recovered/checkpoint.pt"
+            ],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "empirical",
+                "statement": "Published job results record exit code 1 for the initial job and exit code 0 for the recovered job. Recovered metrics report training loss decreasing from 0.7801373764 to 0.4353128329 and validation accuracy increasing from 0.8218 to 0.8582 across three epochs, with 324 optimizer steps and finite gradients.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000033",
+                  "action-task-feb95b2824d2014c7d6e386f-000017",
+                  "action-task-feb95b2824d2014c7d6e386f-000018"
+                ],
+                "limitations": "These are training-reported measurements and observed job outcomes. They do not establish independent saved-weight performance or repeated operational reliability."
+              },
+              {
+                "scope": "empirical",
+                "statement": "The training-only resize to 27×27 caused the feature-dimension mismatch with the fixed architecture. Removing that line restored compatible inputs and allowed training to complete.",
+                "epistemic_status": "inferred",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000010",
+                  "action-task-feb95b2824d2014c7d6e386f-000011",
+                  "action-task-feb95b2824d2014c7d6e386f-000017",
+                  "action-task-feb95b2824d2014c7d6e386f-000033"
+                ],
+                "limitations": "Diagnosis combines the initial error, source comparison and repaired run. The initial implementation failure is not a scientific negative result."
+              },
+              {
+                "scope": "document",
+                "statement": "Source comparison shows exactly one removed resize line; both helper files match their supplied originals. Required documents and directly published job outputs are preserved.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000027",
+                  "action-task-feb95b2824d2014c7d6e386f-000033"
+                ],
+                "limitations": "Artifact checks establish repair scope and preservation, not independent model validity."
+              },
+              {
+                "scope": "document",
+                "statement": "The registration receipt identifies final weights as model-d08af4af3b031610cef35669. Publication receipts record direct preservation of failed and recovered job outputs.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000019",
+                  "action-task-feb95b2824d2014c7d6e386f-000020",
+                  "action-task-feb95b2824d2014c7d6e386f-000021"
+                ],
+                "limitations": "Registration and publication do not establish project acceptance."
+              }
+            ],
+            "objections": [],
+            "next_actions": [
+              {
+                "action": "Evaluate the frozen registered weights with the protected recovery evaluator and dispatch the required research, critic and report-reader reviews.",
+                "owner": "coordinator",
+                "expected_information": "Independent validation of saved weights and review of failure diagnosis, repair lineage, preserved constraints and report clarity.",
+                "acceptance_check": "Advance only after protected measurement and all required reviews pass.",
+                "requires_external": false
+              }
+            ],
+            "open_questions": [
+              "Does protected validation confirm the performance of the registered weights?",
+              "Do all required independent reviews accept the frozen submission?"
+            ],
+            "work_items": [],
+            "execution_records": [
+              {
+                "action": "job_started",
+                "target": "job-60c88d110aff9fbb0cbb75dd",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000016"
+                ]
+              },
+              {
+                "action": "job_completed",
+                "target": "job-60c88d110aff9fbb0cbb75dd",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000017"
+                ]
+              }
+            ],
+            "candidate_decisions": []
+          },
+          "input_names": [
+            "protocol.txt",
+            "starter.py",
+            "fashion_model.py",
+            "fashion_study_models.py"
+          ],
+          "parent_paths": []
+        },
+        {
+          "assignment": "task-fb7c7fc996346ab229207b7d",
+          "role": "researcher",
+          "scope": "full",
+          "status": "submitted",
+          "steps": 11,
+          "report": {
+            "status": "DONE",
+            "summary": "Completed independent research review and recorded PASS for RECOVERY-review-research. Evidence supports an implementation diagnosis, a constrained repair, restored learning, and final-weight registration. Independent protected performance evaluation remains pending; no other gates are approved.",
+            "files": [],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "empirical",
+                "statement": "The parent’s initial run failed with 27×27 inputs and a 729-versus-784 feature mismatch, supporting an implementation incident rather than a scientific negative result.",
+                "epistemic_status": "inferred",
+                "evidence_ids": [
+                  "action-task-fb7c7fc996346ab229207b7d-000005"
+                ],
+                "limitations": "Reviewed the parent execution receipt; did not independently reproduce training."
+              },
+              {
+                "scope": "document",
+                "statement": "The inspected repair removes the training-only resize while preserving helpers, normalization, fixed architecture, split, seed, optimizer and finite checks.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-fb7c7fc996346ab229207b7d-000008"
+                ],
+                "limitations": "Source inspection establishes the constrained change, not independent model performance."
+              },
+              {
+                "scope": "empirical",
+                "statement": "Parent measurements support restored learning: three epochs and 324 optimizer steps, loss decreasing from 0.7801 to 0.4353, and validation accuracy increasing from 0.8218 to 0.8582.",
+                "epistemic_status": "inferred",
+                "evidence_ids": [
+                  "action-task-fb7c7fc996346ab229207b7d-000004",
+                  "action-task-fb7c7fc996346ab229207b7d-000008"
+                ],
+                "limitations": "Training-reported measurements inspected by this reviewer; protected scoring and repeated operational reliability are not established."
+              },
+              {
+                "scope": "document",
+                "statement": "Registration ties model-d08af4af3b031610cef35669 to the recovered job’s final weights.safetensors. The assigned research gate has a recorded PASS.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-fb7c7fc996346ab229207b7d-000009",
+                  "review-dispatch-525f8a887ac0ffe11625a334"
+                ],
+                "limitations": "Registration and scoped review do not establish project success or approve other gates."
+              }
+            ],
+            "objections": [],
+            "next_actions": [
+              {
+                "action": "Evaluate the frozen registered weights with the protected recovery evaluator and resolve remaining required reviews.",
+                "owner": "coordinator",
+                "expected_information": "Independent validation performance and remaining gate verdicts.",
+                "acceptance_check": "Protected measurement and all required frozen workflow gates pass.",
+                "requires_external": false
+              }
+            ],
+            "open_questions": [
+              "Does protected evaluation independently confirm valid performance of the registered weights?"
+            ],
+            "work_items": [],
+            "execution_records": [],
+            "candidate_decisions": []
+          },
+          "input_names": [
+            "protocol.txt",
+            "starter.py",
+            "fashion_model.py",
+            "fashion_study_models.py"
+          ],
+          "parent_paths": [
+            "report.md",
+            "recovery.json",
+            "train.py",
+            "fashion_model.py",
+            "fashion_study_models.py",
+            "repair.patch",
+            "outputs/failed/job-result.json",
+            "outputs/recovered/job-result.json",
+            "outputs/recovered/metrics.json",
+            "outputs/recovered/weights.safetensors",
+            "outputs/recovered/checkpoint.pt"
+          ]
+        },
+        {
+          "assignment": "task-c3cc77896c7949f537ac345d",
+          "role": "critic",
+          "scope": "full",
+          "status": "submitted",
+          "steps": 20,
+          "report": {
+            "status": "DONE",
+            "summary": "Completed the scoped independent evidence review and submitted PASS to RECOVERY-review-auditor for the frozen candidate. No significant unresolved defect was found within this review. Protected saved-weight scoring and other required gates remain separate.",
+            "files": [],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "document",
+                "statement": "The authorized auditor gate recorded PASS for candidate task-feb95b2824d2014c7d6e386f at revision 3ddefd83421ad48321b5296539284d3ba8d2fef1c2158e2aae0bb071a969abe8.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-c3cc77896c7949f537ac345d-000019"
+                ],
+                "limitations": "This is an evidence review, not independent training execution or protected model evaluation."
+              },
+              {
+                "scope": "document",
+                "statement": "The frozen recovery metadata identifies the initial and recovered jobs, final registered model, one-line resize repair, training-reported learning metrics, and remaining validation uncertainty. The inspected initial launch receipt uses the required GPU profile, source files and three-epoch arguments.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-c3cc77896c7949f537ac345d-000017",
+                  "action-task-c3cc77896c7949f537ac345d-000018"
+                ],
+                "limitations": "Reported learning measurements belong to the author's recovered job; reading them does not reproduce them."
+              }
+            ],
+            "objections": [],
+            "next_actions": [],
+            "open_questions": [
+              "Does protected independent validation of the registered saved weights satisfy the frozen performance requirement?"
+            ],
+            "work_items": [],
+            "execution_records": [],
+            "candidate_decisions": []
+          },
+          "input_names": [
+            "protocol.txt",
+            "starter.py",
+            "fashion_model.py",
+            "fashion_study_models.py"
+          ],
+          "parent_paths": [
+            "report.md",
+            "recovery.json",
+            "train.py",
+            "fashion_model.py",
+            "fashion_study_models.py",
+            "repair.patch",
+            "outputs/failed/job-result.json",
+            "outputs/recovered/job-result.json",
+            "outputs/recovered/metrics.json",
+            "outputs/recovered/weights.safetensors",
+            "outputs/recovered/checkpoint.pt"
+          ]
+        },
+        {
+          "assignment": "task-dca96872595168b28b9edf4f",
+          "role": "report_reader",
+          "scope": "report_only",
+          "status": "submitted",
+          "steps": 4,
+          "report": {
+            "status": "DONE",
+            "summary": "Report-only comprehension review completed; PASS recorded. Failure, repair, recovery scope and pending independent evaluation are clear. One minor metric-definition clarification remains. This review does not independently reproduce execution or establish project acceptance.",
+            "files": [],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "document",
+                "statement": "The report attributes learning trends to training-reported measurements, leaves independent scoring pending, and explains why recovery used a new job rather than checkpoint continuation.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "limitations": "Only the delivered report was inspected; execution, source and measurements were not independently verified."
+              }
+            ],
+            "objections": [
+              {
+                "target_id": "task-feb95b2824d2014c7d6e386f",
+                "category": "FACT",
+                "severity": "MINOR",
+                "statement": "The table labels “Reported training loss” and “Reported validation accuracy” omit the loss function, epoch aggregation method and accuracy calculation.",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "resolution_test": "Define the loss function and epoch loss aggregation, and clarify whether validation accuracy is the fraction of correct top-1 predictions across all 5,000 validation examples."
+              }
+            ],
+            "next_actions": [],
+            "open_questions": [
+              "Which loss function and epoch aggregation produced the reported training loss, and how was validation accuracy calculated?"
+            ],
+            "work_items": [],
+            "execution_records": [
+              {
+                "action": "read",
+                "target": "inputs/parent/report.md",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ]
+              }
+            ],
+            "candidate_decisions": []
+          },
+          "input_names": [],
+          "parent_paths": [
+            "report.md"
+          ]
+        },
+        {
+          "assignment": "lead",
+          "role": "coordinator",
+          "scope": null,
+          "status": "completed",
+          "steps": 4,
+          "report": null,
+          "input_names": [],
+          "parent_paths": []
+        }
+      ],
+      "decisions": [
+        {
+          "role": "experiment_engineer",
+          "step": 13,
+          "summary": "Diagnosis: an implementation defect in preprocessing caused the initial failure, not a scientific negative result. The failed run reported input_shape [55000,1,27,27] and a matrix mismatch (512x729 versus 784x256); starter.py explicitly interpolates training images to 27x27. Evidence: action-task-feb95b2824d2014c7d6e386f-000010, action-task-feb95b2824d2014c7d6e386f-000011, action-task-feb95b2824d2014c7d6e386f-000012. The output inventory contains only .job-result.json, so no usable checkpoint exists. Selected next test: remove only the training-image interpolation line, preserve inputs/starter.py and both helpers, verify the diff, then launch the same approved three-epoch configuration. Recovery and learning remain unmeasured.",
+          "candidates": [
+            {
+              "kind": "source_repair",
+              "target": "train.py",
+              "status": "SELECTED",
+              "reason": "Remove the explicit 27x27 interpolation to retain native image dimensions and satisfy the fixed model input contract while preserving data, normalization, architecture, seed, optimizer, split and finite checks."
+            },
+            {
+              "kind": "competing_cause",
+              "target": "GPU resource or external interruption",
+              "status": "REJECTED",
+              "reason": "The observed failure is a Python matrix-shape exception with exit code 1 and OOMKilled false; this does not support resource exhaustion or interruption as the cause of this failure."
+            },
+            {
+              "kind": "competing_cause",
+              "target": "Malformed dataset dimensions",
+              "status": "DEFERRED",
+              "reason": "The explicit resize explains the observed dimensions. The repaired run will test whether native inputs meet the model contract; inspect loader and data dimensions if the mismatch persists."
+            },
+            {
+              "kind": "checkpoint_continuation",
+              "target": "job-07db9d86b4e096625a0472d5",
+              "status": "REJECTED",
+              "reason": "Failure occurred during the first forward pass and the terminal output inventory contains no checkpoint; genuine continuation is unavailable for this failed attempt."
+            }
+          ]
+        }
+      ],
+      "errors": [
+        {
+          "role": "experiment_engineer",
+          "step": null,
+          "tool": "model",
+          "error": {
+            "error": "Structured report argument requires report tool"
+          }
+        },
+        {
+          "role": "experiment_engineer",
+          "step": 28,
+          "tool": "submit_report",
+          "error": {
+            "error": "ValueError",
+            "detail": "Observed empirical claim needs successful source/execution evidence"
+          }
+        },
+        {
+          "role": "experiment_engineer",
+          "step": 29,
+          "tool": "checkpoint",
+          "error": {
+            "error": "ValueError",
+            "detail": "Cannot preserve inputs/starter.py: Submit authored files, not read-only inputs"
+          }
+        },
+        {
+          "role": "researcher",
+          "step": null,
+          "tool": "model",
+          "error": {
+            "error": "Codex call failed (exit 1); see /mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/recovery-live-20261031/case-02/agents/task-fb7c7fc996346ab229207b7d/turns/006/stderr.log"
+          }
+        },
+        {
+          "role": "report_reader",
+          "step": 3,
+          "tool": "submit_report",
+          "error": {
+            "error": "ValueError",
+            "detail": "Unknown objection target"
+          }
+        }
+      ],
+      "unvalidated_decision_citation_typos": [],
+      "jobs": [
+        {
+          "id": "job-07db9d86b4e096625a0472d5",
+          "status": "FAILED",
+          "parent": null,
+          "request": {
+            "profile": "gpu",
+            "code_files": [
+              "train.py",
+              "fashion_model.py",
+              "fashion_study_models.py"
+            ],
+            "entrypoint": "train.py",
+            "args": [
+              "--data",
+              "/datasets/dataset-47ecb8520382bd72b45fdd58",
+              "--epochs",
+              "3"
+            ],
+            "dataset_ids": [
+              "dataset-47ecb8520382bd72b45fdd58"
+            ]
+          },
+          "source": "\"\"\"Training executable supplied for incident reproduction and recovery.\"\"\"\nimport os\nos.environ['CUBLAS_WORKSPACE_CONFIG']=':4096:8'\nimport argparse\nimport json\nfrom pathlib import Path\nimport time\nimport torch\nfrom safetensors.torch import save_file\nfrom fashion_model import images,labels\nfrom fashion_study_models import build\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--data',required=True);p.add_argument('--epochs',type=int,default=3);p.add_argument('--control',action='store_true');a=p.parse_args()\n    torch.set_num_threads(4);torch.manual_seed(1337);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False\n    assert torch.cuda.is_available(),'CUDA required'\n    spec={'family':'mlp','width':16,'hidden':256,'dropout':.2}\n    model=build(spec).cuda();optimizer=torch.optim.Adam(model.parameters(),lr=.001)\n    x=images(Path(a.data)/'images.gz');y=labels(Path(a.data)/'labels.gz')\n    train_x=x[:55000].cuda();train_y=y[:55000].cuda();val_x=x[55000:].cuda();val_y=y[55000:].cuda()\n    train_x=torch.nn.functional.interpolate(train_x,size=(27,27))\n    begin=0;steps=0;history=[];resume=Path('/checkpoints/resume')\n    if resume.exists():\n        saved=torch.load(resume,map_location='cuda',weights_only=True)\n        model.load_state_dict(saved['model']);optimizer.load_state_dict(saved['optimizer'])\n        begin=saved['epoch'];steps=saved['steps'];history=saved['history']\n        torch.set_rng_state(saved['torch_rng'].cpu());torch.cuda.set_rng_state_all([v.cpu() for v in saved['cuda_rng']])\n    print(json.dumps({'resumed_from_epoch':begin,'restored_optimizer_steps':steps,'input_shape':list(train_x.shape),'device':torch.cuda.get_device_name()}),flush=True)\n    for epoch in range(begin,a.epochs):\n        model.train();order=torch.randperm(len(train_y));total=0\n        for i in range(0,len(order),512):\n            ids=order[i:i+512].cuda();optimizer.zero_grad(set_to_none=True);logits=model(train_x[ids])\n            loss=torch.nn.functional.cross_entropy(logits,train_y[ids])\n            if not bool(torch.isfinite(loss)):\n                diagnostic={'epoch':epoch+1,'step':steps,'loss':str(float(loss.detach())),\n                    'logits_min':float(logits.detach().min()),'logits_max':float(logits.detach().max()),'input_finite':bool(torch.isfinite(train_x[ids]).all())}\n                Path('failure.json').write_text(json.dumps(diagnostic));print(json.dumps(diagnostic),flush=True)\n                raise FloatingPointError('non-finite training loss before backward; inspect failure.json')\n            loss.backward()\n            if not all(bool(torch.isfinite(v.grad).all()) for v in model.parameters() if v.grad is not None):raise FloatingPointError('non-finite gradient')\n            optimizer.step();steps+=1;total+=float(loss.detach())*len(ids)\n        model.eval();correct=0\n        with torch.inference_mode():\n            for i in range(0,len(val_y),256):correct+=int((model(val_x[i:i+256]).argmax(1)==val_y[i:i+256]).sum())\n        history.append({'epoch':epoch+1,'loss':total/len(train_y),'validation_accuracy':correct/len(val_y),'optimizer_steps':steps})\n        saved={'model':model.state_dict(),'optimizer':optimizer.state_dict(),'epoch':epoch+1,'steps':steps,'history':history,\n            'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all()}\n        torch.save(saved,'checkpoint.tmp');os.replace('checkpoint.tmp','checkpoint.pt')\n        print(json.dumps(history[-1]),flush=True)\n        # CHECKPOINT_BOUNDARY\n    save_file({k:v.detach().cpu().contiguous() for k,v in model.state_dict().items()},'weights.safetensors',metadata={'spec':json.dumps(spec)})\n    Path('metrics.json').write_text(json.dumps({'spec':spec,'seed':1337,'optimizer':'Adam','lr':.001,'batch_size':512,\n        'train_samples':55000,'validation_samples':5000,'resumed_from_epoch':begin,'optimizer_steps':steps,'finite_gradients':True,'history':history},indent=2))\n\nif __name__=='__main__':main()\n",
+          "metrics": null,
+          "terminal_observation": {
+            "job_id": "job-07db9d86b4e096625a0472d5",
+            "status": "FAILED",
+            "docker": {
+              "Status": "exited",
+              "Running": false,
+              "Paused": false,
+              "Restarting": false,
+              "OOMKilled": false,
+              "Dead": false,
+              "Pid": 0,
+              "ExitCode": 1,
+              "Error": "",
+              "StartedAt": "2026-10-30T17:05:21.657798616Z",
+              "FinishedAt": "2026-10-30T17:05:28.164541044Z"
+            }
+          },
+          "log": "{\"resumed_from_epoch\": 0, \"restored_optimizer_steps\": 0, \"input_shape\": [55000, 1, 27, 27], \"device\": \"NVIDIA GeForce RTX 3080 Laptop GPU\"}\nTraceback (most recent call last):\n  File \"/workspace/code/train.py\", line 55, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/workspace/code/train.py\", line 32, in main\n    ids=order[i:i+512].cuda();optimizer.zero_grad(set_to_none=True);logits=model(train_x[ids])\n                                                                           ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1775, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1786, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/torch/nn/modules/container.py\", line 250, in forward\n    input = module(input)\n            ^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1775, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1786, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/torch/nn/modules/linear.py\", line 134, in forward\n    return F.linear(input, self.weight, self.bias)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: mat1 and mat2 shapes cannot be multiplied (512x729 and 784x256)\n"
+        },
+        {
+          "id": "job-60c88d110aff9fbb0cbb75dd",
+          "status": "SUCCEEDED",
+          "parent": null,
+          "request": {
+            "profile": "gpu",
+            "code_files": [
+              "train.py",
+              "fashion_model.py",
+              "fashion_study_models.py"
+            ],
+            "entrypoint": "train.py",
+            "args": [
+              "--data",
+              "/datasets/dataset-47ecb8520382bd72b45fdd58",
+              "--epochs",
+              "3"
+            ],
+            "dataset_ids": [
+              "dataset-47ecb8520382bd72b45fdd58"
+            ]
+          },
+          "source": "\"\"\"Training executable supplied for incident reproduction and recovery.\"\"\"\nimport os\nos.environ['CUBLAS_WORKSPACE_CONFIG']=':4096:8'\nimport argparse\nimport json\nfrom pathlib import Path\nimport time\nimport torch\nfrom safetensors.torch import save_file\nfrom fashion_model import images,labels\nfrom fashion_study_models import build\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--data',required=True);p.add_argument('--epochs',type=int,default=3);p.add_argument('--control',action='store_true');a=p.parse_args()\n    torch.set_num_threads(4);torch.manual_seed(1337);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False\n    assert torch.cuda.is_available(),'CUDA required'\n    spec={'family':'mlp','width':16,'hidden':256,'dropout':.2}\n    model=build(spec).cuda();optimizer=torch.optim.Adam(model.parameters(),lr=.001)\n    x=images(Path(a.data)/'images.gz');y=labels(Path(a.data)/'labels.gz')\n    train_x=x[:55000].cuda();train_y=y[:55000].cuda();val_x=x[55000:].cuda();val_y=y[55000:].cuda()\n    begin=0;steps=0;history=[];resume=Path('/checkpoints/resume')\n    if resume.exists():\n        saved=torch.load(resume,map_location='cuda',weights_only=True)\n        model.load_state_dict(saved['model']);optimizer.load_state_dict(saved['optimizer'])\n        begin=saved['epoch'];steps=saved['steps'];history=saved['history']\n        torch.set_rng_state(saved['torch_rng'].cpu());torch.cuda.set_rng_state_all([v.cpu() for v in saved['cuda_rng']])\n    print(json.dumps({'resumed_from_epoch':begin,'restored_optimizer_steps':steps,'input_shape':list(train_x.shape),'device':torch.cuda.get_device_name()}),flush=True)\n    for epoch in range(begin,a.epochs):\n        model.train();order=torch.randperm(len(train_y));total=0\n        for i in range(0,len(order),512):\n            ids=order[i:i+512].cuda();optimizer.zero_grad(set_to_none=True);logits=model(train_x[ids])\n            loss=torch.nn.functional.cross_entropy(logits,train_y[ids])\n            if not bool(torch.isfinite(loss)):\n                diagnostic={'epoch':epoch+1,'step':steps,'loss':str(float(loss.detach())),\n                    'logits_min':float(logits.detach().min()),'logits_max':float(logits.detach().max()),'input_finite':bool(torch.isfinite(train_x[ids]).all())}\n                Path('failure.json').write_text(json.dumps(diagnostic));print(json.dumps(diagnostic),flush=True)\n                raise FloatingPointError('non-finite training loss before backward; inspect failure.json')\n            loss.backward()\n            if not all(bool(torch.isfinite(v.grad).all()) for v in model.parameters() if v.grad is not None):raise FloatingPointError('non-finite gradient')\n            optimizer.step();steps+=1;total+=float(loss.detach())*len(ids)\n        model.eval();correct=0\n        with torch.inference_mode():\n            for i in range(0,len(val_y),256):correct+=int((model(val_x[i:i+256]).argmax(1)==val_y[i:i+256]).sum())\n        history.append({'epoch':epoch+1,'loss':total/len(train_y),'validation_accuracy':correct/len(val_y),'optimizer_steps':steps})\n        saved={'model':model.state_dict(),'optimizer':optimizer.state_dict(),'epoch':epoch+1,'steps':steps,'history':history,\n            'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all()}\n        torch.save(saved,'checkpoint.tmp');os.replace('checkpoint.tmp','checkpoint.pt')\n        print(json.dumps(history[-1]),flush=True)\n        # CHECKPOINT_BOUNDARY\n    save_file({k:v.detach().cpu().contiguous() for k,v in model.state_dict().items()},'weights.safetensors',metadata={'spec':json.dumps(spec)})\n    Path('metrics.json').write_text(json.dumps({'spec':spec,'seed':1337,'optimizer':'Adam','lr':.001,'batch_size':512,\n        'train_samples':55000,'validation_samples':5000,'resumed_from_epoch':begin,'optimizer_steps':steps,'finite_gradients':True,'history':history},indent=2))\n\nif __name__=='__main__':main()\n",
+          "metrics": {
+            "spec": {
+              "family": "mlp",
+              "width": 16,
+              "hidden": 256,
+              "dropout": 0.2
+            },
+            "seed": 1337,
+            "optimizer": "Adam",
+            "lr": 0.001,
+            "batch_size": 512,
+            "train_samples": 55000,
+            "validation_samples": 5000,
+            "resumed_from_epoch": 0,
+            "optimizer_steps": 324,
+            "finite_gradients": true,
+            "history": [
+              {
+                "epoch": 1,
+                "loss": 0.7801373763604598,
+                "validation_accuracy": 0.8218,
+                "optimizer_steps": 108
+              },
+              {
+                "epoch": 2,
+                "loss": 0.48705793815526094,
+                "validation_accuracy": 0.8472,
+                "optimizer_steps": 216
+              },
+              {
+                "epoch": 3,
+                "loss": 0.4353128329103643,
+                "validation_accuracy": 0.8582,
+                "optimizer_steps": 324
+              }
+            ]
+          },
+          "terminal_observation": {
+            "job_id": "job-60c88d110aff9fbb0cbb75dd",
+            "status": "SUCCEEDED",
+            "docker": {
+              "Status": "exited",
+              "Running": false,
+              "Paused": false,
+              "Restarting": false,
+              "OOMKilled": false,
+              "Dead": false,
+              "Pid": 0,
+              "ExitCode": 0,
+              "Error": "",
+              "StartedAt": "2026-10-30T17:07:01.197252597Z",
+              "FinishedAt": "2026-10-30T17:07:08.957825558Z"
+            }
+          },
+          "log": "{\"resumed_from_epoch\": 0, \"restored_optimizer_steps\": 0, \"input_shape\": [55000, 1, 28, 28], \"device\": \"NVIDIA GeForce RTX 3080 Laptop GPU\"}\n{\"epoch\": 1, \"loss\": 0.7801373763604598, \"validation_accuracy\": 0.8218, \"optimizer_steps\": 108}\n{\"epoch\": 2, \"loss\": 0.48705793815526094, \"validation_accuracy\": 0.8472, \"optimizer_steps\": 216}\n{\"epoch\": 3, \"loss\": 0.4353128329103643, \"validation_accuracy\": 0.8582, \"optimizer_steps\": 324}\n"
+        }
+      ],
+      "source_patch": "--- initial/train.py\n+++ recovered/train.py\n@@ -18,7 +18,6 @@\n     model=build(spec).cuda();optimizer=torch.optim.Adam(model.parameters(),lr=.001)\n     x=images(Path(a.data)/'images.gz');y=labels(Path(a.data)/'labels.gz')\n     train_x=x[:55000].cuda();train_y=y[:55000].cuda();val_x=x[55000:].cuda();val_y=y[55000:].cuda()\n-    train_x=torch.nn.functional.interpolate(train_x,size=(27,27))\n     begin=0;steps=0;history=[];resume=Path('/checkpoints/resume')\n     if resume.exists():\n         saved=torch.load(resume,map_location='cuda',weights_only=True)\n",
+      "review_verdicts": [
+        {
+          "gate_id": "RECOVERY-review-research",
+          "candidate": "task-feb95b2824d2014c7d6e386f",
+          "verdict": "PASS",
+          "evidence_ids": [
+            "task-feb95b2824d2014c7d6e386f-dispatch-008fbd8294b1e6206503888e",
+            "action-task-fb7c7fc996346ab229207b7d-000004",
+            "action-task-fb7c7fc996346ab229207b7d-000005",
+            "action-task-fb7c7fc996346ab229207b7d-000008",
+            "action-task-fb7c7fc996346ab229207b7d-000009"
+          ],
+          "summary": "PASS for research review only. The initial failure shows 27x27 inputs producing 729 features against the fixed 784-feature model, supporting an implementation diagnosis rather than a scientific negative result. The inspected repair removes the training-only resize; helpers, normalization, architecture, split, optimizer, seed and finite checks remain preserved. No usable initial checkpoint was listed, justifying a repaired-source restart. The recovered job receipt records SUCCEEDED after three epochs and 324 optimizer steps; reported loss decreases from 0.7801 to 0.4353 and validation accuracy rises from 0.8218 to 0.8582. These support restored learning beyond successful exit. Registration ties model-d08af4af3b031610cef35669 to that job's final weights.safetensors. These are inspected parent measurements, not independently executed training or scoring. Protected evaluation of saved weights remains necessary to establish independently validated performance; this verdict does not approve other gates or project success.",
+          "candidate_revision": "3ddefd83421ad48321b5296539284d3ba8d2fef1c2158e2aae0bb071a969abe8",
+          "reviewer_assignment": "task-fb7c7fc996346ab229207b7d",
+          "scope": "Independent assignment review only; not an independent experiment or external observation",
+          "evidence_id": "review-dispatch-525f8a887ac0ffe11625a334"
+        },
+        {
+          "gate_id": "RECOVERY-review-auditor",
+          "candidate": "task-feb95b2824d2014c7d6e386f",
+          "verdict": "PASS",
+          "evidence_ids": [
+            "task-feb95b2824d2014c7d6e386f-dispatch-008fbd8294b1e6206503888e",
+            "action-task-c3cc77896c7949f537ac345d-000016",
+            "action-task-c3cc77896c7949f537ac345d-000017",
+            "action-task-c3cc77896c7949f537ac345d-000018",
+            "action-task-c3cc77896c7949f537ac345d-000013",
+            "action-task-c3cc77896c7949f537ac345d-000014"
+          ],
+          "summary": "Scoped independent evidence review passes. Source and execution evidence support a training-input resize defect: 27x27 inputs supplied 729 features to the fixed 784-feature architecture. The reviewed repair removes that resize while preserving training settings, data convention and finite checks. Initial failure produced no usable checkpoint, justifying a repaired new job. Reviewed terminal status and training-reported metrics support completed training and restored learning; final model registration and direct publication preserve output lineage. Recovery metadata and initial launch configuration agree with the inspected evidence. This review did not independently execute training or score saved weights; protected validation and other required gates remain separate requirements.",
+          "candidate_revision": "3ddefd83421ad48321b5296539284d3ba8d2fef1c2158e2aae0bb071a969abe8",
+          "reviewer_assignment": "task-c3cc77896c7949f537ac345d",
+          "scope": "Independent assignment review only; not an independent experiment or external observation",
+          "evidence_id": "review-dispatch-7030d6c174ad23269769639f"
+        },
+        {
+          "gate_id": "RECOVERY-review-report_reader",
+          "candidate": "task-feb95b2824d2014c7d6e386f",
+          "verdict": "PASS",
+          "evidence_ids": [
+            "task-feb95b2824d2014c7d6e386f-dispatch-008fbd8294b1e6206503888e",
+            "action-task-dca96872595168b28b9edf4f-000001"
+          ],
+          "summary": "Report-only review: the failure, repair, fresh-job recovery rationale, reported learning trend, registration and pending acceptance scope are clear. Measurements are explicitly attributed to training outputs, with independent scoring pending. Minor clarification: the table labels ‘Reported training loss’ and ‘Reported validation accuracy’ omit the loss function and aggregation method and the accuracy calculation; specify these definitions so readers can interpret the metrics precisely. This review does not independently verify execution or performance.",
+          "candidate_revision": "3ddefd83421ad48321b5296539284d3ba8d2fef1c2158e2aae0bb071a969abe8",
+          "reviewer_assignment": "task-dca96872595168b28b9edf4f",
+          "scope": "Independent assignment review only; not an independent experiment or external observation",
+          "evidence_id": "review-dispatch-1378f2ee17f1abfcd8da2eb4"
+        }
+      ],
+      "provider_errors": [
+        {
+          "turn": "agents/task-fb7c7fc996346ab229207b7d/turns/006",
+          "exit_code": 1,
+          "errors": [
+            "Selected model is at capacity. Please try a different model."
+          ]
+        }
+      ],
+      "wire_rejected_outputs": [
+        {
+          "source": "agents/task-feb95b2824d2014c7d6e386f/turns/001/answer.json",
+          "action": {
+            "tool": "read_file",
+            "argument": {
+              "status": "DONE",
+              "summary": "",
+              "files": [],
+              "failure_kind": null,
+              "claims": [],
+              "objections": [],
+              "next_actions": [],
+              "open_questions": [],
+              "work_items": [],
+              "execution_records": [],
+              "candidate_decisions": []
+            },
+            "why": "Inspect supplied source before reproducing the incident."
+          }
+        }
+      ],
+      "injection": null
+    },
+    {
+      "case": "case-03",
+      "goal_met": true,
+      "run_status": "COMPLETED",
+      "reservations": 83,
+      "returned_actions": 83,
+      "models": [
+        "gpt-6-astra"
+      ],
+      "wall_seconds": 973.267401,
+      "verification": {
+        "accepted": true,
+        "kind": "loss",
+        "initial_job": "job-13f28f29a7b14f5ac56ed32f",
+        "recovered_job": "job-c34ba77337352b129a9a6ec7",
+        "model_id": "model-272b77ff246ba0ce1d84ce77",
+        "validation": {
+          "accuracy": 0.8582,
+          "loss": 0.39737747421264646,
+          "samples": 5000,
+          "spec": {
+            "family": "mlp",
+            "width": 16,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "scope": "Independent validation inference, not official test or general recovery proof"
+      },
+      "roles": [
+        {
+          "assignment": "task-feb95b2824d2014c7d6e386f",
+          "role": "experiment_engineer",
+          "scope": "full",
+          "status": "submitted",
+          "steps": 32,
+          "report": {
+            "status": "DONE",
+            "summary": "Recovered the incident in two launches with a one-line loss repair. The recovered job completed three epochs, final weights are registered, and required deliverables and original outputs are preserved. Protected evaluation and independent reviews remain pending.",
+            "files": [
+              "report.md",
+              "recovery.json",
+              "train.py",
+              "train.original.py",
+              "fashion_model.py",
+              "fashion_study_models.py",
+              "recovery.patch",
+              "outputs/failed/failure.json",
+              "outputs/recovered/metrics.json",
+              "outputs/recovered/checkpoint.pt",
+              "outputs/recovered/weights.safetensors",
+              "outputs/recovered/job-result.json"
+            ],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "empirical",
+                "statement": "The unchanged initial job failed with nonfinite loss before its first optimizer update. Taking logarithms of negative raw logits explains the observed failure.",
+                "epistemic_status": "inferred",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000009",
+                  "action-task-feb95b2824d2014c7d6e386f-000010",
+                  "action-task-feb95b2824d2014c7d6e386f-000011",
+                  "action-task-feb95b2824d2014c7d6e386f-000012",
+                  "action-task-feb95b2824d2014c7d6e386f-000013"
+                ],
+                "limitations": "Implementation failure, not a scientific negative result. No usable initial checkpoint was available."
+              },
+              {
+                "scope": "document",
+                "statement": "The repair replaces only the loss expression with supervised cross-entropy; original source is preserved and helpers remain unchanged.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000014"
+                ],
+                "limitations": "Source verification does not independently establish model performance."
+              },
+              {
+                "scope": "empirical",
+                "statement": "Recovered job job-c34ba77337352b129a9a6ec7 reached SUCCEEDED. Its saved metrics report 324 optimizer steps, finite gradients, loss decreasing from 0.780137 to 0.435313 and validation accuracy increasing from 0.8218 to 0.8582 over three epochs.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000017",
+                  "action-task-feb95b2824d2014c7d6e386f-000018"
+                ],
+                "limitations": "Learning metrics are training-reported, not protected saved-weight evaluation. Recovery used a repaired fresh launch."
+              },
+              {
+                "scope": "document",
+                "statement": "Final weights are registered as model-272b77ff246ba0ce1d84ce77. Original failed and recovered outputs were published directly; report.md and recovery.json are saved.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000019",
+                  "action-task-feb95b2824d2014c7d6e386f-000020",
+                  "action-task-feb95b2824d2014c7d6e386f-000021",
+                  "action-task-feb95b2824d2014c7d6e386f-000026",
+                  "action-task-feb95b2824d2014c7d6e386f-000027"
+                ],
+                "limitations": "Registration and assignment completion do not establish project-gate acceptance."
+              }
+            ],
+            "objections": [],
+            "next_actions": [
+              {
+                "action": "Run the protected recovery evaluator on the frozen registered model and obtain the required research, critic and report-reader reviews.",
+                "owner": "coordinator",
+                "expected_information": "Independent saved-weight performance and review of diagnosis, repair and preserved lineage.",
+                "acceptance_check": "Protected recovery measurement and all required reviews pass.",
+                "requires_external": false
+              }
+            ],
+            "open_questions": [
+              "Will protected evaluation and independent reviews confirm the frozen recovery candidate meets the stage criteria?"
+            ],
+            "work_items": [],
+            "execution_records": [
+              {
+                "action": "job_completed",
+                "target": "job-c34ba77337352b129a9a6ec7",
+                "evidence_ids": [
+                  "action-task-feb95b2824d2014c7d6e386f-000017"
+                ]
+              }
+            ],
+            "candidate_decisions": []
+          },
+          "input_names": [
+            "protocol.txt",
+            "starter.py",
+            "fashion_model.py",
+            "fashion_study_models.py"
+          ],
+          "parent_paths": []
+        },
+        {
+          "assignment": "task-fb7c7fc996346ab229207b7d",
+          "role": "researcher",
+          "scope": "full",
+          "status": "submitted",
+          "steps": 15,
+          "report": {
+            "status": "DONE",
+            "summary": "Independent research review completed; RECOVERY-review-research recorded PASS. The reviewed minimal loss repair and training trajectory support restored learning, beyond successful exit alone. This review does not establish independent saved-weight performance or project acceptance.",
+            "files": [],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "empirical",
+                "statement": "The candidate's reported recovery supports restored learning: 324 optimizer updates, training loss decreasing from 0.780137 to 0.435313, and validation accuracy increasing from 0.8218 to 0.8582. The source repair replaces logarithms of raw logits with supervised cross entropy.",
+                "epistemic_status": "inferred",
+                "evidence_ids": [
+                  "action-task-fb7c7fc996346ab229207b7d-000009",
+                  "action-task-fb7c7fc996346ab229207b7d-000010"
+                ],
+                "limitations": "Assessment of another worker's training measurements and repair receipt, not independent execution. Protected evaluation of registered saved weights remains pending."
+              }
+            ],
+            "objections": [],
+            "next_actions": [
+              {
+                "action": "Evaluate model-272b77ff246ba0ce1d84ce77 with the protected recovery evaluator and combine required reviews.",
+                "owner": "coordinator",
+                "expected_information": "Independent saved-weight validation performance and workflow acceptance.",
+                "acceptance_check": "Protected measurement and all required gates pass.",
+                "requires_external": false
+              }
+            ],
+            "open_questions": [
+              "Does protected evaluation of the registered model satisfy the frozen performance criteria?"
+            ],
+            "work_items": [],
+            "execution_records": [],
+            "candidate_decisions": []
+          },
+          "input_names": [
+            "protocol.txt",
+            "starter.py",
+            "fashion_model.py",
+            "fashion_study_models.py"
+          ],
+          "parent_paths": [
+            "report.md",
+            "recovery.json",
+            "train.py",
+            "train.original.py",
+            "fashion_model.py",
+            "fashion_study_models.py",
+            "recovery.patch",
+            "outputs/failed/failure.json",
+            "outputs/recovered/metrics.json",
+            "outputs/recovered/checkpoint.pt",
+            "outputs/recovered/weights.safetensors",
+            "outputs/recovered/job-result.json"
+          ]
+        },
+        {
+          "assignment": "task-c3cc77896c7949f537ac345d",
+          "role": "critic",
+          "scope": "full",
+          "status": "submitted",
+          "steps": 29,
+          "report": {
+            "status": "DONE",
+            "summary": "Completed the scoped evidence audit and recorded PASS for RECOVERY-review-auditor in review-dispatch-a3b90b035021228d63d2d3eb. The review found no significant unresolved defect within its scope. It does not establish independent reproduction or protected saved-weight performance.",
+            "files": [],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "document",
+                "statement": "Inspection of the frozen train.py supports the conclusion that the cross-entropy repair retains seed 1337, Adam learning rate .001, batch size 512, the 55000-sample training split, and finite loss and gradient checks.",
+                "epistemic_status": "inferred",
+                "evidence_ids": [
+                  "action-task-c3cc77896c7949f537ac345d-000026"
+                ],
+                "limitations": "Source inspection supports configuration compliance only; it is not independent execution or protected evaluation."
+              }
+            ],
+            "objections": [],
+            "next_actions": [],
+            "open_questions": [
+              "Protected saved-weight evaluation and other required gates remain outside this auditor approval."
+            ],
+            "work_items": [],
+            "execution_records": [],
+            "candidate_decisions": []
+          },
+          "input_names": [
+            "protocol.txt",
+            "starter.py",
+            "fashion_model.py",
+            "fashion_study_models.py"
+          ],
+          "parent_paths": [
+            "report.md",
+            "recovery.json",
+            "train.py",
+            "train.original.py",
+            "fashion_model.py",
+            "fashion_study_models.py",
+            "recovery.patch",
+            "outputs/failed/failure.json",
+            "outputs/recovered/metrics.json",
+            "outputs/recovered/checkpoint.pt",
+            "outputs/recovered/weights.safetensors",
+            "outputs/recovered/job-result.json"
+          ]
+        },
+        {
+          "assignment": "task-dca96872595168b28b9edf4f",
+          "role": "report_reader",
+          "scope": "report_only",
+          "status": "submitted",
+          "steps": 3,
+          "report": {
+            "status": "DONE",
+            "summary": "Report-only comprehension review completed; gate PASS recorded. The report clearly distinguishes reported recovery and learning from pending protected evaluation and project acceptance. Four minor clarifications remain. No code inspection or independent experiment was performed.",
+            "files": [],
+            "failure_kind": null,
+            "claims": [
+              {
+                "scope": "document",
+                "statement": "The report explains the initial failure, loss repair, fresh-launch rationale, reported learning metrics and remaining evaluation scope.",
+                "epistemic_status": "observed",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "limitations": "Assesses report clarity only; underlying experimental claims were not independently verified."
+              }
+            ],
+            "objections": [
+              {
+                "target_id": "task-feb95b2824d2014c7d6e386f",
+                "category": "FACT",
+                "severity": "MINOR",
+                "statement": "The launch description uses '/datasets/DATASET_ID' and says the identifier is in job records, leaving the supplied dataset unidentified within the standalone report.",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "resolution_test": "State the actual dataset identifier and dataset name in the report."
+              },
+              {
+                "target_id": "task-feb95b2824d2014c7d6e386f",
+                "category": "FACT",
+                "severity": "MINOR",
+                "statement": "'Reported architecture is MLP, width 16, hidden 256 and dropout 0.2' does not explain which architectural dimensions 'width' and 'hidden' denote.",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "resolution_test": "Explain what width 16 and hidden 256 control in this MLP."
+              },
+              {
+                "target_id": "task-feb95b2824d2014c7d6e386f",
+                "category": "FACT",
+                "severity": "MINOR",
+                "statement": "The table heading 'Training loss' does not specify whether values are epoch averages, final-batch losses or another aggregation.",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "resolution_test": "Define the loss aggregation and any weighting used for the reported epoch values."
+              },
+              {
+                "target_id": "task-feb95b2824d2014c7d6e386f",
+                "category": "OBJECTIVE",
+                "severity": "MINOR",
+                "statement": "'The maintainer must run the protected recovery evaluator ... and obtain the required ... reviews' leaves the responsible actor unclear.",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ],
+                "resolution_test": "Identify the workflow role responsible for initiating protected evaluation and obtaining required reviews."
+              }
+            ],
+            "next_actions": [],
+            "open_questions": [
+              "What dataset name and registered identifier were used?",
+              "What do width 16 and hidden 256 denote?",
+              "How is each epoch's training loss aggregated?",
+              "Which workflow role owns the pending evaluation and review steps?"
+            ],
+            "work_items": [],
+            "execution_records": [
+              {
+                "action": "read",
+                "target": "inputs/parent/report.md",
+                "evidence_ids": [
+                  "action-task-dca96872595168b28b9edf4f-000001"
+                ]
+              }
+            ],
+            "candidate_decisions": []
+          },
+          "input_names": [],
+          "parent_paths": [
+            "report.md"
+          ]
+        },
+        {
+          "assignment": "lead",
+          "role": "coordinator",
+          "scope": null,
+          "status": "completed",
+          "steps": 4,
+          "report": null,
+          "input_names": [],
+          "parent_paths": []
+        }
+      ],
+      "decisions": [
+        {
+          "role": "experiment_engineer",
+          "step": 13,
+          "summary": "The unchanged reproduction failed before its first optimizer update: finite inputs, logits spanning negative values, and NaN loss were reported in action-task-feb95b2824d2014c7d6e386f-000009 and action-task-feb95b2824d2014c7d6e386f-000012. Source inspection (action-task-feb95b2824d2014c7d6e386f-000011) shows torch.log(logits).mean(), which is undefined for negative logits and ignores labels. This supports an implementation defect, not a scientific negative result. The failed output inventory contains no checkpoint (action-task-feb95b2824d2014c7d6e386f-000010). Preserve the original and replace only the loss with torch.nn.functional.cross_entropy(logits, train_y[ids]); then run the same three-epoch configuration and inspect finite training, loss progression, validation accuracy and saved weights.",
+          "candidates": [
+            {
+              "kind": "diagnosis",
+              "target": "Invalid logarithm of raw logits",
+              "status": "SELECTED",
+              "reason": "Observed negative logits and NaN loss match the inspected loss expression; supervised cross-entropy is the minimal repair."
+            },
+            {
+              "kind": "diagnosis",
+              "target": "Nonfinite input data",
+              "status": "REJECTED",
+              "reason": "The failing batch diagnostic reports input_finite=true; no data change is justified."
+            },
+            {
+              "kind": "diagnosis",
+              "target": "External interruption or GPU memory exhaustion",
+              "status": "REJECTED",
+              "reason": "Observed termination is an explicit FloatingPointError before backward, exit code 1, with OOMKilled=false."
+            },
+            {
+              "kind": "recovery",
+              "target": "Resume failed job from checkpoint",
+              "status": "REJECTED",
+              "reason": "The observed failure occurred at optimizer step zero and the terminal output inventory contains no checkpoint; a patched new job is required."
+            }
+          ]
+        }
+      ],
+      "errors": [
+        {
+          "role": "experiment_engineer",
+          "step": 28,
+          "tool": "submit_report",
+          "error": {
+            "error": "ValueError",
+            "detail": "Execution assertion requires successful actions by this assignment"
+          }
+        },
+        {
+          "role": "researcher",
+          "step": 14,
+          "tool": "submit_report",
+          "error": {
+            "error": "ValueError",
+            "detail": "Observed document claim needs evidence for delivered material"
+          }
+        },
+        {
+          "role": "critic",
+          "step": 23,
+          "tool": "submit_report",
+          "error": {
+            "error": "ValueError",
+            "detail": "Observed document claim needs evidence for delivered material"
+          }
+        },
+        {
+          "role": "critic",
+          "step": 27,
+          "tool": "submit_report",
+          "error": {
+            "error": "ValueError",
+            "detail": "Unknown claim evidence"
+          }
+        }
+      ],
+      "unvalidated_decision_citation_typos": [],
+      "jobs": [
+        {
+          "id": "job-13f28f29a7b14f5ac56ed32f",
+          "status": "FAILED",
+          "parent": null,
+          "request": {
+            "profile": "gpu",
+            "code_files": [
+              "train.py",
+              "fashion_model.py",
+              "fashion_study_models.py"
+            ],
+            "entrypoint": "train.py",
+            "args": [
+              "--data",
+              "/datasets/dataset-47ecb8520382bd72b45fdd58",
+              "--epochs",
+              "3"
+            ],
+            "dataset_ids": [
+              "dataset-47ecb8520382bd72b45fdd58"
+            ]
+          },
+          "source": "\"\"\"Training executable supplied for incident reproduction and recovery.\"\"\"\nimport os\nos.environ['CUBLAS_WORKSPACE_CONFIG']=':4096:8'\nimport argparse\nimport json\nfrom pathlib import Path\nimport time\nimport torch\nfrom safetensors.torch import save_file\nfrom fashion_model import images,labels\nfrom fashion_study_models import build\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--data',required=True);p.add_argument('--epochs',type=int,default=3);p.add_argument('--control',action='store_true');a=p.parse_args()\n    torch.set_num_threads(4);torch.manual_seed(1337);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False\n    assert torch.cuda.is_available(),'CUDA required'\n    spec={'family':'mlp','width':16,'hidden':256,'dropout':.2}\n    model=build(spec).cuda();optimizer=torch.optim.Adam(model.parameters(),lr=.001)\n    x=images(Path(a.data)/'images.gz');y=labels(Path(a.data)/'labels.gz')\n    train_x=x[:55000].cuda();train_y=y[:55000].cuda();val_x=x[55000:].cuda();val_y=y[55000:].cuda()\n    # INPUT_TRANSFORM\n    begin=0;steps=0;history=[];resume=Path('/checkpoints/resume')\n    if resume.exists():\n        saved=torch.load(resume,map_location='cuda',weights_only=True)\n        model.load_state_dict(saved['model']);optimizer.load_state_dict(saved['optimizer'])\n        begin=saved['epoch'];steps=saved['steps'];history=saved['history']\n        torch.set_rng_state(saved['torch_rng'].cpu());torch.cuda.set_rng_state_all([v.cpu() for v in saved['cuda_rng']])\n    print(json.dumps({'resumed_from_epoch':begin,'restored_optimizer_steps':steps,'input_shape':list(train_x.shape),'device':torch.cuda.get_device_name()}),flush=True)\n    for epoch in range(begin,a.epochs):\n        model.train();order=torch.randperm(len(train_y));total=0\n        for i in range(0,len(order),512):\n            ids=order[i:i+512].cuda();optimizer.zero_grad(set_to_none=True);logits=model(train_x[ids])\n            loss=torch.log(logits).mean()\n            if not bool(torch.isfinite(loss)):\n                diagnostic={'epoch':epoch+1,'step':steps,'loss':str(float(loss.detach())),\n                    'logits_min':float(logits.detach().min()),'logits_max':float(logits.detach().max()),'input_finite':bool(torch.isfinite(train_x[ids]).all())}\n                Path('failure.json').write_text(json.dumps(diagnostic));print(json.dumps(diagnostic),flush=True)\n                raise FloatingPointError('non-finite training loss before backward; inspect failure.json')\n            loss.backward()\n            if not all(bool(torch.isfinite(v.grad).all()) for v in model.parameters() if v.grad is not None):raise FloatingPointError('non-finite gradient')\n            optimizer.step();steps+=1;total+=float(loss.detach())*len(ids)\n        model.eval();correct=0\n        with torch.inference_mode():\n            for i in range(0,len(val_y),256):correct+=int((model(val_x[i:i+256]).argmax(1)==val_y[i:i+256]).sum())\n        history.append({'epoch':epoch+1,'loss':total/len(train_y),'validation_accuracy':correct/len(val_y),'optimizer_steps':steps})\n        saved={'model':model.state_dict(),'optimizer':optimizer.state_dict(),'epoch':epoch+1,'steps':steps,'history':history,\n            'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all()}\n        torch.save(saved,'checkpoint.tmp');os.replace('checkpoint.tmp','checkpoint.pt')\n        print(json.dumps(history[-1]),flush=True)\n        # CHECKPOINT_BOUNDARY\n    save_file({k:v.detach().cpu().contiguous() for k,v in model.state_dict().items()},'weights.safetensors',metadata={'spec':json.dumps(spec)})\n    Path('metrics.json').write_text(json.dumps({'spec':spec,'seed':1337,'optimizer':'Adam','lr':.001,'batch_size':512,\n        'train_samples':55000,'validation_samples':5000,'resumed_from_epoch':begin,'optimizer_steps':steps,'finite_gradients':True,'history':history},indent=2))\n\nif __name__=='__main__':main()\n",
+          "metrics": null,
+          "terminal_observation": {
+            "job_id": "job-13f28f29a7b14f5ac56ed32f",
+            "status": "FAILED",
+            "docker": {
+              "Status": "exited",
+              "Running": false,
+              "Paused": false,
+              "Restarting": false,
+              "OOMKilled": false,
+              "Dead": false,
+              "Pid": 0,
+              "ExitCode": 1,
+              "Error": "",
+              "StartedAt": "2026-10-30T17:10:44.588475228Z",
+              "FinishedAt": "2026-10-30T17:10:51.449172395Z"
+            }
+          },
+          "log": "{\"resumed_from_epoch\": 0, \"restored_optimizer_steps\": 0, \"input_shape\": [55000, 1, 28, 28], \"device\": \"NVIDIA GeForce RTX 3080 Laptop GPU\"}\n{\"epoch\": 1, \"step\": 0, \"loss\": \"nan\", \"logits_min\": -0.3925343155860901, \"logits_max\": 0.4358544945716858, \"input_finite\": true}\nTraceback (most recent call last):\n  File \"/workspace/code/train.py\", line 55, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/workspace/code/train.py\", line 38, in main\n    raise FloatingPointError('non-finite training loss before backward; inspect failure.json')\nFloatingPointError: non-finite training loss before backward; inspect failure.json\n"
+        },
+        {
+          "id": "job-c34ba77337352b129a9a6ec7",
+          "status": "SUCCEEDED",
+          "parent": null,
+          "request": {
+            "profile": "gpu",
+            "code_files": [
+              "train.py",
+              "fashion_model.py",
+              "fashion_study_models.py"
+            ],
+            "entrypoint": "train.py",
+            "args": [
+              "--data",
+              "/datasets/dataset-47ecb8520382bd72b45fdd58",
+              "--epochs",
+              "3"
+            ],
+            "dataset_ids": [
+              "dataset-47ecb8520382bd72b45fdd58"
+            ]
+          },
+          "source": "\"\"\"Training executable supplied for incident reproduction and recovery.\"\"\"\nimport os\nos.environ['CUBLAS_WORKSPACE_CONFIG']=':4096:8'\nimport argparse\nimport json\nfrom pathlib import Path\nimport time\nimport torch\nfrom safetensors.torch import save_file\nfrom fashion_model import images,labels\nfrom fashion_study_models import build\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--data',required=True);p.add_argument('--epochs',type=int,default=3);p.add_argument('--control',action='store_true');a=p.parse_args()\n    torch.set_num_threads(4);torch.manual_seed(1337);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False\n    assert torch.cuda.is_available(),'CUDA required'\n    spec={'family':'mlp','width':16,'hidden':256,'dropout':.2}\n    model=build(spec).cuda();optimizer=torch.optim.Adam(model.parameters(),lr=.001)\n    x=images(Path(a.data)/'images.gz');y=labels(Path(a.data)/'labels.gz')\n    train_x=x[:55000].cuda();train_y=y[:55000].cuda();val_x=x[55000:].cuda();val_y=y[55000:].cuda()\n    # INPUT_TRANSFORM\n    begin=0;steps=0;history=[];resume=Path('/checkpoints/resume')\n    if resume.exists():\n        saved=torch.load(resume,map_location='cuda',weights_only=True)\n        model.load_state_dict(saved['model']);optimizer.load_state_dict(saved['optimizer'])\n        begin=saved['epoch'];steps=saved['steps'];history=saved['history']\n        torch.set_rng_state(saved['torch_rng'].cpu());torch.cuda.set_rng_state_all([v.cpu() for v in saved['cuda_rng']])\n    print(json.dumps({'resumed_from_epoch':begin,'restored_optimizer_steps':steps,'input_shape':list(train_x.shape),'device':torch.cuda.get_device_name()}),flush=True)\n    for epoch in range(begin,a.epochs):\n        model.train();order=torch.randperm(len(train_y));total=0\n        for i in range(0,len(order),512):\n            ids=order[i:i+512].cuda();optimizer.zero_grad(set_to_none=True);logits=model(train_x[ids])\n            loss=torch.nn.functional.cross_entropy(logits, train_y[ids])\n            if not bool(torch.isfinite(loss)):\n                diagnostic={'epoch':epoch+1,'step':steps,'loss':str(float(loss.detach())),\n                    'logits_min':float(logits.detach().min()),'logits_max':float(logits.detach().max()),'input_finite':bool(torch.isfinite(train_x[ids]).all())}\n                Path('failure.json').write_text(json.dumps(diagnostic));print(json.dumps(diagnostic),flush=True)\n                raise FloatingPointError('non-finite training loss before backward; inspect failure.json')\n            loss.backward()\n            if not all(bool(torch.isfinite(v.grad).all()) for v in model.parameters() if v.grad is not None):raise FloatingPointError('non-finite gradient')\n            optimizer.step();steps+=1;total+=float(loss.detach())*len(ids)\n        model.eval();correct=0\n        with torch.inference_mode():\n            for i in range(0,len(val_y),256):correct+=int((model(val_x[i:i+256]).argmax(1)==val_y[i:i+256]).sum())\n        history.append({'epoch':epoch+1,'loss':total/len(train_y),'validation_accuracy':correct/len(val_y),'optimizer_steps':steps})\n        saved={'model':model.state_dict(),'optimizer':optimizer.state_dict(),'epoch':epoch+1,'steps':steps,'history':history,\n            'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all()}\n        torch.save(saved,'checkpoint.tmp');os.replace('checkpoint.tmp','checkpoint.pt')\n        print(json.dumps(history[-1]),flush=True)\n        # CHECKPOINT_BOUNDARY\n    save_file({k:v.detach().cpu().contiguous() for k,v in model.state_dict().items()},'weights.safetensors',metadata={'spec':json.dumps(spec)})\n    Path('metrics.json').write_text(json.dumps({'spec':spec,'seed':1337,'optimizer':'Adam','lr':.001,'batch_size':512,\n        'train_samples':55000,'validation_samples':5000,'resumed_from_epoch':begin,'optimizer_steps':steps,'finite_gradients':True,'history':history},indent=2))\n\nif __name__=='__main__':main()\n",
+          "metrics": {
+            "spec": {
+              "family": "mlp",
+              "width": 16,
+              "hidden": 256,
+              "dropout": 0.2
+            },
+            "seed": 1337,
+            "optimizer": "Adam",
+            "lr": 0.001,
+            "batch_size": 512,
+            "train_samples": 55000,
+            "validation_samples": 5000,
+            "resumed_from_epoch": 0,
+            "optimizer_steps": 324,
+            "finite_gradients": true,
+            "history": [
+              {
+                "epoch": 1,
+                "loss": 0.7801373763604598,
+                "validation_accuracy": 0.8218,
+                "optimizer_steps": 108
+              },
+              {
+                "epoch": 2,
+                "loss": 0.48705793815526094,
+                "validation_accuracy": 0.8472,
+                "optimizer_steps": 216
+              },
+              {
+                "epoch": 3,
+                "loss": 0.4353128329103643,
+                "validation_accuracy": 0.8582,
+                "optimizer_steps": 324
+              }
+            ]
+          },
+          "terminal_observation": {
+            "job_id": "job-c34ba77337352b129a9a6ec7",
+            "status": "SUCCEEDED",
+            "docker": {
+              "Status": "exited",
+              "Running": false,
+              "Paused": false,
+              "Restarting": false,
+              "OOMKilled": false,
+              "Dead": false,
+              "Pid": 0,
+              "ExitCode": 0,
+              "Error": "",
+              "StartedAt": "2026-10-30T17:12:59.605301976Z",
+              "FinishedAt": "2026-10-30T17:13:08.393806726Z"
+            }
+          },
+          "log": "{\"resumed_from_epoch\": 0, \"restored_optimizer_steps\": 0, \"input_shape\": [55000, 1, 28, 28], \"device\": \"NVIDIA GeForce RTX 3080 Laptop GPU\"}\n{\"epoch\": 1, \"loss\": 0.7801373763604598, \"validation_accuracy\": 0.8218, \"optimizer_steps\": 108}\n{\"epoch\": 2, \"loss\": 0.48705793815526094, \"validation_accuracy\": 0.8472, \"optimizer_steps\": 216}\n{\"epoch\": 3, \"loss\": 0.4353128329103643, \"validation_accuracy\": 0.8582, \"optimizer_steps\": 324}\n"
+        }
+      ],
+      "source_patch": "--- initial/train.py\n+++ recovered/train.py\n@@ -30,7 +30,7 @@\n         model.train();order=torch.randperm(len(train_y));total=0\n         for i in range(0,len(order),512):\n             ids=order[i:i+512].cuda();optimizer.zero_grad(set_to_none=True);logits=model(train_x[ids])\n-            loss=torch.log(logits).mean()\n+            loss=torch.nn.functional.cross_entropy(logits, train_y[ids])\n             if not bool(torch.isfinite(loss)):\n                 diagnostic={'epoch':epoch+1,'step':steps,'loss':str(float(loss.detach())),\n                     'logits_min':float(logits.detach().min()),'logits_max':float(logits.detach().max()),'input_finite':bool(torch.isfinite(train_x[ids]).all())}\n",
+      "review_verdicts": [
+        {
+          "gate_id": "RECOVERY-review-research",
+          "candidate": "task-feb95b2824d2014c7d6e386f",
+          "verdict": "PASS",
+          "evidence_ids": [
+            "task-feb95b2824d2014c7d6e386f-dispatch-008fbd8294b1e6206503888e",
+            "action-task-fb7c7fc996346ab229207b7d-000007",
+            "action-task-fb7c7fc996346ab229207b7d-000008",
+            "action-task-fb7c7fc996346ab229207b7d-000009",
+            "action-task-fb7c7fc996346ab229207b7d-000010",
+            "action-task-fb7c7fc996346ab229207b7d-000011",
+            "action-task-fb7c7fc996346ab229207b7d-000012"
+          ],
+          "summary": "PASS for the scoped research review. The inspected failure and source support an implementation diagnosis: logarithms of negative raw logits produced nonfinite loss before any optimizer update. No usable checkpoint was reported. The minimal supervised cross-entropy repair preserves the remaining training logic, finite checks and unchanged helpers, including uint8/255 preprocessing. Reviewed recovered-job receipts show SUCCEEDED, 324 optimizer updates, decreasing training loss (0.780137 to 0.435313) and increasing validation accuracy (0.8218 to 0.8582), supporting restored learning beyond successful exit alone. Final weights were registered as model-272b77ff246ba0ce1d84ce77 from the recovered job. These are reviewed training-reported measurements, not my independent execution or protected saved-weight evaluation. The candidate explicitly preserves that limitation; independent performance and project acceptance remain for the protected evaluator.",
+          "candidate_revision": "fd5ed0b74ee72c30e0200d915d00af56c50a60dfbbb84f3345746e519d163a99",
+          "reviewer_assignment": "task-fb7c7fc996346ab229207b7d",
+          "scope": "Independent assignment review only; not an independent experiment or external observation",
+          "evidence_id": "review-dispatch-0760db83b809c8884fb02fc2"
+        },
+        {
+          "gate_id": "RECOVERY-review-auditor",
+          "candidate": "task-feb95b2824d2014c7d6e386f",
+          "verdict": "PASS",
+          "evidence_ids": [
+            "task-feb95b2824d2014c7d6e386f-dispatch-008fbd8294b1e6206503888e",
+            "action-task-c3cc77896c7949f537ac345d-000017",
+            "action-task-c3cc77896c7949f537ac345d-000019",
+            "action-task-c3cc77896c7949f537ac345d-000020",
+            "action-task-c3cc77896c7949f537ac345d-000021",
+            "action-task-feb95b2824d2014c7d6e386f-000017",
+            "action-task-feb95b2824d2014c7d6e386f-000018",
+            "action-task-feb95b2824d2014c7d6e386f-000019",
+            "action-task-feb95b2824d2014c7d6e386f-000020",
+            "action-task-feb95b2824d2014c7d6e386f-000021"
+          ],
+          "summary": "Scoped independent evidence audit completed without a significant unresolved defect. Original failure evidence supports an invalid logarithm of raw logits before the first optimizer update, with no usable checkpoint. The preserved original and minimal cross-entropy repair retain architecture, data handling, seed, optimizer, split and finite checks. Recovery launch uses the required configuration without --control. Inspected terminal evidence and training outputs support completed training and improving learning metrics; registration and direct publication receipts preserve model and output lineage. This PASS concerns the evidence audit only: reading execution records is not independent reproduction, and training-reported accuracy does not replace the protected saved-weight evaluation or other required gates.",
+          "candidate_revision": "fd5ed0b74ee72c30e0200d915d00af56c50a60dfbbb84f3345746e519d163a99",
+          "reviewer_assignment": "task-c3cc77896c7949f537ac345d",
+          "scope": "Independent assignment review only; not an independent experiment or external observation",
+          "evidence_id": "review-dispatch-a3b90b035021228d63d2d3eb"
+        },
+        {
+          "gate_id": "RECOVERY-review-report_reader",
+          "candidate": "task-feb95b2824d2014c7d6e386f",
+          "verdict": "PASS",
+          "evidence_ids": [
+            "task-feb95b2824d2014c7d6e386f-dispatch-008fbd8294b1e6206503888e",
+            "action-task-dca96872595168b28b9edf4f-000001"
+          ],
+          "summary": "Report-only review: the failure, repair, fresh-launch rationale, reported learning and pending evaluation are understandable and appropriately scoped; no independent execution or product acceptance is established. Minor clarification requests: replace '/datasets/DATASET_ID' with the actual dataset identifier and name; explain what 'width 16, hidden 256' means for the stated MLP; define how 'Training loss' is aggregated; identify the responsible role meant by 'The maintainer must run the protected recovery evaluator.' These do not obscure the reported recovery outcome or its stated limitations.",
+          "candidate_revision": "fd5ed0b74ee72c30e0200d915d00af56c50a60dfbbb84f3345746e519d163a99",
+          "reviewer_assignment": "task-dca96872595168b28b9edf4f",
+          "scope": "Independent assignment review only; not an independent experiment or external observation",
+          "evidence_id": "review-dispatch-a67c57e1d330ae2697f28f51"
+        }
+      ],
+      "provider_errors": [],
+      "wire_rejected_outputs": [],
+      "injection": null
+    }
+  ],
+  "readiness_scope": "Separate scripted command checks validate fault mechanisms only; not agent ability",
+  "local_regression": {
+    "passed": 131,
+    "skipped": 3,
+    "seconds": 97.59
+  },
+  "reopen_added_reservations": {
+    "case-01": 0,
+    "case-02": 0,
+    "case-03": 0
+  }
+}
