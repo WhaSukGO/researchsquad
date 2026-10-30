@@ -14,6 +14,12 @@ model selection and separate role reviews. Run `python -m goalagent.fashion_live
 --run-dir tmp/NEW-LIVE-STUDY` to start a fresh bounded study; this consumes provider
 usage and restricts architecture selection to a reviewed declarative MLP/CNN registry.
 
+Direct job output publication and typed report input are described in
+[handoff/report interfaces](handoff-report-input.md). Their
+[actual-agent comparison](handoff-comparison-results-ko.md) found less manual
+Engineering packaging and no missing report-field errors, but no reduction in
+overall calls or repeated reading. It records both improvements and remaining gaps.
+
 ## Order and file ownership
 
 Define contracts first, implement the runtime and tracing together, verify CPU

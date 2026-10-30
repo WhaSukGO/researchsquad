@@ -1,0 +1,1046 @@
+{
+  "before": {
+    "folder": "/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/fashion-live-01",
+    "reservations": 145,
+    "returned_model_actions": 144,
+    "model_errors": 1,
+    "raw_returned_outputs": 144,
+    "models": [
+      "gpt-6-astra"
+    ],
+    "wall_seconds": 2181.531712,
+    "read_calls": 81,
+    "same_resource_extra_reads": 30,
+    "identical_window_extra_reads": 13,
+    "tools": {
+      "project_state": 3,
+      "propose_decision": 2,
+      "evaluate": 1,
+      "read_file": 54,
+      "review_gate": 4,
+      "submit_report": 13,
+      "training_catalog": 2,
+      "checkpoint": 15,
+      "write_file": 11,
+      "run": 1,
+      "start_job": 2,
+      "await_job": 2,
+      "read_job_output": 6,
+      "record_decision": 2,
+      "register_model": 1,
+      "read_evidence": 17,
+      "list_files": 4,
+      "read_artifact": 4
+    },
+    "roles": {
+      "coordinator": {
+        "returned_actions": 6,
+        "read_calls": 0,
+        "exact_repeat_reads": 0,
+        "actions": {
+          "project_state": 3,
+          "propose_decision": 2,
+          "evaluate": 1
+        }
+      },
+      "report_reader": {
+        "returned_actions": 7,
+        "read_calls": 3,
+        "exact_repeat_reads": 0,
+        "actions": {
+          "read_file": 3,
+          "review_gate": 1,
+          "submit_report": 3
+        }
+      },
+      "experiment_engineer": {
+        "returned_actions": 63,
+        "read_calls": 31,
+        "exact_repeat_reads": 9,
+        "actions": {
+          "read_file": 21,
+          "training_catalog": 2,
+          "checkpoint": 8,
+          "write_file": 10,
+          "run": 1,
+          "start_job": 2,
+          "await_job": 2,
+          "read_job_output": 6,
+          "record_decision": 2,
+          "register_model": 1,
+          "read_evidence": 4,
+          "list_files": 2,
+          "submit_report": 2
+        }
+      },
+      "researcher": {
+        "returned_actions": 31,
+        "read_calls": 21,
+        "exact_repeat_reads": 2,
+        "actions": {
+          "list_files": 1,
+          "read_file": 17,
+          "checkpoint": 3,
+          "read_evidence": 4,
+          "review_gate": 1,
+          "submit_report": 4,
+          "write_file": 1
+        }
+      },
+      "critic": {
+        "returned_actions": 37,
+        "read_calls": 26,
+        "exact_repeat_reads": 2,
+        "actions": {
+          "list_files": 1,
+          "read_file": 13,
+          "read_evidence": 9,
+          "checkpoint": 4,
+          "read_artifact": 4,
+          "review_gate": 2,
+          "submit_report": 4
+        }
+      }
+    },
+    "errors": [
+      {
+        "role": "report_reader",
+        "assignment": "task-106c79be811194489ae0c803",
+        "step": 5,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Invalid objection category/severity"
+        }
+      },
+      {
+        "role": "report_reader",
+        "assignment": "task-106c79be811194489ae0c803",
+        "step": 6,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Managed claims require document/empirical scope"
+        }
+      },
+      {
+        "role": "experiment_engineer",
+        "assignment": "task-c3cc77896c7949f537ac345d",
+        "step": null,
+        "tool": "model",
+        "detail": {
+          "error": "Codex call failed (exit 1); see /mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/fashion-live-01/agents/task-c3cc77896c7949f537ac345d/turns/050/stderr.log"
+        }
+      },
+      {
+        "role": "experiment_engineer",
+        "assignment": "task-c3cc77896c7949f537ac345d",
+        "step": 63,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Managed claims require document/empirical scope"
+        }
+      },
+      {
+        "role": "researcher",
+        "assignment": "task-dca96872595168b28b9edf4f",
+        "step": 21,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Managed claims require document/empirical scope"
+        }
+      },
+      {
+        "role": "critic",
+        "assignment": "task-fb7c7fc996346ab229207b7d",
+        "step": 7,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Managed claims require document/empirical scope"
+        }
+      },
+      {
+        "role": "critic",
+        "assignment": "task-fb7c7fc996346ab229207b7d",
+        "step": 9,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Observed document claim needs evidence for delivered material"
+        }
+      },
+      {
+        "role": "researcher",
+        "assignment": "task-feb95b2824d2014c7d6e386f",
+        "step": 8,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Managed claims require document/empirical scope"
+        }
+      }
+    ],
+    "decisions": [
+      {
+        "role": "experiment_engineer",
+        "step": 17,
+        "summary": "Baseline metrics read in action-task-c3cc77896c7949f537ac345d-000016 report validation accuracies 0.8346, 0.8562, 0.8674 and training losses 0.6677965811642733, 0.4521402206550945, 0.4028471820311113. Neither planned instability condition applies. Select the planned CNN architecture change with width16, hidden256, dropout0.2 and Adam lr0.001; retain batch256, 3 epochs, seed1337 and the prescribed split. This tests whether CNN final validation accuracy exceeds the MLP baseline by at least 0.005. Results are job-reported, not protected measurements.",
+        "candidates": [
+          {
+            "kind": "experiment",
+            "target": "MLP baseline job-59dc54b3664a1f65ceb008fd",
+            "status": "completed",
+            "reason": "SUCCEEDED receipt action-task-c3cc77896c7949f537ac345d-000014 and metrics read action-task-c3cc77896c7949f537ac345d-000016 establish the completed baseline; retain for final validation comparison."
+          },
+          {
+            "kind": "experiment",
+            "target": "CNN width16 hidden256 dropout0.2 Adam lr0.001 batch256 epochs3",
+            "status": "selected",
+            "reason": "Baseline final accuracy did not regress and final training loss decreased; choose the corresponding planned architecture-change branch. Final model selection awaits CNN metrics."
+          }
+        ]
+      },
+      {
+        "role": "experiment_engineer",
+        "step": 23,
+        "summary": "Select the final CNN checkpoint from job-98c185a35788bd6664ad9a52 using validation only. Baseline metrics receipt action-task-c3cc77896c7949f537ac345d-000016 reports final accuracy 0.8674; CNN metrics receipt action-task-c3cc77896c7949f537ac345d-000021 reports 0.8806. The observed difference is 0.0132, exceeding the planned 0.005 improvement threshold for this single-seed comparison. Both jobs returned SUCCEEDED (receipts action-task-c3cc77896c7949f537ac345d-000014 and action-task-c3cc77896c7949f537ac345d-000020). Stop after two valid jobs under the frozen plan. These are job-reported validation results, not protected test measurements or evidence of general improvement across seeds. Register only selected CNN weights; independent reviews and the coordinator's single protected evaluation remain pending.",
+        "candidates": [
+          {
+            "kind": "model",
+            "target": "job-98c185a35788bd6664ad9a52/weights.safetensors",
+            "status": "selected",
+            "reason": "Highest observed final validation accuracy, 0.8806, among the two completed candidates. CNN architecture change followed baseline metrics and decision receipt action-task-c3cc77896c7949f537ac345d-000017."
+          },
+          {
+            "kind": "model",
+            "target": "job-59dc54b3664a1f65ceb008fd/weights.safetensors",
+            "status": "rejected",
+            "reason": "Final validation accuracy 0.8674 is lower than the CNN result. Retain baseline metrics and logs as comparison evidence; do not register its weights as the selected model."
+          }
+        ]
+      }
+    ],
+    "quality": {
+      "goal_met": true,
+      "workflow_status": "COMPLETED",
+      "reviews": [
+        {
+          "gate": "PLAN-review-auditor",
+          "verdict": "PASS",
+          "reviewer": "task-fb7c7fc996346ab229207b7d",
+          "summary": "Reviewed frozen plan.md and supplied protocol and both helpers. The prospective plan compares supported MLP/CNN families, specifies a baseline and falsifiable improvement threshold, requires observed baseline metrics before recording and executing the adaptive change, and defines validation-only selection and bounded stopping. Split, CUDA, seed, serialization, evidence delivery and protected-test restrictions match the protocol. Architecture descriptions match the helper. Confounding, adaptive validation reuse and single-seed limitations are explicit; negative outcomes remain acceptable. No significant PLAN defect found. This is document review, not training reproduction: actual execution, feedback-dependent decisions and performance remain unverified and require STUDY evidence."
+        },
+        {
+          "gate": "STUDY-review-research",
+          "verdict": "PASS",
+          "reviewer": "task-dca96872595168b28b9edf4f",
+          "summary": "PASS for the scoped research review. Inspected frozen plan, implementation, archived metrics, experiments, report, adaptive decision and completion receipts. Worker-reported final validation accuracy increased from MLP 0.8674 to CNN 0.8806, a descriptive 0.0132 advantage exceeding the planned 0.005 hypothesis criterion. Baseline feedback preceded the CNN decision; final-epoch validation selection and the two-valid-job stopping rule were followed. Selected-model registration and model-ref agree. The report appropriately acknowledges single-seed uncertainty, reused validation data and parameter-count confounding; it does not establish statistical significance or causal architecture superiority. These are inspected worker results, not independently rerun measurements. Protected test performance and overall project success remain unknown."
+        },
+        {
+          "gate": "STUDY-review-auditor",
+          "verdict": "PASS",
+          "reviewer": "task-ed0095e4d61c7c5798ed5bda",
+          "summary": "Scoped independent review complete for frozen revision e2c1c4319825a57e85f9c153079dfd44a7412bffb15ebf1cd67991975b9824bc. Preserved review findings cover code, plan, both successful job receipts, metrics/logs, baseline-feedback-before-adaptation sequence, validation-only selection and matching model registration. The final loader inspection confirms both supplied helper identities; hashes establish identity only. No significant unresolved defect was found within this scope. Reported MLP/CNN validation accuracies of 0.8674/0.8806 are worker-job measurements, not independently reproduced results. Single-seed uncertainty, adaptive validation reuse and architecture/capacity confounding limit generalization. Protected test performance remains unknown; this verdict neither approves other gates nor establishes project success."
+        },
+        {
+          "gate": "STUDY-review-report_reader",
+          "verdict": "PASS",
+          "reviewer": "task-106c79be811194489ae0c803",
+          "summary": "Report-only comprehension review passes: inputs, learning conditions, observed results, feedback-conditioned selection, limitations, and pending coordinator evaluation are understandable. Measurements are attributed to worker outputs; reading the report does not independently verify execution. Nonblocking clarification requests: for 'Both specifications used width 16, hidden 256, and dropout 0.2', briefly define MLP/CNN and explain where width, hidden size, and dropout apply in each architecture; for 'Mean training loss', specify whether aggregation weights examples or batches, including the partial batch. Completion is explicitly limited to training and selection, with reviews and protected evaluation pending."
+        }
+      ],
+      "successful_jobs": 2,
+      "test": {
+        "accepted": true,
+        "model_id": "model-12a2751b42277f91bb2af382",
+        "validation": {
+          "accuracy": 0.8806,
+          "loss": 0.3125355712890625,
+          "samples": 5000,
+          "spec": {
+            "family": "cnn",
+            "width": 16,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "test": {
+          "accuracy": 0.8755,
+          "loss": 0.33368758034706114,
+          "samples": 10000,
+          "spec": {
+            "family": "cnn",
+            "width": 16,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "successful_jobs": 2,
+        "scope": "Valid study delivery, no accuracy threshold; adaptive reasoning judged separately by reviewers"
+      }
+    },
+    "report_wire_arguments": {
+      "string": 13
+    },
+    "wire_rejected_outputs": [],
+    "task_budget": {
+      "max_calls": 160,
+      "max_seconds": 7200,
+      "max_assignments": 18,
+      "max_depth": 2
+    },
+    "training_profiles": {
+      "profiles": {
+        "gpu": {
+          "image": "sha256:c58935a25f5b8a96de0bd7beae77dd88889433c4b964697a29376b0ae049a97b",
+          "gpu": "all",
+          "memory": "8g",
+          "cpus": 4,
+          "max_seconds": 180,
+          "max_output_bytes": 200000000,
+          "roles": [
+            "experiment_engineer"
+          ]
+        }
+      }
+    },
+    "workflow": {
+      "mode": "research",
+      "policy_version": 2,
+      "role_bindings": {
+        "research": "researcher",
+        "engineering": "experiment_engineer",
+        "auditor": "critic",
+        "report_reader": "report_reader",
+        "environment": "environment_engineer"
+      },
+      "work_policy": {
+        "max_attempts": 3,
+        "checkpoint_interval": 8,
+        "coordinator_checkpoint_interval": 1
+      },
+      "stages": [
+        {
+          "id": "PLAN",
+          "description": "Choose candidate models, baseline and falsifiable adaptation rule; deliver plan.md",
+          "owner": "research",
+          "required_outputs": [
+            "plan.md"
+          ],
+          "required_reviewers": [
+            "auditor"
+          ],
+          "gates": [
+            {
+              "id": "plan",
+              "kind": "artifact",
+              "criterion": "Bounded real model experiment plan delivered",
+              "path": "plan.md"
+            }
+          ]
+        },
+        {
+          "id": "STUDY",
+          "description": "Run real GPU experiments; read baseline results before revising; choose on validation; final protected test once",
+          "owner": "engineering",
+          "required_outputs": [
+            "report.md",
+            "experiments.json",
+            "model-ref.json"
+          ],
+          "required_tools": [
+            "start_job",
+            "read_job_output",
+            "record_decision"
+          ],
+          "required_reviewers": [
+            "research",
+            "auditor",
+            "report_reader"
+          ],
+          "report_paths": [
+            "report.md"
+          ],
+          "review_scopes": {
+            "report_reader": "report_only"
+          },
+          "gates": [
+            {
+              "id": "study-measured",
+              "kind": "evaluation",
+              "criterion": "At least two successful real experiments and selected model independently scored",
+              "accepted": true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "after": {
+    "folder": "/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/fashion-handoff-live-01",
+    "reservations": 146,
+    "returned_model_actions": 145,
+    "model_errors": 1,
+    "raw_returned_outputs": 146,
+    "models": [
+      "gpt-6-astra"
+    ],
+    "wall_seconds": 1944.671209,
+    "read_calls": 85,
+    "same_resource_extra_reads": 34,
+    "identical_window_extra_reads": 15,
+    "tools": {
+      "project_state": 3,
+      "propose_decision": 2,
+      "evaluate": 1,
+      "read_file": 61,
+      "review_gate": 4,
+      "submit_report": 9,
+      "training_catalog": 1,
+      "write_file": 7,
+      "checkpoint": 14,
+      "run": 1,
+      "start_job": 2,
+      "await_job": 4,
+      "read_job_output": 2,
+      "record_decision": 2,
+      "list_files": 7,
+      "read_evidence": 21,
+      "publish_job_outputs": 2,
+      "register_model": 1,
+      "read_artifact": 1
+    },
+    "roles": {
+      "coordinator": {
+        "returned_actions": 6,
+        "read_calls": 0,
+        "exact_repeat_reads": 0,
+        "actions": {
+          "project_state": 3,
+          "propose_decision": 2,
+          "evaluate": 1
+        }
+      },
+      "report_reader": {
+        "returned_actions": 6,
+        "read_calls": 4,
+        "exact_repeat_reads": 1,
+        "actions": {
+          "read_file": 4,
+          "review_gate": 1,
+          "submit_report": 1
+        }
+      },
+      "experiment_engineer": {
+        "returned_actions": 55,
+        "read_calls": 29,
+        "exact_repeat_reads": 8,
+        "actions": {
+          "read_file": 23,
+          "training_catalog": 1,
+          "write_file": 5,
+          "checkpoint": 5,
+          "run": 1,
+          "start_job": 2,
+          "await_job": 4,
+          "read_job_output": 2,
+          "record_decision": 2,
+          "list_files": 2,
+          "read_evidence": 4,
+          "publish_job_outputs": 2,
+          "register_model": 1,
+          "submit_report": 1
+        }
+      },
+      "researcher": {
+        "returned_actions": 32,
+        "read_calls": 21,
+        "exact_repeat_reads": 1,
+        "actions": {
+          "list_files": 1,
+          "read_file": 17,
+          "checkpoint": 4,
+          "read_evidence": 4,
+          "review_gate": 1,
+          "submit_report": 3,
+          "write_file": 2
+        }
+      },
+      "critic": {
+        "returned_actions": 46,
+        "read_calls": 31,
+        "exact_repeat_reads": 5,
+        "actions": {
+          "list_files": 4,
+          "read_file": 17,
+          "checkpoint": 5,
+          "read_evidence": 13,
+          "read_artifact": 1,
+          "review_gate": 2,
+          "submit_report": 4
+        }
+      }
+    },
+    "errors": [
+      {
+        "role": "researcher",
+        "assignment": "task-dca96872595168b28b9edf4f",
+        "step": null,
+        "tool": "model",
+        "detail": {
+          "error": "Structured report argument requires report tool"
+        }
+      },
+      {
+        "role": "researcher",
+        "assignment": "task-dca96872595168b28b9edf4f",
+        "step": 22,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Observed document claim needs evidence for delivered material"
+        }
+      },
+      {
+        "role": "critic",
+        "assignment": "task-ed0095e4d61c7c5798ed5bda",
+        "step": 35,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Observed document claim needs evidence for delivered material"
+        }
+      },
+      {
+        "role": "critic",
+        "assignment": "task-fb7c7fc996346ab229207b7d",
+        "step": 9,
+        "tool": "submit_report",
+        "detail": {
+          "error": "ValueError",
+          "detail": "Observed document claim needs evidence for delivered material"
+        }
+      }
+    ],
+    "decisions": [
+      {
+        "role": "experiment_engineer",
+        "step": 20,
+        "summary": "Baseline job job-cc49c3cf9f36d6802b1accfe succeeded (action-task-c3cc77896c7949f537ac345d-000016), and metrics were read (action-task-c3cc77896c7949f537ac345d-000017). Training loss decreased from 0.6677965811642733 to 0.354086985319311; validation accuracy increased from 0.8346 to its best value 0.8738 at epoch 5. Metrics report CUDA, the 55000/5000 split, 1075 optimizer steps, and finite gradients. Neither the increasing-loss branch nor the final-validation-decline branch applies under the frozen plan (action-task-c3cc77896c7949f537ac345d-000019). Select its nominal CNN branch: change family from MLP to CNN, retain width 32, hidden 256, dropout 0.2, Adam lr 0.001, batch size 256, five epochs, no augmentation or scheduler, and train from scratch with seed 1337. CNN performance and protected test performance remain unknown. Stop after the second valid experiment and select by validation according to the plan.",
+        "candidates": [
+          {
+            "kind": "architecture",
+            "target": "MLP baseline",
+            "status": "completed",
+            "reason": "Observed best validation accuracy 0.8738 (4369/5000), epoch 5; retain as the comparison and an eligible final candidate."
+          },
+          {
+            "kind": "architecture",
+            "target": "CNN challenger",
+            "status": "selected_for_next_experiment",
+            "reason": "The observed baseline trajectory selects the frozen nominal branch, permitting the family comparison with unchanged learning conditions."
+          }
+        ]
+      },
+      {
+        "role": "experiment_engineer",
+        "step": 34,
+        "summary": "Select the CNN epoch-4 checkpoint by the frozen validation-only rule and stop training after the two completed experiments. Baseline metrics receipt action-task-c3cc77896c7949f537ac345d-000017 reports 4369/5000 correct (0.8738), best at epoch 5. CNN metrics receipt action-task-c3cc77896c7949f537ac345d-000030 reports 4500/5000 correct (0.9000), best and exported at epoch 4: an improvement of 131 examples, or 2.62 percentage points. CNN epoch 5 declined to 0.8974; retain the exported epoch-4 weights. This validation result supports the planned 0.5-percentage-point hypothesis for this bounded comparison; it does not establish independent test performance or broad architectural superiority. Both jobs have observed SUCCEEDED receipts (action-task-c3cc77896c7949f537ac345d-000016 and action-task-c3cc77896c7949f537ac345d-000029). Register only selected CNN weights; the coordinator performs the single protected evaluation after handoff.",
+        "candidates": [
+          {
+            "kind": "model",
+            "target": "job-7b7c82702dd65569b23e570b/weights.safetensors",
+            "status": "SELECTED",
+            "reason": "Highest observed best-epoch validation accuracy: 0.9000 at epoch 4; metrics inspected in action-task-c3cc77896c7949f537ac345d-000030."
+          },
+          {
+            "kind": "model",
+            "target": "job-cc49c3cf9f36d6802b1accfe/weights.safetensors",
+            "status": "REJECTED",
+            "reason": "Valid baseline retained in the experiment record, but its best validation accuracy of 0.8738 is lower; metrics receipt action-task-c3cc77896c7949f537ac345d-000017."
+          }
+        ]
+      }
+    ],
+    "quality": {
+      "goal_met": true,
+      "workflow_status": "COMPLETED",
+      "reviews": [
+        {
+          "gate": "PLAN-review-auditor",
+          "verdict": "PASS",
+          "reviewer": "task-fb7c7fc996346ab229207b7d",
+          "summary": "Independent PLAN review completed against the supplied protocol and helpers. The frozen plan compares MLP and CNN, specifies a falsifiable 0.5-percentage-point improvement hypothesis, and defines baseline-feedback-dependent learning conditions, validation-only checkpoint selection, bounded stopping and recovery, and preservation of negative outcomes. Architecture and input-convention descriptions match the inspected helpers. Split isolation and coordinator-only protected testing are explicit. No significant PLAN defect found. This verdict verifies prospective document adequacy only; CUDA availability, execution integrity, actual adaptive chronology, and model performance remain unverified until STUDY evidence exists."
+        },
+        {
+          "gate": "STUDY-review-research",
+          "verdict": "PASS",
+          "reviewer": "task-dca96872595168b28b9edf4f",
+          "summary": "PASS for the independent research review. Inspected prospective hypothesis and selection rules, implementation, adaptive decision evidence, completion receipts, reported metrics, and selected-model reference. The engineering measurements show MLP best validation accuracy 87.38% versus CNN 90.00%, a 2.62 percentage-point gain exceeding the prospective 0.5-point criterion. The selected CNN epoch-4 checkpoint follows the validation rule despite its epoch-5 decline; stopping after two valid jobs follows the bounded plan. The report appropriately limits conclusions to this single-seed, fixed-split family comparison, acknowledges selection optimism and parameter-count differences, and does not claim isolated causality, independent replication, or protected-test performance. This verdict assesses research validity within the assigned scope; it does not establish project success or approve other gates."
+        },
+        {
+          "gate": "STUDY-review-auditor",
+          "verdict": "PASS",
+          "reviewer": "task-ed0095e4d61c7c5798ed5bda",
+          "summary": "Independent frozen-submission audit completed with no significant defect identified. Preserved source, plan, metrics and chronology checks support baseline-feedback-driven CNN adaptation and validation-only selection. Original job-output publication provenance is confirmed; model-ref.json matches registration of weights from the selected CNN job. Reported best validation accuracy increased from 87.38% to 90.00%; these are the worker's measurements, not independent reproduction. Single-seed, shared-validation selection and capacity-confounding limitations remain. This PASS applies only to STUDY-review-auditor; protected test performance and other gates are not established."
+        },
+        {
+          "gate": "STUDY-review-report_reader",
+          "verdict": "PASS",
+          "reviewer": "task-106c79be811194489ae0c803",
+          "summary": "Report-only review: the report clearly identifies the baseline, challenger, validation selection, reported outcomes, limitations, and pending independent review/protected evaluation. No blocking comprehension issue found; this does not independently verify execution or accuracy. Minor clarification: the passage ‘Neither the frozen increasing-loss branch nor the final-validation-decline branch applied’ names prospective branches without defining their exact triggers or alternative actions. Please summarize those conditions and actions in the report so the feedback-dependent choice is understandable without consulting the plan."
+        }
+      ],
+      "successful_jobs": 2,
+      "test": {
+        "accepted": true,
+        "model_id": "model-1dd781292565395bf8e3edb0",
+        "validation": {
+          "accuracy": 0.9,
+          "loss": 0.2674346771240234,
+          "samples": 5000,
+          "spec": {
+            "family": "cnn",
+            "width": 32,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "test": {
+          "accuracy": 0.8956,
+          "loss": 0.2849977509975433,
+          "samples": 10000,
+          "spec": {
+            "family": "cnn",
+            "width": 32,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "successful_jobs": 2,
+        "scope": "Valid study delivery, no accuracy threshold; adaptive reasoning judged separately by reviewers"
+      }
+    },
+    "report_wire_arguments": {
+      "object": 9
+    },
+    "wire_rejected_outputs": [
+      {
+        "source": "agents/task-dca96872595168b28b9edf4f/turns/001/answer.json",
+        "action": {
+          "tool": "list_files",
+          "argument": {
+            "status": "DONE",
+            "summary": "",
+            "files": [],
+            "failure_kind": null,
+            "claims": [],
+            "objections": [],
+            "next_actions": [],
+            "open_questions": [],
+            "work_items": [],
+            "execution_records": [],
+            "candidate_decisions": []
+          },
+          "why": "Locate the frozen candidate files under inputs/parent before reviewing."
+        }
+      }
+    ],
+    "task_budget": {
+      "max_calls": 160,
+      "max_seconds": 7200,
+      "max_assignments": 18,
+      "max_depth": 2
+    },
+    "training_profiles": {
+      "profiles": {
+        "gpu": {
+          "image": "sha256:c58935a25f5b8a96de0bd7beae77dd88889433c4b964697a29376b0ae049a97b",
+          "gpu": "all",
+          "memory": "8g",
+          "cpus": 4,
+          "max_seconds": 180,
+          "max_output_bytes": 200000000,
+          "roles": [
+            "experiment_engineer"
+          ]
+        }
+      }
+    },
+    "workflow": {
+      "mode": "research",
+      "policy_version": 2,
+      "role_bindings": {
+        "research": "researcher",
+        "engineering": "experiment_engineer",
+        "auditor": "critic",
+        "report_reader": "report_reader",
+        "environment": "environment_engineer"
+      },
+      "work_policy": {
+        "max_attempts": 3,
+        "checkpoint_interval": 8,
+        "coordinator_checkpoint_interval": 1
+      },
+      "stages": [
+        {
+          "id": "PLAN",
+          "description": "Choose candidate models, baseline and falsifiable adaptation rule; deliver plan.md",
+          "owner": "research",
+          "required_outputs": [
+            "plan.md"
+          ],
+          "required_reviewers": [
+            "auditor"
+          ],
+          "gates": [
+            {
+              "id": "plan",
+              "kind": "artifact",
+              "criterion": "Bounded real model experiment plan delivered",
+              "path": "plan.md"
+            }
+          ]
+        },
+        {
+          "id": "STUDY",
+          "description": "Run real GPU experiments; read baseline results before revising; choose on validation; final protected test once",
+          "owner": "engineering",
+          "required_outputs": [
+            "report.md",
+            "experiments.json",
+            "model-ref.json"
+          ],
+          "required_tools": [
+            "start_job",
+            "read_job_output",
+            "record_decision",
+            "publish_job_outputs"
+          ],
+          "required_reviewers": [
+            "research",
+            "auditor",
+            "report_reader"
+          ],
+          "report_paths": [
+            "report.md"
+          ],
+          "review_scopes": {
+            "report_reader": "report_only"
+          },
+          "gates": [
+            {
+              "id": "study-measured",
+              "kind": "evaluation",
+              "criterion": "At least two successful real experiments and selected model independently scored",
+              "accepted": true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "deltas": {
+    "reservations": {
+      "before": 145,
+      "after": 146,
+      "difference": 1,
+      "reduction_percent": -0.6896551724137931
+    },
+    "returned_model_actions": {
+      "before": 144,
+      "after": 145,
+      "difference": 1,
+      "reduction_percent": -0.6944444444444444
+    },
+    "wall_seconds": {
+      "before": 2181.531712,
+      "after": 1944.671209,
+      "difference": -236.86050299999988,
+      "reduction_percent": 10.857531966970548
+    },
+    "read_calls": {
+      "before": 81,
+      "after": 85,
+      "difference": 4,
+      "reduction_percent": -4.938271604938271
+    },
+    "same_resource_extra_reads": {
+      "before": 30,
+      "after": 34,
+      "difference": 4,
+      "reduction_percent": -13.333333333333334
+    },
+    "identical_window_extra_reads": {
+      "before": 13,
+      "after": 15,
+      "difference": 2,
+      "reduction_percent": -15.384615384615385
+    }
+  },
+  "handoff_audit": [
+    {
+      "job_id": "job-7b7c82702dd65569b23e570b",
+      "source": "metrics.json",
+      "destination": "cnn-metrics.json",
+      "artifact_id": "artifact-c533f76b3d5e8bdf8ee196f7c389d1bb66d5e768a5599177ddbc3716e04ce902",
+      "bytes": 3976,
+      "registered_identical": true,
+      "reviewer_receivers": [
+        {
+          "role": "researcher",
+          "assignment": "task-dca96872595168b28b9edf4f",
+          "review_scope": "full",
+          "identical": true
+        },
+        {
+          "role": "critic",
+          "assignment": "task-ed0095e4d61c7c5798ed5bda",
+          "review_scope": "full",
+          "identical": true
+        }
+      ]
+    },
+    {
+      "job_id": "job-7b7c82702dd65569b23e570b",
+      "source": "training.jsonl",
+      "destination": "cnn-training.jsonl",
+      "artifact_id": "artifact-a34e4b6218f4edb72fd79bd8259ef9b06489e4a31032487cc5f7836391d4a8cd",
+      "bytes": 2760,
+      "registered_identical": true,
+      "reviewer_receivers": [
+        {
+          "role": "researcher",
+          "assignment": "task-dca96872595168b28b9edf4f",
+          "review_scope": "full",
+          "identical": true
+        },
+        {
+          "role": "critic",
+          "assignment": "task-ed0095e4d61c7c5798ed5bda",
+          "review_scope": "full",
+          "identical": true
+        }
+      ]
+    },
+    {
+      "job_id": "job-7b7c82702dd65569b23e570b",
+      "source": "environment.json",
+      "destination": "cnn-environment.json",
+      "artifact_id": "artifact-7baac0d9cc24e3e9a8af485a1b9efc705fcd870ee51c7f43b6a061115438f307",
+      "bytes": 357,
+      "registered_identical": true,
+      "reviewer_receivers": [
+        {
+          "role": "researcher",
+          "assignment": "task-dca96872595168b28b9edf4f",
+          "review_scope": "full",
+          "identical": true
+        },
+        {
+          "role": "critic",
+          "assignment": "task-ed0095e4d61c7c5798ed5bda",
+          "review_scope": "full",
+          "identical": true
+        }
+      ]
+    },
+    {
+      "job_id": "job-cc49c3cf9f36d6802b1accfe",
+      "source": "metrics.json",
+      "destination": "baseline-metrics.json",
+      "artifact_id": "artifact-0b0eb05fe8990a78ba85ca6668bcb55b4daee7eecbe1b34f5b816babaead875f",
+      "bytes": 3981,
+      "registered_identical": true,
+      "reviewer_receivers": [
+        {
+          "role": "researcher",
+          "assignment": "task-dca96872595168b28b9edf4f",
+          "review_scope": "full",
+          "identical": true
+        },
+        {
+          "role": "critic",
+          "assignment": "task-ed0095e4d61c7c5798ed5bda",
+          "review_scope": "full",
+          "identical": true
+        }
+      ]
+    },
+    {
+      "job_id": "job-cc49c3cf9f36d6802b1accfe",
+      "source": "training.jsonl",
+      "destination": "baseline-training.jsonl",
+      "artifact_id": "artifact-0d141e57eddb0c8db40438033691eb7469a40fd05a84d5467d5fd44154a8539d",
+      "bytes": 2761,
+      "registered_identical": true,
+      "reviewer_receivers": [
+        {
+          "role": "researcher",
+          "assignment": "task-dca96872595168b28b9edf4f",
+          "review_scope": "full",
+          "identical": true
+        },
+        {
+          "role": "critic",
+          "assignment": "task-ed0095e4d61c7c5798ed5bda",
+          "review_scope": "full",
+          "identical": true
+        }
+      ]
+    },
+    {
+      "job_id": "job-cc49c3cf9f36d6802b1accfe",
+      "source": "environment.json",
+      "destination": "baseline-environment.json",
+      "artifact_id": "artifact-3b7bb4be5f78c49ffbb1fb46a6bf4529c004e8d90ac51ac4caa788bcd3ffe0fc",
+      "bytes": 357,
+      "registered_identical": true,
+      "reviewer_receivers": [
+        {
+          "role": "researcher",
+          "assignment": "task-dca96872595168b28b9edf4f",
+          "review_scope": "full",
+          "identical": true
+        },
+        {
+          "role": "critic",
+          "assignment": "task-ed0095e4d61c7c5798ed5bda",
+          "review_scope": "full",
+          "identical": true
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "wall_seconds": "Earliest observable span start to latest span end; includes model latency, reviews and containers",
+    "read_calls": "Successful read_file/read_job_output/read_evidence/read_artifact actions",
+    "same_resource_extra_reads": "Repeated tool/resource within one assignment, including distinct pagination; not automatically waste",
+    "identical_window_extra_reads": "Same tool/resource/offset/limit and identical returned observation within one assignment; may include legitimate confirmation",
+    "scope": "One historical baseline and one new actual-agent study. Combined changes, model latency, stochastic choices and plans confound causal attribution."
+  },
+  "validation_audits": {
+    "before": [
+      {
+        "job_id": "job-59dc54b3664a1f65ceb008fd",
+        "independent_validation": {
+          "accuracy": 0.8674,
+          "loss": 0.37348963470458985,
+          "samples": 5000,
+          "spec": {
+            "family": "mlp",
+            "width": 16,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "reported_accuracy": 0.8674,
+        "accuracy_matches": true
+      },
+      {
+        "job_id": "job-98c185a35788bd6664ad9a52",
+        "independent_validation": {
+          "accuracy": 0.8806,
+          "loss": 0.3125355712890625,
+          "samples": 5000,
+          "spec": {
+            "family": "cnn",
+            "width": 16,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "reported_accuracy": 0.8806,
+        "accuracy_matches": true
+      }
+    ],
+    "after": [
+      {
+        "job_id": "job-cc49c3cf9f36d6802b1accfe",
+        "reported_selected_accuracy": 0.8738,
+        "exported_epoch": 5,
+        "independent_validation": {
+          "accuracy": 0.8738,
+          "loss": 0.3507407112121582,
+          "samples": 5000,
+          "spec": {
+            "family": "mlp",
+            "width": 32,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "accuracy_matches": true
+      },
+      {
+        "job_id": "job-7b7c82702dd65569b23e570b",
+        "reported_selected_accuracy": 0.9,
+        "exported_epoch": 4,
+        "independent_validation": {
+          "accuracy": 0.9,
+          "loss": 0.2674346771240234,
+          "samples": 5000,
+          "spec": {
+            "family": "cnn",
+            "width": 32,
+            "hidden": 256,
+            "dropout": 0.2
+          }
+        },
+        "accuracy_matches": true
+      }
+    ]
+  },
+  "report_only_input_audit": [
+    {
+      "scope": "report_only",
+      "parent_paths": [
+        "report.md"
+      ],
+      "other_inputs": []
+    }
+  ],
+  "commits": {
+    "direct_handoff": "24e4b82",
+    "report_input": "3dffce5",
+    "study_runner": "1175aaf"
+  },
+  "checks": {
+    "regression": {
+      "passed": 129,
+      "skipped": 3,
+      "seconds": 118.52
+    },
+    "opt_in_docker": {
+      "passed": 3,
+      "seconds": 17.63
+    },
+    "targeted_report_and_managed": 27,
+    "typed_wire_smoke_actual_calls": 3,
+    "managed_docker_check": "passed, scripted choices; protected false/true and restart",
+    "reopen_added_reservations": 0
+  },
+  "feedback_audit": {
+    "first_metrics_step": 17,
+    "following_decision_steps": [
+      20
+    ],
+    "second_launch_step": 27,
+    "ordered": true
+  },
+  "report_error_classification": {
+    "before": {
+      "structural": 6,
+      "semantic": 1
+    },
+    "after": {
+      "structural": 0,
+      "semantic": 3
+    },
+    "after_wire_pair_rejections": 1,
+    "note": "New list_files action with a report object was blocked before dispatch; model retried with a valid argument. Not a provider capacity failure."
+  }
+}

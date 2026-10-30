@@ -40,3 +40,10 @@ may still be rejected even when constrained decoding produces valid structure.
 This is a separate commit. Tests cover typed normalization, required scope/enums,
 unknown evidence rejection in preflight and submission, protected input exclusion,
 and a typed response running through the common Agent loop.
+
+The wire retains string arguments for compatibility and a report-object alternative.
+It does not yet discriminate the argument type by selected tool in the schema. A
+non-report tool with a report object is rejected before dispatch, never coerced.
+The actual study observed one such rejected list_files action and a corrected retry.
+See handoff-comparison-results-ko.md for the complete outcome; fewer malformed
+report fields did not imply fewer total calls or eliminate semantic evidence errors.
