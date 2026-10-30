@@ -36,20 +36,23 @@ Reviewers must inspect supplied evidence, not assume success. Researcher reviews
 Public decision summaries only; no hidden reasoning. Task/review outputs must be based on actual tool evidence.
 '''
 
-def run(folder):
+def run(folder,efficient_handoff=False):
     folder=Path(folder).resolve();folder.mkdir(parents=True,exist_ok=True)
     image=subprocess.run(['docker','image','inspect','--format','{{.Id}}','researchsquad-training:torch2.9.1-cu128'],capture_output=True,text=True,check=True).stdout.strip()
     data=download(Path.home()/'.cache/researchsquad/fashion-mnist')
     agents=folder/'agents-config';agents.mkdir(exist_ok=True)
+    brief=BRIEF
+    if efficient_handoff:
+        brief+='\nOperational improvements only: after observing metrics, publish_job_outputs can copy metrics.json and training.jsonl directly to baseline-metrics.json / baseline-training.jsonl or cnn equivalents in one call per job. Include published paths in your report files so reviewers receive original bytes. Do not reread or retype outputs solely to make reviewer copies. Use the durable job_output_files context for their paths/provenance. Report tools accept structured argument objects with explicit claim scopes and enum categories. check_report is optional preflight, not a required meeting or scientific gate. All original scientific criteria, role reviews and test restrictions remain unchanged.\n'
     for p in (ROOT/'agents/training').iterdir():
         if p.suffix=='.json':
             c=json.loads(p.read_text());c['limits'].update(max_steps=70,max_seconds=3600,model_call_timeout=240)
             c['tools']=[t for t in c['tools'] if t!='evaluate_model']
             if c['id'] not in ('report_reader',) and 'record_decision' not in c['tools']:c['tools'].append('record_decision')
             atomic_json(agents/p.name,c)
-        else:(agents/p.name).write_text(p.read_text()+'\nStudy-specific protocol:\n'+BRIEF)
+        else:(agents/p.name).write_text(p.read_text()+'\nStudy-specific protocol:\n'+brief)
     bindings={'research':'researcher','engineering':'experiment_engineer','auditor':'critic','report_reader':'report_reader','environment':'environment_engineer'}
-    task={'goal':BRIEF,'inputs':{'protocol.txt':BRIEF,'fashion_model.py':(ROOT/'goalagent/fashion_model.py').read_text(),
+    task={'goal':brief,'inputs':{'protocol.txt':brief,'fashion_model.py':(ROOT/'goalagent/fashion_model.py').read_text(),
         'fashion_study_models.py':(ROOT/'goalagent/fashion_study_models.py').read_text()},'network':True,'evaluator':'study',
         'budget':{'max_calls':160,'max_seconds':7200,'max_assignments':18,'max_depth':2},
         'training':{'profiles':{'gpu':{'image':image,'gpu':'all','memory':'8g','cpus':4,'max_seconds':180,'max_output_bytes':200000000,'roles':['experiment_engineer']}}},
@@ -57,7 +60,7 @@ def run(folder):
             {'id':'PLAN','description':'Choose candidate models, baseline and falsifiable adaptation rule; deliver plan.md','owner':'research','required_outputs':['plan.md'],'required_reviewers':['auditor'],
              'gates':[{'id':'plan','kind':'artifact','criterion':'Bounded real model experiment plan delivered','path':'plan.md'}]},
             {'id':'STUDY','description':'Run real GPU experiments; read baseline results before revising; choose on validation; final protected test once',
-             'owner':'engineering','required_outputs':['report.md','experiments.json','model-ref.json'],'required_tools':['start_job','read_job_output','record_decision'],
+             'owner':'engineering','required_outputs':['report.md','experiments.json','model-ref.json'],'required_tools':['start_job','read_job_output','record_decision']+(['publish_job_outputs'] if efficient_handoff else []),
              'required_reviewers':['research','auditor','report_reader'],'report_paths':['report.md'],'review_scopes':{'report_reader':'report_only'},
              'gates':[{'id':'study-measured','kind':'evaluation','criterion':'At least two successful real experiments and selected model independently scored','accepted':True}]}]}}
     def evaluate(snapshot,_task):
@@ -84,4 +87,4 @@ def run(folder):
     finally:team.trace.export(folder/'trace.html');team.close()
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--run-dir',required=True);a=p.parse_args();run(a.run_dir)
+    p=argparse.ArgumentParser();p.add_argument('--run-dir',required=True);p.add_argument('--efficient-handoff',action='store_true');a=p.parse_args();run(a.run_dir,a.efficient_handoff)
