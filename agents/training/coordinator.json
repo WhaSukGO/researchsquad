@@ -29,7 +29,8 @@
     "evaluate_model",
     "record_decision",
     "register_dataset",
-    "read_job_output"
+    "read_job_output",
+    "publish_job_outputs"
   ],
   "limits": {
     "max_steps": 24,

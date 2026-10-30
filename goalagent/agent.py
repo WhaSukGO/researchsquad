@@ -144,6 +144,7 @@ class Agent:
                                "remaining_seconds": visible_remaining(remaining()), "authored_files": self.state.get("written_files", [])[-32:],
                                "recent_actions": self.recent_context()}
                     context['progress'] = self.state.get('progress')
+                    context['job_output_files'] = self.state.get('job_output_files',{})
                     context['coordinator_guidance'] = self.state.get('guidance')
                     context['checkpoint_interval'] = checkpoint_interval
                     context['actions_until_checkpoint'] = (max(0, checkpoint_interval - (self.state['steps'] - self.state['period_start'])) if checkpoint_interval else None)
