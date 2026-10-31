@@ -54,6 +54,13 @@ def unread_for(team,role,direct=True):
     return [m for m in L.state['mail'] if (m['to']==role if direct else m['to'] in (role,'all')) and m['from']!=role and role not in m.get('read_by',[]) and m.get('delivered',0)<=L.now()]
 
 
+def take(team,role):
+    """Hand a role its unread letters and mark them read: a letter the orchestrator put in front of a role must not wake it again."""
+    new=unread_for(team,role)
+    for m in new:m.setdefault('read_by',[]).append(role)
+    return new
+
+
 def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,phase=None):
     L=team.ledger;defs=team.definitions;counts={r:0 for r in defs};judged=set();hinton_last=-99;announced=False;last_meeting_nodes=0
     lead={'goal':team.task['goal'],'objective':'Coordinate measurable progress toward the goal','success_criteria':'Claims agreed by the department and a demonstration booked','depth':0,'inputs':[]}
@@ -79,7 +86,7 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                     if pending or requests:
                         what=('letters '+', '.join(m['id'] for m in pending)) if pending else ''
                         what+=((' and ' if what else '')+'feature requests '+', '.join(n['id'] for n in requests)) if requests else ''
-                        run_role(role,f'Day {L.now():.0f}. {what.capitalize()} arrived for you. Read mail_inbox, act with your tools, answer with mail_send, write note.md, then finish.')
+                        run_role(role,f'Day {L.now():.0f}. {what.capitalize()} arrived for you. Read mail_inbox, act with your tools, answer with mail_send, write note.md, then finish.');take(team,role)
                         if role=='hinton':hinton_last=L.now()
                         judge_new()
                 delivered=L.deliver()
@@ -103,7 +110,7 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
             if L.state.get('demo_day') and L.now()>=L.state['demo_day']:
                 continuation={'dispatch_id':f'round-{rounds}','guidance':f'Day {L.now():.0f}: the USPS demonstration day. Write report.md with the agreed claims and finish.'}
             else:
-                new=unread_for(team,'coordinator')
+                new=take(team,'coordinator')
                 letters='\n\n'.join(f"Letter {m['id']} from {m['from']} to {m['to']} (attached: {', '.join(m['attach']) or 'nothing'}):\n{m['body']}" for m in new)
                 head=f"Day {L.now():.0f}. "+('; '.join(notes)+'. ' if notes else '')
                 continuation={'dispatch_id':f'round-{rounds}','guidance':(head+('These letters arrived; attachments are already in your view. Act on them now; do not poll mail_inbox.\n\n'+letters if new else 'Nothing new arrived. Continue your own work or write again.'))[:7900]}
@@ -130,36 +137,36 @@ def path_score(team):
 
 
 # ---------------- scripted department (check mode) ----------------
-WAIT=[lambda s:action('mail_inbox'),lambda s:action('checkpoint',{'summary':'Waiting for the Sun-4 or for letters','next_test':'Act when results or letters arrive'})]
+WAIT=[lambda s:action('checkpoint',{'summary':'Waiting for the Sun-4 or for letters','next_test':'Act when results or letters arrive'})]
 PHASES={
  'data':[lambda s:action('lit_read','LECUN89TR'),lambda s:action('lit_read','RHW86-TC'),
   lambda s:action('sn_define',{'spec':FULL,'rationale':'Fully connected control like Net-2 in [LECUN89TR]'}),
   lambda s:action('mail_send',{'to':'denker','body':'Dear John, could you attach the training data handle and say which split and rejection rate comparisons use? [LECUN89TR]','attach':[]}),
   lambda s:action('checkpoint',{'summary':'Asked for data','next_test':'Train the control and a shared-weight net'})],
- 'train':[lambda s:action('mail_inbox'),
+ 'train':[
   lambda s:action('sn_define',{'spec':TIED,'rationale':'Net-5 of [LECUN89TR] with the constraint of [RHW86-TC]'}),
   lambda s:action('sn_train',{'net_id':'N1','epochs':8}),lambda s:action('sn_train',{'net_id':'N2','epochs':8}),
   lambda s:action('request_feature',{'description':'a fixed-weight averaging layer with 2 to 1 subsampling'}),
   lambda s:action('mail_send',{'to':'boser','body':'Bernhard, could you estimate whether the shared-weight network [N2] fits the chip and promote a FITS_CHIP claim? Attached.','attach':['N2']}),
   lambda s:action('checkpoint',{'summary':'Two runs on the Sun-4, feature requested, chip estimate requested','next_test':'Compare when results arrive'})],
- 'validate':[lambda s:action('mail_inbox'),
+ 'validate':[
   lambda s:action('compare_results',{'a':'R2','b':'R1','reject_rate':'0.09'}),
   lambda s:action('ledger_claim',{'template':'FEWER_PARAMS','args':{'net_a':'N2','net_b':'N1'},'rationale':'[N1] [N2]'}),lambda s:action('ledger_promote',{'claim_id':'C1','evidence_ids':[]}),
   lambda s:action('ledger_claim',{'template':'BEATS','args':{'net_a':'N2','net_b':'N1','dataset':'usps-val','reject_rate':'0.09'},'rationale':'[CMP1]'}),lambda s:action('ledger_promote',{'claim_id':'C2','evidence_ids':['R1','R2']}),
   lambda s:action('ledger_claim',{'template':'INVARIANT_TO','args':{'net':'N2','transform':'shift1','tolerance':0.5},'rationale':'[R2]'}),lambda s:action('ledger_promote',{'claim_id':'C3','evidence_ids':['R2']}),
   lambda s:action('mail_send',{'to':'denker','body':'John, the shared-weight network [N2] beats the control [N1] on the validation split at 9% rejection [C2] [CMP1]. Could you promote the claim in your view, run your baseline, and attach the test handle? [R2]','attach':['N2','R2','C2','R1','N1']}),
   lambda s:action('checkpoint',{'summary':'Asked Denker for baseline and test handle','next_test':'Evaluate on test'})],
- 'test':[lambda s:action('mail_inbox'),
+ 'test':[
   lambda s:action('ledger_evaluate',{'net_id':'N2'}),lambda s:action('ledger_evaluate',{'net_id':'N1'}),
   lambda s:action('compare_results',{'a':s['test_n2'],'b':s['test_n1'],'reject_rate':'0.09'}),
   lambda s:action('ledger_claim',{'template':'BEATS','args':{'net_a':'N2','net_b':'N1','dataset':'usps-test','reject_rate':'0.09'},'rationale':'['+s['cmp_last']+']'}),
   lambda s:action('ledger_promote',{'claim_id':s['claim_last'],'evidence_ids':[s['test_n2'],s['test_n1']]}),
   lambda s:action('mail_send',{'to':'denker','body':'John, on the test split the shared-weight network ['+s['test_n2']+'] beats the control ['+s['test_n1']+'] at 9% rejection ['+s['cmp_last']+'] ['+s['claim_last']+']. Could you promote it in your view? Attached.','attach':[s['test_n2'],s['test_n1'],s['claim_last'],s['cmp_last']]}),
   lambda s:action('checkpoint',{'summary':'Asked Denker to endorse the test claim','next_test':'Forward the chip claim to Jackel'})],
- 'jackel':[lambda s:action('mail_inbox'),
+ 'jackel':[
   lambda s:action('mail_send',{'to':'jackel','body':'Larry, Boser promoted the chip claim for [N2] ['+s['fits']+']; attached so you can book the demonstration.','attach':[s['fits'],'N2']+([s['chip']] if s['chip'] else [])}),
   lambda s:action('checkpoint',{'summary':'Asked Jackel to book','next_test':'Report on demonstration day'})],
- 'final':[lambda s:action('mail_inbox'),
+ 'final':[
   lambda s:action('write_file',{'path':'report.md','content':'# Milestone 3 (scripted)\nAgreed claims are in the ledger audit.'}),
   lambda s:action('finish',{'summary':'Scripted department fixture complete','files':['report.md']})]}
 

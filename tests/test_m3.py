@@ -112,3 +112,11 @@ def test_one_letter_per_recipient_per_day(tmp_path):
     L.state['day']=1.0;assert call(team,lecun,'mail_send',{'to':'denker','body':'Next day [LECUN89TR].','attach':[]})['mail_id']=='M3'
     from goalagent import judge
     assert judge.check_text('Please attach the supported claim so that I can promote it [C1].',['C1'])==[]
+
+
+def test_letters_handed_over_by_the_orchestrator_count_as_read(tmp_path):
+    from goalagent.lenet_m3 import unread_for, take
+    team=make(tmp_path);L=team.ledger;denker=worker(team,'denker')
+    call(team,denker,'mail_send',{'to':'coordinator','body':'Handle attached [USPS_TRAIN].','attach':['USPS_TRAIN']})
+    L.state['day']=1.0;assert [m['id'] for m in unread_for(team,'coordinator')]==['M1']
+    assert [m['id'] for m in take(team,'coordinator')]==['M1'] and unread_for(team,'coordinator')==[] and take(team,'coordinator')==[]
