@@ -1,0 +1,229 @@
+{
+  "status": "passed",
+  "scope": "R12 publication mechanism reproduction and regression; no actual model calls or historical-trigger attribution",
+  "historical_trigger_proven": false,
+  "actual_model_calls": 0,
+  "regression": {
+    "passed": 162,
+    "skipped": 3,
+    "seconds": 148.2
+  },
+  "original_failure": [
+    {
+      "data": {
+        "reason": "[Errno 18] Invalid cross-device link: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-managed-03/artifacts/artifact-52cff15f3384a566485d2c2414cd722a12f86124479efa7ce448c446c09ae7f8/content.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-managed-03/artifacts/artifact-52cff15f3384a566485d2c2414cd722a12f86124479efa7ce448c446c09ae7f8/content'",
+        "status": "WAITING",
+        "work_id": "W-0001"
+      },
+      "kind": "work_status",
+      "sequence": 5
+    },
+    {
+      "data": {
+        "reason": "W-0001 experiment_engineer: [Errno 18] Invalid cross-device link: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-managed-03/artifacts/artifact-52cff15f3384a566485d2c2414cd722a12f86124479efa7ce448c446c09ae7f8/content.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-managed-03/artifacts/artifact-52cff15f3384a566485d2c2414cd722a12f86124479efa7ce448c446c09ae7f8/content'",
+        "request_id": "work-wait-5fc1cf8553d2b3c9a02185dc"
+      },
+      "kind": "managed_wait",
+      "sequence": 6
+    }
+  ],
+  "evidence": {
+    "drvfs_mount": {
+      "status": "passed",
+      "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "folder": "/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-production-mount-01",
+      "mount_changes": 349880,
+      "mount_errors": [],
+      "exdev_reproduced": true,
+      "phases": [
+        {
+          "name": "legacy_absolute_rename",
+          "iterations": 5000,
+          "success": 4922,
+          "errors": {
+            "18": 78
+          },
+          "seconds": 40.115
+        },
+        {
+          "name": "fixed_atomic_json",
+          "iterations": 1000,
+          "success": 1000,
+          "errors": {},
+          "seconds": 13.346
+        },
+        {
+          "name": "fixed_artifact_register_read",
+          "iterations": 1000,
+          "success": 1000,
+          "errors": {},
+          "seconds": 111.479
+        }
+      ],
+      "scope": "Real same-directory mount-instance race and production publication calls. No injected errno. Historical trigger is not proven."
+    },
+    "ext4_mount": {
+      "status": "passed",
+      "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "folder": "/tmp/rsq-r12-production-mount-01",
+      "mount_changes": 20762,
+      "mount_errors": [],
+      "exdev_reproduced": true,
+      "phases": [
+        {
+          "name": "legacy_absolute_rename",
+          "iterations": 20000,
+          "success": 19995,
+          "errors": {
+            "18": 5
+          },
+          "seconds": 4.181
+        },
+        {
+          "name": "fixed_atomic_json",
+          "iterations": 300,
+          "success": 300,
+          "errors": {},
+          "seconds": 0.749
+        },
+        {
+          "name": "fixed_artifact_register_read",
+          "iterations": 300,
+          "success": 300,
+          "errors": {},
+          "seconds": 2.067
+        }
+      ],
+      "scope": "Real same-directory mount-instance race and production publication calls. No injected errno. Historical trigger is not proven."
+    },
+    "windows_read_lock": {
+      "status": "passed",
+      "attempts": [
+        {
+          "result": "os_error",
+          "errno": 13,
+          "error": "[Errno 13] Permission denied: '.state.json.c44f771187324cea9a2701fb07d7a79b.tmp' -> 'state.json'"
+        },
+        {
+          "result": "os_error",
+          "errno": 13,
+          "error": "[Errno 13] Permission denied: '.state.json.c44f771187324cea9a2701fb07d7a79b.tmp' -> 'state.json'"
+        },
+        {
+          "result": "os_error",
+          "errno": 13,
+          "error": "[Errno 13] Permission denied: '.state.json.c44f771187324cea9a2701fb07d7a79b.tmp' -> 'state.json'"
+        },
+        {
+          "result": "os_error",
+          "errno": 13,
+          "error": "[Errno 13] Permission denied: '.state.json.c44f771187324cea9a2701fb07d7a79b.tmp' -> 'state.json'"
+        },
+        {
+          "result": "replaced"
+        }
+      ],
+      "sharing_error_reproduced": true,
+      "scope": "Real OS read-lock/replacement probe; no model calls or forced OS exceptions. Does not establish the original incident cause."
+    },
+    "managed": {
+      "status": "passed",
+      "model": "scripted decisions; no live reasoning",
+      "real_docker": true,
+      "work_id": "W-0001",
+      "owner_attempts": 2,
+      "protected_acceptance": [
+        false,
+        true
+      ],
+      "required_reviewers": [
+        "critic",
+        "experience",
+        "report_reader"
+      ],
+      "reserved_calls": 30,
+      "resume_added_calls": 0,
+      "scope": "Execution, work identity, protected failure/improvement, report-only handoff and all-role reviews; not research quality"
+    },
+    "training_lifecycle": {
+      "status": "passed",
+      "real_docker": true,
+      "actual_model_calls": 0,
+      "detached_host_reopen": "SUCCEEDED",
+      "large_checkpoint_bytes": 20000000,
+      "deadline_exit_code": 124,
+      "cancel_status": "CANCELLED",
+      "scope": "Runtime lifecycle and storage; not GPU training"
+    }
+  },
+  "windows_lock_matrix": [
+    {
+      "result": {
+        "status": "error",
+        "errno": 13,
+        "message": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-tmp-None/content.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-tmp-None/content'"
+      },
+      "target": "content.tmp",
+      "sharing": "None"
+    },
+    {
+      "result": {
+        "status": "error",
+        "errno": 13,
+        "message": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-tmp-Read/content.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-tmp-Read/content'"
+      },
+      "target": "content.tmp",
+      "sharing": "Read"
+    },
+    {
+      "result": {
+        "status": "error",
+        "errno": 13,
+        "message": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-tmp-ReadWrite/content.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-tmp-ReadWrite/content'"
+      },
+      "target": "content.tmp",
+      "sharing": "ReadWrite"
+    },
+    {
+      "result": {
+        "status": "renamed"
+      },
+      "target": "content.tmp",
+      "sharing": "ReadWrite, Delete"
+    },
+    {
+      "result": {
+        "status": "error",
+        "errno": 13,
+        "message": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-None/content.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-None/content'"
+      },
+      "target": "content",
+      "sharing": "None"
+    },
+    {
+      "result": {
+        "status": "error",
+        "errno": 13,
+        "message": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-Read/content.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-Read/content'"
+      },
+      "target": "content",
+      "sharing": "Read"
+    },
+    {
+      "result": {
+        "status": "error",
+        "errno": 13,
+        "message": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-ReadWrite/content.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/r12-lock-matrix-01/content-ReadWrite/content'"
+      },
+      "target": "content",
+      "sharing": "ReadWrite"
+    },
+    {
+      "result": {
+        "status": "renamed"
+      },
+      "target": "content",
+      "sharing": "ReadWrite, Delete"
+    }
+  ]
+}

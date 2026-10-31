@@ -2,6 +2,7 @@
 import copy
 import errno
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -16,13 +17,13 @@ from test_managed import make as managed,spec
 @pytest.mark.parametrize('kind',['temporary','permanent','disk_full','serialization'])
 def test_atomic_replace_preserves_last_good_state_and_cleans_temps(tmp_path,monkeypatch,kind):
     target=tmp_path/'state.json';atomic_json(target,{'old':True})
-    replace=Path.replace;calls=[]
+    replace=os.replace;calls=[]
     monkeypatch.setattr('goalagent.contracts.time.sleep',lambda _:None)
-    def blocked(src,dst):
+    def blocked(src,dst,**kwargs):
         calls.append(1)
-        if kind=='temporary' and len(calls)>2:return replace(src,dst)
+        if kind=='temporary' and len(calls)>2:return replace(src,dst,**kwargs)
         raise OSError(errno.ENOSPC if kind=='disk_full' else errno.EACCES,'injected replace failure')
-    monkeypatch.setattr(Path,'replace',blocked)
+    monkeypatch.setattr('goalagent.contracts.os.replace',blocked)
     if kind=='temporary':
         atomic_json(target,{'new':True});assert json.loads(target.read_text())=={'new':True};assert len(calls)==3
     else:

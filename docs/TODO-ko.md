@@ -3,7 +3,7 @@
 우선순위: 기존 기능 안정화 → 과거 연구 경험 활용 비교 → 목표에 따른 연구 방향 전환.
 원문 근거: `docs/external-source-results-ko.md` 및 2026-10-31 실행 보고서.
 기존 실행 보고서·trace는 당시 관측 기록으로 보존한다. 기존 기능 수정의 검증 결과는 `runtime-reliability-results-ko.md`에 있다.
-2026-10-31: R01–R11 구현과 아래 범위의 검증 완료. 과거 연구 경험 활용과 목표 전환 기능은 아직 시작하지 않았다.
+2026-10-31: R01–R12 구현과 아래 범위의 검증 완료. R12의 과거 촉발 프로세스는 미확정이며 재현한 경합과 구분한다. 과거 연구 경험 활용과 목표 전환 기능은 아직 시작하지 않았다.
 
 ## 지금 진행: 보고서에서 드러난 기존 기능 수정
 
@@ -20,9 +20,9 @@
 | R09 | PNG를 전달하면서 view_image를 부여하지 않아 검토 중단 | 이미지 입력과 권한의 불일치를 모델 호출 전에 검출; 기본 reader에 읽기 전용 이미지 보기 제공 | 완료: 조기 차단 회귀 + 실제 모델 그림 보기 |
 | R10 | Coordinator에 이전 단계 gate가 보이는 문제로 상태 재조회 | 현재 candidate/stage에 맞는 gate만 표시하고 회귀 검증 | 완료: 단계 전환·현재 문맥 회귀 |
 | R11 | 상대 경로의 managed fixture가 재열기 중 경로 해석 오류 | 경로를 시작 시 절대 경로로 고정; 최초 원인 미확정과 검증 범위를 구분 | 완료: 새 상대 경로 Docker fixture/재열기 확인 |
-| R12 | 추가 DrvFS 실행에서 산출물 content.tmp → content 교체가 EXDEV로 중단 | 실패 시점의 마운트·열린 파일·경로 조건을 재현해 원인을 좁히고 원자성·산출물 보존을 유지하는 수정 검증 | 미해결: managed-03 실패 보존, 새 managed-04 통과. 원인 확정 전 복사 우회·자동 실행 재시도 금지 |
+| R12 | 추가 DrvFS 실행에서 산출물 content.tmp → content 교체가 EXDEV로 중단 | 실제 OS의 같은 폴더 EXDEV를 재현하고 원자성·산출물 보존을 유지하는 수정 검증; 과거 사건의 추정과 관측 구분 | 수정·검증 완료: 마운트 인스턴스 경합 재현, 부모 directory descriptor 고정으로 JSON·산출물 게시 수정. 당시 촉발 프로세스는 미확정. 상세는 r12-publication-results-ko.md |
 
-추가 회귀 수정: 원자적 JSON 저장이 기본 0600 권한을 만들면서 Linux CI의 권한을 제한한 supervisor가 job.json을 읽지 못했다. 비밀정보 없는 읽기 전용 control 파일만 0644, 폴더 0755로 명시하고 Team 상태는 0600을 유지했다. 실제 Linux ext4의 Docker 작업 수명주기와 권한 회귀로 검증했다. R12는 DrvFS/ext4 각각 100건 산출물 등록·재읽기에서는 재현되지 않았다. 재현 도구는 scripts/probe_artifact_rename.py에 남겼다. 원인을 확정하지 못했으므로 새 기능 전에 R12 진단을 먼저 이어간다.
+추가 회귀 수정: 원자적 JSON 저장이 기본 0600 권한을 만들면서 Linux CI의 권한을 제한한 supervisor가 job.json을 읽지 못했다. 비밀정보 없는 읽기 전용 control 파일만 0644, 폴더 0755로 명시하고 Team 상태는 0600을 유지했다. 실제 Linux ext4의 Docker 작업 수명주기와 권한 회귀로 검증했다. R12는 단순 등록 반복에서 재현되지 않았으나, 후속 실제 마운트 경합에서는 DrvFS/ext4 모두 재현됐다. 재현 및 수정 검사는 scripts/probe_mount_publication.py, Windows 잠금 회귀는 scripts/probe_windows_state_lock.ps1에 남겼다. 기존 실패 기록은 보존했다. 이는 재현된 결함에 대한 수정 완료이며 모든 저장 장애의 부재를 뜻하지 않는다.
 
 검증: 문제별 회귀 테스트 → 전체 테스트 → 새 디렉터리의 실제 Docker managed fixture → 실제 모델의 문서/도식 검토.
 필요한 GPU 실행 검사는 기존 훈련 fixture로 수행한다. 고정 결정 fixture와 실제 모델 판단의 증거를 섞지 않는다.

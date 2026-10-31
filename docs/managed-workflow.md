@@ -36,6 +36,12 @@ storage-restored event, managed work continues the same assignment and checkpoin
 This does not auto-repeat uncertain commands or migrate changed run contracts.
 Other failure boundaries keep their existing recovery requirements.
 
+JSON and artifact content publication pin one parent directory descriptor for
+temporary creation, replacement and cleanup. This prevents two absolute lookups
+from crossing mount instances during a same-directory mount transition. EXDEV
+does not trigger a copy fallback. See [the R12 reproduction](r12-publication-results-ko.md)
+for actual mount-race checks and the distinction from the unrecorded historical trigger.
+
 Registered `Evaluator.preflight(snapshot, task)` may provide mechanical checks
 before full reviews; returning None skips that stage. An explicit false verdict
 sends the owner for correction before reviewers run. The receipt is input to full

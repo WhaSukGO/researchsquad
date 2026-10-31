@@ -6,7 +6,7 @@ import json
 import os
 from pathlib import Path
 
-from .contracts import atomic_json, digest
+from .contracts import atomic_json, atomic_bytes, digest
 from .sandbox import read_file, workspace_path
 
 MAX_FILE = 16_000_000
@@ -34,12 +34,7 @@ class ArtifactStore:
             if read_file(destination, 'content', limit=MAX_FILE) != raw:
                 raise ValueError('Registered artifact changed')
         else:
-            temporary = destination / 'content.tmp'
-            with temporary.open('wb') as stream:
-                stream.write(raw)
-                stream.flush()
-                os.fsync(stream.fileno())
-            temporary.replace(content)
+            atomic_bytes(content, raw)
         record = destination / 'record.json'
         if record.exists() and json.loads(record.read_text()) != metadata:
             raise ValueError('Artifact metadata changed')
