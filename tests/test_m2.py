@@ -52,7 +52,11 @@ def test_letters_are_the_only_channel_and_widen_views(tmp_path):
     with pytest.raises(ValueError,match='Not in your ledger view'):call(team,lecun,'mail_send',{'to':'denker','body':'see [USPS_TRAIN]','attach':['USPS_TRAIN']})
     out=call(team,denker,'mail_send',{'to':'coordinator','body':'Here is the training handle [USPS_TRAIN].','attach':['USPS_TRAIN']})
     assert out['mail_id']=='M1' and 'USPS_TRAIN' in team.ledger.view(lecun)['nodes']
-    inbox=call(team,lecun,'mail_inbox');assert inbox['letters'][0]['attach']==['USPS_TRAIN'] and call(team,lecun,'mail_inbox')['letters']==[]
+    inbox=call(team,lecun,'mail_inbox');assert inbox['letters'][0]['attach']==['USPS_TRAIN']
+    again=call(team,lecun,'mail_inbox');assert again['letters']==[] and again['already_read'][0]['id']=='M1'
+    call(team,lecun,'mail_inbox')
+    with pytest.raises(ValueError,match='nobody writes until you act'):call(team,lecun,'mail_inbox')
+    call(team,lecun,'ledger_view');assert call(team,lecun,'mail_inbox')['letters']==[]  # any other action resets the poll counter
     with pytest.raises(ValueError,match='Unknown recipient'):call(team,lecun,'mail_send',{'to':'judge','body':'hi','attach':[]})
     with pytest.raises(ValueError,match='vocabulary'):call(team,lecun,'mail_send',{'to':'denker','body':'My convnet works.','attach':[]})
     with pytest.raises(ValueError,match='number without a ledger ID'):call(team,lecun,'mail_send',{'to':'denker','body':'I got 4.3% error.','attach':[]})

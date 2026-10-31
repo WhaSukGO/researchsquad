@@ -121,6 +121,7 @@ class LedgerRuntime:
     def dispatch(self,agent,action,timeout):
         if self.config is None:raise ValueError('Ledger not configured for this task')
         tool=action['tool'];raw=action['argument']
+        if tool!='mail_inbox':self.state.setdefault('polls',{})[self.role(agent)]=0
         if tool=='ledger_view':return self.render(agent)
         if tool=='lit_search':return self.search(agent,raw)
         if tool=='lit_read':return {'id':raw.strip(),'text':self.docs[self.visible(agent,raw.strip(),'document')['id']],'scope':'Stored excerpt or paraphrase; cite as ['+raw.strip()+']'}
@@ -327,11 +328,14 @@ class LedgerRuntime:
         self.state['mail'].append(mail);self.team.event('ledger_mail',{'id':mail['id'],'from':sender,'to':to,'attach':mail['attach']})
         return {'mail_id':mail['id'],'delivered_to':to,'attached':mail['attach'],'note':'A reply takes time; checkpoint if you must wait for it'}
     def inbox(self,agent):
-        role=self.role(agent);rows=[]
+        role=self.role(agent);rows=[];recent=[]
         for m in self.state['mail']:
-            if m['to']==role and not m['read']:
-                m['read']=True;rows.append({'id':m['id'],'from':m['from'],'body':m['body'],'attach':m['attach']})
-        return {'letters':rows,'note':'Attached nodes are already in your view' if rows else 'No unread letters'}
+            if m['to']!=role:continue
+            if not m['read']:m['read']=True;rows.append({'id':m['id'],'from':m['from'],'body':m['body'],'attach':m['attach']})
+            else:recent.append({'id':m['id'],'from':m['from'],'body':m['body'],'attach':m['attach']})
+        polls=self.state.setdefault('polls',{});polls[role]=0 if rows else polls.get(role,0)+1
+        if polls[role]>=3:raise ValueError('You have read every letter; nobody writes until you act. Use the letters below and take a design, training, claim or mail_send action now. '+json.dumps({'letters_already_read':recent[-3:]})[:3000])
+        return {'letters':rows,'already_read':recent[-3:],'note':'Attached nodes are already in your view' if rows else 'No unread letters; a reply arrives only after you send a letter and checkpoint. Act on the letters you have.'}
     def verdict(self,agent,d):
         if self.role(agent)!='judge':raise ValueError('Only the judge records verdicts')
         if set(d)!={'mail_id','verdict','reason'} or d['verdict'] not in ('pass','future_knowledge','unsupported'):raise ValueError('judge_verdict needs {mail_id, verdict:pass|future_knowledge|unsupported, reason}')
