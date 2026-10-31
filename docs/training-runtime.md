@@ -25,6 +25,10 @@ killed training container, invalid input dimensions and nonfinite loss. The sour
 and replay guide are in research/recovery/; these bounded seeded incidents do not
 establish generic recovery from arbitrary failures.
 
+[Source-informed study operations](external-source-study.md) adds real public
+paper/code discovery, bounded PDF extraction, preserved reading provenance and
+source-to-experiment mapping to the same training runtime.
+
 ## Order and file ownership
 
 Define contracts first, implement the runtime and tracing together, verify CPU

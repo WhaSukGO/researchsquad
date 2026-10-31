@@ -1,0 +1,2532 @@
+{
+  "run": "literature-live-01",
+  "model_call_reservations": 190,
+  "run_status": "COMPLETED",
+  "goal_met": true,
+  "wall_seconds": 2103.807304,
+  "models": [
+    "gpt-6-astra"
+  ],
+  "roles": [
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "role": "researcher",
+      "scope": "full",
+      "status": "submitted",
+      "steps": 27,
+      "returned_actions": 27,
+      "assignment_outcome": "submitted",
+      "model_seconds": 334.2359783879947,
+      "usage": {
+        "input_tokens": 681240,
+        "cached_input_tokens": 80640,
+        "output_tokens": 8792,
+        "reasoning_output_tokens": 240
+      },
+      "input_names": [
+        "protocol.txt",
+        "fashion_model.py",
+        "fashion_study_models.py"
+      ],
+      "parent_paths": [],
+      "report": {
+        "status": "DONE",
+        "summary": "Completed the bounded source study and prospective two-run Fashion-MNIST dropout plan. Preserved method-paper readings, pinned Python implementation, provenance, transfer limitations, competing hypotheses and a public experiment decision. No training results or improvement claims are made.",
+        "files": [
+          "sources.json",
+          "literature.md",
+          "plan.md",
+          "web-source-003.txt",
+          "web-source-004.txt",
+          "web-source-005.txt",
+          "web-source-006.txt",
+          "web-source-007.pdf",
+          "web-source-007.txt",
+          "web-source-013.txt",
+          "web-source-014.txt",
+          "web-source-015.txt"
+        ],
+        "failure_kind": null,
+        "claims": [
+          {
+            "scope": "document",
+            "statement": "The source manifest connects the dropout method paper and pinned PyTorch implementation to discovery, fetch and body-reading receipts, and records the blocked search provider.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-feb95b2824d2014c7d6e386f-000022"
+            ],
+            "limitations": "The search is bounded, not exhaustive. Only specified paper windows were inspected; external code was not executed."
+          },
+          {
+            "scope": "document",
+            "statement": "The prospective plan compares the approved CNN with dropout 0 against an otherwise identical CNN with hidden dropout 0.25, selecting by strictly higher final-epoch validation accuracy and retaining the baseline on ties.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-feb95b2824d2014c7d6e386f-000023",
+              "action-task-feb95b2824d2014c7d6e386f-000026"
+            ],
+            "limitations": "Selection here identifies experiments, not a measured winner. The plan requires baseline metrics to be inspected before the comparison launch decision."
+          },
+          {
+            "scope": "document",
+            "statement": "The literature synthesis distinguishes published source findings from transfer inferences and the untested Fashion-MNIST improvement hypothesis, and documents architecture, preprocessing and optimization differences.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-feb95b2824d2014c7d6e386f-000025"
+            ],
+            "limitations": "No exact reproduction, Fashion-MNIST benefit, novelty or general superiority is established."
+          }
+        ],
+        "objections": [],
+        "next_actions": [
+          {
+            "action": "Independently inspect the preserved source sections, provenance and adaptation limits for the SOURCES review.",
+            "owner": "critic",
+            "expected_information": "Whether source attribution and the bounded prospective comparison satisfy the frozen review criteria.",
+            "acceptance_check": "Verify cited reading receipts and source content, pinned implementation, and explicit transfer limitations.",
+            "requires_external": false
+          }
+        ],
+        "open_questions": [
+          "Will hidden dropout improve final validation accuracy within the fixed five-epoch, single-seed budget?",
+          "Actual runtime, validation outcomes and robustness across seeds remain unmeasured."
+        ],
+        "work_items": [],
+        "execution_records": [
+          {
+            "action": "read",
+            "target": "inputs/fashion_study_models.py",
+            "evidence_ids": [
+              "action-task-feb95b2824d2014c7d6e386f-000021"
+            ]
+          }
+        ],
+        "candidate_decisions": [
+          {
+            "candidate": "A: approved CNN width32 hidden128 dropout0",
+            "decision": "SELECTED",
+            "reason": "Prespecified baseline for the controlled hidden-dropout comparison.",
+            "evidence_ids": [
+              "action-task-feb95b2824d2014c7d6e386f-000026"
+            ],
+            "followup_action": "Run baseline under plan.md and inspect actual metrics before deciding to launch the comparison."
+          },
+          {
+            "candidate": "B: identical approved CNN with dropout0.25",
+            "decision": "SELECTED",
+            "reason": "Source-informed experimental treatment; its benefit is untested.",
+            "evidence_ids": [
+              "action-task-feb95b2824d2014c7d6e386f-000026"
+            ],
+            "followup_action": "After a valid baseline and recorded execution decision, run the controlled comparison and apply the prespecified selection rule."
+          }
+        ]
+      }
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "role": "critic",
+      "scope": "full",
+      "status": "running",
+      "steps": 20,
+      "returned_actions": 19,
+      "assignment_outcome": "execution_error",
+      "model_seconds": 134.41625694700633,
+      "usage": {
+        "input_tokens": 460561,
+        "cached_input_tokens": 71680,
+        "output_tokens": 1967,
+        "reasoning_output_tokens": 149
+      },
+      "input_names": [
+        "protocol.txt",
+        "fashion_model.py",
+        "fashion_study_models.py"
+      ],
+      "parent_paths": [
+        "sources.json",
+        "plan.md",
+        "web-source-003.txt",
+        "web-source-004.txt",
+        "web-source-005.txt",
+        "web-source-006.txt",
+        "web-source-007.pdf",
+        "web-source-007.txt",
+        "web-source-013.txt",
+        "web-source-014.txt",
+        "web-source-015.txt",
+        "literature.md",
+        "web-source-003.html",
+        "web-source-004.html",
+        "web-source-005.html",
+        "web-source-006.html",
+        "web-source-013.html",
+        "web-source-014.html",
+        "web-source-015.html"
+      ],
+      "report": null
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "role": "critic",
+      "scope": "full",
+      "status": "submitted",
+      "steps": 31,
+      "returned_actions": 31,
+      "assignment_outcome": "submitted",
+      "model_seconds": 227.19372108999232,
+      "usage": {
+        "input_tokens": 780516,
+        "cached_input_tokens": 197120,
+        "output_tokens": 3836,
+        "reasoning_output_tokens": 364
+      },
+      "input_names": [
+        "protocol.txt",
+        "fashion_model.py",
+        "fashion_study_models.py"
+      ],
+      "parent_paths": [
+        "sources.json",
+        "plan.md",
+        "web-source-003.txt",
+        "web-source-004.txt",
+        "web-source-005.txt",
+        "web-source-006.txt",
+        "web-source-007.pdf",
+        "web-source-007.txt",
+        "web-source-013.txt",
+        "web-source-014.txt",
+        "web-source-015.txt",
+        "literature.md",
+        "web-source-003.html",
+        "web-source-004.html",
+        "web-source-005.html",
+        "web-source-006.html",
+        "web-source-013.html",
+        "web-source-014.html",
+        "web-source-015.html"
+      ],
+      "report": {
+        "status": "DONE",
+        "summary": "Completed the frozen SOURCES review. PASS was recorded for candidate task-feb95b2824d2014c7d6e386f at revision eb50c754caab42713e952f538c5bc49a4275ec636a65cdfb38cd0e9e71a2535a. No significant unresolved source-stage defect was found.",
+        "files": [],
+        "failure_kind": null,
+        "claims": [
+          {
+            "scope": "document",
+            "statement": "The inspected provenance supports successful retrieval of the untruncated 30-page method paper, substantial distinct method and experimental reading windows, and reading of actual Python implementation code pinned to a 40-hex commit.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-355deb3c7eeaf65eb18dc0f0-000025",
+              "action-task-355deb3c7eeaf65eb18dc0f0-000026",
+              "action-task-355deb3c7eeaf65eb18dc0f0-000027",
+              "action-task-355deb3c7eeaf65eb18dc0f0-000028",
+              "action-task-355deb3c7eeaf65eb18dc0f0-000029"
+            ],
+            "limitations": "Source reading and execution receipts do not establish Fashion-MNIST improvement or independent experimental reproduction."
+          },
+          {
+            "scope": "document",
+            "statement": "The authorized SOURCES-review-auditor gate returned a PASS receipt for the frozen candidate and revision.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-355deb3c7eeaf65eb18dc0f0-000030",
+              "review-dispatch-1a07543a20586ba1e408039f"
+            ],
+            "limitations": "This verdict covers only the assigned SOURCES review. It does not approve another gate or establish project success; downstream coordinator storage was not independently inspected."
+          }
+        ],
+        "objections": [],
+        "next_actions": [],
+        "open_questions": [],
+        "work_items": [],
+        "execution_records": [],
+        "candidate_decisions": []
+      }
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "role": "experiment_engineer",
+      "scope": "full",
+      "status": "submitted",
+      "steps": 45,
+      "returned_actions": 45,
+      "assignment_outcome": "submitted",
+      "model_seconds": 603.5767032780277,
+      "usage": {
+        "input_tokens": 1409520,
+        "cached_input_tokens": 218112,
+        "output_tokens": 19328,
+        "reasoning_output_tokens": 2051
+      },
+      "input_names": [
+        "protocol.txt",
+        "fashion_model.py",
+        "fashion_study_models.py",
+        "prior-SOURCES/sources.json",
+        "prior-SOURCES/literature.md",
+        "prior-SOURCES/plan.md",
+        "prior-SOURCES/web-source-003.txt",
+        "prior-SOURCES/web-source-004.txt",
+        "prior-SOURCES/web-source-005.txt",
+        "prior-SOURCES/web-source-006.txt",
+        "prior-SOURCES/web-source-007.pdf",
+        "prior-SOURCES/web-source-007.txt",
+        "prior-SOURCES/web-source-013.txt",
+        "prior-SOURCES/web-source-014.txt",
+        "prior-SOURCES/web-source-015.txt"
+      ],
+      "parent_paths": [],
+      "report": {
+        "status": "DONE",
+        "summary": "Completed the two-run controlled comparison. Selected baseline A with 90.92% validation accuracy versus 90.56% for dropout B. Published both runs’ metrics and logs and registered only the selected model. Selection is frozen; protected evaluation and independent reviews remain pending. This submission corrects the earlier file-list error by omitting read-only inputs.",
+        "files": [
+          "report.md",
+          "experiments.json",
+          "source-influence.json",
+          "model-ref.json",
+          "train.py",
+          "fashion_model.py",
+          "fashion_study_models.py",
+          "results/baseline/metrics.json",
+          "results/baseline/training.log",
+          "results/dropout/metrics.json",
+          "results/dropout/training.log"
+        ],
+        "failure_kind": null,
+        "claims": [
+          {
+            "scope": "empirical",
+            "statement": "Reported final validation accuracy was 0.9092 for baseline A and 0.9056 for dropout B. The hypothesized improvement was not observed; the prespecified accuracy rule selected A.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000032",
+              "action-task-c3cc77896c7949f537ac345d-000033",
+              "action-task-c3cc77896c7949f537ac345d-000024"
+            ],
+            "limitations": "GPU-job outputs for one seed and validation split; not independent protected measurement or evidence of general dropout inferiority."
+          },
+          {
+            "scope": "empirical",
+            "statement": "Both jobs report 2150 optimizer steps, finite losses and gradients, finite exported weights, strict reload, tensor equality and matching validation metrics after export.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000032",
+              "action-task-c3cc77896c7949f537ac345d-000033"
+            ],
+            "limitations": "These are same-job checks. Independent inference and repeat-run reproducibility are not established."
+          },
+          {
+            "scope": "document",
+            "statement": "source-influence.json links S1's dropout mechanism and S2's training/evaluation mode separation to implementation locations, actual jobs, outcomes and adaptation limitations.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000039",
+              "action-task-c3cc77896c7949f537ac345d-000038"
+            ],
+            "limitations": "The implementation adapts the sources using the reviewed architecture registry; it is not an exact reproduction. Inherited source materials retain their existing provenance."
+          },
+          {
+            "scope": "document",
+            "statement": "model-ref.json identifies the frozen selected baseline as model-9b5ee269db54d7ac71b0117c.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000027",
+              "action-task-c3cc77896c7949f537ac345d-000040"
+            ],
+            "limitations": "Registration does not establish protected evaluation success or project acceptance."
+          }
+        ],
+        "objections": [],
+        "next_actions": [
+          {
+            "action": "Run the managed protected evaluation and required research, auditor and report-reader reviews on the frozen submission.",
+            "owner": "coordinator",
+            "expected_information": "Independent inference results and review verdicts for the selected model and delivered artifacts.",
+            "acceptance_check": "Required STUDY gates assess this submission against the frozen workflow criteria.",
+            "requires_external": false
+          }
+        ],
+        "open_questions": [
+          "Protected evaluation and independent review outcomes for this frozen submission remain unknown.",
+          "Generalization across seeds and larger training budgets remains unknown and outside this bounded study."
+        ],
+        "work_items": [],
+        "execution_records": [
+          {
+            "action": "read",
+            "target": "train.py",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000038"
+            ]
+          },
+          {
+            "action": "read",
+            "target": "report.md",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000041"
+            ]
+          },
+          {
+            "action": "read",
+            "target": "experiments.json",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000042"
+            ]
+          }
+        ],
+        "candidate_decisions": [
+          {
+            "candidate": "A: approved CNN width32 hidden128 dropout0",
+            "decision": "SELECTED",
+            "reason": "Final validation accuracy 90.92% exceeded B's 90.56% under the prespecified selection rule.",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000032",
+              "action-task-c3cc77896c7949f537ac345d-000033",
+              "action-task-c3cc77896c7949f537ac345d-000024"
+            ],
+            "followup_action": "Evaluate the frozen registered model through the coordinator-managed protected evaluator."
+          },
+          {
+            "candidate": "B: identical approved CNN with dropout0.25",
+            "decision": "REJECTED",
+            "reason": "Final validation accuracy was 0.36 percentage points lower. Lower validation cross-entropy does not override the accuracy selection rule.",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000032",
+              "action-task-c3cc77896c7949f537ac345d-000033",
+              "action-task-c3cc77896c7949f537ac345d-000024"
+            ],
+            "followup_action": "Preserve the negative result and published logs; no further training."
+          }
+        ]
+      }
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "role": "researcher",
+      "scope": "full",
+      "status": "submitted",
+      "steps": 31,
+      "returned_actions": 31,
+      "assignment_outcome": "submitted",
+      "model_seconds": 267.47931170598895,
+      "usage": {
+        "input_tokens": 855062,
+        "cached_input_tokens": 197120,
+        "output_tokens": 4597,
+        "reasoning_output_tokens": 371
+      },
+      "input_names": [
+        "protocol.txt",
+        "fashion_model.py",
+        "fashion_study_models.py",
+        "prior-SOURCES/sources.json",
+        "prior-SOURCES/literature.md",
+        "prior-SOURCES/plan.md",
+        "prior-SOURCES/web-source-003.txt",
+        "prior-SOURCES/web-source-004.txt",
+        "prior-SOURCES/web-source-005.txt",
+        "prior-SOURCES/web-source-006.txt",
+        "prior-SOURCES/web-source-007.pdf",
+        "prior-SOURCES/web-source-007.txt",
+        "prior-SOURCES/web-source-013.txt",
+        "prior-SOURCES/web-source-014.txt",
+        "prior-SOURCES/web-source-015.txt"
+      ],
+      "parent_paths": [
+        "train.py",
+        "fashion_model.py",
+        "fashion_study_models.py",
+        "report.md",
+        "experiments.json",
+        "source-influence.json",
+        "model-ref.json",
+        "results/baseline/metrics.json",
+        "results/baseline/training.log",
+        "results/dropout/metrics.json",
+        "results/dropout/training.log"
+      ],
+      "report": {
+        "status": "DONE",
+        "summary": "Completed the independent research review and recorded PASS for STUDY-review-research. Preserved the review in research-review.md; the frozen candidate remains unchanged.",
+        "files": [
+          "research-review.md"
+        ],
+        "failure_kind": null,
+        "claims": [
+          {
+            "scope": "document",
+            "statement": "The delivered review records PASS for the scoped STUDY-review-research gate and distinguishes attributed validation results from independent measurement and project acceptance.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-dca96872595168b28b9edf4f-000030",
+              "review-dispatch-5a0718d37bff627fd2f04c6a"
+            ],
+            "limitations": "This assignment reviews the frozen submission; it does not establish protected test performance or project acceptance."
+          }
+        ],
+        "objections": [],
+        "next_actions": [],
+        "open_questions": [
+          "Protected test performance remains for the host evaluator to establish."
+        ],
+        "work_items": [],
+        "execution_records": [],
+        "candidate_decisions": []
+      }
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "role": "critic",
+      "scope": "full",
+      "status": "submitted",
+      "steps": 24,
+      "returned_actions": 24,
+      "assignment_outcome": "submitted",
+      "model_seconds": 180.47849354198115,
+      "usage": {
+        "input_tokens": 654638,
+        "cached_input_tokens": 161280,
+        "output_tokens": 3153,
+        "reasoning_output_tokens": 176
+      },
+      "input_names": [
+        "protocol.txt",
+        "fashion_model.py",
+        "fashion_study_models.py",
+        "prior-SOURCES/sources.json",
+        "prior-SOURCES/literature.md",
+        "prior-SOURCES/plan.md",
+        "prior-SOURCES/web-source-003.txt",
+        "prior-SOURCES/web-source-004.txt",
+        "prior-SOURCES/web-source-005.txt",
+        "prior-SOURCES/web-source-006.txt",
+        "prior-SOURCES/web-source-007.pdf",
+        "prior-SOURCES/web-source-007.txt",
+        "prior-SOURCES/web-source-013.txt",
+        "prior-SOURCES/web-source-014.txt",
+        "prior-SOURCES/web-source-015.txt"
+      ],
+      "parent_paths": [
+        "train.py",
+        "fashion_model.py",
+        "fashion_study_models.py",
+        "report.md",
+        "experiments.json",
+        "source-influence.json",
+        "model-ref.json",
+        "results/baseline/metrics.json",
+        "results/baseline/training.log",
+        "results/dropout/metrics.json",
+        "results/dropout/training.log"
+      ],
+      "report": {
+        "status": "DONE",
+        "summary": "Completed the frozen STUDY audit and recorded PASS for STUDY-review-auditor. No significant unresolved defect was found within the inspected scope. This is an artifact and execution-provenance review, not independent experimental reproduction or final project acceptance.",
+        "files": [],
+        "failure_kind": null,
+        "claims": [
+          {
+            "scope": "document",
+            "statement": "The assigned gate recorded PASS for candidate task-c3cc77896c7949f537ac345d at revision ba16cf75be761e01e5e725681ddc4de72b6c60c40bf69aa93f87ab2037967d7f after source, implementation and execution-provenance inspection.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-ed0095e4d61c7c5798ed5bda-000023"
+            ],
+            "limitations": "Applies only to the assigned frozen review scope; the host retains final acceptance authority."
+          },
+          {
+            "scope": "empirical",
+            "statement": "Engineering's two successful job receipts report final validation accuracies of 0.9092 for baseline A and 0.9056 for dropout B. The baseline was registered, and both jobs' metrics and logs were published directly.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-ed0095e4d61c7c5798ed5bda-000018",
+              "action-task-ed0095e4d61c7c5798ed5bda-000019",
+              "action-task-ed0095e4d61c7c5798ed5bda-000020",
+              "action-task-ed0095e4d61c7c5798ed5bda-000021",
+              "action-task-ed0095e4d61c7c5798ed5bda-000022"
+            ],
+            "limitations": "Measurements are attributed to Engineering's runs. Reading execution receipts is not independent reproduction; these validation results do not establish protected test performance or general superiority."
+          }
+        ],
+        "objections": [],
+        "next_actions": [],
+        "open_questions": [],
+        "work_items": [],
+        "execution_records": [],
+        "candidate_decisions": []
+      }
+    },
+    {
+      "assignment": "task-106c79be811194489ae0c803",
+      "role": "report_reader",
+      "scope": "report_only",
+      "status": "submitted",
+      "steps": 3,
+      "returned_actions": 3,
+      "assignment_outcome": "submitted",
+      "model_seconds": 31.283296438014077,
+      "usage": {
+        "input_tokens": 46716,
+        "cached_input_tokens": 8960,
+        "output_tokens": 807,
+        "reasoning_output_tokens": 68
+      },
+      "input_names": [],
+      "parent_paths": [
+        "report.md"
+      ],
+      "report": {
+        "status": "DONE",
+        "summary": "PASS for report comprehension, with one minor chronology ambiguity. The report clearly states the comparison, selection rule, source adaptations, limitations and pending protected evaluation. This review assessed only the delivered report, not experimental validity.",
+        "files": [],
+        "failure_kind": null,
+        "claims": [
+          {
+            "scope": "document",
+            "statement": "The report distinguishes the completed two-run training comparison from pending protected evaluation and independent reviews, and limits its negative dropout finding to the reported single-seed, five-epoch comparison.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-106c79be811194489ae0c803-000001"
+            ],
+            "limitations": "Reported measurements were not independently verified."
+          }
+        ],
+        "objections": [
+          {
+            "target_id": "task-c3cc77896c7949f537ac345d",
+            "category": "EXPERIENCE",
+            "severity": "MINOR",
+            "statement": "The passage “After both results were read, A was selected” is ambiguous alongside “Baseline and comparison metric reads are action-task-c3cc77896c7949f537ac345d-000032 and -000033, respectively; the frozen selection decision is action-task-c3cc77896c7949f537ac345d-000024”. The cited action numbering appears to put selection before the cited reads; the report does not explain this.",
+            "evidence_ids": [
+              "action-task-106c79be811194489ae0c803-000001"
+            ],
+            "resolution_test": "Clarify whether -000032/-000033 were later verification reads and identify the preselection reads, or explain why the action numbering does not represent chronological order."
+          }
+        ],
+        "next_actions": [],
+        "open_questions": [
+          "Which reads informed selection, and are the cited metric reads later verification reads?"
+        ],
+        "work_items": [],
+        "execution_records": [
+          {
+            "action": "read",
+            "target": "inputs/parent/report.md",
+            "evidence_ids": [
+              "action-task-106c79be811194489ae0c803-000001"
+            ]
+          }
+        ],
+        "candidate_decisions": []
+      }
+    },
+    {
+      "assignment": "lead",
+      "role": "coordinator",
+      "scope": null,
+      "status": "completed",
+      "steps": 9,
+      "returned_actions": 9,
+      "assignment_outcome": null,
+      "model_seconds": 63.90546076499595,
+      "usage": {
+        "input_tokens": 222934,
+        "cached_input_tokens": 45440,
+        "output_tokens": 1074,
+        "reasoning_output_tokens": 97
+      },
+      "input_names": [],
+      "parent_paths": [],
+      "report": null
+    }
+  ],
+  "decisions": [
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "role": "researcher",
+      "step": 26,
+      "summary": "Select a prospective two-run hidden-dropout comparison informed by S1 (Dropout: A Simple Way to Prevent Neural Networks from Overfitting) and S2 (pytorch/examples pinned MNIST implementation). sources.json, literature.md and plan.md preserve attribution and adaptations. No training outcome is known; selection here identifies experiments, not a measured winner.",
+      "candidates": [
+        {
+          "kind": "experiment",
+          "target": "A: approved CNN width32 hidden128 dropout0",
+          "status": "SELECTED",
+          "reason": "Baseline for isolating the hidden-dropout factor; run first and inspect actual validation metrics before recording the next execution decision."
+        },
+        {
+          "kind": "experiment",
+          "target": "B: identical approved CNN with dropout0.25",
+          "status": "SELECTED",
+          "reason": "S1 motivates stochastic hidden-unit regularization and S2 demonstrates explicit train/eval separation. The probability and transfer to Fashion-MNIST are untested adaptations. Execute after valid baseline evidence; select B only if final-epoch validation accuracy strictly exceeds A, otherwise retain A. Stop after two valid runs."
+        }
+      ]
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "role": "experiment_engineer",
+      "step": 19,
+      "summary": "Baseline job-76e909120601a06e17b8cd4d succeeded. Its saved metrics report final validation accuracy 0.9092 (4546/5000), 2150 optimizer steps, finite losses/gradients, and successful local export reload checks (action-task-c3cc77896c7949f537ac345d-000018). Proceed with the source-informed dropout comparison prescribed in inputs/prior-SOURCES/plan.md. Change only dropout from 0 to 0.25; retain architecture, initialization seed, sample ordering, split, optimizer, batch size and five-epoch budget. Select B only if its final-epoch validation accuracy strictly exceeds A; ties retain A. Stop after two valid runs. Independent protected evaluation remains pending.",
+      "candidates": [
+        {
+          "kind": "experiment",
+          "target": "A: approved CNN width32 hidden128 dropout0",
+          "status": "completed",
+          "reason": "Valid baseline observed; retain its final-epoch model as the reference candidate with validation accuracy 0.9092."
+        },
+        {
+          "kind": "experiment",
+          "target": "B: identical approved CNN with dropout0.25",
+          "status": "selected",
+          "reason": "Launch the prespecified controlled regularization treatment after inspecting baseline metrics. Its improvement hypothesis remains untested."
+        }
+      ]
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "role": "experiment_engineer",
+      "step": 24,
+      "summary": "Select baseline A under the prespecified final-epoch validation-accuracy rule. Saved metrics report A=0.9092 (4546/5000; action-task-c3cc77896c7949f537ac345d-000018) and B=0.9056 (4528/5000; action-task-c3cc77896c7949f537ac345d-000023). Dropout reduced accuracy by 0.36 percentage points in this single-seed five-epoch comparison, although B had lower validation loss. Accuracy is the frozen selection criterion. Both runs report finite losses/gradients and successful local export checks. Stop training after these two valid runs; register only A. These job outputs are not independent protected measurements, and final protected evaluation remains pending.",
+      "candidates": [
+        {
+          "kind": "model",
+          "target": "A: approved CNN width32 hidden128 dropout0",
+          "status": "selected",
+          "reason": "Higher final-epoch validation accuracy under the prespecified rule; select weights.safetensors from job-76e909120601a06e17b8cd4d."
+        },
+        {
+          "kind": "model",
+          "target": "B: identical approved CNN with dropout0.25",
+          "status": "rejected",
+          "reason": "Final validation accuracy 0.9056 is below baseline 0.9092. Preserve the negative result and stop without further tuning."
+        }
+      ]
+    }
+  ],
+  "search_and_fetch": [
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "step": 3,
+      "tool": "web_search",
+      "argument": "{\"provider\":\"crossref\",\"query\":\"Dropout A Simple Way to Prevent Neural Networks from Overfitting Srivastava\"}",
+      "why": "Discover a primary regularization method that can be tested through the supported dropout parameter while holding architecture fixed.",
+      "url": "https://api.crossref.org/works?query.bibliographic=Dropout%20A%20Simple%20Way%20to%20Prevent%20Neural%20Networks%20from%20Overfitting%20Srivastava&rows=5",
+      "status": "retrieved",
+      "format": "search_metadata",
+      "pages_total": null,
+      "pages_extracted": null,
+      "truncated": null,
+      "text_file": "web-source-003.txt",
+      "transport": {
+        "bytes": 22653,
+        "final_url": "https://api.crossref.org/works?query.bibliographic=Dropout%20A%20Simple%20Way%20to%20Prevent%20Neural%20Networks%20from%20Overfitting%20Srivastava&rows=5",
+        "content_type": "application/json"
+      },
+      "document_error": null
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "step": 4,
+      "tool": "web_search",
+      "argument": "{\"provider\":\"duckduckgo\",\"query\":\"Srivastava Hinton Krizhevsky Sutskever Salakhutdinov Dropout A Simple Way to Prevent Neural Networks from Overfitting jmlr 2014\"}",
+      "why": "Find a discovery record identifying the primary dropout paper; the previous Crossref search returned related works rather than this method paper.",
+      "url": "https://html.duckduckgo.com/html/?q=Srivastava%20Hinton%20Krizhevsky%20Sutskever%20Salakhutdinov%20Dropout%20A%20Simple%20Way%20to%20Prevent%20Neural%20Networks%20from%20Overfitting%20jmlr%202014",
+      "status": "access_blocked",
+      "format": "html",
+      "pages_total": null,
+      "pages_extracted": null,
+      "truncated": null,
+      "text_file": "web-source-004.txt",
+      "transport": {
+        "bytes": 14470,
+        "final_url": "https://html.duckduckgo.com/html/?q=Srivastava%20Hinton%20Krizhevsky%20Sutskever%20Salakhutdinov%20Dropout%20A%20Simple%20Way%20to%20Prevent%20Neural%20Networks%20from%20Overfitting%20jmlr%202014",
+        "content_type": "text/html; charset=UTF-8"
+      },
+      "document_error": null
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "step": 5,
+      "tool": "web_search",
+      "argument": "{\"provider\":\"github\",\"query\":\"dropout Srivastava\"}",
+      "why": "Find public implementation repositories and references identifying the primary dropout method, using an alternate provider after DuckDuckGo blocked access.",
+      "url": "https://api.github.com/search/repositories?q=dropout%20Srivastava&per_page=5",
+      "status": "retrieved",
+      "format": "search_metadata",
+      "pages_total": null,
+      "pages_extracted": null,
+      "truncated": null,
+      "text_file": "web-source-005.txt",
+      "transport": {
+        "bytes": 8674,
+        "final_url": "https://api.github.com/search/repositories?q=dropout%20Srivastava&per_page=5",
+        "content_type": "application/json; charset=utf-8"
+      },
+      "document_error": null
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "step": 6,
+      "tool": "web_fetch",
+      "argument": "https://jmlr.org/papers/v15/srivastava14a.html",
+      "why": "Open the primary publisher reference to verify the dropout paper identity and discover its full method PDF after the search backend challenge.",
+      "url": "https://jmlr.org/papers/v15/srivastava14a.html",
+      "status": "retrieved",
+      "format": "html",
+      "pages_total": null,
+      "pages_extracted": null,
+      "truncated": false,
+      "text_file": "web-source-006.txt",
+      "transport": {
+        "bytes": 6165,
+        "final_url": "https://jmlr.org/papers/v15/srivastava14a.html",
+        "content_type": "text/html"
+      },
+      "document_error": null
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "step": 7,
+      "tool": "web_fetch",
+      "argument": "https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf",
+      "why": "Retrieve the primary method paper discovered through the publisher reference; subsequent read windows will verify its methods and experiments beyond the abstract.",
+      "url": "https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf",
+      "status": "retrieved",
+      "format": "pdf",
+      "pages_total": 30,
+      "pages_extracted": 30,
+      "truncated": false,
+      "text_file": "web-source-007.txt",
+      "transport": {
+        "bytes": 2869095,
+        "final_url": "https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf",
+        "content_type": "application/pdf"
+      },
+      "document_error": null
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "step": 13,
+      "tool": "web_search",
+      "argument": "{\"provider\":\"github\",\"query\":\"pytorch examples\"}",
+      "why": "Discover a public implementation repository with readable Python dropout usage, then resolve a full commit and inspect pinned code; the previously found repository has not yet established usable Python implementation evidence.",
+      "url": "https://api.github.com/search/repositories?q=pytorch%20examples&per_page=5",
+      "status": "retrieved",
+      "format": "search_metadata",
+      "pages_total": null,
+      "pages_extracted": null,
+      "truncated": null,
+      "text_file": "web-source-013.txt",
+      "transport": {
+        "bytes": 29140,
+        "final_url": "https://api.github.com/search/repositories?q=pytorch%20examples&per_page=5",
+        "content_type": "application/json; charset=utf-8"
+      },
+      "document_error": null
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "step": 14,
+      "tool": "web_fetch",
+      "argument": "https://api.github.com/repos/pytorch/examples/commits/main",
+      "why": "Resolve the successfully discovered pytorch/examples repository to an immutable 40-hex commit before fetching and reading its MNIST Python implementation.",
+      "url": "https://api.github.com/repos/pytorch/examples/commits/main",
+      "status": "retrieved",
+      "format": "text",
+      "pages_total": null,
+      "pages_extracted": null,
+      "truncated": false,
+      "text_file": "web-source-014.txt",
+      "transport": {
+        "bytes": 5881,
+        "final_url": "https://api.github.com/repos/pytorch/examples/commits/main",
+        "content_type": "application/json; charset=utf-8"
+      },
+      "document_error": null
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "step": 15,
+      "tool": "web_fetch",
+      "argument": "https://raw.githubusercontent.com/pytorch/examples/acc295dc7b90714f1bf47f06004fc19a7fe235c4/mnist/main.py",
+      "why": "Fetch actual Python from the discovered pytorch/examples repository at its resolved immutable 40-hex commit, then inspect its model and training functions to distinguish transferable dropout usage from architecture and training differences.",
+      "url": "https://raw.githubusercontent.com/pytorch/examples/acc295dc7b90714f1bf47f06004fc19a7fe235c4/mnist/main.py",
+      "status": "retrieved",
+      "format": "text",
+      "pages_total": null,
+      "pages_extracted": null,
+      "truncated": false,
+      "text_file": "web-source-015.txt",
+      "transport": {
+        "bytes": 5392,
+        "final_url": "https://raw.githubusercontent.com/pytorch/examples/acc295dc7b90714f1bf47f06004fc19a7fe235c4/mnist/main.py",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      "document_error": null
+    }
+  ],
+  "tool_errors": [
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "step": 43,
+      "tool": "submit_report",
+      "observation": {
+        "error": "ValueError",
+        "detail": "Cannot preserve inputs/protocol.txt: Submit authored files, not read-only inputs"
+      }
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "step": 29,
+      "tool": "submit_report",
+      "observation": {
+        "error": "ValueError",
+        "detail": "Observed document claim needs evidence for delivered material"
+      }
+    }
+  ],
+  "exact_repeated_read_windows": [
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "role": "researcher",
+      "path": "inputs/fashion_study_models.py",
+      "offset": 0,
+      "limit": 8000,
+      "reads": 3,
+      "extra_reads": 2
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "role": "critic",
+      "path": "inputs/parent/sources.json",
+      "offset": 0,
+      "limit": 8000,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "role": "critic",
+      "evidence_id": "task-feb95b2824d2014c7d6e386f-dispatch-1517be9988afb49f2ec5484d",
+      "offset": 0,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "role": "critic",
+      "path": "inputs/parent/sources.json",
+      "offset": 0,
+      "limit": 8000,
+      "reads": 3,
+      "extra_reads": 2
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "role": "critic",
+      "evidence_id": "task-feb95b2824d2014c7d6e386f-dispatch-1517be9988afb49f2ec5484d",
+      "offset": 0,
+      "reads": 3,
+      "extra_reads": 2
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "role": "critic",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000013",
+      "offset": 0,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "role": "critic",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000007",
+      "offset": 0,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "role": "critic",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000015",
+      "offset": 0,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "role": "critic",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000010",
+      "offset": 0,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "role": "critic",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000019",
+      "offset": 0,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "role": "experiment_engineer",
+      "path": "inputs/prior-SOURCES/plan.md",
+      "offset": 0,
+      "limit": 8000,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "role": "experiment_engineer",
+      "path": "inputs/prior-SOURCES/sources.json",
+      "offset": 0,
+      "limit": 8000,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "role": "experiment_engineer",
+      "path": "train.py",
+      "offset": 0,
+      "limit": 8000,
+      "reads": 3,
+      "extra_reads": 2
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "role": "researcher",
+      "path": "inputs/parent/experiments.json",
+      "offset": 0,
+      "limit": 8000,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "role": "researcher",
+      "evidence_id": "task-c3cc77896c7949f537ac345d-dispatch-f6db6abca3945411f52df5e3",
+      "offset": 0,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "role": "critic",
+      "path": "inputs/parent/experiments.json",
+      "offset": 0,
+      "limit": 8000,
+      "reads": 2,
+      "extra_reads": 1
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "role": "critic",
+      "path": "inputs/parent/source-influence.json",
+      "offset": 0,
+      "limit": 8000,
+      "reads": 2,
+      "extra_reads": 1
+    }
+  ],
+  "source_read_context_previews": [
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "010",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000009",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "011",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000009",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "011",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "012",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000009",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "012",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "013",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000009",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "013",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "014",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000009",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "014",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "015",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000009",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "015",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "016",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "020",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000019",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "021",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000019",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "022",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000019",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "023",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000019",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "024",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000019",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-feb95b2824d2014c7d6e386f",
+      "turn": "025",
+      "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000019",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "006",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "007",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "007",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "008",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "008",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "009",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "009",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "010",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "010",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "011",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "011",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-fb7c7fc996346ab229207b7d",
+      "turn": "012",
+      "evidence_id": "action-task-fb7c7fc996346ab229207b7d-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "006",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "007",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "007",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "008",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "008",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "009",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "009",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "010",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "010",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "011",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "011",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "turn": "012",
+      "evidence_id": "action-task-355deb3c7eeaf65eb18dc0f0-000006",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "006",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "007",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "008",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "009",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "010",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "011",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000005",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "012",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "013",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "014",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "015",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "016",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "017",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "032",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000031",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "033",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000031",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "034",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000031",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "035",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000031",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "036",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000031",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "037",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000031",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "038",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000037",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "039",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000037",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "040",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000037",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "041",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000037",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "042",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000037",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-c3cc77896c7949f537ac345d",
+      "turn": "043",
+      "evidence_id": "action-task-c3cc77896c7949f537ac345d-000037",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "004",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000003",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "005",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000003",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "006",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000003",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "007",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000003",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "008",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000003",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "009",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000003",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "011",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "012",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "013",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "014",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "015",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-dca96872595168b28b9edf4f",
+      "turn": "016",
+      "evidence_id": "action-task-dca96872595168b28b9edf4f-000010",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "005",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000004",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "006",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000004",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "007",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000004",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "008",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000004",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "009",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000004",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "010",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000004",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "012",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "013",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "014",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "015",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "016",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000011",
+      "preview_characters": 4000
+    },
+    {
+      "assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "turn": "017",
+      "evidence_id": "action-task-ed0095e4d61c7c5798ed5bda-000011",
+      "preview_characters": 4000
+    }
+  ],
+  "host_interventions": [
+    {
+      "sequence": 39,
+      "kind": "managed_wait",
+      "data": {
+        "request_id": "work-wait-09f335fe7146daf09a424e45",
+        "reason": "W-0002 critic: [Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/literature-live-01/team-state.json.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/literature-live-01/team-state.json'"
+      }
+    },
+    {
+      "sequence": 41,
+      "kind": "external_event",
+      "data": {
+        "evidence_id": "external-53f125e780e8dc6724331c9cc320467d121441d8dac72b896216b1a5bf17abf7",
+        "request_id": "work-wait-09f335fe7146daf09a424e45"
+      }
+    }
+  ],
+  "reviews": [
+    {
+      "gate_id": "SOURCES-review-auditor",
+      "candidate": "task-feb95b2824d2014c7d6e386f",
+      "verdict": "PASS",
+      "evidence_ids": [
+        "task-feb95b2824d2014c7d6e386f-dispatch-1517be9988afb49f2ec5484d",
+        "action-task-355deb3c7eeaf65eb18dc0f0-000024",
+        "action-task-355deb3c7eeaf65eb18dc0f0-000025",
+        "action-task-355deb3c7eeaf65eb18dc0f0-000026",
+        "action-task-355deb3c7eeaf65eb18dc0f0-000027",
+        "action-task-355deb3c7eeaf65eb18dc0f0-000028",
+        "action-task-355deb3c7eeaf65eb18dc0f0-000029"
+      ],
+      "summary": "PASS within the frozen SOURCES scope. Preserved independent inspections cover the source manifest, literature, plan, discovery links and registry compatibility. Provenance checks confirm a successfully fetched, untruncated 30-page dropout method paper, distinct substantial method and experimental reading windows, and actual Python implementation reading at a 40-hex commit. The proposed controlled dropout comparison distinguishes published findings from untested Fashion-MNIST transfer and documents adaptation and bounded selection rules. No significant unresolved source-stage defect was found. This review establishes neither training results nor independent reproduction; it does not approve any other gate. Prior storage failure is an operational limitation whose resolution depends on successful persistence of this verdict.",
+      "candidate_revision": "eb50c754caab42713e952f538c5bc49a4275ec636a65cdfb38cd0e9e71a2535a",
+      "reviewer_assignment": "task-355deb3c7eeaf65eb18dc0f0",
+      "scope": "Independent assignment review only; not an independent experiment or external observation",
+      "evidence_id": "review-dispatch-1a07543a20586ba1e408039f"
+    },
+    {
+      "gate_id": "STUDY-review-research",
+      "candidate": "task-c3cc77896c7949f537ac345d",
+      "verdict": "PASS",
+      "evidence_ids": [
+        "task-c3cc77896c7949f537ac345d-dispatch-f6db6abca3945411f52df5e3",
+        "action-task-dca96872595168b28b9edf4f-000024",
+        "action-task-dca96872595168b28b9edf4f-000022",
+        "action-task-dca96872595168b28b9edf4f-000023",
+        "action-task-dca96872595168b28b9edf4f-000025",
+        "action-task-dca96872595168b28b9edf4f-000026",
+        "action-task-dca96872595168b28b9edf4f-000027"
+      ],
+      "summary": "PASS for the scoped independent research review. Preserved inspection covered source attribution and adaptation, training code and data isolation, prospective decisions, and reported metrics. Both training jobs have SUCCEEDED receipts, and metrics/logs were published directly from those jobs. Engineering reports final validation accuracy 0.9092 for baseline and 0.9056 for dropout; selecting baseline preserves the negative comparison and follows the prespecified final-epoch rule. The frozen model reference matches the inspected baseline registration. These are attributed single-seed validation results, not independently reproduced measurements or protected test results; broader improvement remains unsupported. Candidate unchanged; no other gate approved.",
+      "candidate_revision": "ba16cf75be761e01e5e725681ddc4de72b6c60c40bf69aa93f87ab2037967d7f",
+      "reviewer_assignment": "task-dca96872595168b28b9edf4f",
+      "scope": "Independent assignment review only; not an independent experiment or external observation",
+      "evidence_id": "review-dispatch-5a0718d37bff627fd2f04c6a"
+    },
+    {
+      "gate_id": "STUDY-review-auditor",
+      "candidate": "task-c3cc77896c7949f537ac345d",
+      "verdict": "PASS",
+      "evidence_ids": [
+        "task-c3cc77896c7949f537ac345d-dispatch-f6db6abca3945411f52df5e3",
+        "action-task-ed0095e4d61c7c5798ed5bda-000017",
+        "action-task-ed0095e4d61c7c5798ed5bda-000018",
+        "action-task-ed0095e4d61c7c5798ed5bda-000019",
+        "action-task-ed0095e4d61c7c5798ed5bda-000020",
+        "action-task-ed0095e4d61c7c5798ed5bda-000021",
+        "action-task-ed0095e4d61c7c5798ed5bda-000022"
+      ],
+      "summary": "Scoped independent artifact and execution-provenance review completed without a significant unresolved defect. Prior inspection covered the frozen report, experiments, code, prospective plan and preserved method/code sources; continuation verified source influence, both original SUCCEEDED receipts, direct publication of metrics/logs and registration of the selected baseline. Engineering's reported final validation accuracy is 0.9092 for baseline A versus 0.9056 for dropout B, consistent with the prespecified selection rule and preserved negative result. Inspected code separates fitting and validation and includes required CUDA, seed, thread and export checks. Source transfer limitations are disclosed. This review is not an independent training reproduction or protected test measurement; final project acceptance remains with the host.",
+      "candidate_revision": "ba16cf75be761e01e5e725681ddc4de72b6c60c40bf69aa93f87ab2037967d7f",
+      "reviewer_assignment": "task-ed0095e4d61c7c5798ed5bda",
+      "scope": "Independent assignment review only; not an independent experiment or external observation",
+      "evidence_id": "review-dispatch-babd1a83336fb5e5e82b22cb"
+    },
+    {
+      "gate_id": "STUDY-review-report_reader",
+      "candidate": "task-c3cc77896c7949f537ac345d",
+      "verdict": "PASS",
+      "evidence_ids": [
+        "task-c3cc77896c7949f537ac345d-dispatch-f6db6abca3945411f52df5e3",
+        "action-task-106c79be811194489ae0c803-000001"
+      ],
+      "summary": "Report-only review: the comparison, selection criterion, source adaptations, negative finding and pending protected evaluation are clear. One minor presentation gap: the report says selection followed reading both results, but cites metric-read actions -000032/-000033 and selection action -000024. Clarify whether the cited reads are later verification reads and identify the preselection reads, or explain the ordering. This is a trace-description ambiguity, not a finding about execution validity. No independent experimental verification was performed.",
+      "candidate_revision": "ba16cf75be761e01e5e725681ddc4de72b6c60c40bf69aa93f87ab2037967d7f",
+      "reviewer_assignment": "task-106c79be811194489ae0c803",
+      "scope": "Independent assignment review only; not an independent experiment or external observation",
+      "evidence_id": "review-dispatch-80cf8df22f7917c6f51a7e8b"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "job-76e909120601a06e17b8cd4d",
+      "owner": "agents/task-c3cc77896c7949f537ac345d",
+      "status": "SUCCEEDED",
+      "request": {
+        "profile": "gpu",
+        "code_files": [
+          "train.py",
+          "fashion_model.py",
+          "fashion_study_models.py"
+        ],
+        "entrypoint": "train.py",
+        "args": [
+          "--dataset-id",
+          "dataset-94a2a09dd65605ee653be981",
+          "--dropout",
+          "0.0"
+        ],
+        "dataset_ids": [
+          "dataset-94a2a09dd65605ee653be981"
+        ]
+      },
+      "metrics": {
+        "spec": {
+          "family": "cnn",
+          "width": 32,
+          "hidden": 128,
+          "dropout": 0.0
+        },
+        "seed": 1337,
+        "dataset_id": "dataset-94a2a09dd65605ee653be981",
+        "split": {
+          "fit": [
+            0,
+            55000
+          ],
+          "validation": [
+            55000,
+            60000
+          ],
+          "source": "official training corpus",
+          "test_accessed": false
+        },
+        "hyperparameters": {
+          "epochs": 5,
+          "batch_size": 128,
+          "optimizer": "Adam",
+          "lr": 0.001,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0,
+          "amsgrad": false,
+          "foreach": false,
+          "schedule": null,
+          "augmentation": null,
+          "input_scaling": "raw uint8 / 255; range [0,1]"
+        },
+        "device": {
+          "type": "cuda",
+          "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
+          "torch_version": "2.9.1+cu128",
+          "cuda_version": "12.8",
+          "threads": 4,
+          "deterministic_algorithms": true
+        },
+        "initial_state_sha256": "2800e8007fd4f7b67d3af0d9aecb6746d5beb9b81aa22c904248aebc1113032a",
+        "epochs": [
+          {
+            "epoch": 1,
+            "loss": 0.5229701810229909,
+            "validation_loss": 0.37819813079833986,
+            "validation_accuracy": 0.8606,
+            "validation_correct": 4303,
+            "optimizer_steps": 430,
+            "finite_gradients": true,
+            "sample_order_sha256": "31da5ecb2729d1006c9fd0e266256a20cb1b5f6127182c871b7eb128a343afff",
+            "time_seconds": 3.533050619000278
+          },
+          {
+            "epoch": 2,
+            "loss": 0.3272470440344377,
+            "validation_loss": 0.3074686149597168,
+            "validation_accuracy": 0.8878,
+            "validation_correct": 4439,
+            "optimizer_steps": 860,
+            "finite_gradients": true,
+            "sample_order_sha256": "cbdf8d7c67aabab5f72ebf821e54c612a21245950c0a50d3bcbd3f63ff10e2f3",
+            "time_seconds": 2.7991637750019436
+          },
+          {
+            "epoch": 3,
+            "loss": 0.28249572100856085,
+            "validation_loss": 0.26971387367248534,
+            "validation_accuracy": 0.901,
+            "validation_correct": 4505,
+            "optimizer_steps": 1290,
+            "finite_gradients": true,
+            "sample_order_sha256": "c34c5b443734c70eae8d6f9b75ab914d86de8c384d6ec6b949cb770cbe61d185",
+            "time_seconds": 2.380913724002312
+          },
+          {
+            "epoch": 4,
+            "loss": 0.250964444845373,
+            "validation_loss": 0.2679497489929199,
+            "validation_accuracy": 0.9038,
+            "validation_correct": 4519,
+            "optimizer_steps": 1720,
+            "finite_gradients": true,
+            "sample_order_sha256": "c8b7903aeff4024b52c0736963642f6da12e5da98464fa9b3af8c69b5cdd08eb",
+            "time_seconds": 2.3164230460024555
+          },
+          {
+            "epoch": 5,
+            "loss": 0.23017681181972677,
+            "validation_loss": 0.2530856803894043,
+            "validation_accuracy": 0.9092,
+            "validation_correct": 4546,
+            "optimizer_steps": 2150,
+            "finite_gradients": true,
+            "sample_order_sha256": "131b7d236334e702a606ff63feae239ac2704de8b5a3d11184a77bf5fa111185",
+            "time_seconds": 2.285527653999452
+          }
+        ],
+        "optimizer_steps": 2150,
+        "finite_gradients": true,
+        "finite_loss": true,
+        "selection_rule": "Compare final epoch validation accuracy; B must strictly exceed A; ties retain A",
+        "resumed": false,
+        "time_seconds": 15.81009688800259,
+        "validation_accuracy": 0.9092,
+        "export_validation": {
+          "strict_reload": true,
+          "finite_weights": true,
+          "tensor_equality": true,
+          "validation": {
+            "loss": 0.2530856803894043,
+            "accuracy": 0.9092,
+            "correct": 4546,
+            "samples": 5000
+          },
+          "weights_sha256": "7acfeb19ca276e6499ad94f191eb084ab2b9b9e83552b2668c7fbe96b9dbdb8b",
+          "scope": "same-job local export verification; not independent evaluation"
+        },
+        "completed": true
+      }
+    },
+    {
+      "id": "job-45be0297e10d96995f36ea08",
+      "owner": "agents/task-c3cc77896c7949f537ac345d",
+      "status": "SUCCEEDED",
+      "request": {
+        "profile": "gpu",
+        "code_files": [
+          "train.py",
+          "fashion_model.py",
+          "fashion_study_models.py"
+        ],
+        "entrypoint": "train.py",
+        "args": [
+          "--dataset-id",
+          "dataset-94a2a09dd65605ee653be981",
+          "--dropout",
+          "0.25"
+        ],
+        "dataset_ids": [
+          "dataset-94a2a09dd65605ee653be981"
+        ]
+      },
+      "metrics": {
+        "spec": {
+          "family": "cnn",
+          "width": 32,
+          "hidden": 128,
+          "dropout": 0.25
+        },
+        "seed": 1337,
+        "dataset_id": "dataset-94a2a09dd65605ee653be981",
+        "split": {
+          "fit": [
+            0,
+            55000
+          ],
+          "validation": [
+            55000,
+            60000
+          ],
+          "source": "official training corpus",
+          "test_accessed": false
+        },
+        "hyperparameters": {
+          "epochs": 5,
+          "batch_size": 128,
+          "optimizer": "Adam",
+          "lr": 0.001,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0,
+          "amsgrad": false,
+          "foreach": false,
+          "schedule": null,
+          "augmentation": null,
+          "input_scaling": "raw uint8 / 255; range [0,1]"
+        },
+        "device": {
+          "type": "cuda",
+          "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
+          "torch_version": "2.9.1+cu128",
+          "cuda_version": "12.8",
+          "threads": 4,
+          "deterministic_algorithms": true
+        },
+        "initial_state_sha256": "2800e8007fd4f7b67d3af0d9aecb6746d5beb9b81aa22c904248aebc1113032a",
+        "epochs": [
+          {
+            "epoch": 1,
+            "loss": 0.5651086699095639,
+            "validation_loss": 0.36970834350585935,
+            "validation_accuracy": 0.8648,
+            "validation_correct": 4324,
+            "optimizer_steps": 430,
+            "finite_gradients": true,
+            "sample_order_sha256": "31da5ecb2729d1006c9fd0e266256a20cb1b5f6127182c871b7eb128a343afff",
+            "time_seconds": 3.5255473629949847
+          },
+          {
+            "epoch": 2,
+            "loss": 0.3527402428670363,
+            "validation_loss": 0.3085724769592285,
+            "validation_accuracy": 0.8836,
+            "validation_correct": 4418,
+            "optimizer_steps": 860,
+            "finite_gradients": true,
+            "sample_order_sha256": "cbdf8d7c67aabab5f72ebf821e54c612a21245950c0a50d3bcbd3f63ff10e2f3",
+            "time_seconds": 3.711977165999997
+          },
+          {
+            "epoch": 3,
+            "loss": 0.309193249242956,
+            "validation_loss": 0.27421556587219237,
+            "validation_accuracy": 0.8964,
+            "validation_correct": 4482,
+            "optimizer_steps": 1290,
+            "finite_gradients": true,
+            "sample_order_sha256": "c34c5b443734c70eae8d6f9b75ab914d86de8c384d6ec6b949cb770cbe61d185",
+            "time_seconds": 3.7297458019966143
+          },
+          {
+            "epoch": 4,
+            "loss": 0.27745625784180383,
+            "validation_loss": 0.25970926666259764,
+            "validation_accuracy": 0.9048,
+            "validation_correct": 4524,
+            "optimizer_steps": 1720,
+            "finite_gradients": true,
+            "sample_order_sha256": "c8b7903aeff4024b52c0736963642f6da12e5da98464fa9b3af8c69b5cdd08eb",
+            "time_seconds": 2.761560566999833
+          },
+          {
+            "epoch": 5,
+            "loss": 0.2547022829055786,
+            "validation_loss": 0.2513106430053711,
+            "validation_accuracy": 0.9056,
+            "validation_correct": 4528,
+            "optimizer_steps": 2150,
+            "finite_gradients": true,
+            "sample_order_sha256": "131b7d236334e702a606ff63feae239ac2704de8b5a3d11184a77bf5fa111185",
+            "time_seconds": 3.2556864290017984
+          }
+        ],
+        "optimizer_steps": 2150,
+        "finite_gradients": true,
+        "finite_loss": true,
+        "selection_rule": "Compare final epoch validation accuracy; B must strictly exceed A; ties retain A",
+        "resumed": false,
+        "time_seconds": 19.01712917900295,
+        "validation_accuracy": 0.9056,
+        "export_validation": {
+          "strict_reload": true,
+          "finite_weights": true,
+          "tensor_equality": true,
+          "validation": {
+            "loss": 0.2513106430053711,
+            "accuracy": 0.9056,
+            "correct": 4528,
+            "samples": 5000
+          },
+          "weights_sha256": "fdf205296edf66a695de8edb94dd41233150f5bc4b1f05e7776a78a432e85e9f",
+          "scope": "same-job local export verification; not independent evaluation"
+        },
+        "completed": true
+      }
+    }
+  ],
+  "deliveries": {
+    "SOURCES": {
+      "sources.json": {
+        "sources": [
+          {
+            "id": "S1",
+            "kind": "paper",
+            "title": "Dropout: A Simple Way to Prevent Neural Networks from Overfitting",
+            "url": "https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf",
+            "fetch_evidence_id": "action-task-feb95b2824d2014c7d6e386f-000007",
+            "read_evidence_ids": [
+              "action-task-feb95b2824d2014c7d6e386f-000010",
+              "action-task-feb95b2824d2014c7d6e386f-000019"
+            ],
+            "discovery_evidence_id": "action-task-feb95b2824d2014c7d6e386f-000006",
+            "discovery_term": "Dropout: A Simple Way to Prevent Neural Networks from Overfitting",
+            "text_file": "web-source-007.txt",
+            "discovery_text_file": "web-source-006.txt",
+            "sections_read": [
+              "Text offset 14000, limit 8000: section 4 model description, section 5 learning, beginning of experiments; includes PDF pages 6 and 7",
+              "Text offset 21000, limit 8000: section 6 experiments, including section 6.1.1 MNIST and Table 2"
+            ],
+            "finding": "The method samples Bernoulli masks during training, propagates gradients through the retained units, and uses a deterministic scaled network at inference. Published MNIST comparisons report lower error with dropout and further differences with activation, max-norm regularization and network size; these are published results, not measurements from this assignment.",
+            "decision": "Use hidden-unit dropout as the single experimental factor in a bounded comparison against the identical approved CNN with dropout disabled.",
+            "limitations": "The saved extraction is reported as 30 pages without truncation; only the specified windows were inspected, not every page or Appendix B. The extraction service caps PDFs at 40 pages/200000 characters. Published results concern other datasets, including digit MNIST, and different architectures and optimization regimes. No Fashion-MNIST benefit or exact reproduction is established."
+          },
+          {
+            "id": "S2",
+            "kind": "implementation",
+            "title": "PyTorch examples: MNIST convolutional classifier",
+            "url": "https://raw.githubusercontent.com/pytorch/examples/acc295dc7b90714f1bf47f06004fc19a7fe235c4/mnist/main.py",
+            "fetch_evidence_id": "action-task-feb95b2824d2014c7d6e386f-000015",
+            "read_evidence_ids": [
+              "action-task-feb95b2824d2014c7d6e386f-000017"
+            ],
+            "discovery_evidence_id": "action-task-feb95b2824d2014c7d6e386f-000013",
+            "discovery_term": "pytorch/examples",
+            "text_file": "web-source-015.txt",
+            "discovery_text_file": "web-source-013.txt",
+            "commit_resolution_text_file": "web-source-014.txt",
+            "sections_read": [
+              "Entire 5392-byte Python file: Net.__init__, Net.forward, train, test and main"
+            ],
+            "finding": "Net uses two convolutions, one pooling operation, dropout probabilities 0.25 and 0.5, and a 128-unit hidden layer. Training and evaluation explicitly switch model modes. Defaults use digit MNIST, normalization by mean 0.1307 and standard deviation 0.3081, 14 epochs, Adadelta at learning rate 1.0 and an epoch StepLR multiplier of 0.7.",
+            "decision": "Adopt explicit training/evaluation mode separation and investigate hidden dropout; write original training code using the reviewed local builder rather than execute this external file.",
+            "limitations": "Source inspection only; external code was not executed. The local registry uses padded convolutions, two pooling operations and one hidden dropout location. Fashion-MNIST raw inputs, five epochs and the planned optimizer differ from this example. Its test-data loading path must not be copied."
+          }
+        ],
+        "access_failures": [
+          {
+            "provider": "duckduckgo",
+            "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000004",
+            "failure": "Bot challenge",
+            "response": "Did not repeatedly poll; switched search providers. Successful GitHub discovery is recorded in receipt 000013."
+          }
+        ]
+      }
+    },
+    "STUDY": {
+      "source-influence.json": {
+        "influences": [
+          {
+            "source_id": "S1",
+            "title": "Dropout: A Simple Way to Prevent Neural Networks from Overfitting",
+            "url": "https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf",
+            "decision": "Adopt hidden activation dropout as the sole controlled factor: baseline A uses probability 0 and comparison B uses 0.25. After reading baseline feedback, execute the prespecified comparison. Retain A because B does not improve final-epoch validation accuracy.",
+            "code_location": "train.py: main(), --dropout argument, spec construction and build(spec); epoch loop calls model.train(); validate() calls model.eval(). The reviewed fashion_study_models.py builder supplies the registered architecture and dropout layer.",
+            "job_ids": [
+              "job-76e909120601a06e17b8cd4d",
+              "job-45be0297e10d96995f36ea08"
+            ],
+            "observed_result": "Published job metrics report final validation accuracy 0.9092 for A and 0.9056 for B: B minus A is -0.36 percentage points, or 18 fewer correct predictions among 5000. B has lower validation cross-entropy, but accuracy determines selection. The hypothesized accuracy benefit was not observed.",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000030",
+              "action-task-c3cc77896c7949f537ac345d-000032",
+              "action-task-c3cc77896c7949f537ac345d-000033",
+              "action-task-c3cc77896c7949f537ac345d-000037",
+              "action-task-c3cc77896c7949f537ac345d-000038",
+              "action-task-c3cc77896c7949f537ac345d-000024"
+            ],
+            "limitations": "Mechanism transfer, not exact reproduction or a source-established optimal probability. This study uses Fashion-MNIST, the approved width32/hidden128 CNN, raw [0,1] inputs, five epochs and Adam without a schedule. The inspected paper experiments use other architectures and discuss SGD, momentum, learning-rate decay, max-norm and other retention probabilities. Exact paper preprocessing and per-experiment epoch counts are not asserted. One seed and split cannot establish general dropout superiority or inferiority. Paper reading coverage is recorded in the inherited source manifest; full-paper reading is not claimed."
+          },
+          {
+            "source_id": "S2",
+            "title": "PyTorch examples: MNIST convolutional classifier",
+            "url": "https://raw.githubusercontent.com/pytorch/examples/acc295dc7b90714f1bf47f06004fc19a7fe235c4/mnist/main.py",
+            "decision": "Adopt explicit training/evaluation mode separation in the original training implementation. Use only reviewed local data loaders and the approved model builder; the fetched Python file is evidence and was not executed.",
+            "code_location": "train.py: main() epoch loop calls model.train() before fitting; validate() calls model.eval() and torch.inference_mode(); final export verification invokes validate() on a strictly reloaded model.",
+            "job_ids": [
+              "job-76e909120601a06e17b8cd4d",
+              "job-45be0297e10d96995f36ea08"
+            ],
+            "observed_result": "Both jobs report finite loss and gradients, 2150 optimizer steps, finite exported tensors, strict reload, tensor equality and matching validation metrics after export. Mode separation was shared by both candidates and its causal contribution was not separately measured.",
+            "evidence_ids": [
+              "action-task-c3cc77896c7949f537ac345d-000030",
+              "action-task-c3cc77896c7949f537ac345d-000032",
+              "action-task-c3cc77896c7949f537ac345d-000033",
+              "action-task-c3cc77896c7949f537ac345d-000037",
+              "action-task-c3cc77896c7949f537ac345d-000038"
+            ],
+            "limitations": "Not an exact reproduction. The source uses digit MNIST, normalized inputs, unpadded convolutions, one pooling operation, feature and hidden dropout, log-softmax/NLL and defaults of 14 epochs, batch64, Adadelta and StepLR. This study uses Fashion-MNIST, raw [0,1] inputs, the approved padded CNN with two pooling operations and one hidden dropout location, raw-logit cross-entropy, five epochs, batch128 and Adam without a schedule. Export verification is same-job evidence, not independent protected evaluation."
+          }
+        ],
+        "source_manifest": "inputs/prior-SOURCES/sources.json",
+        "prospective_plan": "inputs/prior-SOURCES/plan.md",
+        "measurement_files": [
+          "results/baseline/metrics.json",
+          "results/baseline/training.log",
+          "results/dropout/metrics.json",
+          "results/dropout/training.log"
+        ],
+        "selected_model_id": "model-9b5ee269db54d7ac71b0117c",
+        "independent_evaluation": "Pending coordinator-managed evaluation of this frozen selected model; no protected test result is claimed."
+      },
+      "experiments.json": {
+        "study": "Bounded Fashion-MNIST hidden-dropout comparison",
+        "protocol": "inputs/prior-SOURCES/plan.md",
+        "source_ids": [
+          "S1",
+          "S2"
+        ],
+        "dataset_id": "dataset-94a2a09dd65605ee653be981",
+        "implementation": [
+          "train.py",
+          "fashion_model.py",
+          "fashion_study_models.py"
+        ],
+        "fixed_configuration": {
+          "family": "cnn",
+          "width": 32,
+          "hidden": 128,
+          "seed": 1337,
+          "epochs": 5,
+          "batch_size": 128,
+          "validation_batch_size": 256,
+          "optimizer": "Adam",
+          "lr": 0.001,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "weight_decay": 0,
+          "amsgrad": false,
+          "foreach": false,
+          "schedule": null,
+          "loss": "raw-logit cross-entropy",
+          "augmentation": null,
+          "input_scaling": "raw uint8 / 255",
+          "fit_indices": [
+            0,
+            55000
+          ],
+          "validation_indices": [
+            55000,
+            60000
+          ],
+          "index_interval_convention": "start inclusive, end exclusive",
+          "corpus": "official training corpus only",
+          "device": "CUDA",
+          "torch_threads": 4,
+          "deterministic_algorithms": true
+        },
+        "controlled_factor": "hidden dropout probability: 0 versus 0.25",
+        "hypothesis": "B improves final-epoch validation accuracy over A under this fixed budget.",
+        "selection_rule": "Select B only if its final-epoch validation accuracy strictly exceeds A; ties retain A. Earlier checkpoints and validation loss do not determine selection.",
+        "runs": [
+          {
+            "candidate": "A",
+            "dropout": 0.0,
+            "job_id": "job-76e909120601a06e17b8cd4d",
+            "reported_completed": true,
+            "resumed": false,
+            "metrics_path": "results/baseline/metrics.json",
+            "log_path": "results/baseline/training.log",
+            "metrics_read_evidence_id": "action-task-c3cc77896c7949f537ac345d-000032",
+            "original_metrics_read_evidence_id": "action-task-c3cc77896c7949f537ac345d-000018",
+            "publish_evidence_id": "action-task-c3cc77896c7949f537ac345d-000025",
+            "final_validation_accuracy": 0.9092,
+            "final_validation_correct": 4546,
+            "validation_samples": 5000,
+            "final_validation_loss": 0.2530856803894043,
+            "final_training_loss": 0.23017681181972677,
+            "optimizer_steps": 2150,
+            "finite_loss": true,
+            "finite_gradients": true,
+            "reported_time_seconds": 15.81009688800259,
+            "export_checks": {
+              "strict_reload": true,
+              "finite_weights": true,
+              "tensor_equality": true,
+              "validation_metrics_match": true
+            },
+            "weights_sha256": "7acfeb19ca276e6499ad94f191eb084ab2b9b9e83552b2668c7fbe96b9dbdb8b",
+            "decision": "SELECTED"
+          },
+          {
+            "candidate": "B",
+            "dropout": 0.25,
+            "job_id": "job-45be0297e10d96995f36ea08",
+            "reported_completed": true,
+            "resumed": false,
+            "metrics_path": "results/dropout/metrics.json",
+            "log_path": "results/dropout/training.log",
+            "metrics_read_evidence_id": "action-task-c3cc77896c7949f537ac345d-000033",
+            "original_metrics_read_evidence_id": "action-task-c3cc77896c7949f537ac345d-000023",
+            "publish_evidence_id": "action-task-c3cc77896c7949f537ac345d-000026",
+            "final_validation_accuracy": 0.9056,
+            "final_validation_correct": 4528,
+            "validation_samples": 5000,
+            "final_validation_loss": 0.2513106430053711,
+            "final_training_loss": 0.2547022829055786,
+            "optimizer_steps": 2150,
+            "finite_loss": true,
+            "finite_gradients": true,
+            "reported_time_seconds": 19.01712917900295,
+            "export_checks": {
+              "strict_reload": true,
+              "finite_weights": true,
+              "tensor_equality": true,
+              "validation_metrics_match": true
+            },
+            "weights_sha256": "fdf205296edf66a695de8edb94dd41233150f5bc4b1f05e7776a78a432e85e9f",
+            "decision": "REJECTED"
+          }
+        ],
+        "comparison": {
+          "B_minus_A_accuracy_percentage_points": -0.36,
+          "B_minus_A_correct": -18,
+          "interpretation": "The hypothesized accuracy improvement was not observed. B had lower validation loss, which was not the selection criterion.",
+          "initial_parameter_hashes_match": true,
+          "all_five_sample_order_hashes_match": true,
+          "initial_state_sha256": "2800e8007fd4f7b67d3af0d9aecb6746d5beb9b81aa22c904248aebc1113032a"
+        },
+        "sequential_execution": {
+          "baseline_feedback": "Baseline metrics were inspected before recording the decision to execute the planned comparison. A valid baseline triggered B without hyperparameter tuning.",
+          "selection_decision_evidence_id": "action-task-c3cc77896c7949f537ac345d-000024",
+          "stopping": "Stopped after the two valid planned runs; no further training is planned."
+        },
+        "selected_model": {
+          "candidate": "A",
+          "model_id": "model-9b5ee269db54d7ac71b0117c",
+          "registration_evidence_id": "action-task-c3cc77896c7949f537ac345d-000027",
+          "checkpoint": "final epoch 5 weights.safetensors"
+        },
+        "measurement_scope": "Reported GPU-job measurements and same-job export verification; independent protected evaluation remains pending for this selected model.",
+        "limitations": [
+          "One seed, one fixed split, one architecture and five epochs; no general superiority or significance claim.",
+          "Determinism was configured, but repeat-run bitwise reproducibility was not tested.",
+          "Training losses were measured during fitting under different dropout settings and are not a matched evaluation-mode training diagnostic.",
+          "Elapsed times exclude orchestration and review and are not production throughput or total-cost measurements.",
+          "Per-class diagnostics were not collected.",
+          "No official test corpus was downloaded or used by this implementation; no protected test result is claimed."
+        ]
+      },
+      "model-ref.json": {
+        "model_id": "model-9b5ee269db54d7ac71b0117c"
+      }
+    }
+  },
+  "verification": {
+    "source-verification.json": {
+      "accepted": true,
+      "sources": [
+        {
+          "id": "S1",
+          "url": "https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf",
+          "kind": "paper",
+          "format": "pdf",
+          "read_receipts": [
+            "action-task-feb95b2824d2014c7d6e386f-000010",
+            "action-task-feb95b2824d2014c7d6e386f-000019"
+          ]
+        },
+        {
+          "id": "S2",
+          "url": "https://raw.githubusercontent.com/pytorch/examples/acc295dc7b90714f1bf47f06004fc19a7fe235c4/mnist/main.py",
+          "kind": "implementation",
+          "format": "text",
+          "read_receipts": [
+            "action-task-feb95b2824d2014c7d6e386f-000017"
+          ]
+        }
+      ],
+      "scope": "Receipt/discovery/body-reading structure only; semantic fidelity is independently reviewed"
+    },
+    "source-visibility-audit.json": {
+      "scope": "Actual body text present in next model prompt, not hidden comprehension or full-paper reading",
+      "windows": [
+        {
+          "source_id": "S1",
+          "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000010",
+          "next_model_turn": "011",
+          "offset": 14000,
+          "returned_characters": 7914,
+          "visible_body_characters": 3487,
+          "truncated_in_context": true,
+          "matches_original_prefix": true
+        },
+        {
+          "source_id": "S1",
+          "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000019",
+          "next_model_turn": "020",
+          "offset": 21000,
+          "returned_characters": 7936,
+          "visible_body_characters": 3506,
+          "truncated_in_context": true,
+          "matches_original_prefix": true
+        },
+        {
+          "source_id": "S2",
+          "evidence_id": "action-task-feb95b2824d2014c7d6e386f-000017",
+          "next_model_turn": "018",
+          "offset": 0,
+          "returned_characters": 5392,
+          "visible_body_characters": 5392,
+          "truncated_in_context": false,
+          "matches_original_prefix": true
+        }
+      ]
+    },
+    "comparison-audit.json": {
+      "scope": "Frozen code comparison plus job-reported controls, not a full independent rerun of optimization",
+      "checks": {
+        "only_dropout_differs_in_spec": true,
+        "identical_training_source": true,
+        "identical_hyperparameters": true,
+        "identical_initial_weights": true,
+        "identical_epoch_sample_order": true,
+        "same_fixed_split": true,
+        "same_steps_and_epoch_budget": true,
+        "actual_cuda_reported": true,
+        "helpers_unchanged": true
+      },
+      "jobs": [
+        "job-76e909120601a06e17b8cd4d",
+        "job-45be0297e10d96995f36ea08"
+      ],
+      "results": [
+        {
+          "dropout": 0.0,
+          "validation_accuracy": 0.9092,
+          "loss": 0.23017681181972677,
+          "validation_loss": 0.2530856803894043,
+          "seconds": 15.81009688800259
+        },
+        {
+          "dropout": 0.25,
+          "validation_accuracy": 0.9056,
+          "loss": 0.2547022829055786,
+          "validation_loss": 0.2513106430053711,
+          "seconds": 19.01712917900295
+        }
+      ]
+    },
+    "final-test.json": {
+      "accepted": true,
+      "model_id": "model-9b5ee269db54d7ac71b0117c",
+      "validation": {
+        "accuracy": 0.9092,
+        "loss": 0.253085680770874,
+        "samples": 5000,
+        "spec": {
+          "family": "cnn",
+          "width": 32,
+          "hidden": 128,
+          "dropout": 0.0
+        }
+      },
+      "test": {
+        "accuracy": 0.9023,
+        "loss": 0.2721662576675415,
+        "samples": 10000,
+        "spec": {
+          "family": "cnn",
+          "width": 32,
+          "hidden": 128,
+          "dropout": 0.0
+        }
+      },
+      "influences": [
+        {
+          "source_id": "S1",
+          "title": "Dropout: A Simple Way to Prevent Neural Networks from Overfitting",
+          "url": "https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf",
+          "decision": "Adopt hidden activation dropout as the sole controlled factor: baseline A uses probability 0 and comparison B uses 0.25. After reading baseline feedback, execute the prespecified comparison. Retain A because B does not improve final-epoch validation accuracy.",
+          "code_location": "train.py: main(), --dropout argument, spec construction and build(spec); epoch loop calls model.train(); validate() calls model.eval(). The reviewed fashion_study_models.py builder supplies the registered architecture and dropout layer.",
+          "job_ids": [
+            "job-76e909120601a06e17b8cd4d",
+            "job-45be0297e10d96995f36ea08"
+          ],
+          "observed_result": "Published job metrics report final validation accuracy 0.9092 for A and 0.9056 for B: B minus A is -0.36 percentage points, or 18 fewer correct predictions among 5000. B has lower validation cross-entropy, but accuracy determines selection. The hypothesized accuracy benefit was not observed.",
+          "evidence_ids": [
+            "action-task-c3cc77896c7949f537ac345d-000030",
+            "action-task-c3cc77896c7949f537ac345d-000032",
+            "action-task-c3cc77896c7949f537ac345d-000033",
+            "action-task-c3cc77896c7949f537ac345d-000037",
+            "action-task-c3cc77896c7949f537ac345d-000038",
+            "action-task-c3cc77896c7949f537ac345d-000024"
+          ],
+          "limitations": "Mechanism transfer, not exact reproduction or a source-established optimal probability. This study uses Fashion-MNIST, the approved width32/hidden128 CNN, raw [0,1] inputs, five epochs and Adam without a schedule. The inspected paper experiments use other architectures and discuss SGD, momentum, learning-rate decay, max-norm and other retention probabilities. Exact paper preprocessing and per-experiment epoch counts are not asserted. One seed and split cannot establish general dropout superiority or inferiority. Paper reading coverage is recorded in the inherited source manifest; full-paper reading is not claimed."
+        },
+        {
+          "source_id": "S2",
+          "title": "PyTorch examples: MNIST convolutional classifier",
+          "url": "https://raw.githubusercontent.com/pytorch/examples/acc295dc7b90714f1bf47f06004fc19a7fe235c4/mnist/main.py",
+          "decision": "Adopt explicit training/evaluation mode separation in the original training implementation. Use only reviewed local data loaders and the approved model builder; the fetched Python file is evidence and was not executed.",
+          "code_location": "train.py: main() epoch loop calls model.train() before fitting; validate() calls model.eval() and torch.inference_mode(); final export verification invokes validate() on a strictly reloaded model.",
+          "job_ids": [
+            "job-76e909120601a06e17b8cd4d",
+            "job-45be0297e10d96995f36ea08"
+          ],
+          "observed_result": "Both jobs report finite loss and gradients, 2150 optimizer steps, finite exported tensors, strict reload, tensor equality and matching validation metrics after export. Mode separation was shared by both candidates and its causal contribution was not separately measured.",
+          "evidence_ids": [
+            "action-task-c3cc77896c7949f537ac345d-000030",
+            "action-task-c3cc77896c7949f537ac345d-000032",
+            "action-task-c3cc77896c7949f537ac345d-000033",
+            "action-task-c3cc77896c7949f537ac345d-000037",
+            "action-task-c3cc77896c7949f537ac345d-000038"
+          ],
+          "limitations": "Not an exact reproduction. The source uses digit MNIST, normalized inputs, unpadded convolutions, one pooling operation, feature and hidden dropout, log-softmax/NLL and defaults of 14 epochs, batch64, Adadelta and StepLR. This study uses Fashion-MNIST, raw [0,1] inputs, the approved padded CNN with two pooling operations and one hidden dropout location, raw-logit cross-entropy, five epochs, batch128 and Adam without a schedule. Export verification is same-job evidence, not independent protected evaluation."
+        }
+      ],
+      "scope": "Valid source-linked experiment delivery, not accuracy/novelty superiority"
+    },
+    "validation-audit.json": [
+      {
+        "job_id": "job-76e909120601a06e17b8cd4d",
+        "reported_selected_accuracy": 0.9092,
+        "reported_accuracy_field": "validation_accuracy",
+        "exported_epoch": 5,
+        "independent_validation": {
+          "accuracy": 0.9092,
+          "loss": 0.253085680770874,
+          "samples": 5000,
+          "spec": {
+            "family": "cnn",
+            "width": 32,
+            "hidden": 128,
+            "dropout": 0.0
+          }
+        },
+        "accuracy_matches": true
+      },
+      {
+        "job_id": "job-45be0297e10d96995f36ea08",
+        "reported_selected_accuracy": 0.9056,
+        "reported_accuracy_field": "validation_accuracy",
+        "exported_epoch": 5,
+        "independent_validation": {
+          "accuracy": 0.9056,
+          "loss": 0.2513106460571289,
+          "samples": 5000,
+          "spec": {
+            "family": "cnn",
+            "width": 32,
+            "hidden": 128,
+            "dropout": 0.25
+          }
+        },
+        "accuracy_matches": true
+      }
+    ],
+    "restart-verification.json": {
+      "scope": "Same pinned completed contract reopened without new model reservations, jobs or protected test rewrite",
+      "calls_before": 190,
+      "calls_after": 190,
+      "jobs_before": 2,
+      "jobs_after": 2,
+      "final_test_unchanged": true,
+      "status": "COMPLETED"
+    }
+  },
+  "additional_report_reviews": [
+    {
+      "run": "literature-report-reader-01",
+      "calls": 24,
+      "status": "checkpointed",
+      "report": null,
+      "scope": "Standalone report comprehension only; maintainer-selected dispatch; not experimental truth or a project gate"
+    },
+    {
+      "run": "literature-report-reader-02",
+      "calls": 6,
+      "status": "checkpointed",
+      "report": null,
+      "scope": "Standalone report comprehension only; maintainer-selected dispatch; not experimental truth or a project gate"
+    },
+    {
+      "run": "literature-report-reader-03",
+      "calls": 7,
+      "status": "submitted",
+      "report": {
+        "status": "DONE",
+        "summary": "보고서 전체 25,245바이트를 비중복 5개 구간으로 읽고 포함된 그림을 확인했다. 행위자, 전달 자료, 실험 조건, 선택 기준, 결과와 한계를 이해하는 데 중대한 모호함은 발견하지 못했다. 이 결론은 문서의 이해 가능성에 한정하며 사실·과학적 타당성 검증이나 gate 승인이 아니다.",
+        "files": [],
+        "failure_kind": null,
+        "claims": [
+          {
+            "scope": "document",
+            "statement": "보고서는 중앙 담당자·Researcher·Experiment Engineer·검토자·호스트의 책임을 구분한다. 그림의 출처→연구자→전달 자료→검토 및 구현 흐름은 본문 설명과 일치하며, 본문은 출처 검토와 호스트 확인을 통과한 뒤 구현했다고 명시한다.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-a84a6a737d5802e2c34735ca-000001",
+              "action-task-a84a6a737d5802e2c34735ca-000002",
+              "action-task-a84a6a737d5802e2c34735ca-000006"
+            ],
+            "limitations": "전달과 검토가 실제로 수행됐는지는 독립 확인하지 않았다.",
+            "claim_id": "task-a84a6a737d5802e2c34735ca-claim-0"
+          },
+          {
+            "scope": "document",
+            "statement": "동일 CNN의 dropout 0과 0.25를 비교하고 마지막 epoch 검증 정확도로 선택했다는 방법과, A 90.92%·B 90.56%로 A를 선택했다는 결과가 명확하다. 작업 내부 검사, 역할 검토, 별도 추론 재채점과 선택 모델의 최종 test 평가도 구분되어 있다.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-a84a6a737d5802e2c34735ca-000001",
+              "action-task-a84a6a737d5802e2c34735ca-000002",
+              "action-task-a84a6a737d5802e2c34735ca-000003"
+            ],
+            "limitations": "수치와 구현의 정확성을 검증하거나 실험을 재현하지 않았다.",
+            "claim_id": "task-a84a6a737d5802e2c34735ca-claim-1"
+          },
+          {
+            "scope": "document",
+            "statement": "부분적인 논문 읽기, 제한된 검색, 한 seed·한 split·두 조건·5 epoch, 기존 프로젝트의 공개 test 사용, 운영자 개입과 반복 읽기 비용을 명시한다. 원리 적용과 논문 재현, 실행 완료와 정확도 개선을 구분하며 기록·재실행 범위도 설명한다.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-a84a6a737d5802e2c34735ca-000002",
+              "action-task-a84a6a737d5802e2c34735ca-000003",
+              "action-task-a84a6a737d5802e2c34735ca-000004",
+              "action-task-a84a6a737d5802e2c34735ca-000005"
+            ],
+            "limitations": "보고서와 포함 그림만 검토했으며 외부 자료나 원시 기록을 열지 않았다.",
+            "claim_id": "task-a84a6a737d5802e2c34735ca-claim-2"
+          }
+        ],
+        "objections": [],
+        "next_actions": [],
+        "open_questions": [],
+        "work_items": [],
+        "execution_records": [],
+        "candidate_decisions": [],
+        "run_id": "literature-report-reader-03",
+        "task_id": "task-a84a6a737d5802e2c34735ca",
+        "role": "report_reader",
+        "state_revision": 0,
+        "candidate_revision": "cddcb3423873683c2e1d71ce7716eb1ef6e6f96950de8cc4eb214979e3580e43"
+      },
+      "scope": "Standalone report comprehension only; maintainer-selected dispatch; not experimental truth or a project gate"
+    }
+  ],
+  "additional_report_review_failures": [
+    {
+      "run": "literature-report-reader-01",
+      "reason": "Three submit_report objections used a passage/file path as target_id and failed Unknown objection target; repeated complete readings; no accepted report. PNG read_file was not visual inspection.",
+      "calls": 24
+    },
+    {
+      "run": "literature-report-reader-02",
+      "reason": "Maintainer supplied a PNG without granting view_image. Reader correctly checkpointed for missing visual capability.",
+      "calls": 6
+    }
+  ]
+}

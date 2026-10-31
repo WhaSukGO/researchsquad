@@ -10,11 +10,13 @@ def audit(folder):
         if job['status']!='SUCCEEDED':continue
         out=folder/'training/jobs'/job['id']/'output'
         metrics=json.loads((out/'metrics.json').read_text())
-        if 'best_validation_accuracy' in metrics:reported=metrics['best_validation_accuracy']
-        else:reported=metrics['per_epoch'][-1]['validation_accuracy']
+        if 'best_validation_accuracy' in metrics:reported=metrics['best_validation_accuracy'];field='best_validation_accuracy'
+        elif 'validation_accuracy' in metrics:reported=metrics['validation_accuracy'];field='validation_accuracy'
+        else:reported=metrics['per_epoch'][-1]['validation_accuracy'];field='per_epoch[-1].validation_accuracy'
         actual=score(job['profile']['image'],Path.home()/'.cache/researchsquad/fashion-mnist',out/'weights.safetensors',True)
         rows.append({'job_id':job['id'],'reported_selected_accuracy':reported,
-            'exported_epoch':metrics.get('exported_checkpoint_epoch',len(metrics.get('per_epoch',[]))),
+            'reported_accuracy_field':field,
+            'exported_epoch':metrics.get('exported_checkpoint_epoch',len(metrics.get('per_epoch',metrics.get('epochs',[])))),
             'independent_validation':actual,'accuracy_matches':actual['accuracy']==reported})
     (folder/'validation-audit.json').write_text(json.dumps(rows,indent=2)+'\n')
     return rows
