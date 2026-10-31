@@ -52,5 +52,8 @@ def validate_claims(team, report, assignment):
                     supported = True
                 if record.get('assignment_id') == assignment.get('review_of'):
                     supported = True
+                if any(r.get('evidence_id')==eid and r.get('reviewer_assignment')==assignment.get('task_id')
+                       and r.get('candidate')==assignment.get('review_of') for r in team.state['workflow']['reviews']):
+                    supported = True
             if not supported:
                 raise ValueError('Observed document claim needs evidence for delivered material')

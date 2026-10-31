@@ -48,6 +48,13 @@ def source_verdict(team,snapshot,candidate):
             if len(s['discovery_term'])<6 or s['discovery_term'].casefold() not in text.casefold():raise ValueError('Discovery identifier absent from saved source')
             if s['kind']=='paper':
                 if f.get('format')!='pdf' or len(reads)<2 or sum(len(e['observation'].get('text','')) for e in reads)<5000:raise ValueError('Paper needs PDF body reading, not metadata')
+                windows=sorted((json.loads(e['argument']).get('offset',0),json.loads(e['argument']).get('offset',0)+json.loads(e['argument']).get('limit',4000)) for e in reads)
+                if len({a for a,b in windows})<2:raise ValueError('Paper needs distinct read starting offsets')
+                merged=[]
+                for start,end in windows:
+                    if merged and start<=merged[-1][1]:merged[-1][1]=max(end,merged[-1][1])
+                    else:merged.append([start,end])
+                if sum(len(original[a:b].decode('utf-8',errors='replace')) for a,b in merged)<5000:raise ValueError('Paper needs 5000 unique body characters; repeated reads do not count twice')
                 if not any(json.loads(e['argument']).get('offset',0)>=6000 or re.search(r'\[PDF page (?:[2-9]|\d{2,})\]',e['observation'].get('text','')) for e in reads):raise ValueError('Read beyond abstract')
             elif s['kind']=='implementation':
                 if not re.search(r'/[a-f0-9]{40}/.+\.py(?:\?|$)',s['url']) or not any(re.search(r'\b(?:def|class)\s',e['observation'].get('text','')) for e in reads):raise ValueError('Implementation needs commit-pinned Python body')
@@ -111,7 +118,10 @@ def run(folder):
                 'scope':'Valid source-linked experiment delivery, not accuracy/novelty superiority'}
             atomic_json(once,result);return result
         except (KeyError,ValueError,TypeError) as e:return {'accepted':False,'reason':str(e)}
-    team=Team(folder,task,agents_dir=configs,evaluators={'literature':Evaluator('source-study-v1-'+digest([gpu,parser])[:16],evaluate)})
+    def preflight(snapshot,_task):
+        if team.state['workflow']['stage']=='SOURCES':return source_verdict(team,snapshot,team.state['workflow']['candidate'])
+        return None
+    team=Team(folder,task,agents_dir=configs,evaluators={'literature':Evaluator('source-study-v2-'+digest([gpu,parser])[:16],evaluate,preflight=preflight)})
     if not team.training.state['datasets']:team.training.register_dataset('Fashion-MNIST official training only',{'images.gz':data/'train-images-idx3-ubyte.gz','labels.gz':data/'train-labels-idx1-ubyte.gz'},{'source':'official Fashion-MNIST','split':'train','samples':60000})
     try:
         result=team.run();atomic_json(folder/'outcome.json',{'outcome':result,'goal_met':team.state['goal_met'],'calls':team.state['calls']});print(json.dumps({'status':result['status'],'goal_met':team.state['goal_met'],'calls':team.state['calls']}))

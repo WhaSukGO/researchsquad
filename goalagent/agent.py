@@ -2,7 +2,7 @@
 import json
 import time
 from pathlib import Path
-from .contracts import atomic_json, digest
+from .contracts import atomic_json, digest, AtomicWriteError
 from .sandbox import DockerSandbox, workspace_path, read_file
 from .toolkit import default_registry
 from .budgets import limit, visible_remaining
@@ -56,7 +56,8 @@ class Agent:
         result=[]
         for record in self.state['history'][-6:]:
             serialized=json.dumps(record,ensure_ascii=False)
-            if len(serialized)<=8000:
+            if len(serialized)<=8000 or (record.get('tool') in {'read_file','read_evidence','read_artifact'}
+                    and len(record.get('observation',{}).get('text',''))<=8000):
                 result.append(record);continue
             observation=record.get('observation',{})
             preview={k:observation[k] for k in ('assignment_id','checkpoint_id','evidence_id','submission_hash') if k in observation}
@@ -130,9 +131,15 @@ class Agent:
                         self.state["status"] = "budget_exhausted"
                         break
                     self.state["steps"] += 1
-                    self.save()
                     try:
+                        self.save()
                         charge_model()
+                    except AtomicWriteError as error:
+                        # No provider or tool was invoked at this boundary.
+                        self.state['steps']-=1
+                        self.state.update(status='storage_blocked',storage_phase='before_model_call',storage_error=str(error))
+                        self.save()
+                        break
                     except (RuntimeError, TimeoutError):
                         self.state["status"] = "budget_exhausted"
                         break
@@ -142,10 +149,16 @@ class Agent:
                                "remaining_seconds": visible_remaining(remaining()), "authored_files": self.state.get("written_files", [])[-32:],
                                "recent_actions": self.recent_context()}
                     context['progress'] = self.state.get('progress')
+                    from .context_state import observed_work
+                    context['observed_work'] = observed_work(self.state['history'])
+                    context['review_checklist'] = self.state.get('review_checklist',{})
                     context['job_output_files'] = self.state.get('job_output_files',{})
                     if 'submit_report' in self.config['tools']:
                         context['report_input'] = 'For submit_report/check_report use a structured argument object matching the output schema (not escaped JSON). Use empty arrays for unused sections and null failure_kind unless FAILED. Each claim needs scope document|empirical and real evidence IDs. Check_report validates without submitting; it does not grant acceptance.'
                     context['coordinator_guidance'] = self.state.get('guidance')
+                    if 'submit_report' in self.config['tools']:
+                        context['report_input'] += ' files contains authored outputs only; inputs/ and baselines/ are already preserved and must not be resubmitted. Quote passages in objection.statement; use IDs/paths from report_context for target_id.'
+                        if hasattr(self,'report_context'):context['report_context']=self.report_context()
                     context['checkpoint_interval'] = checkpoint_interval
                     context['actions_until_checkpoint'] = (max(0, checkpoint_interval - (self.state['steps'] - self.state['period_start'])) if checkpoint_interval else None)
                     if hasattr(self, 'team_context'):
@@ -222,4 +235,5 @@ class Agent:
         return {"status": self.state["status"], "steps": self.state["steps"],
                 "uncertain_reason": self.state.get('uncertain_reason'),
                 "report": self.state.get('report'), "progress": self.state.get('progress'),
+                "storage_phase": self.state.get('storage_phase'), "storage_error": self.state.get('storage_error'),
                 "last_observation": self.state["history"][-1]["observation"] if self.state["history"] else {}}

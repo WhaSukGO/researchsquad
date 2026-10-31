@@ -65,8 +65,9 @@ def make(tmp_path, *, workflow_spec=None, hook=None, **kwargs):
           'workflow':workflow_spec or spec(),
           'budget':{'max_calls':100,'max_seconds':120,'max_assignments':40,'max_depth':2}}
     sandbox=kwargs.pop('sandbox_factory',FakeSandbox)
+    evaluators=kwargs.pop('evaluators',EVALUATORS)
     team=Team(tmp_path,task,provider_factory=lambda config:Model(config['id'],calls,hook),
-              sandbox_factory=sandbox,evaluators=EVALUATORS,**kwargs)
+              sandbox_factory=sandbox,evaluators=evaluators,**kwargs)
     return team,calls
 
 

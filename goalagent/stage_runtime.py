@@ -60,7 +60,9 @@ class StageRuntime:
             return {'review_scope':'full','candidate_receipt_id':assignment['candidate_receipt_id'],
                     'current_work':copy.deepcopy(self.board.jobs.get(assignment.get('work_id'))),
                     'stage':assignment['stage']}
-        return {'run_id':self.team.folder.name, 'workflow':copy.deepcopy(self.team.state['workflow']),
+        current=copy.deepcopy(self.team.state['workflow'])
+        current['gates']=workflow.gates(self.team,current['candidate'])
+        return {'run_id':self.team.folder.name, 'workflow':current,
                 'definition':self.spec, 'work':self.board.summary(),
                 'current_work':self.board.jobs.get(assignment.get('work_id')),
                 'candidate_decisions':self.board.state['candidate_decisions'][-24:],
@@ -250,6 +252,10 @@ next_actions are recorded proposals; only typed work_items request additional di
         if status=='checkpointed':
             self.board.set_status(job,'CHECKPOINTED')
             return
+        if status=='storage_blocked':
+            job['wait_kind']='storage_before_model'
+            self.board.set_status(job,'WAITING',entry['outcome'].get('storage_error','State storage unavailable before provider dispatch'))
+            return
         report=entry['outcome'].get('report') or {}
         marker=aid+':'+entry['candidate_revision']
         if job.get('processed_report')!=marker:
@@ -301,6 +307,10 @@ next_actions are recorded proposals; only typed work_items request additional di
         if job['kind']=='owner':
             self.board.state['candidates'][job['stage']]=aid
             self.team.state['workflow'].update(candidate=aid,candidate_revision=entry['candidate_revision'])
+            preflight=self.team.preflight_submission(aid)
+            if preflight is not None and not preflight['accepted']:
+                self._host_fail(job,'Mechanical submission preflight failed: '+preflight.get('reason','See preflight receipt'))
+                return
             stage=self.stage()
             rules=[(r,stage['id']+'-review-'+r,stage['review_scopes'].get(r,'full')) for r in stage['required_reviewers']]
         else:
@@ -374,6 +384,7 @@ next_actions are recorded proposals; only typed work_items request additional di
 
     def _wake(self):
         for job in self.board.jobs.values():
+            if job.get('wait_kind')=='storage_before_model':continue
             if job.get('wait_kind')=='training':
                 entry=self.team.state['assignments'][job['assignment_id']]
                 jid=entry.get('waiting_training_job')
@@ -413,6 +424,9 @@ next_actions are recorded proposals; only typed work_items request additional di
             raise ValueError('Revision must preserve the stage owner')
 
     def after_decision(self, kind, record):
+        if kind=='ADVANCE' and record['stage']!=record['target_stage']:
+            self.team.state['workflow'].update(candidate=None,candidate_revision=None,gates=[])
+            self.team.event('stage_candidate_cleared',{'stage':record['target_stage'],'scope':'Previous candidate and gates remain in decision history only'})
         if kind=='REVISE':
             target=record['target_stage']
             if target==record['stage']:
@@ -442,7 +456,21 @@ next_actions are recorded proposals; only typed work_items request additional di
                 if verdict=='PASS':
                     job['result_artifact_ids']=record['artifact_ids'];self.board.set_status(job,'DONE')
                 continue
-            if job['stage']==self.stage()['id'] and job['status']=='WAITING' and not job['depends_on']:
+            if job['stage']==self.stage()['id'] and job['status']=='WAITING' and (not job['depends_on'] or job.get('wait_kind')=='storage_before_model'):
+                if job.get('wait_kind')=='storage_before_model':
+                    entry=self.team.state['assignments'][job['assignment_id']]
+                    path=self.team.folder/'agents'/job['assignment_id']/'worker-state.json'
+                    worker=json.loads(path.read_text())
+                    if (worker.get('status')!='storage_blocked' or worker.get('storage_phase')!='before_model_call'
+                            or worker.get('pending') or worker.get('pending_execution_step')):
+                        raise ValueError('Cannot resume storage wait without a known pre-model boundary')
+                    worker.update(status='checkpointed');worker.pop('storage_phase',None);worker.pop('storage_error',None)
+                    atomic_json(path,worker)
+                    entry['outcome']['status']='checkpointed'
+                    job.pop('wait_kind');job['feedback'].append('Storage restored by trusted operator; retain completed work and continue this same assignment.')
+                    self.board.set_status(job,'CHECKPOINTED')
+                    self.team.event('storage_assignment_resumed',{'assignment_id':job['assignment_id'],'work_id':job['work_id'],'scope':'Known pre-model boundary only; no external action replay'})
+                    continue
                 for aid in record['artifact_ids']:
                     job['inputs']['external/'+self.team.state['artifacts'][aid]['path']]=aid
                 if self.team.state['assignments'][job['assignment_id']].get('outcome',{}).get('status')=='submitted':
