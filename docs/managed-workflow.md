@@ -6,6 +6,43 @@ Docker workspaces, checkpoints and protected evaluators. `policy_version: 2` opt
 into host dispatch. Custom workflows without that field retain the synchronous
 coordinator-directed interface.
 
+## Repaired runtime interfaces
+
+The [current TODO](TODO-ko.md) and [runtime repair verification](runtime-reliability-results-ko.md)
+track the source-study findings. Same-assignment reading coverage is now available
+in `observed_work`, separate from the six recent action bodies. `read_file` preserves
+its bounded text in the next model context and returns total `bytes`, window
+`returned_bytes`, `end_offset`, `next_offset` and `eof`; advance by `next_offset`,
+not the total file size. PNG/JPEG/GIF/WebP must use `view_image`.
+
+`checkpoint` optionally accepts `checks: [{id, description, status, evidence_ids}]`.
+Statuses are pending/passed/failed/unknown; completed checks require evidence, and
+passed checks cannot cite failed actions. Checklist entries persist when a later
+checkpoint omits them. These are agent-reported checks, never automatic gate votes.
+They and observed_work are local to the assignment, not a cross-run memory feature.
+
+`report_context.objection_targets` lists delivered paths and their canonical IDs.
+`target_id` can use one of those paths (optionally `:section`); the host resolves it
+only against delivered material and records the resolution in the tool receipt.
+Unknown paths still fail. `files` contains authored outputs only; inputs and
+baselines are already preserved. A reviewer's own recorded review event can support
+a document claim of their verdict, never an empirical experiment claim. Peer
+review conclusions remain isolated.
+
+Atomic JSON writes retry only transient replacement errors for a bounded interval
+with unique temporary files. Exhaustion before a provider call produces a known
+`storage_blocked` boundary, rolling back the unused reservation. After a trusted
+storage-restored event, managed work continues the same assignment and checkpoint.
+This does not auto-repeat uncertain commands or migrate changed run contracts.
+Other failure boundaries keep their existing recovery requirements.
+
+Registered `Evaluator.preflight(snapshot, task)` may provide mechanical checks
+before full reviews; returning None skips that stage. An explicit false verdict
+sends the owner for correction before reviewers run. The receipt is input to full
+reviewers, not report-only readers, and cannot populate final acceptance. The
+source-study adapter uses this for immutable fetch/read provenance; semantic
+attribution review and protected final evaluation are still required.
+
 ## Start with the file that owns the change
 
 | Desired change | Edit |
