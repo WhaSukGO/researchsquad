@@ -75,6 +75,8 @@ class Team:
         for name,(description,handler) in handlers.items():self.registry.register(Tool(name,description,handler))
         from .training import TOOLS
         for name,description in TOOLS.items():self.registry.register(Tool(name,description,self.training_tool))
+        from .ledger import TOOLS as LEDGER_TOOLS
+        for name,description in LEDGER_TOOLS.items():self.registry.register(Tool(name,description,self.ledger_tool))
         for config in self.definitions.values():self.registry.catalog(config['tools'])
         contract={'task':task,'agents':self.definitions,'model':model,'evaluators':{name:e.version for name,e in self.evaluators.items()},
                   'model_evaluators':{name:e.version for name,e in (model_evaluators or {}).items()},
@@ -111,6 +113,8 @@ class Team:
         from .training import TrainingRuntime
         self.trace=Trace(self.folder/'traces')
         self.training=TrainingRuntime(self,model_evaluators)
+        from .ledger import LedgerRuntime
+        self.ledger=LedgerRuntime(self)
         if self.workflow_spec.get('policy_version')==2:
             from .stage_runtime import StageRuntime
             self.managed=StageRuntime(self)
@@ -139,6 +143,7 @@ class Team:
         if hasattr(self,'trace'):
             span=self.trace.start('host_event',kind,data=data);self.trace.end(span,{'sequence':event['sequence']})
     def training_tool(self,agent,action,timeout):return self.training.dispatch(agent,action,timeout)
+    def ledger_tool(self,agent,action,timeout):return self.ledger.dispatch(agent,action,timeout)
     def register_artifact(self, raw, *, owner, path, depends_on=()):
         if not set(depends_on) <= set(self.state['artifacts']): raise ValueError('Unknown artifact dependency')
         record = self.artifact_store.register(raw, owner=owner, path=path, depends_on=depends_on)
