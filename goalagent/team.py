@@ -12,7 +12,7 @@ from pathlib import Path
 from .agent import Agent
 from .budgets import limit, valid_limit, visible_remaining
 from .configuration import load_agent, validate_agent
-from .contracts import atomic_json, digest
+from .contracts import atomic_json, digest, AtomicWriteError
 from .provider import CodexProvider
 from .sandbox import DockerSandbox, read_file, workspace_path
 from .toolkit import Tool, default_registry
@@ -153,7 +153,11 @@ class Team:
         return limit(self.task['budget']['max_seconds'])-self.state['active_seconds']-(time.monotonic()-self.started if self.started else 0)
     def charge(self):
         if self.remaining()<=1 or self.state['calls']>=limit(self.task['budget']['max_calls']):raise TimeoutError('Team budget exhausted')
-        self.state['calls']+=1;self.save()
+        self.state['calls']+=1
+        try:self.save()
+        except AtomicWriteError:
+            self.state['calls']-=1
+            raise
     def record(self,id,data):
         path=self.folder/'evidence'/f'{id}.json'
         if path.exists() and json.loads(path.read_text())!=data:raise ValueError('Evidence is immutable')
@@ -186,6 +190,8 @@ class Team:
         instance.trace_parent_agent=self.state['assignments'].get(id,{}).get('caller')
         instance.trace_parent_span=self.state['assignments'].get(id,{}).get('trace_parent')
         instance.validate_report = lambda report: self.validate_assignment_report(report,assignment)
+        instance.report_context = lambda: self.report_context(assignment)
+        instance.validate_checks = lambda checks: self.validate_checks(checks,assignment)
         instance.record_action = lambda record: self.action_evidence(id, record, folder)
         instance.team_context = lambda: {'run_id': self.folder.name, 'state_revision': self.state['workflow']['state_revision'],
             'stage': self.state['workflow']['stage'], 'run_status': self.state['workflow']['run_status'],
@@ -202,12 +208,36 @@ class Team:
         return instance.run(self.charge,self.remaining, checkpoint_interval=(self.workflow_spec['work_policy']['coordinator_checkpoint_interval'] if id=='lead' else self.workflow_spec['work_policy']['checkpoint_interval']) if self.managed else (None if id=='lead' else effective.get('checkpoint_interval',8)), continuation=continuation)
 
     def validate_assignment_report(self, report, assignment):
+        from .report_context import resolve_objections
+        resolutions=resolve_objections(self,report,assignment)
         validate_report(report,self.state['evidence'],set(self.state['artifacts']) | set(self.state['assignments']) |
             set(self.state['claims']) | {g['id'] for s in self.workflow_spec['stages'] for g in s['gates']} |
             (set(self.managed.board.jobs) if self.managed else set()))
         if self.managed:self.managed.validate_report(report,assignment)
         if report['status']=='DONE' and not {o['path'] for o in assignment.get('required_outputs',[])}<=set(report['files']):
             raise ValueError('DONE report omits required outputs; use NEEDS_INPUT or FAILED with partial work')
+        for path in report['files']:
+            if path.split('/')[0] in {'inputs','baselines'}:
+                raise ValueError('Submission files must be authored outputs only: '+path+' is an already-preserved read-only input. Omit it from files; cite its artifact ID in claims instead. See report_context.')
+        return resolutions
+
+    def report_context(self,assignment):
+        from .report_context import report_targets
+        return {'objection_targets':report_targets(self,assignment),
+                'target_rule':'Use a registered ID or exact delivered path; a :section suffix is resolved only on delivered paths. Put quotations in statement.',
+                'submission_rule':'files lists authored outputs only; inputs/ and baselines/ are already frozen and preserved.'}
+
+    def validate_checks(self,checks,assignment):
+        delivered={r['id'] for r in self.report_context(assignment)['objection_targets']}
+        for check in checks:
+            for eid in check['evidence_ids']:
+                if eid in delivered and eid in self.state['artifacts']:continue
+                if eid==assignment.get('mechanical_checks',{}).get('evidence_id'):continue
+                record=self.evidence_record(eid)
+                if record.get('assignment_id')!=assignment.get('task_id') or not record.get('receipt'):
+                    raise ValueError('Checklist requires this assignment own action receipts or delivered artifacts')
+                from .claim_checks import successful
+                if check['status']=='passed' and not successful(record['receipt']):raise ValueError('Passed checklist checks require successful action evidence')
 
     def action_evidence(self, id, record, folder):
         # Command receipts establish that an action ran, not that its scientific claim is true.
@@ -345,11 +375,15 @@ class Team:
                 assignment['parent_artifacts']=inherited
                 assignment['review_revision']=source_entry['candidate_revision'] if review_of else None
                 assignment['candidate_receipt_id']=source_entry['receipt_id']
+                if review_of and not report_only and source_entry.get('preflight_evidence_id'):
+                    assignment['mechanical_checks']=self.receipt(source_entry['preflight_evidence_id'])
                 if report_only:
                     assignment['goal']='Review only the supplied report for comprehension and scoped claims'
                     assignment['review_files']=['inputs/parent/'+self.state['artifacts'][a]['path'] for a in chosen]
                     assignment.pop('parent_evaluation',None)
                     assignment.pop('environment',None)
+            from .report_context import check_image_capability
+            check_image_capability(config,list(raw_inputs.items())+[(self.state['artifacts'][a]['path'],self.artifact_store.read(self.state['artifacts'][a])) for a in inherited])
             for dest,raw in raw_inputs.items():
                 target=workspace_path(self.folder/'agents'/id/'workspace'/'inputs',dest)
                 target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
@@ -681,6 +715,23 @@ class Team:
     def effective_evaluation(self,id):
         accepted=self.state['acceptances'].get(id)
         return accepted['measurement'] if accepted else self.state['evaluations'].get(id)
+    def preflight_submission(self,id):
+        """Mechanical frozen-source checks before reviews; never final acceptance."""
+        entry=self.state['assignments'][id]
+        if entry.get('preflight_evidence_id'):return self.evidence_record(entry['preflight_evidence_id'])['measurement']
+        evaluator=self.evaluators.get(self.task.get('evaluator'))
+        preflight=getattr(evaluator,'preflight',None)
+        if preflight is None:return None
+        result=preflight(copy.deepcopy(self.verify_submission(id)),copy.deepcopy(self.task))
+        if result is None:return None
+        if not isinstance(result,dict) or type(result.get('accepted')) is not bool:raise ValueError('Invalid mechanical preflight verdict')
+        eid='preflight-'+id
+        self.record(eid,{'assignment_id':id,'candidate_revision':entry['candidate_revision'],'measurement':result,
+                         'evaluator_version':evaluator.version,'scope':'Mechanical preflight only; semantic review and final evaluation remain required'})
+        entry['preflight_evidence_id']=eid
+        self.event('submission_preflight',{'assignment_id':id,'evidence_id':eid,'accepted':result['accepted']})
+        return result
+
     def prepare_environment(self,agent,action,timeout):
         from .team_environment import prepare
         started=time.monotonic()

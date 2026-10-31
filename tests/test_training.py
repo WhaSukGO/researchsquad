@@ -55,6 +55,12 @@ def test_job_receipt_reuse_no_relaunch_and_cross_assignment_denied(tmp_path,monk
     run=next(c for c in calls if c[0]=='run')
     assert '--network' in run and '--privileged' not in run and '--gpus' not in run
     assert not any('/var/run/docker.sock' in str(v) for v in run)
+    control=runtime.root/'jobs'/first['job_id']/'control'
+    import stat
+    assert stat.S_IMODE((control/'job.json').stat().st_mode)==0o644
+    assert stat.S_IMODE((control/'supervisor.py').stat().st_mode)==0o644
+    assert stat.S_IMODE(control.stat().st_mode)==0o755
+    assert stat.S_IMODE((team.folder/'team-state.json').stat().st_mode)==0o600
 
 
 def test_ambiguous_start_never_blindly_repeats(tmp_path,monkeypatch):

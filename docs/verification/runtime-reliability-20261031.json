@@ -1,0 +1,369 @@
+{
+  "scope": "Existing runtime repair verification, not a new scientific study or cross-run memory implementation",
+  "regression": {
+    "passed": 156,
+    "skipped": 3,
+    "source": "Maintainer-recorded WSL Python 3.12 pytest -q result"
+  },
+  "runs": {
+    "windows_lock": "reliability-windows-lock-01",
+    "managed": "reliability-managed-04",
+    "gpu": "reliability-fashion-03",
+    "reader": "reliability-reader-03",
+    "sources": "reliability-source-readiness-01"
+  },
+  "evidence": {
+    "windows_lock": {
+      "status": "passed",
+      "attempts": [
+        {
+          "result": "os_error",
+          "errno": 13,
+          "error": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-windows-lock-01/.state.json.zbfgjzbx.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-windows-lock-01/state.json'"
+        },
+        {
+          "result": "os_error",
+          "errno": 13,
+          "error": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-windows-lock-01/.state.json.zbfgjzbx.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-windows-lock-01/state.json'"
+        },
+        {
+          "result": "os_error",
+          "errno": 13,
+          "error": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-windows-lock-01/.state.json.zbfgjzbx.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-windows-lock-01/state.json'"
+        },
+        {
+          "result": "os_error",
+          "errno": 13,
+          "error": "[Errno 13] Permission denied: '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-windows-lock-01/.state.json.zbfgjzbx.tmp' -> '/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-windows-lock-01/state.json'"
+        },
+        {
+          "result": "replaced"
+        }
+      ],
+      "sharing_error_reproduced": true,
+      "scope": "Real OS read-lock/replacement probe; no model calls or forced OS exceptions. Does not establish the original incident cause."
+    },
+    "managed": {
+      "status": "passed",
+      "model": "scripted decisions; no live reasoning",
+      "real_docker": true,
+      "work_id": "W-0001",
+      "owner_attempts": 2,
+      "protected_acceptance": [
+        false,
+        true
+      ],
+      "required_reviewers": [
+        "critic",
+        "experience",
+        "report_reader"
+      ],
+      "reserved_calls": 30,
+      "resume_added_calls": 0,
+      "scope": "Execution, work identity, protected failure/improvement, report-only handoff and all-role reviews; not research quality"
+    },
+    "gpu": {
+      "status": "passed",
+      "provider": "scripted validation choices, not live model reasoning",
+      "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "torch": "2.9.1+cu128",
+      "cuda": "12.8",
+      "training": [
+        {
+          "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+          "torch": "2.9.1+cu128",
+          "cuda": "12.8",
+          "resumed_from_epoch": 0,
+          "completed_epochs": 1,
+          "optimizer_steps": 108,
+          "finite_gradients": true,
+          "parameter_delta_norm": 0.4814680516719818,
+          "peak_vram_bytes": 479848448,
+          "elapsed_seconds": 2.338191265000205,
+          "history": [
+            {
+              "epoch": 1,
+              "loss": 0.6275469402443279,
+              "validation_accuracy": 0.8444,
+              "optimizer_steps": 108
+            }
+          ],
+          "train_samples": 55000,
+          "validation_samples": 5000
+        },
+        {
+          "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+          "torch": "2.9.1+cu128",
+          "cuda": "12.8",
+          "resumed_from_epoch": 1,
+          "completed_epochs": 2,
+          "optimizer_steps": 216,
+          "finite_gradients": true,
+          "parameter_delta_norm": 0.7030189633369446,
+          "peak_vram_bytes": 493875200,
+          "elapsed_seconds": 2.450763373999507,
+          "history": [
+            {
+              "epoch": 1,
+              "loss": 0.6275469402443279,
+              "validation_accuracy": 0.8444,
+              "optimizer_steps": 108
+            },
+            {
+              "epoch": 2,
+              "loss": 0.37029236661737613,
+              "validation_accuracy": 0.8788,
+              "optimizer_steps": 216
+            }
+          ],
+          "train_samples": 55000,
+          "validation_samples": 5000
+        },
+        {
+          "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+          "torch": "2.9.1+cu128",
+          "cuda": "12.8",
+          "resumed_from_epoch": 0,
+          "completed_epochs": 2,
+          "optimizer_steps": 216,
+          "finite_gradients": true,
+          "parameter_delta_norm": 0.7030189633369446,
+          "peak_vram_bytes": 479848448,
+          "elapsed_seconds": 3.8958708370046224,
+          "history": [
+            {
+              "epoch": 1,
+              "loss": 0.6275469402443279,
+              "validation_accuracy": 0.8444,
+              "optimizer_steps": 108
+            },
+            {
+              "epoch": 2,
+              "loss": 0.37029236661737613,
+              "validation_accuracy": 0.8788,
+              "optimizer_steps": 216
+            }
+          ],
+          "train_samples": 55000,
+          "validation_samples": 5000
+        }
+      ],
+      "checkpoint_bytes": 38913781,
+      "resume_comparison": {
+        "max_abs_difference": 0.0,
+        "identical": true
+      },
+      "evaluations": [
+        {
+          "accepted": true,
+          "test": {
+            "accuracy": 0.8697,
+            "loss": 0.3524301143884659,
+            "samples": 10000
+          },
+          "untrained": {
+            "accuracy": 0.1448,
+            "loss": 2.3015141620635986,
+            "samples": 10000
+          },
+          "scope": "Fixed short-run training validation, not architecture research or multi-seed comparison"
+        },
+        {
+          "accepted": true,
+          "test": {
+            "accuracy": 0.8697,
+            "loss": 0.3524301143884659,
+            "samples": 10000
+          },
+          "untrained": {
+            "accuracy": 0.1448,
+            "loss": 2.3015141620635986,
+            "samples": 10000
+          },
+          "scope": "Fixed short-run training validation, not architecture research or multi-seed comparison"
+        }
+      ],
+      "dataset_id": "dataset-8c682cf5484af479b2eeaaf1",
+      "test_labels_delivered_to_training": false,
+      "reserved_scripted_calls": 26,
+      "resume_added_calls": 0,
+      "scope": "Real learning/storage/exact epoch-resume/isolated CPU evaluation; one seed, fixed architecture, not autonomous research performance"
+    },
+    "reader": {
+      "status": "passed",
+      "checks": {
+        "submitted": true,
+        "image_viewed": true,
+        "full_7900_byte_note_in_model_context": true,
+        "one_assignment": true,
+        "checklist_retained": true,
+        "marker_reported": true,
+        "no_tool_errors": true
+      },
+      "calls": 8,
+      "report": {
+        "status": "DONE",
+        "summary": "Completed the scoped comprehension review of the full report and included figure, preserving prior reading coverage and the single checkpoint. Inspection marker: delta-seven. Found one minor presentation inconsistency; no independent experimental verification was performed.",
+        "files": [],
+        "failure_kind": null,
+        "claims": [
+          {
+            "scope": "document",
+            "statement": "The report distinguishes model selection, role review, separate inference scoring, and experimental reproduction, and limits its conclusions to the reported conditions.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-0637fccfa6241e56555c9371-000004",
+              "action-task-0637fccfa6241e56555c9371-000005"
+            ],
+            "limitations": "These are document statements, not independently verified experimental findings."
+          },
+          {
+            "scope": "document",
+            "statement": "The included figure identifies the sources, Researcher, handoff materials, Critic and host checks, and Experiment Engineer; its handoff sequence is understandable alongside the report.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-0637fccfa6241e56555c9371-000007",
+              "action-task-0637fccfa6241e56555c9371-000003",
+              "action-task-0637fccfa6241e56555c9371-000004"
+            ],
+            "limitations": "Visual and textual comprehension only; the diagram does not establish that these actions occurred."
+          }
+        ],
+        "objections": [
+          {
+            "target_id": "artifact-a1ff0d5de5c1fd999b5e1f3d9b5d54f44fa88fb6a5ed23363061e8e9b5965ec6",
+            "category": "EXPERIENCE",
+            "severity": "MINOR",
+            "statement": "The results table still labels a row ‘optimizer step / epoch’ with ‘2,150 / 5’, while the appendix states ‘이를 ‘총 optimizer step 수’와 ‘총 epoch 수’로 나누어 고쳤다.’ The delivered table therefore does not reflect the claimed correction and can be read as reporting steps per epoch. Please clarify whether 2,150 is the total across all five epochs and update the table or correction history accordingly.",
+            "evidence_ids": [
+              "action-task-0637fccfa6241e56555c9371-000004",
+              "action-task-0637fccfa6241e56555c9371-000006"
+            ],
+            "resolution_test": "The delivered table explicitly separates total optimizer steps from total epochs, and the appendix accurately describes the delivered revision."
+          }
+        ],
+        "next_actions": [],
+        "open_questions": [],
+        "work_items": [],
+        "execution_records": [],
+        "candidate_decisions": []
+      },
+      "errors": [],
+      "scope": "Actual model reading/continuation/submission probe with fixed maintainer dispatch and a seeded label ambiguity; not scientific research or an A/B efficiency claim"
+    },
+    "sources": {
+      "scope": "Actual network/parser readiness with zero model calls",
+      "results": [
+        {
+          "url": "https://api.crossref.org/works?query.bibliographic=dropout%20neural%20networks&rows=5",
+          "status": "retrieved",
+          "source_file": "web-source-001.html",
+          "text_file": "web-source-001.txt",
+          "format": "search_metadata",
+          "transport": {
+            "bytes": 50846,
+            "final_url": "https://api.crossref.org/works?query.bibliographic=dropout%20neural%20networks&rows=5",
+            "content_type": "application/json"
+          },
+          "source_artifact_id": "artifact-ad853a24d44576d382afecca6e369566217990cd2a76ec92c0b2106e116b4038",
+          "text_artifact_id": "artifact-345396c258150d5593c605f8b81c767c2179c9259f2d953acc7d38e4e0a1b826",
+          "note": "Retrieved transport is not semantic verification or an exhaustive search; inspect the saved source and text."
+        },
+        {
+          "url": "https://api.github.com/search/repositories?q=fashion-mnist%20pytorch&per_page=5",
+          "status": "retrieved",
+          "source_file": "web-source-002.html",
+          "text_file": "web-source-002.txt",
+          "format": "search_metadata",
+          "transport": {
+            "bytes": 29773,
+            "final_url": "https://api.github.com/search/repositories?q=fashion-mnist%20pytorch&per_page=5",
+            "content_type": "application/json; charset=utf-8"
+          },
+          "source_artifact_id": "artifact-ad6945d4c9d3487573babb6f89c7736357f8df56161c6a9f04beca92f99e8cab",
+          "text_artifact_id": "artifact-954b11f3701262439097d9239e9c1dfbe6b5085994e849353cc4385975721c06",
+          "note": "Retrieved transport is not semantic verification or an exhaustive search; inspect the saved source and text."
+        },
+        {
+          "url": "https://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf",
+          "status": "retrieved",
+          "source_file": "web-source-003.pdf",
+          "text_file": "web-source-003.txt",
+          "format": "pdf",
+          "pages_total": 30,
+          "pages_extracted": 30,
+          "truncated": false,
+          "transport": {
+            "bytes": 2869095,
+            "final_url": "https://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf",
+            "content_type": "application/pdf"
+          },
+          "source_artifact_id": "artifact-2a5418f1d9dccca5f3e75233960f9f6bee859dba9e98700d139891aeed94cade",
+          "text_artifact_id": "artifact-ff5faaf8be9c4f24cab062e93697b9ab0b9e63a11c1d7977574a29099525ef0a",
+          "note": "Retrieved transport is not semantic verification or an exhaustive search; inspect the saved source and text."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/pytorch/examples/acc295dc7b90714f1bf47f06004fc19a7fe235c4/mnist/main.py",
+          "status": "retrieved",
+          "source_file": "web-source-004.html",
+          "text_file": "web-source-004.txt",
+          "format": "text",
+          "truncated": false,
+          "transport": {
+            "bytes": 5392,
+            "final_url": "https://raw.githubusercontent.com/pytorch/examples/acc295dc7b90714f1bf47f06004fc19a7fe235c4/mnist/main.py",
+            "content_type": "text/plain; charset=utf-8"
+          },
+          "source_artifact_id": "artifact-6735a3f47f0850e89ad9b2905054672c9d6c6cb97dc0b2d2ffe780a7de99ec4c",
+          "text_artifact_id": "artifact-4172b6ef720d581c8f8289adfd5e59293b899f4565259c9cf13c6d06a6271fe6",
+          "note": "Retrieved transport is not semantic verification or an exhaustive search; inspect the saved source and text."
+        }
+      ]
+    }
+  },
+  "linux_ext4_training_lifecycle": {
+    "status": "passed",
+    "real_docker": true,
+    "actual_model_calls": 0,
+    "detached_host_reopen": "SUCCEEDED",
+    "large_checkpoint_bytes": 20000000,
+    "deadline_exit_code": 124,
+    "cancel_status": "CANCELLED",
+    "scope": "Runtime lifecycle and storage; not GPU training"
+  },
+  "artifact_mount_probe": {
+    "status": "passed",
+    "results": [
+      {
+        "root": "/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-artifact-probe-02",
+        "registrations": 100,
+        "errors": []
+      },
+      {
+        "root": "/tmp/rsq-artifact-probe-02",
+        "registrations": 100,
+        "errors": []
+      }
+    ],
+    "scope": "Artifact register/read probe without injected faults. A pass does not explain prior EXDEV or prove absence."
+  },
+  "additional_findings": [
+    {
+      "finding": "Initial CI supervisor could not read mode-0600 job.json with DAC override dropped",
+      "resolution": "Publish only read-only non-secret control files as 0644 and directory as 0755; keep private Team state 0600",
+      "verification": "Real ext4 Docker lifecycle and Unix permission assertions"
+    },
+    {
+      "finding": "One DrvFS managed run blocked on artifact content.tmp rename with EXDEV",
+      "affected_run": "reliability-managed-03",
+      "status": "Unresolved cause; preserved failed run; fresh managed-04 passed; 100 register/read probes on each of DrvFS and ext4 did not reproduce",
+      "scope": "No cross-device copy fallback or uncertain execution replay was added"
+    }
+  ],
+  "reader_restart": {
+    "calls_before": 8,
+    "calls_after": 8,
+    "additional_calls": 0,
+    "scope": "Unchanged completed reader assignment replay through cached receipts; no new provider calls"
+  }
+}

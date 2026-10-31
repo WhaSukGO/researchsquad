@@ -1,5 +1,6 @@
 """Host-owned tool implementations shared by configured agents."""
 import json
+import hashlib
 from dataclasses import dataclass
 from pathlib import Path
 from .contracts import atomic_json, digest
@@ -34,28 +35,35 @@ def workspace_action(self, action, timeout):
     tool, argument = action["tool"], action["argument"]
     if tool == 'checkpoint':
         data = validate_progress(json.loads(argument))
+        if data.get('checks'):
+            if hasattr(self,'validate_checks'):self.validate_checks(data['checks'])
+            else:
+                known={r.get('evidence_id') for r in self.state['history']}
+                if any(not set(c['evidence_ids'])<=known for c in data['checks']):raise ValueError('Unknown checkpoint check evidence')
         # Validate explicitly named important files before acknowledging the checkpoint.
         capture_workspace(self.folder, self.workspace, files=data['files'])
         self.state['important_files'] = data['files']
         self.state['progress'] = data
+        self.state.setdefault('review_checklist',{}).update({c['id']:{**c,'verification':'agent-reported check, not a host gate'} for c in data.get('checks',[])})
         self.state['status'] = 'checkpointed'
         return {'status': 'checkpointed', 'progress': data}
     if tool in {'submit_report','check_report'}:
         data = json.loads(argument)
         if hasattr(self, 'validate_report'):
-            self.validate_report(data)
+            resolutions=self.validate_report(data) or []
         else:
             validate_report(data)
+            resolutions=[]
         if tool=='check_report':
             manifest=capture_workspace(self.folder,self.workspace,files=data['files'])
-            return {'valid':True,'snapshot_id':manifest['snapshot_id'],'scope':'Current assignment report/evidence and file checks only; not submission, review or project acceptance'}
+            return {'valid':True,'snapshot_id':manifest['snapshot_id'],'target_resolutions':resolutions,'scope':'Current assignment report/evidence and file checks only; not submission, review or project acceptance'}
         manifest = capture_workspace(self.folder, self.workspace, files=data['files'])
         atomic_json(self.folder / 'submission.json', manifest)
         atomic_json(self.folder / 'source-snapshot.json', text_snapshot(self.folder, manifest))
         self.state['report'] = data
         self.state['status'] = {'DONE': 'submitted', 'NEEDS_INPUT': 'needs_input', 'FAILED': 'failed'}[data['status']]
         atomic_json(self.folder / 'report.json', data)
-        return {'status': self.state['status'], 'summary': data['summary'], 'source_files': data['files']}
+        return {'status': self.state['status'], 'summary': data['summary'], 'source_files': data['files'],'target_resolutions':resolutions}
     if tool == 'request_environment':
         if not 10 <= len(argument) <= 2000:
             raise ValueError('Describe the missing dependency and observed failure')
@@ -88,8 +96,12 @@ def workspace_action(self, action, timeout):
         if type(offset) is not int or offset < 0 or type(limit) is not int or not 1 <= limit <= 8000:
             raise ValueError("Invalid read window")
         raw = read_file(self.workspace, data["path"], limit=16_000_000)
-        return {"path": data["path"], "bytes": len(raw), "offset": offset,
-                "text": raw[offset:offset + limit].decode("utf-8", errors="replace")}
+        if raw.startswith((b'\x89PNG',b'\xff\xd8\xff',b'GIF87a',b'GIF89a')) or (raw.startswith(b'RIFF') and raw[8:12]==b'WEBP'):
+            raise ValueError('Image binary is not readable text. Use view_image; if not granted, request that capability before visual review.')
+        chunk=raw[offset:offset+limit];end=offset+len(chunk)
+        return {'path':data['path'],'bytes':len(raw),'offset':offset,'text':chunk.decode('utf-8',errors='replace'),
+                'returned_bytes':len(chunk),'end_offset':end,'next_offset':end if end<len(raw) else None,'eof':end>=len(raw),
+                'content_id':hashlib.sha256(raw).hexdigest(),'context_delivery':'Full bounded read body in next model context'}
     if tool == "view_image":
         from PIL import Image
         raw = read_file(self.workspace, argument, limit=16_000_000)
@@ -135,9 +147,9 @@ def workspace_action(self, action, timeout):
 
 DESCRIPTIONS = {
  "check_report": 'Structured report object with the same schema as submit_report; check current report shape, evidence and files without submitting. Errors require correction, never invented IDs or removed validation. Optional preflight, not a mandatory extra call.',
- "checkpoint": 'JSON {summary, next_test, findings?:[text], failures?:[text], files?:[paths]}; save durable progress and yield to coordinator. Work can continue without a new assignment or total budget limit. Describe what changed and what the next test distinguishes.',
+ "checkpoint": 'JSON {summary,next_test,findings?:[text],failures?:[text],files?:[authored paths],checks?:[{id,description,status:pending|passed|failed|unknown,evidence_ids:[own receipt IDs]}]}; preserve progress and optional review checklist across periods. Omitted checks are retained. Completed checks need actual evidence; they do not pass host gates. Use observed_work to avoid reopening completed windows without reason.',
  "submit_report": 'JSON {status:DONE|NEEDS_INPUT|FAILED, summary, files:[paths], failure_kind?:environment|implementation|measurement|performance|missing_input|other, claims?:[{scope:document|empirical,statement,epistemic_status:observed|inferred|hypothesis|unknown,evidence_ids:[],limitations}], objections?:[{target_id,category:FACT|FEASIBILITY|EXPERIENCE|RESOURCE|OBJECTIVE|AUTHORIZATION,severity:BLOCKER|MAJOR|MINOR,statement,evidence_ids:[],resolution_test}], next_actions?:[{action,owner,expected_information,acceptance_check,requires_external}], open_questions?:[text]}. Empty files allowed for blocked work. DONE completes only this assignment; host alone verifies project success.',
- "read_file": 'JSON {path, offset?:0, limit?:4000}; read a workspace-relative file. limit must be an integer 1..8000; supplied inputs live under inputs/.',
+ "read_file": 'JSON {path,offset?:0,limit?:4000}; read UTF-8 text in byte windows, 1..8000 bytes. bytes is total file size, returned_bytes is this window; use next_offset until null/eof. Full bounded body is delivered to next model context. Use view_image for images; supplied inputs live under inputs/.',
  "write_file": 'JSON {path, content}; write a workspace text file; inputs are read-only.',
  "run": 'Shell command in a disposable Docker container. Full logs stay on disk. Download/install only if the execution policy permits.',
  "view_image": 'Relative workspace image path; attach image to next model call.',

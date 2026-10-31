@@ -46,9 +46,13 @@ must still inspect source and data use. Downloaded sources are untrusted evidenc
 
 The source gate requires a fetched PDF body and a commit-pinned Python body,
 owner-bound fetch/read/discovery receipts, preserved original text, and substantive
-paper read windows. Search metadata alone cannot pass. Submitted text and actual
+paper read windows with distinct offsets and sufficient unique body coverage. Search metadata alone cannot pass. Submitted text and actual
 read windows must match the original immutable bytes. This protects provenance,
-not semantic truth or proof that a model understood every page.
+not semantic truth or proof that a model understood every page. A registered mechanical
+preflight now runs on the frozen source submission before semantic reviewers are
+dispatched. Its receipt is explicitly scoped and delivered to full reviewers; a
+failure sends the owner back for correction. It does not populate final acceptance
+or replace required semantic review. Final evaluation still runs after reviews.
 
 Training uses the existing managed GPU jobs, direct output publishing, large model
 storage and safe declarative inference registry. The experiment can choose MLP/CNN
@@ -97,6 +101,8 @@ The [actual execution report](external-source-results-ko.md) records a valid
 negative comparison and the limits encountered. For standalone report reviews,
 objections must target a registered artifact/candidate ID, not a file path with a
 passage label; put the passage in the objection statement. Explicitly grant
-`view_image` if a text-only reader is also expected to inspect an included PNG.
-The shipped training reader is text-only. Preserve incomplete/blocked reviews
+`view_image` if a custom text-only reader is also expected to inspect an included PNG.
+Both shipped readers now grant that read-only capability. Image/tool mismatches
+for read-only handoffs fail before model dispatch; raw image bytes are rejected
+by read_file with guidance to use view_image. Preserve incomplete/blocked reviews
 rather than calling their checkpoint an accepted review.

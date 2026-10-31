@@ -7,6 +7,7 @@ class Evaluator:
     version: str
     evaluate: object
     finalize: object = None
+    preflight: object = None
     def __call__(self, snapshot, task):return self.evaluate(snapshot, task)
 
 

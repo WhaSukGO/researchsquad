@@ -4,6 +4,12 @@ A configurable research team with one reusable `Agent`, JSON/Markdown role defin
 explicit tools, host-managed work, independent reviews and protected evaluation.
 Product and research workflows select responsibilities and required evidence.
 
+The [current TODO](docs/TODO-ko.md) separates existing runtime repairs from future
+cross-run experience and adaptive research work. [Repair verification](docs/runtime-reliability-results-ko.md)
+records fault checks, real GPU regression and actual reader evidence.
+The [R12 follow-up](docs/r12-publication-results-ko.md) records the real mount-race
+reproduction, pinned-directory publication fix and its limits.
+
 Start with the [Korean operating guide](docs/managed-workflow-ko.md),
 [configuration and recovery guide](docs/managed-workflow.md), and
 [implementation notes](docs/managed-workflow-notes.md).

@@ -53,7 +53,7 @@ class Decisions:
 
 
 def verify(folder):
-    folder=Path(folder)
+    folder=Path(folder).resolve()
     bindings={'engineering':'experiment_engineer','research':'researcher','auditor':'critic',
               'experience':'experience','strategy':'strategy','environment':'environment_engineer','report_reader':'report_reader'}
     task={'goal':'Sort the public values and preserve every duplicate','inputs':{'numbers.json':'[4,1,3,1]'},

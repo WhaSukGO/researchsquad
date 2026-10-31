@@ -46,12 +46,15 @@ def test_original_paper_body_and_pinned_code_are_accepted(tmp_path):
     assert source_verdict(team, snapshot, 'owner')['accepted']
 
 
-@pytest.mark.parametrize('fault', ['rewritten', 'fake_read', 'wrong_owner', 'metadata', 'missing_discovery'])
+@pytest.mark.parametrize('fault', ['rewritten', 'fake_read', 'wrong_owner', 'metadata', 'missing_discovery','duplicate_window'])
 def test_source_gate_rejects_unsupported_provenance(tmp_path, fault):
     team, snapshot, records = delivery(tmp_path)
     if fault == 'rewritten': snapshot['paper.txt'] = 'agent-authored summary'
     elif fault == 'fake_read': records['paper6000']['receipt']['observation']['text'] = 'claimed full reading'
     elif fault == 'wrong_owner': records['paper']['assignment_id'] = 'someone-else'
     elif fault == 'metadata': records['paper']['receipt']['observation']['format'] = 'search_metadata'
+    elif fault=='duplicate_window':
+        rows=json.loads(snapshot['sources.json']);rows['sources'][0]['read_evidence_ids']=['paper0','paper0']
+        snapshot['sources.json']=json.dumps(rows)
     else: records['discovery']['receipt']['observation']['text_excerpt'] = 'unrelated result'
     assert not source_verdict(team, snapshot, 'owner')['accepted']

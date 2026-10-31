@@ -15,7 +15,7 @@ def strings(value, name, maximum=16):
 
 
 def validate_progress(data):
-    if not isinstance(data, dict) or set(data) - {'summary', 'findings', 'failures', 'next_test', 'files'}:
+    if not isinstance(data, dict) or set(data) - {'summary', 'findings', 'failures', 'next_test', 'files','checks'}:
         raise ValueError('Invalid checkpoint fields')
     result = {'summary': text(data.get('summary'), 'summary'),
               'findings': strings(data.get('findings', []), 'findings'),
@@ -23,6 +23,17 @@ def validate_progress(data):
               'next_test': text(data.get('next_test'), 'next_test'), 'files': data.get('files', [])}
     if not isinstance(result['files'], list) or any(not isinstance(p, str) for p in result['files']):
         raise ValueError('files must contain relative paths')
+    if 'checks' in data:
+        checks=data['checks']
+        if not isinstance(checks,list) or len(checks)>32:raise ValueError('Up to 32 checkpoint checks allowed')
+        for check in checks:
+            if not isinstance(check,dict) or set(check)!={'id','description','status','evidence_ids'}:raise ValueError('Check requires id, description, status, evidence_ids')
+            text(check['id'],'check id',100);text(check['description'],'check description',1000)
+            if check['status'] not in {'pending','passed','failed','unknown'}:raise ValueError('Invalid check status')
+            strings(check['evidence_ids'],'check evidence',16)
+            if check['status'] in {'passed','failed'} and not check['evidence_ids']:raise ValueError('Completed checks need evidence')
+        if len({c['id'] for c in checks})!=len(checks):raise ValueError('Duplicate check id')
+        result['checks']=checks
     return result
 
 
@@ -59,7 +70,7 @@ def validate_report(data, evidence_ids=(), targets=()):
         if not isinstance(objection, dict) or set(objection) != {'target_id', 'category', 'severity', 'statement', 'evidence_ids', 'resolution_test'}:
             raise ValueError('Invalid objection fields')
         if objection['target_id'] not in targets:
-            raise ValueError('Unknown objection target')
+            raise ValueError('Unknown objection target: '+str(objection['target_id'])+'. Use a registered ID or delivered path from report_context.objection_targets; put the quoted passage in statement.')
         if objection['category'] not in {'FACT', 'FEASIBILITY', 'EXPERIENCE', 'RESOURCE', 'OBJECTIVE', 'AUTHORIZATION'} or objection['severity'] not in {'BLOCKER', 'MAJOR', 'MINOR'}:
             raise ValueError('Invalid objection category/severity')
         text(objection['statement'], 'objection'); text(objection['resolution_test'], 'resolution_test')
