@@ -11,6 +11,9 @@ The [training benchmark proposal](docs/training-benchmark-plan-ko.md) describes 
 research projects. [Training operations](docs/training-runtime.md) and the
 [measured implementation report](docs/training-runtime-results-ko.md) describe the
 implemented job/checkpoint/trace path and its remaining research limitations.
+The [external-source study guide](docs/external-source-study.md) connects actual
+paper/code discovery and body reading to source-informed GPU comparisons and
+independent final inference.
 
 ![The reusable agent loop](docs/diagrams/configurable-team-loop.png)
 
