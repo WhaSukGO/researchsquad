@@ -380,6 +380,9 @@ class LedgerRuntime:
         if violations:
             self.state['leak_log'].append({'time':time.time(),'role':sender,'kind':'mail_rejected','violations':violations,'body':d['body'][:500]})
             raise ValueError('Letter refused by the judge ('+judge.describe(violations)+'). Rewrite it: 1988 vocabulary, cite only IDs in your view, attach an ID to every number, call nothing verified without a supported claim ID.')
+        if self.clock() and to!='all':
+            today=[m for m in self.state['mail'] if m['from']==sender and m['to']==to and m.get('sent_day')==self.now()]
+            if today:raise ValueError(f'You already wrote to {to} today ({today[-1]["id"]}); the mail goes out once a day and no answer can arrive while you keep writing. Checkpoint to let the day pass, then act on the reply.')
         recipients=[r for r in self.team.definitions if r not in (sender,'judge')] if to=='all' else [to]
         for r in recipients:
             view=self.view_for(r)

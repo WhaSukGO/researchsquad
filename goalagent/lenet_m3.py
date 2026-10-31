@@ -48,9 +48,10 @@ def build(folder,image,cache,*,provider_factory=None,model=None,**kw):
 WAKEABLE=('denker','jackel','boser','bottou','hinton')
 
 
-def unread_for(team,role):
+def unread_for(team,role,direct=True):
+    """Delivered, unread letters for a role. Floor statements (to 'all') never wake anyone; they are read at the next turn."""
     L=team.ledger
-    return [m for m in L.state['mail'] if m['to'] in (role,'all') and m['from']!=role and role not in m.get('read_by',[]) and m.get('delivered',0)<=L.now()]
+    return [m for m in L.state['mail'] if (m['to']==role if direct else m['to'] in (role,'all')) and m['from']!=role and role not in m.get('read_by',[]) and m.get('delivered',0)<=L.now()]
 
 
 def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,phase=None):

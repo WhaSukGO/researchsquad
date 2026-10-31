@@ -10,7 +10,7 @@ BLACKLIST=['convolutional network','convolutional net','convnet','cnn','max pool
            'batch norm','gpu','imagenet','mnist','deep learning','pytorch','tensorflow','transformer','backprop through time','adam optimizer']
 CITE=re.compile(r'\[([A-Za-z0-9_#:.-]+)\]')
 NUMBER=re.compile(r'(\d+(?:\.\d+)?\s*%|\b0\.\d+\b|\b\d{1,3}(?:,\d{3})+\b|\b\d{4,}\b)')
-VERIFIED=re.compile(r'\b(verified|proven|confirmed|established|supported|demonstrated)\b',re.I)
+VERIFIED=re.compile(r'\b(verified|proven|confirmed|established|demonstrated)\b',re.I)
 NEGATED=re.compile(r"\b(not|no|never|nor|cannot|isn't|wasn't|hasn't|without|un)\W*(\w+\W+){0,2}$",re.I)
 
 

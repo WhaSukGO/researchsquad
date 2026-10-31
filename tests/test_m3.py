@@ -102,3 +102,13 @@ def test_training_is_sealed_on_the_clock_without_docker(tmp_path,monkeypatch):
     assert L.state['compute_days_used']>0 and L.next_event()==round(out['sealed']['ready_day'],2) or L.next_event()>0
     L.state['day']=out['sealed']['ready_day'];L.deliver();assert 'R1' in L.view(lecun)['nodes'] and 'P1' in L.view(lecun)['nodes']
     assert L.audit()['invariant_holds']
+
+
+def test_one_letter_per_recipient_per_day(tmp_path):
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
+    call(team,lecun,'mail_send',{'to':'denker','body':'First [LECUN89TR].','attach':[]})
+    with pytest.raises(ValueError,match='already wrote to denker today'):call(team,lecun,'mail_send',{'to':'denker','body':'Second [LECUN89TR].','attach':[]})
+    call(team,lecun,'mail_send',{'to':'boser','body':'Other colleague [LECUN89TR].','attach':[]})
+    L.state['day']=1.0;assert call(team,lecun,'mail_send',{'to':'denker','body':'Next day [LECUN89TR].','attach':[]})['mail_id']=='M3'
+    from goalagent import judge
+    assert judge.check_text('Please attach the supported claim so that I can promote it [C1].',['C1'])==[]
