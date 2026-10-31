@@ -11,6 +11,7 @@ BLACKLIST=['convolutional network','convolutional net','convnet','cnn','max pool
 CITE=re.compile(r'\[([A-Za-z0-9_#:.-]+)\]')
 NUMBER=re.compile(r'(\d+(?:\.\d+)?\s*%|\b0\.\d+\b|\b\d{1,3}(?:,\d{3})+\b|\b\d{4,}\b)')
 VERIFIED=re.compile(r'\b(verified|proven|confirmed|established|supported|demonstrated)\b',re.I)
+NEGATED=re.compile(r"\b(not|no|never|nor|cannot|isn't|wasn't|hasn't|without|un)\W*(\w+\W+){0,2}$",re.I)
 
 
 def sentences(text):
@@ -29,7 +30,7 @@ def check_text(text,view_ids,supported_ids=()):
     for s in sentences(text):
         cites=CITE.findall(s)
         if NUMBER.search(re.sub(r'\[[^\]]*\]','',s)) and not cites:violations.append(('uncited_number',s[:100]))
-        if VERIFIED.search(s) and not any(c in supported for c in cites) and not any(c.startswith('conj:') for c in cites):
+        if any(not NEGATED.search(s[:m.start()][-40:]) for m in VERIFIED.finditer(s)) and not any(c in supported for c in cites) and not any(c.startswith('conj:') for c in cites):
             violations.append(('unsupported_verification',s[:100]))
     return violations
 

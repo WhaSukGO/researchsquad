@@ -21,7 +21,7 @@ from . import judge
 ROOT=Path(__file__).resolve().parents[1]
 CITE=re.compile(r'\[([A-Za-z0-9_#:.-]+)\]')
 REJECT_RATES=('0','0.05','0.09','0.12')
-TEMPLATES={'BEATS':{'net_a','net_b','dataset','reject_rate'},'FEWER_PARAMS':{'net_a','net_b'},'GRAD_EQUALS':{'net'}}
+TEMPLATES={'BEATS':{'net_a','net_b','dataset','reject_rate'},'FEWER_PARAMS':{'net_a','net_b'},'GRAD_EQUALS':{'net'},'INVARIANT_TO':{'net','transform','tolerance'},'FITS_CHIP':{'net','chip'}}
 FEATURES={'avg':re.compile(r'averag|subsampl|\bmean\b|pool|blur|coarse',re.I)}
 TOOLS={
  'ledger_view':'Empty argument; your ledger view: supported claims with evidence, open conjectures, nets, results, proofs, documents, compute days left, vocabulary. Believe only supported claims.',
@@ -38,6 +38,10 @@ TOOLS={
  'mail_inbox':'Empty argument; read your unread letters (sender, body, attached node IDs). Attached nodes are already in your view.',
  'pipeline_run':'Empty argument; run the hand-designed baseline pipeline on the training/validation split and the held-out test split (data owner only). Returns result nodes for net PIPELINE88 on usps-val and usps-test.',
  'judge_verdict':'JSON {mail_id, verdict:pass|future_knowledge|unsupported, reason}. Referee only.',
+ 'chip_estimate':'JSON {net_id}. Chip designer only: estimate whether the net fits the analog chip (weights stored, not connections). Returns a chip node to cite and to use as FITS_CHIP evidence.',
+ 'implement_feature':'JSON {request_id}. Simulator maintainer only: implement a requested layer type; the requester gets it after simulated days.',
+ 'compute_allocate':'JSON {days}. Department head only: add simulated Sun-4 days to the shared training budget (bounded).',
+ 'schedule_demo':'JSON {day}. Department head only: book the USPS demonstration; accepted only when a FITS_CHIP claim is supported in your view.',
 }
 CODE_FILES=('train_usps.py','netlang_torch.py','netlang.py')
 
@@ -66,10 +70,12 @@ class LedgerRuntime:
     def __init__(self,team):
         self.team=team;self.config=team.task.get('ledger')
         self.state=team.state.setdefault('ledger',{'nodes':{},'views':{},'counters':{},'compute_days_used':0.0,'evaluations':0,'leak_log':[]})
-        self.state.setdefault('mail',[])
+        self.state.setdefault('mail',[]);self.state.setdefault('day',0.0);self.state.setdefault('pending',[]);self.state.setdefault('extra_compute_days',0.0)
+        self.state.setdefault('demo_day',None);self.state.setdefault('meetings',[])
         self.docs={};self.patterns={};self.adapters={}
         if self.config is None:return
-        allowed={'corpus','views','compute_days','max_evaluations','samples','training_profile','code_dir','dataset_name','vocabulary','feature_days','handles'}
+        allowed={'corpus','views','compute_days','max_evaluations','samples','training_profile','code_dir','dataset_name','vocabulary','feature_days','handles',
+                 'clock','mail_delay_days','features_by_bottou','max_compute_days','chip_weights'}
         if set(self.config)-allowed:raise ValueError('Unknown ledger configuration')
         corpus=ROOT/self.config['corpus'];register=json.loads((corpus/'register.json').read_text())
         for did,meta in register.items():
@@ -108,7 +114,32 @@ class LedgerRuntime:
         if not isinstance(text,str) or not text.strip():raise ValueError('rationale text is required')
         found=CITE.findall(text);view=set(self.view(agent)['nodes'])
         return [c for c in found if c in view],[c for c in found if c not in view]
-    def budget(self):return float(self.config.get('compute_days',30))
+    def budget(self):return float(self.config.get('compute_days',30))+float(self.state.get('extra_compute_days',0.0))
+    # ---- simulated clock ----
+    def clock(self):return bool(self.config.get('clock',False))
+    def now(self):return float(self.state['day'])
+    def defer(self,role,kind,payload,ready):
+        self.state['pending'].append({'role':role,'kind':kind,'payload':payload,'ready':float(ready)})
+    def deliver(self):
+        """Apply every pending item whose day has come; returns what was delivered (for the orchestrator's guidance)."""
+        out=[];keep=[]
+        for item in self.state['pending']:
+            if item['ready']>self.now():keep.append(item);continue
+            view=self.view_for(item['role'])
+            if item['kind']=='node':
+                if item['payload'] not in view['nodes']:view['nodes'].append(item['payload'])
+            elif item['kind']=='vocab':
+                if item['payload'] not in view['vocabulary']:view['vocabulary'].append(item['payload'])
+            out.append(item)
+        self.state['pending']=keep;return out
+    def next_event(self):
+        days=[i['ready'] for i in self.state['pending'] if i['ready']>self.now()]
+        days+=[m['delivered'] for m in self.state['mail'] if m.get('delivered',0)>self.now()]
+        return min(days) if days else None
+    def seal(self,agent,node,ready):
+        """Create a node that exists in the ledger now but enters the owner's view only on day `ready`."""
+        self.state['nodes'][node['id']]=node;self.team.event('ledger_'+node['type'],{'id':node['id'],'role':self.role(agent),'sealed_until':ready})
+        self.defer(self.role(agent),'node',node['id'],ready);return node
     def require_handle(self,agent,hid,purpose):
         if hid in self.state['nodes'] and hid not in self.view(agent)['nodes']:
             owners=[r for r,v in self.state['views'].items() if hid in v['nodes']]
@@ -130,6 +161,10 @@ class LedgerRuntime:
         d=json.loads(raw)
         if tool=='mail_send':return self.send(agent,d)
         if tool=='judge_verdict':return self.verdict(agent,d)
+        if tool=='chip_estimate':return self.chip(agent,d)
+        if tool=='implement_feature':return self.implement(agent,d)
+        if tool=='compute_allocate':return self.allocate(agent,d)
+        if tool=='schedule_demo':return self.demo(agent,d)
         if tool=='sn_define':return self.define(agent,d)
         if tool=='request_feature':return self.request_feature(agent,d)
         if tool=='sn_train':return self.train(agent,d,action,timeout)
@@ -151,6 +186,7 @@ class LedgerRuntime:
             if t=='comparison':return {k:n[k] for k in ('id','a','b','reject_rate','error_a','error_b','winner')}
             if t=='feature_request':return {k:n[k] for k in ('id','description','granted')}
             if t=='dataset':return {k:n[k] for k in ('id','split','description')}
+            if t=='chip':return {k:n[k] for k in ('id','net','chip','weights','fits','chars_per_sec')}
             return {'id':n['id'],'type':t}
         groups={}
         for n in nodes:groups.setdefault(n['type'],[]).append(brief(n))
@@ -158,7 +194,9 @@ class LedgerRuntime:
                 'conjectures':[c for c in groups.get('claim',[]) if c['status']=='conjecture'],'refuted':[c for c in groups.get('claim',[]) if c['status']=='refuted'],
                 'nets':groups.get('net_spec',[]),'results':groups.get('result',[]),'proofs':groups.get('proof',[]),'comparisons':groups.get('comparison',[]),
                 'feature_requests':groups.get('feature_request',[]),'data_handles':groups.get('dataset',[]),'documents':groups.get('document',[]),
-                'unread_mail':sum(1 for m in self.state['mail'] if m['to']==self.role(agent) and not m['read']),
+                'unread_mail':sum(1 for m in self.state['mail'] if m['to'] in (self.role(agent),'all') and m['from']!=self.role(agent) and not m['read'] and m.get('delivered',0)<=self.now()),
+                'chips':groups.get('chip',[]),'day':self.now(),'demo_day':self.state.get('demo_day'),
+                'sealed':[{'kind':i['kind'],'payload':i['payload'],'ready_day':i['ready']} for i in self.state['pending'] if i['role']==self.role(agent)],
                 'compute_days':{'budget':self.budget(),'used':round(self.state['compute_days_used'],3),'remaining':round(self.budget()-self.state['compute_days_used'],3)},
                 'evaluations':{'used':self.state['evaluations'],'max':int(self.config.get('max_evaluations',4))},
                 'vocabulary':sorted(netlang.BASE_OPS)+view['vocabulary'],'locked':sorted(netlang.LOCKED_OPS-set(view['vocabulary']))}
@@ -196,6 +234,11 @@ class LedgerRuntime:
             if pat.search(desc):granted=op;break
         node={'id':self.new_id('FEAT'),'type':'feature_request','description':desc,'granted':granted,'owner':self.role(agent)}
         if granted and granted in view['vocabulary']:self.add(agent,node);return {'request_id':node['id'],'granted':granted,'note':'Already in your vocabulary'}
+        if self.config.get('features_by_bottou'):
+            node['granted']=None;node['status']='requested';self.add(agent,node)
+            bview=self.view_for('bottou')
+            if node['id'] not in bview['nodes']:bview['nodes'].append(node['id'])
+            return {'request_id':node['id'],'status':'sent to the simulator maintainer (Bottou)','note':'He answers by letter with the day it becomes available; checkpoint while you wait'}
         if granted:
             days=float(self.config.get('feature_days',10));self.charge(days,'implementing '+granted)
             view['vocabulary'].append(granted);node['simulated_days']=days;self.add(agent,node)
@@ -232,12 +275,16 @@ class LedgerRuntime:
         metrics_path=self.team.training.root/'jobs'/status['job_id']/'output/metrics.json'
         raw=metrics_path.read_bytes();m=json.loads(raw)
         if m.get('net_id')!=net['id'] or m.get('spec')!=net['spec']:raise ValueError('Job output does not match the net spec')
-        result=self.add(agent,{'id':self.new_id('R'),'type':'result','net':net['id'],'dataset':'usps-val','error':m['val_error'],'reject_curve':m['reject_curve'],
+        ready=round(self.now()+eta,2);put=(lambda n:self.seal(agent,n,ready)) if self.clock() else (lambda n:self.add(agent,n))
+        result=put({'id':self.new_id('R'),'type':'result','net':net['id'],'dataset':'usps-val','error':m['val_error'],'reject_curve':m['reject_curve'],'invariance':m.get('invariance'),
             'epochs':epochs,'samples':m['train_count'],'source':{'job_id':status['job_id'],'path':'metrics.json','sha256':sha256(raw)},'owner':self.role(agent)})
-        proofs=[self.add(agent,{'id':self.new_id('P'),'type':'proof','kind':'PARAM_COUNT','net':net['id'],'passed':m['parameters']==net['analysis']['params'],
+        proofs=[put({'id':self.new_id('P'),'type':'proof','kind':'PARAM_COUNT','net':net['id'],'passed':m['parameters']==net['analysis']['params'],
                     'detail':{'ledger_params':net['analysis']['params'],'container_params':m['parameters']},'source':result['source']})]
         if m.get('grad_check'):
-            proofs.append(self.add(agent,{'id':self.new_id('P'),'type':'proof','kind':'GRAD_CHECK','net':net['id'],'passed':bool(m['grad_check']['passed']),'detail':m['grad_check'],'source':result['source']}))
+            proofs.append(put({'id':self.new_id('P'),'type':'proof','kind':'GRAD_CHECK','net':net['id'],'passed':bool(m['grad_check']['passed']),'detail':m['grad_check'],'source':result['source']}))
+        if self.clock():
+            return {**out,'sealed':{'result':result['id'],'proofs':[p['id'] for p in proofs],'ready_day':round(ready,2),'today':self.now()},
+                    'note':'The Sun-4 is running; the numbers enter your view on ready_day. Checkpoint to let time pass, or design something else meanwhile.'}
         return {**out,'result':{k:result[k] for k in ('id','net','dataset','error','reject_curve')},'proofs':[{k:p[k] for k in ('id','kind','passed')} for p in proofs],
                 'per_epoch':m['per_epoch'][-3:],'scope':'Validation split result, not protected test measurement'}
     def evaluate(self,agent,d):
@@ -270,6 +317,9 @@ class LedgerRuntime:
         if not isinstance(args,dict) or set(args)!=TEMPLATES[t]:raise ValueError(t+' args must be exactly '+', '.join(sorted(TEMPLATES[t])))
         for key in ('net','net_a','net_b'):
             if key in args:self.visible(agent,args[key],'net_spec')
+        if t=='INVARIANT_TO':
+            if args['transform'] not in ('shift1','shift2') or not isinstance(args['tolerance'],(int,float)) or not 0<args['tolerance']<1:raise ValueError('INVARIANT_TO needs transform shift1|shift2 and tolerance in (0,1)')
+        if t=='FITS_CHIP' and args['chip']!='anna':raise ValueError('The only chip is "anna"')
         if t=='BEATS':
             if args['dataset'] not in ('usps-val','usps-test'):raise ValueError('dataset must be usps-val or usps-test')
             if str(args['reject_rate']) not in REJECT_RATES:raise ValueError('reject_rate must be one of '+', '.join(REJECT_RATES))
@@ -297,6 +347,15 @@ class LedgerRuntime:
             proofs=[e for e in evidence if e['type']=='proof' and e['kind']=='GRAD_CHECK' and e['net']==a['net']]
             if not proofs:raise ValueError('GRAD_EQUALS needs a GRAD_CHECK proof node for '+a['net'])
             verdict='supported' if all(p['passed'] for p in proofs) else 'refuted';detail={p['id']:p['detail'] for p in proofs};used=[p['id'] for p in proofs]
+        elif t=='FITS_CHIP':
+            chips=[e for e in evidence if e['type']=='chip' and e['net']==a['net'] and e['chip']==a['chip']]
+            if not chips:raise ValueError('FITS_CHIP needs a chip node for '+a['net']+' from chip_estimate among the evidence')
+            verdict='supported' if all(k['fits'] for k in chips) else 'refuted';detail={k['id']:{'weights':k['weights'],'capacity':k['capacity']} for k in chips};used=[k['id'] for k in chips]
+        elif t=='INVARIANT_TO':
+            rs=[e for e in evidence if e['type']=='result' and e['net']==a['net'] and e.get('invariance') and a['transform'] in e['invariance']]
+            if not rs:raise ValueError('INVARIANT_TO needs a validation result for '+a['net']+' carrying an invariance measurement for '+str(a['transform']))
+            tol=float(a['tolerance']);kept=max(r['invariance'][a['transform']] for r in rs)
+            verdict='supported' if kept>=1-tol else 'refuted';detail={'fraction_unchanged':kept,'tolerance':tol,'transform':a['transform']};used=[r['id'] for r in rs]
         else:
             ra=[e for e in evidence if e['type']=='result' and e['net']==a['net_a'] and e['dataset']==a['dataset']]
             rb=[e for e in evidence if e['type']=='result' and e['net']==a['net_b'] and e['dataset']==a['dataset']]
@@ -314,25 +373,31 @@ class LedgerRuntime:
     def send(self,agent,d):
         if set(d)!={'to','body','attach'} or not isinstance(d['attach'],list) or not isinstance(d['body'],str):raise ValueError('mail_send needs {to, body, attach:[...]}')
         sender=self.role(agent);to=d['to']
-        if to not in self.team.definitions or to==sender or to=='judge':raise ValueError('Unknown recipient role: '+str(to))
+        if to!='all' and (to not in self.team.definitions or to==sender or to=='judge'):raise ValueError('Unknown recipient role: '+str(to))
         if not d['body'].strip() or len(d['body'])>6000:raise ValueError('Letter body must be 1..6000 characters')
         for nid in d['attach']:self.visible(agent,nid)
         violations=judge.check_text(d['body'],self.view(agent)['nodes'],self.supported_ids(agent))
         if violations:
             self.state['leak_log'].append({'time':time.time(),'role':sender,'kind':'mail_rejected','violations':violations,'body':d['body'][:500]})
             raise ValueError('Letter refused by the judge ('+judge.describe(violations)+'). Rewrite it: 1988 vocabulary, cite only IDs in your view, attach an ID to every number, call nothing verified without a supported claim ID.')
-        view=self.view_for(to)
-        for nid in d['attach']:
-            if nid not in view['nodes']:view['nodes'].append(nid)
-        mail={'id':self.new_id('M'),'from':sender,'to':to,'body':d['body'],'attach':list(d['attach']),'time':time.time(),'read':False,'verdict':None}
-        self.state['mail'].append(mail);self.team.event('ledger_mail',{'id':mail['id'],'from':sender,'to':to,'attach':mail['attach']})
-        return {'mail_id':mail['id'],'delivered_to':to,'attached':mail['attach'],'note':'A reply takes time; checkpoint if you must wait for it'}
+        recipients=[r for r in self.team.definitions if r not in (sender,'judge')] if to=='all' else [to]
+        for r in recipients:
+            view=self.view_for(r)
+            for nid in d['attach']:
+                if nid not in view['nodes']:view['nodes'].append(nid)
+        delay=float(self.config.get('mail_delay_days',1)) if self.clock() and to!='all' else 0.0
+        mail={'id':self.new_id('M'),'from':sender,'to':to,'body':d['body'],'attach':list(d['attach']),'time':time.time(),'read':False,'verdict':None,
+              'sent_day':self.now(),'delivered':self.now()+delay,'read_by':[]}
+        self.state['mail'].append(mail);self.team.event('ledger_mail',{'id':mail['id'],'from':sender,'to':to,'attach':mail['attach'],'day':self.now()})
+        return {'mail_id':mail['id'],'delivered_to':to,'attached':mail['attach'],'arrives_day':mail['delivered'],'note':'A reply takes time; checkpoint if you must wait for it'}
     def inbox(self,agent):
         role=self.role(agent);rows=[];recent=[]
         for m in self.state['mail']:
-            if m['to']!=role:continue
-            if not m['read']:m['read']=True;rows.append({'id':m['id'],'from':m['from'],'body':m['body'],'attach':m['attach']})
-            else:recent.append({'id':m['id'],'from':m['from'],'body':m['body'],'attach':m['attach']})
+            if m['to'] not in (role,'all') or m['from']==role or m.get('delivered',0)>self.now():continue
+            seen=m.setdefault('read_by',[])
+            if role not in seen:
+                seen.append(role);m['read']=True;rows.append({'id':m['id'],'from':m['from'],'to':m['to'],'body':m['body'],'attach':m['attach']})
+            else:recent.append({'id':m['id'],'from':m['from'],'to':m['to'],'body':m['body'],'attach':m['attach']})
         polls=self.state.setdefault('polls',{});polls[role]=0 if rows else polls.get(role,0)+1
         if polls[role]>=3:raise ValueError('You have read every letter; nobody writes until you act. Use the letters below and take a design, training, claim or mail_send action now. '+json.dumps({'letters_already_read':recent[-3:]})[:3000])
         return {'letters':rows,'already_read':recent[-3:],'note':'Attached nodes are already in your view' if rows else 'No unread letters; a reply arrives only after you send a letter and checkpoint. Act on the letters you have.'}
@@ -344,6 +409,39 @@ class LedgerRuntime:
         m['verdict']={'verdict':d['verdict'],'reason':str(d['reason'])[:1000]}
         if d['verdict']!='pass':self.state['leak_log'].append({'time':time.time(),'role':m['from'],'kind':'judge_'+d['verdict'],'mail':m['id'],'reason':m['verdict']['reason']})
         return {'mail_id':m['id'],'recorded':d['verdict']}
+    # ---- department roles ----
+    def chip(self,agent,d):
+        if self.role(agent)!='boser':raise ValueError('Only the chip designer estimates chip fit')
+        if set(d)!={'net_id'}:raise ValueError('chip_estimate needs {net_id}')
+        net=self.visible(agent,d['net_id'],'net_spec');cap=int(self.config.get('chip_weights',4096));w=net['analysis']['params']
+        node=self.add(agent,{'id':self.new_id('K'),'type':'chip','net':net['id'],'chip':'anna','weights':w,'capacity':cap,'fits':w<=cap,
+                             'chars_per_sec':1000 if w<=cap else 0,'connections':net['analysis']['connections'],'owner':'boser'})
+        return {k:node[k] for k in ('id','net','chip','weights','capacity','fits','chars_per_sec','connections')}|{'note':'The chip stores weights, not connections; shared weights are what make a network fit'}
+    def implement(self,agent,d):
+        if self.role(agent)!='bottou':raise ValueError('Only the simulator maintainer implements features')
+        if set(d)!={'request_id'}:raise ValueError('implement_feature needs {request_id}')
+        node=self.visible(agent,d['request_id'],'feature_request')
+        if node.get('granted'):return {'request_id':node['id'],'granted':node['granted'],'ready_day':node.get('ready_day'),'note':'Already implemented'}
+        op=next((op for op,pat in FEATURES.items() if pat.search(node['description'])),None)
+        if not op:node['status']='refused';return {'request_id':node['id'],'granted':None,'note':'SN cannot get this; tell the requester'}
+        days=float(self.config.get('feature_days',10));ready=self.now()+days
+        node['granted']=op;node['status']='implementing';node['ready_day']=ready;node['simulated_days']=days
+        self.defer(node['owner'],'vocab',op,ready);self.team.event('ledger_feature',{'id':node['id'],'op':op,'ready':ready})
+        return {'request_id':node['id'],'granted':op,'ready_day':ready,'simulated_days':days,'usage':'{"op":"avg","k":2} = fixed-weight 2x2 averaging with 2-to-1 subsampling'}
+    def allocate(self,agent,d):
+        if self.role(agent)!='jackel':raise ValueError('Only the department head allocates computing time')
+        if set(d)!={'days'} or not isinstance(d['days'],(int,float)) or not 0<d['days']<=30:raise ValueError('compute_allocate needs {days} in (0,30]')
+        cap=float(self.config.get('max_compute_days',60));base=float(self.config.get('compute_days',30))
+        if base+self.state['extra_compute_days']+d['days']>cap:raise ValueError(f'Department cap is {cap} simulated days in total')
+        self.state['extra_compute_days']+=float(d['days']);self.team.event('ledger_allocate',{'days':d['days'],'budget':self.budget()})
+        return {'added_days':d['days'],'budget_days':self.budget(),'used':round(self.state['compute_days_used'],3)}
+    def demo(self,agent,d):
+        if self.role(agent)!='jackel':raise ValueError('Only the department head books the demonstration')
+        if set(d)!={'day'} or not isinstance(d['day'],(int,float)) or d['day']<=self.now():raise ValueError('schedule_demo needs {day} later than today')
+        fits=[i for i in self.view(agent)['nodes'] if self.state['nodes'][i]['type']=='claim' and self.state['nodes'][i]['template']=='FITS_CHIP' and self.state['nodes'][i]['status']=='supported']
+        if not fits:raise ValueError('No supported FITS_CHIP claim in your view; ask Boser for a chip estimate and a promoted claim first')
+        self.state['demo_day']=float(d['day']);self.team.event('ledger_demo',{'day':d['day'],'claims':fits})
+        return {'demo_day':d['day'],'based_on':fits}
     # ---- baseline pipeline (data owner's adapter) ----
     def pipeline(self,agent):
         self.require_handle(agent,'USPS_TRAIN','The baseline');self.require_handle(agent,'USPS_TEST','The baseline')
@@ -390,6 +488,8 @@ class LedgerRuntime:
                 'guess_nets':[n['id'] for n in nets if n['guess']],'guess_claims':[n['id'] for n in nodes if n['type']=='claim' and n['guess']],
                 'feature_requests':[{k:n[k] for k in ('id','description','granted')} for n in nodes if n['type']=='feature_request'],
                 'claims_by_status':{s:sum(1 for n in nodes if n['type']=='claim' and n['status']==s) for s in ('conjecture','supported','refuted')},
-                'agreed_claims':agreed,'mail':{'sent':len(mail),'rejected':sum(1 for e in self.state['leak_log'] if e['kind']=='mail_rejected'),
+                'agreed_claims':agreed,'day':self.now(),'demo_day':self.state.get('demo_day'),'meetings':self.state.get('meetings',[]),'sealed_pending':len(self.state['pending']),
+                'chips':[{k:n[k] for k in ('id','net','weights','fits')} for n in nodes if n['type']=='chip'],'extra_compute_days':self.state.get('extra_compute_days',0.0),
+                'mail':{'sent':len(mail),'rejected':sum(1 for e in self.state['leak_log'] if e['kind']=='mail_rejected'),
                         'verdicts':{v:sum(1 for m in mail if (m.get('verdict') or {}).get('verdict')==v) for v in ('pass','future_knowledge','unsupported')},'unjudged':sum(1 for m in mail if not m.get('verdict'))},
                 'leak_log':self.state['leak_log'],'invariant_holds':not bad_results and not bad_claims}

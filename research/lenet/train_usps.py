@@ -64,12 +64,17 @@ def main():
         row={'epoch':epoch,'train_mse':total/len(ty),'val_error':val['error'],'val_reject_curve':val['reject_curve'],'elapsed_seconds':time.perf_counter()-started}
         history.append(row);emit({'event':'epoch',**row})
     final=evaluate(model,vx,vy)
+    def shifted(dx):
+        x=torch.roll(vx,shifts=dx,dims=3);x[:,:,:,:dx]=-1.0;return x
+    model.eval()
+    with torch.inference_mode():
+        base=model(vx).argmax(1);invariance={f'shift{d}':float((model(shifted(d)).argmax(1)==base).float().mean()) for d in (1,2)}
     state={k:v.detach().cpu().contiguous() for k,v in model.state_dict().items()}
     save_file(state,str(out/'weights.safetensors'),metadata={'spec':json.dumps(spec)})
     metrics={'net_id':a.net_id,'spec':a.spec,'dataset_id':a.dataset_id,'parameters':params,'connections':model.analysis['connections'],
              'epochs':a.epochs,'seed':SEED,'lr':a.lr,'batch_size':a.batch_size,'loss':'mse_pm1_tanh','optimizer':'sgd_momentum_0.9',
              'train_count':int(len(ty)),'validation_count':VALID,'per_epoch':history,'val_error':final['error'],'reject_curve':final['reject_curve'],
-             'grad_check':check,'elapsed_seconds':time.perf_counter()-started,'official_test_accessed':False}
+             'grad_check':check,'invariance':invariance,'elapsed_seconds':time.perf_counter()-started,'official_test_accessed':False}
     (out/'metrics.json').write_text(json.dumps(metrics,indent=2,allow_nan=False)+'\n')
     emit({'event':'complete','val_error':final['error'],'elapsed_seconds':metrics['elapsed_seconds']});log.close()
 

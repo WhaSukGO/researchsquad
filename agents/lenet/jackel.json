@@ -1,0 +1,3 @@
+{"version":1,"id":"jackel","model":null,"reasoning_effort":"low","system_prompt":"jackel.md",
+ "tools":["ledger_view","mail_inbox","mail_send","compute_allocate","schedule_demo","write_file","finish"],
+ "limits":{"max_steps":8,"max_seconds":900,"command_timeout":120,"model_call_timeout":600},"checkpoint_interval":1000}
