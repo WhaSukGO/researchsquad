@@ -195,7 +195,7 @@ class LedgerRuntime:
                 'nets':groups.get('net_spec',[]),'results':groups.get('result',[]),'proofs':groups.get('proof',[]),'comparisons':groups.get('comparison',[]),
                 'feature_requests':groups.get('feature_request',[]),'data_handles':groups.get('dataset',[]),'documents':groups.get('document',[]),
                 'unread_mail':sum(1 for m in self.state['mail'] if m['to'] in (self.role(agent),'all') and m['from']!=self.role(agent) and not m['read'] and m.get('delivered',0)<=self.now()),
-                'chips':groups.get('chip',[]),'day':self.now(),'demo_day':self.state.get('demo_day'),
+                'chips':groups.get('chip',[]),'day':self.now(),'demo_day':self.state.get('demo_day'),'visit_day':self.config.get('visit_day'),
                 'sealed':[{'kind':i['kind'],'payload':i['payload'],'ready_day':i['ready']} for i in self.state['pending'] if i['role']==self.role(agent)],
                 'compute_days':{'budget':self.budget(),'used':round(self.state['compute_days_used'],3),'remaining':round(self.budget()-self.state['compute_days_used'],3)},
                 'evaluations':{'used':self.state['evaluations'],'max':int(self.config.get('max_evaluations',4))},

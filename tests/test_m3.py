@@ -71,7 +71,7 @@ def test_chip_and_fits_chip_and_demo_gating(tmp_path):
     assert call(team,jackel,'compute_allocate',{'days':10})['budget_days']==30.0
     assert call(team,jackel,'compute_allocate',{'days':30})['budget_days']==60.0
     with pytest.raises(ValueError,match='Department cap'):call(team,jackel,'compute_allocate',{'days':1})
-    assert L.audit()['chips'][0]['fits'] and L.audit()['demo_day']==45
+    assert L.audit()['chips'][0]['fits'] and L.audit()['demo_day']==45 and call(team,jackel,'ledger_view')['visit_day']==45
 
 
 def test_invariant_to_needs_measured_invariance(tmp_path):
