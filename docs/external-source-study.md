@@ -76,10 +76,11 @@ model calls**. It is transport verification, not evidence that an agent discover
 those sources. `literature_live` uses the configured actual provider for every role;
 it names no particular paper or repository in the study prompt.
 
-Use absolute run directories: the underlying managed execution changes process
-working directories, so a relative path can fail when a helper reopens the run.
-Reuse the same directory only for an unchanged contract/restart. Otherwise create
-a fresh run and preserve the old outcome.
+Use absolute run directories. During this task a relative-directory managed
+fixture failed on reopen with `FileNotFoundError` while resolving the process
+working directory; a fresh absolute-directory invocation passed. The underlying
+cause has not been established. Reuse the same directory only for an unchanged
+contract/restart. Otherwise create a fresh run and preserve the old outcome.
 
 Inspect `traces/*.json`, `events.jsonl`, assignment `actions/*.json`, original source
 artifacts, source/evaluation results and `training/jobs/*/output`. Export a readable
