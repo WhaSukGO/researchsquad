@@ -197,10 +197,15 @@ class TrainingRuntime:
             blob=read_file(src,name,limit=1_000_000)
             target=workspace_path(code,name);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(blob)
         command=['python','/workspace/code/'+d['entrypoint'],*d['args']]
-        control=folder/'control';control.mkdir()
+        control=folder/'control';control.mkdir();control.chmod(0o755)
         atomic_json(control/'job.json',{'command':command,'uid':os.getuid() or 1000,'gid':os.getgid() or 1000,
             'max_seconds':profile['max_seconds'],'max_output_bytes':profile['max_output_bytes']})
+        # PID 1 runs with DAC override dropped and a different UID from the host.
+        # Publish only this non-secret, read-only control packet for it to read;
+        # private Team state keeps atomic_json's restrictive temporary-file mode.
+        (control/'job.json').chmod(0o644)
         shutil.copyfile(Path(__file__).with_name('job_supervisor.py'),control/'supervisor.py')
+        (control/'supervisor.py').chmod(0o644)
         container='rsq-'+digest([str(self.team.folder),jid])[:24]
         j={'id':jid,'owner':self.owner(agent),'request':d,'parent_job':parent['id'] if parent else None,
            'profile':profile,'container':container,'status':'STARTING','created_at':time.time()}

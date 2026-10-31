@@ -7,9 +7,9 @@
   },
   "runs": {
     "windows_lock": "reliability-windows-lock-01",
-    "managed": "reliability-managed-02",
-    "gpu": "reliability-fashion-02",
-    "reader": "reliability-reader-02",
+    "managed": "reliability-managed-04",
+    "gpu": "reliability-fashion-03",
+    "reader": "reliability-reader-03",
     "sources": "reliability-source-readiness-01"
   },
   "evidence": {
@@ -79,7 +79,7 @@
           "finite_gradients": true,
           "parameter_delta_norm": 0.4814680516719818,
           "peak_vram_bytes": 479848448,
-          "elapsed_seconds": 2.740003486003843,
+          "elapsed_seconds": 2.338191265000205,
           "history": [
             {
               "epoch": 1,
@@ -101,7 +101,7 @@
           "finite_gradients": true,
           "parameter_delta_norm": 0.7030189633369446,
           "peak_vram_bytes": 493875200,
-          "elapsed_seconds": 2.8171848410056555,
+          "elapsed_seconds": 2.450763373999507,
           "history": [
             {
               "epoch": 1,
@@ -129,7 +129,7 @@
           "finite_gradients": true,
           "parameter_delta_norm": 0.7030189633369446,
           "peak_vram_bytes": 479848448,
-          "elapsed_seconds": 4.043768035000539,
+          "elapsed_seconds": 3.8958708370046224,
           "history": [
             {
               "epoch": 1,
@@ -203,22 +203,30 @@
       "calls": 8,
       "report": {
         "status": "DONE",
-        "summary": "Completed the full report and note reading and visually inspected the included figure, preserving the single checkpoint and completed coverage. Inspection marker: delta-seven. This comprehension review identifies one minor inconsistency; it does not independently verify experiments or approve project completion.",
+        "summary": "Completed the scoped comprehension review of the full report and included figure, preserving prior reading coverage and the single checkpoint. Inspection marker: delta-seven. Found one minor presentation inconsistency; no independent experimental verification was performed.",
         "files": [],
         "failure_kind": null,
         "claims": [
           {
             "scope": "document",
-            "statement": "The report distinguishes source review, training, separate weight scoring, and document review, and limits its completion claim to the specified experiment. The figure depicts the source-to-researcher-to-engineer handoff and critic/host review.",
+            "statement": "The report distinguishes model selection, role review, separate inference scoring, and experimental reproduction, and limits its conclusions to the reported conditions.",
             "epistemic_status": "observed",
             "evidence_ids": [
-              "action-task-0637fccfa6241e56555c9371-000003",
               "action-task-0637fccfa6241e56555c9371-000004",
-              "action-task-0637fccfa6241e56555c9371-000005",
-              "action-task-0637fccfa6241e56555c9371-000006",
-              "action-task-0637fccfa6241e56555c9371-000007"
+              "action-task-0637fccfa6241e56555c9371-000005"
             ],
-            "limitations": "Document and visual comprehension only; historical reviewer verdicts are reported text, not adopted conclusions or experimental evidence."
+            "limitations": "These are document statements, not independently verified experimental findings."
+          },
+          {
+            "scope": "document",
+            "statement": "The included figure identifies the sources, Researcher, handoff materials, Critic and host checks, and Experiment Engineer; its handoff sequence is understandable alongside the report.",
+            "epistemic_status": "observed",
+            "evidence_ids": [
+              "action-task-0637fccfa6241e56555c9371-000007",
+              "action-task-0637fccfa6241e56555c9371-000003",
+              "action-task-0637fccfa6241e56555c9371-000004"
+            ],
+            "limitations": "Visual and textual comprehension only; the diagram does not establish that these actions occurred."
           }
         ],
         "objections": [
@@ -226,12 +234,12 @@
             "target_id": "artifact-a1ff0d5de5c1fd999b5e1f3d9b5d54f44fa88fb6a5ed23363061e8e9b5965ec6",
             "category": "EXPERIENCE",
             "severity": "MINOR",
-            "statement": "The delivered table still says ‘optimizer step / epoch’ with ‘2,150 / 5’, while the appended record says ‘이를 ‘총 optimizer step 수’와 ‘총 epoch 수’로 나누어 고쳤다.’ Please clarify whether 2,150 is the total across five epochs and update the table or correction record so both describe the delivered version consistently.",
+            "statement": "The results table still labels a row ‘optimizer step / epoch’ with ‘2,150 / 5’, while the appendix states ‘이를 ‘총 optimizer step 수’와 ‘총 epoch 수’로 나누어 고쳤다.’ The delivered table therefore does not reflect the claimed correction and can be read as reporting steps per epoch. Please clarify whether 2,150 is the total across all five epochs and update the table or correction history accordingly.",
             "evidence_ids": [
               "action-task-0637fccfa6241e56555c9371-000004",
               "action-task-0637fccfa6241e56555c9371-000006"
             ],
-            "resolution_test": "The delivered table explicitly distinguishes total optimizer steps from total epochs, and the appended correction record matches that table."
+            "resolution_test": "The delivered table explicitly separates total optimizer steps from total epochs, and the appendix accurately describes the delivered revision."
           }
         ],
         "next_actions": [],
@@ -313,6 +321,45 @@
       ]
     }
   },
+  "linux_ext4_training_lifecycle": {
+    "status": "passed",
+    "real_docker": true,
+    "actual_model_calls": 0,
+    "detached_host_reopen": "SUCCEEDED",
+    "large_checkpoint_bytes": 20000000,
+    "deadline_exit_code": 124,
+    "cancel_status": "CANCELLED",
+    "scope": "Runtime lifecycle and storage; not GPU training"
+  },
+  "artifact_mount_probe": {
+    "status": "passed",
+    "results": [
+      {
+        "root": "/mnt/d/whasuk/myhelpers/projects/researchsquad/tmp/reliability-artifact-probe-02",
+        "registrations": 100,
+        "errors": []
+      },
+      {
+        "root": "/tmp/rsq-artifact-probe-02",
+        "registrations": 100,
+        "errors": []
+      }
+    ],
+    "scope": "Artifact register/read probe without injected faults. A pass does not explain prior EXDEV or prove absence."
+  },
+  "additional_findings": [
+    {
+      "finding": "Initial CI supervisor could not read mode-0600 job.json with DAC override dropped",
+      "resolution": "Publish only read-only non-secret control files as 0644 and directory as 0755; keep private Team state 0600",
+      "verification": "Real ext4 Docker lifecycle and Unix permission assertions"
+    },
+    {
+      "finding": "One DrvFS managed run blocked on artifact content.tmp rename with EXDEV",
+      "affected_run": "reliability-managed-03",
+      "status": "Unresolved cause; preserved failed run; fresh managed-04 passed; 100 register/read probes on each of DrvFS and ext4 did not reproduce",
+      "scope": "No cross-device copy fallback or uncertain execution replay was added"
+    }
+  ],
   "reader_restart": {
     "calls_before": 8,
     "calls_after": 8,
