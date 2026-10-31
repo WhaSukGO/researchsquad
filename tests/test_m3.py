@@ -63,14 +63,15 @@ def test_chip_and_fits_chip_and_demo_gating(tmp_path):
     assert call(team,boser,'ledger_promote',{'claim_id':c['claim_id'],'evidence_ids':[k1['id']]})['status']=='supported'
     c2=call(team,boser,'ledger_claim',{'template':'FITS_CHIP','args':{'net':'N2','chip':'anna'},'rationale':'['+k2['id']+']'})
     assert call(team,boser,'ledger_promote',{'claim_id':c2['claim_id'],'evidence_ids':[k2['id']]})['status']=='refuted'
-    with pytest.raises(ValueError,match='No supported FITS_CHIP'):call(team,jackel,'schedule_demo',{'day':30})
+    with pytest.raises(ValueError,match='No supported FITS_CHIP'):call(team,jackel,'schedule_demo',{'day':45})
     call(team,boser,'mail_send',{'to':'jackel','body':'Fits ['+c['claim_id']+'].','attach':[c['claim_id'],k1['id']]})
-    assert call(team,jackel,'schedule_demo',{'day':30})['demo_day']==30 and L.state['demo_day']==30
+    with pytest.raises(ValueError,match='visit is on day 45'):call(team,jackel,'schedule_demo',{'day':30})
+    assert call(team,jackel,'schedule_demo',{'day':45})['demo_day']==45 and L.state['demo_day']==45
     with pytest.raises(ValueError,match='Only the department head'):call(team,boser,'compute_allocate',{'days':5})
     assert call(team,jackel,'compute_allocate',{'days':10})['budget_days']==30.0
     assert call(team,jackel,'compute_allocate',{'days':30})['budget_days']==60.0
     with pytest.raises(ValueError,match='Department cap'):call(team,jackel,'compute_allocate',{'days':1})
-    assert L.audit()['chips'][0]['fits'] and L.audit()['demo_day']==30
+    assert L.audit()['chips'][0]['fits'] and L.audit()['demo_day']==45
 
 
 def test_invariant_to_needs_measured_invariance(tmp_path):

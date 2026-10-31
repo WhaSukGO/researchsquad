@@ -75,7 +75,7 @@ class LedgerRuntime:
         self.docs={};self.patterns={};self.adapters={}
         if self.config is None:return
         allowed={'corpus','views','compute_days','max_evaluations','samples','training_profile','code_dir','dataset_name','vocabulary','feature_days','handles',
-                 'clock','mail_delay_days','features_by_bottou','max_compute_days','chip_weights'}
+                 'clock','mail_delay_days','features_by_bottou','max_compute_days','chip_weights','visit_day'}
         if set(self.config)-allowed:raise ValueError('Unknown ledger configuration')
         corpus=ROOT/self.config['corpus'];register=json.loads((corpus/'register.json').read_text())
         for did,meta in register.items():
@@ -441,6 +441,8 @@ class LedgerRuntime:
     def demo(self,agent,d):
         if self.role(agent)!='jackel':raise ValueError('Only the department head books the demonstration')
         if set(d)!={'day'} or not isinstance(d['day'],(int,float)) or d['day']<=self.now():raise ValueError('schedule_demo needs {day} later than today')
+        visit=self.config.get('visit_day',0)
+        if d['day']<visit:raise ValueError(f'The Postal Service visit is on day {visit:g}; the demonstration cannot be booked earlier than that')
         fits=[i for i in self.view(agent)['nodes'] if self.state['nodes'][i]['type']=='claim' and self.state['nodes'][i]['template']=='FITS_CHIP' and self.state['nodes'][i]['status']=='supported']
         if not fits:raise ValueError('No supported FITS_CHIP claim in your view; ask Boser for a chip estimate and a promoted claim first')
         self.state['demo_day']=float(d['day']);self.team.event('ledger_demo',{'day':d['day'],'claims':fits})

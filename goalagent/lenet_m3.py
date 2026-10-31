@@ -25,12 +25,12 @@ GOAL=('It is 3 October 1988 (day 0). The department recognizes handwritten USPS 
       'Finish with report.md citing only ledger IDs.')
 
 
-def task(image,*,compute_days=20.0,max_evaluations=6,corpus=True,vocabulary=(),clock=True):
+def task(image,*,compute_days=20.0,max_evaluations=6,corpus=True,vocabulary=(),clock=True,visit_day=45):
     views={r:(d if corpus or r!='coordinator' else []) for r,d in ROLE_DOCS.items()}
     return {'goal':GOAL,'inputs':{},'network':False,'budget':{'max_calls':420,'max_seconds':14400,'max_assignments':80,'max_depth':2},
         'training':{'profiles':{'sun4':{'image':image,'gpu':False,'memory':'2g','cpus':2,'max_seconds':1200,'max_output_bytes':50_000_000,'roles':['coordinator']}}},
         'ledger':{'corpus':'research/lit-1988','handles':HANDLES,'vocabulary':list(vocabulary),'views':views,'clock':clock,'mail_delay_days':1,
-                  'features_by_bottou':True,'feature_days':10,'max_compute_days':60,'chip_weights':4096,
+                  'features_by_bottou':True,'feature_days':10,'max_compute_days':60,'chip_weights':4096,'visit_day':visit_day,
                   'compute_days':compute_days,'max_evaluations':max_evaluations,'samples':6291,'training_profile':'sun4','code_dir':'research/lenet','dataset_name':'usps-train'}}
 
 
@@ -103,9 +103,10 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                     for role in ('jackel','denker','boser'):
                         run_role(role,f'Day {L.now():.0f}, Monday meeting. Read mail_inbox for the floor, then say one thing to "all" with mail_send (at most three sentences, every number with a ledger ID, attach what colleagues need). Jackel decides compute_allocate if someone showed a supported claim. Then write note.md and finish.')
                     judge_new();notes.append(f'Monday meeting held on day {L.now():.0f}; read the floor with mail_inbox')
-                if L.now()>=60 and not announced:
+                visit=L.config.get('visit_day',0)
+                if L.now()>=visit-15 and not announced and not L.state.get('demo_day'):
                     announced=True
-                    run_role('jackel',f'Day {L.now():.0f}. The Postal Service visit is 45 days away. Tell "all" by mail_send what you need to book the demonstration (a supported FITS_CHIP claim in your view), and if one exists, call schedule_demo. Write note.md and finish.')
+                    run_role('jackel',f'Day {L.now():.0f}. The Postal Service visit is on day {visit:g}, {visit-L.now():.0f} days away. Tell "all" by mail_send what you need to book the demonstration (a supported FITS_CHIP claim in your view), and if one exists, call schedule_demo for day {visit:g}. Write note.md and finish.')
                     judge_new();notes.append('Jackel wrote to everyone about the demonstration')
             if L.state.get('demo_day') and L.now()>=L.state['demo_day']:
                 continuation={'dispatch_id':f'round-{rounds}','guidance':f'Day {L.now():.0f}: the USPS demonstration day. Write report.md with the agreed claims and finish.'}
@@ -225,7 +226,7 @@ class ScriptedRole:
             seq=[action('implement_feature',{'request_id':req}),lambda:action('mail_send',{'to':'coordinator','body':'Yann, the averaging layer ['+req+'] will be in SN on day '+str(int(nodes[req].get('ready_day',0)))+' ['+req+'].','attach':[]})]
         elif self.role=='jackel':
             fits=[n['id'] for n in nodes.values() if n['type']=='claim' and n['template']=='FITS_CHIP' and n['status']=='supported' and n['id'] in L.view_for('jackel')['nodes']]
-            if fits and not L.state.get('demo_day'):seq=[action('schedule_demo',{'day':L.now()+30}),action('mail_send',{'to':'all','body':'The demonstration is booked on the strength of the chip claim ['+fits[0]+'].','attach':[]})]
+            if fits and not L.state.get('demo_day'):seq=[action('schedule_demo',{'day':max(L.now()+30,L.config.get('visit_day',0))}),action('mail_send',{'to':'all','body':'The demonstration is booked on the strength of the chip claim ['+fits[0]+'].','attach':[]})]
             else:seq=[action('mail_send',{'to':'all','body':'I need a supported chip claim in my view before I can book the demonstration [GRAF87].','attach':[]})]
         elif self.role=='hinton':
             seq=[action('mail_send',{'to':'coordinator','body':'If you do all the sensible things it works; constrain the weights as in [RHW86-TC].','attach':[]})]
@@ -265,7 +266,7 @@ def check(folder,image,cache):
 
 def live(folder,image,cache,model,**kw):
     team=build(folder,image,cache,model=model,**kw)
-    outcome=simulate(team);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
+    outcome=simulate(team,max_rounds=60);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
     summary={'outcome':outcome,'day':L.now(),'demo_day':L.state['demo_day'],'meetings':L.state['meetings'],'path':path_score(team),
              'audit':{k:v for k,v in audit.items() if k!='leak_log'},'leak_log':audit['leak_log'],
              'claims':{k:{'template':v['template'],'args':v['args'],'status':v['status'],'endorsed_by':v.get('endorsed_by',[])} for k,v in nodes.items() if v['type']=='claim'},
