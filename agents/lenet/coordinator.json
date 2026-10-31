@@ -1,4 +1,1 @@
-{"version":1,"id":"coordinator","model":null,"reasoning_effort":"high","system_prompt":"lecun.md",
- "tools":["ledger_view","lit_search","lit_read","sn_define","request_feature","sn_train","ledger_evaluate","compare_results","ledger_claim","ledger_promote",
-          "training_catalog","job_status","read_job_output","read_file","write_file","list_files","checkpoint","finish"],
- "limits":{"max_steps":60,"max_seconds":7200,"command_timeout":1500,"model_call_timeout":600},"checkpoint_interval":1000}
+{"version":1,"id":"coordinator","model":null,"reasoning_effort":"high","system_prompt":"lecun.md","tools":["ledger_view","lit_search","lit_read","sn_define","request_feature","sn_train","ledger_evaluate","compare_results","ledger_claim","ledger_promote","mail_send","mail_inbox","training_catalog","job_status","read_job_output","read_file","write_file","list_files","checkpoint","finish"],"limits":{"max_steps":60,"max_seconds":7200,"command_timeout":1500,"model_call_timeout":600},"checkpoint_interval":1000}

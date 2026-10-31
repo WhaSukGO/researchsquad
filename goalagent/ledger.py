@@ -16,6 +16,7 @@ import re
 import time
 from .contracts import digest
 from . import netlang
+from . import judge
 
 ROOT=Path(__file__).resolve().parents[1]
 CITE=re.compile(r'\[([A-Za-z0-9_#:.-]+)\]')
@@ -32,7 +33,11 @@ TOOLS={
  'ledger_evaluate':'JSON {net_id}. Protected host evaluation of the latest successful job for that net on the held-out USPS test split in a separate container; limited count per run. Returns a result node (dataset usps-test).',
  'compare_results':'JSON {a:result_id, b:result_id, reject_rate:"0"|"0.05"|"0.09"|"0.12"}. Host compares error rates at that rejection rate and returns a comparison node to cite. Never compare numbers yourself.',
  'ledger_claim':'JSON {template:BEATS|FEWER_PARAMS|GRAD_EQUALS, args, rationale:text citing [IDs]}. Creates a conjecture; it is never supported by itself. BEATS args {net_a,net_b,dataset:usps-val|usps-test,reject_rate}; FEWER_PARAMS args {net_a,net_b}; GRAD_EQUALS args {net}.',
- 'ledger_promote':'JSON {claim_id, evidence_ids:[result/proof ids]}. Deterministic host check; returns supported, refuted, or an error that leaves the claim a conjecture. Nothing you say can promote a claim.',
+ 'ledger_promote':'JSON {claim_id, evidence_ids:[result/proof ids]}. Deterministic host check; returns supported, refuted, or an error that leaves the claim a conjecture. Nothing you say can promote a claim. A claim another role already decided can be promoted again in your own view; agreement exists when two roles have promoted it.',
+ 'mail_send':'JSON {to:role, body:text, attach:[node ids from your view]}. The only way to share knowledge: attached nodes enter the recipient view. The judge refuses letters with post-1988 vocabulary, citations outside your view, numbers without IDs, or claims of verification without a supported claim ID.',
+ 'mail_inbox':'Empty argument; read your unread letters (sender, body, attached node IDs). Attached nodes are already in your view.',
+ 'pipeline_run':'Empty argument; run the hand-designed baseline pipeline on the training/validation split and the held-out test split (data owner only). Returns result nodes for net PIPELINE88 on usps-val and usps-test.',
+ 'judge_verdict':'JSON {mail_id, verdict:pass|future_knowledge|unsupported, reason}. Referee only.',
 }
 CODE_FILES=('train_usps.py','netlang_torch.py','netlang.py')
 
@@ -61,9 +66,10 @@ class LedgerRuntime:
     def __init__(self,team):
         self.team=team;self.config=team.task.get('ledger')
         self.state=team.state.setdefault('ledger',{'nodes':{},'views':{},'counters':{},'compute_days_used':0.0,'evaluations':0,'leak_log':[]})
-        self.docs={};self.patterns={}
+        self.state.setdefault('mail',[])
+        self.docs={};self.patterns={};self.adapters={}
         if self.config is None:return
-        allowed={'corpus','views','compute_days','max_evaluations','samples','training_profile','code_dir','dataset_name','vocabulary','feature_days'}
+        allowed={'corpus','views','compute_days','max_evaluations','samples','training_profile','code_dir','dataset_name','vocabulary','feature_days','handles'}
         if set(self.config)-allowed:raise ValueError('Unknown ledger configuration')
         corpus=ROOT/self.config['corpus'];register=json.loads((corpus/'register.json').read_text())
         for did,meta in register.items():
@@ -72,9 +78,12 @@ class LedgerRuntime:
             self.docs[did]=body.decode('utf-8');self.patterns[did]=list(meta.get('patterns',[]))
             self.state['nodes'].setdefault(did,{'id':did,'type':'document','title':meta['title'],'date':meta['date'],'kind':meta['kind'],'sha256':meta['sha256']})
         if set(self.config.get('vocabulary',[]))-netlang.LOCKED_OPS:raise ValueError('Unknown vocabulary item')
+        for hid,meta in self.config.get('handles',{}).items():
+            if set(meta)!={'split','description'}:raise ValueError('Handle needs split and description')
+            self.state['nodes'].setdefault(hid,{'id':hid,'type':'dataset','split':meta['split'],'description':meta['description']})
         for role,ids in self.config.get('views',{}).items():
             if role not in team.definitions:raise ValueError('Ledger view for unknown role: '+role)
-            if not set(ids)<=set(self.docs):raise ValueError('Ledger view cites unknown documents')
+            if not set(ids)<=set(self.docs)|set(self.config.get('handles',{})):raise ValueError('Ledger view cites unknown documents')
             view=self.view_for(role)
             for did in ids:
                 if did not in view['nodes']:view['nodes'].append(did)
@@ -100,6 +109,12 @@ class LedgerRuntime:
         found=CITE.findall(text);view=set(self.view(agent)['nodes'])
         return [c for c in found if c in view],[c for c in found if c not in view]
     def budget(self):return float(self.config.get('compute_days',30))
+    def require_handle(self,agent,hid,purpose):
+        if hid in self.state['nodes'] and hid not in self.view(agent)['nodes']:
+            owners=[r for r,v in self.state['views'].items() if hid in v['nodes']]
+            raise ValueError(f'{purpose} needs the data handle [{hid}], which is not in your view. Ask its owner ({", ".join(owners) or "unknown"}) by mail to attach it.')
+    def supported_ids(self,agent):
+        return [i for i in self.view(agent)['nodes'] if self.state['nodes'][i]['type']=='claim' and self.state['nodes'][i]['status']=='supported']
     def charge(self,days,what):
         if self.state['compute_days_used']+days>self.budget():raise ValueError(f'Compute budget exceeded: {what} costs {days:.2f} simulated days, {self.budget()-self.state["compute_days_used"]:.2f} remain.')
         self.state['compute_days_used']+=days
@@ -109,7 +124,11 @@ class LedgerRuntime:
         if tool=='ledger_view':return self.render(agent)
         if tool=='lit_search':return self.search(agent,raw)
         if tool=='lit_read':return {'id':raw.strip(),'text':self.docs[self.visible(agent,raw.strip(),'document')['id']],'scope':'Stored excerpt or paraphrase; cite as ['+raw.strip()+']'}
+        if tool=='mail_inbox':return self.inbox(agent)
+        if tool=='pipeline_run':return self.pipeline(agent)
         d=json.loads(raw)
+        if tool=='mail_send':return self.send(agent,d)
+        if tool=='judge_verdict':return self.verdict(agent,d)
         if tool=='sn_define':return self.define(agent,d)
         if tool=='request_feature':return self.request_feature(agent,d)
         if tool=='sn_train':return self.train(agent,d,action,timeout)
@@ -130,13 +149,15 @@ class LedgerRuntime:
             if t=='claim':return {'id':n['id'],'template':n['template'],'args':n['args'],'status':n['status'],'evidence':n['evidence'],'guess':n['guess']}
             if t=='comparison':return {k:n[k] for k in ('id','a','b','reject_rate','error_a','error_b','winner')}
             if t=='feature_request':return {k:n[k] for k in ('id','description','granted')}
+            if t=='dataset':return {k:n[k] for k in ('id','split','description')}
             return {'id':n['id'],'type':t}
         groups={}
         for n in nodes:groups.setdefault(n['type'],[]).append(brief(n))
         return {'believe_only':'claims with status supported','supported':[c for c in groups.get('claim',[]) if c['status']=='supported'],
                 'conjectures':[c for c in groups.get('claim',[]) if c['status']=='conjecture'],'refuted':[c for c in groups.get('claim',[]) if c['status']=='refuted'],
                 'nets':groups.get('net_spec',[]),'results':groups.get('result',[]),'proofs':groups.get('proof',[]),'comparisons':groups.get('comparison',[]),
-                'feature_requests':groups.get('feature_request',[]),'documents':groups.get('document',[]),
+                'feature_requests':groups.get('feature_request',[]),'data_handles':groups.get('dataset',[]),'documents':groups.get('document',[]),
+                'unread_mail':sum(1 for m in self.state['mail'] if m['to']==self.role(agent) and not m['read']),
                 'compute_days':{'budget':self.budget(),'used':round(self.state['compute_days_used'],3),'remaining':round(self.budget()-self.state['compute_days_used'],3)},
                 'evaluations':{'used':self.state['evaluations'],'max':int(self.config.get('max_evaluations',4))},
                 'vocabulary':sorted(netlang.BASE_OPS)+view['vocabulary'],'locked':sorted(netlang.LOCKED_OPS-set(view['vocabulary']))}
@@ -188,6 +209,7 @@ class LedgerRuntime:
     def train(self,agent,d,action,timeout):
         if set(d)!={'net_id','epochs'}:raise ValueError('sn_train needs {net_id, epochs}')
         net=self.visible(agent,d['net_id'],'net_spec');epochs=d['epochs']
+        self.require_handle(agent,'USPS_TRAIN','Training')
         if type(epochs) is not int or not 1<=epochs<=30:raise ValueError('epochs must be an integer in 1..30')
         eta=netlang.eta_days(net['analysis']['connections'],int(self.config.get('samples',6291)),epochs)
         self.charge(eta,'this run')
@@ -220,6 +242,7 @@ class LedgerRuntime:
     def evaluate(self,agent,d):
         if set(d)!={'net_id'}:raise ValueError('ledger_evaluate needs {net_id}')
         net=self.visible(agent,d['net_id'],'net_spec');limit=int(self.config.get('max_evaluations',4))
+        self.require_handle(agent,'USPS_TEST','Protected evaluation')
         jobs=[j for j in net.get('jobs',[]) if self.team.training.state['jobs'][j]['status']=='SUCCEEDED']
         if not jobs:raise ValueError('No succeeded job for '+net['id'])
         if self.state['evaluations']>=limit:raise ValueError('Protected evaluation limit reached')
@@ -257,8 +280,13 @@ class LedgerRuntime:
         return {'claim_id':node['id'],'status':'conjecture','guess':node['guess'],'note':'Promote with ledger_promote and result/proof evidence; speech cannot promote it'}
     def promote(self,agent,d):
         if set(d)!={'claim_id','evidence_ids'} or not isinstance(d['evidence_ids'],list):raise ValueError('ledger_promote needs {claim_id, evidence_ids:[...]}')
-        c=self.visible(agent,d['claim_id'],'claim')
-        if c['status']!='conjecture':return {'claim_id':c['id'],'status':c['status'],'evidence':c['evidence'],'note':'Already decided'}
+        c=self.visible(agent,d['claim_id'],'claim');role=self.role(agent);c.setdefault('endorsed_by',[])
+        if c['status']!='conjecture':
+            if role in c['endorsed_by']:return {'claim_id':c['id'],'status':c['status'],'evidence':c['evidence'],'endorsed_by':c['endorsed_by'],'note':'Already decided'}
+            missing=[e for e in c['evidence'] if e not in self.view(agent)['nodes']]
+            if missing:raise ValueError('To promote this claim yourself you need its evidence in your view; missing: '+', '.join(missing))
+            c['endorsed_by'].append(role);self.team.event('ledger_endorse',{'claim':c['id'],'role':role})
+            return {'claim_id':c['id'],'status':c['status'],'evidence':c['evidence'],'detail':c.get('detail'),'endorsed_by':c['endorsed_by'],'agreed':len(c['endorsed_by'])>=2}
         evidence=[self.visible(agent,e) for e in d['evidence_ids']]
         t=c['template'];a=c['args']
         if t=='FEWER_PARAMS':
@@ -274,13 +302,65 @@ class LedgerRuntime:
             if not ra or not rb:raise ValueError('BEATS needs one result for each net on dataset '+a['dataset']+' among the evidence; results on other datasets do not count')
             ea=min(self.error_at(r,a['reject_rate']) for r in ra);eb=min(self.error_at(r,a['reject_rate']) for r in rb)
             verdict='supported' if ea<eb else 'refuted';detail={'error_a':ea,'error_b':eb,'reject_rate':a['reject_rate']};used=[r['id'] for r in ra+rb]
-        c['status']=verdict;c['evidence']=used;c['detail']=detail;c['decided_at']=time.time()
-        self.team.event('ledger_promote',{'claim':c['id'],'status':verdict,'role':self.role(agent)})
+        c['status']=verdict;c['evidence']=used;c['detail']=detail;c['decided_at']=time.time();c['endorsed_by']=[role]
+        self.team.event('ledger_promote',{'claim':c['id'],'status':verdict,'role':role})
         unlocked=[]
         if verdict=='supported' and t=='BEATS' and self.state['nodes'][a['net_a']]['analysis']['tied_layers']>0:
             view=self.view(agent)
             if 'shared_map' not in view['vocabulary']:view['vocabulary'].append('shared_map');unlocked.append('shared_map')
-        return {'claim_id':c['id'],'status':verdict,'evidence':used,'detail':detail,'unlocked_vocabulary':unlocked}
+        return {'claim_id':c['id'],'status':verdict,'evidence':used,'detail':detail,'unlocked_vocabulary':unlocked,'endorsed_by':c['endorsed_by'],'agreed':False}
+    # ---- mail: the only channel between roles ----
+    def send(self,agent,d):
+        if set(d)!={'to','body','attach'} or not isinstance(d['attach'],list) or not isinstance(d['body'],str):raise ValueError('mail_send needs {to, body, attach:[...]}')
+        sender=self.role(agent);to=d['to']
+        if to not in self.team.definitions or to==sender or to=='judge':raise ValueError('Unknown recipient role: '+str(to))
+        if not d['body'].strip() or len(d['body'])>6000:raise ValueError('Letter body must be 1..6000 characters')
+        for nid in d['attach']:self.visible(agent,nid)
+        violations=judge.check_text(d['body'],self.view(agent)['nodes'],self.supported_ids(agent))
+        if violations:
+            self.state['leak_log'].append({'time':time.time(),'role':sender,'kind':'mail_rejected','violations':violations,'body':d['body'][:500]})
+            raise ValueError('Letter refused by the judge ('+judge.describe(violations)+'). Rewrite it: 1988 vocabulary, cite only IDs in your view, attach an ID to every number, call nothing verified without a supported claim ID.')
+        view=self.view_for(to)
+        for nid in d['attach']:
+            if nid not in view['nodes']:view['nodes'].append(nid)
+        mail={'id':self.new_id('M'),'from':sender,'to':to,'body':d['body'],'attach':list(d['attach']),'time':time.time(),'read':False,'verdict':None}
+        self.state['mail'].append(mail);self.team.event('ledger_mail',{'id':mail['id'],'from':sender,'to':to,'attach':mail['attach']})
+        return {'mail_id':mail['id'],'delivered_to':to,'attached':mail['attach'],'note':'A reply takes time; checkpoint if you must wait for it'}
+    def inbox(self,agent):
+        role=self.role(agent);rows=[]
+        for m in self.state['mail']:
+            if m['to']==role and not m['read']:
+                m['read']=True;rows.append({'id':m['id'],'from':m['from'],'body':m['body'],'attach':m['attach']})
+        return {'letters':rows,'note':'Attached nodes are already in your view' if rows else 'No unread letters'}
+    def verdict(self,agent,d):
+        if self.role(agent)!='judge':raise ValueError('Only the judge records verdicts')
+        if set(d)!={'mail_id','verdict','reason'} or d['verdict'] not in ('pass','future_knowledge','unsupported'):raise ValueError('judge_verdict needs {mail_id, verdict:pass|future_knowledge|unsupported, reason}')
+        m=next((m for m in self.state['mail'] if m['id']==d['mail_id']),None)
+        if not m:raise ValueError('Unknown mail')
+        m['verdict']={'verdict':d['verdict'],'reason':str(d['reason'])[:1000]}
+        if d['verdict']!='pass':self.state['leak_log'].append({'time':time.time(),'role':m['from'],'kind':'judge_'+d['verdict'],'mail':m['id'],'reason':m['verdict']['reason']})
+        return {'mail_id':m['id'],'recorded':d['verdict']}
+    # ---- baseline pipeline (data owner's adapter) ----
+    def pipeline(self,agent):
+        self.require_handle(agent,'USPS_TRAIN','The baseline');self.require_handle(agent,'USPS_TEST','The baseline')
+        adapter=self.adapters.get('baseline88')
+        if adapter is None:raise ValueError('Baseline adapter not installed for this run')
+        existing=[n for n in self.state['nodes'].values() if n['type']=='result' and n['net']=='PIPELINE88']
+        if existing:
+            for n in existing:self.add(agent,n)
+            self.add(agent,self.state['nodes']['PIPELINE88'])
+            return {'results':[{k:n[k] for k in ('id','net','dataset','error','reject_curve')} for n in existing],'note':'Baseline already measured'}
+        m=adapter();key='baseline-'+digest([adapter.version,m])[:24]
+        record=self.team.record(key,{'adapter':'baseline88','version':adapter.version,'measurement':m,'scope':'Maintainer-owned hand-designed baseline adapter; reads the test split in its own container'})
+        if 'PIPELINE88' not in self.state['nodes']:
+            self.add(agent,{'id':'PIPELINE88','type':'net_spec','spec':'hand-designed templates + least-squares classifier','analysis':{'connections':m['features']*10+16*16*4*9,'params':m['classifier_params'],'tied_layers':0,'pattern':'template1>avg>full>output','layers':[]},
+                            'rationale':'[DENKER88] stand-in baseline','cites':['DENKER88'],'unknown_cites':[],'choices':[],'guess':False,'owner':self.role(agent),'jobs':[]})
+        out=[]
+        for split,dataset in (('val','usps-val'),('test','usps-test')):
+            r=self.add(agent,{'id':self.new_id('R'),'type':'result','net':'PIPELINE88','dataset':dataset,'error':m[split]['error'],'reject_curve':m[split]['reject_curve'],'samples':m[split]['samples'],
+                              'source':{'evidence_id':record['evidence_id'],'adapter':'baseline88'},'owner':self.role(agent)})
+            out.append({k:r[k] for k in ('id','net','dataset','error','reject_curve')})
+        return {'results':out,'baseline_net':'PIPELINE88','scope':record['scope']}
     # ---- audit (host-side invariant check, no model involved) ----
     def audit(self):
         nodes=list(self.state['nodes'].values());bad_results=[];bad_claims=[]
@@ -298,11 +378,14 @@ class LedgerRuntime:
         for n in nets:
             for c in n['choices']:
                 if c['status']=='unsourced':by_kind[c['choice']]=by_kind.get(c['choice'],0)+1
-        counts={t:sum(1 for n in nodes if n['type']==t) for t in ('document','net_spec','result','proof','claim','comparison','feature_request')}
+        counts={t:sum(1 for n in nodes if n['type']==t) for t in ('document','net_spec','result','proof','claim','comparison','feature_request','dataset')}
+        mail=self.state['mail'];agreed=[n['id'] for n in nodes if n['type']=='claim' and len(n.get('endorsed_by',[]))>=2]
         return {'nodes':counts,'results_without_provenance':bad_results,'supported_without_evidence':bad_claims,
                 'choices_total':sum(len(n['choices']) for n in nets),'unsourced_choices':sum(by_kind.values()),'unsourced_by_kind':by_kind,
                 'unsourced_patterns':[{'net':n['id'],'pattern':n['analysis']['pattern'],'cites':n['cites']} for n in nets if any(c['choice']=='pattern' and c['status']=='unsourced' for c in n['choices'])],
                 'guess_nets':[n['id'] for n in nets if n['guess']],'guess_claims':[n['id'] for n in nodes if n['type']=='claim' and n['guess']],
                 'feature_requests':[{k:n[k] for k in ('id','description','granted')} for n in nodes if n['type']=='feature_request'],
                 'claims_by_status':{s:sum(1 for n in nodes if n['type']=='claim' and n['status']==s) for s in ('conjecture','supported','refuted')},
+                'agreed_claims':agreed,'mail':{'sent':len(mail),'rejected':sum(1 for e in self.state['leak_log'] if e['kind']=='mail_rejected'),
+                        'verdicts':{v:sum(1 for m in mail if (m.get('verdict') or {}).get('verdict')==v) for v in ('pass','future_knowledge','unsupported')},'unjudged':sum(1 for m in mail if not m.get('verdict'))},
                 'leak_log':self.state['leak_log'],'invariant_holds':not bad_results and not bad_claims}

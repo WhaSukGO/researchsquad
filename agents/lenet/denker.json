@@ -1,0 +1,1 @@
+{"version":1,"id":"denker","model":null,"reasoning_effort":"medium","system_prompt":"denker.md","tools":["ledger_view","lit_search","lit_read","mail_inbox","mail_send","pipeline_run","compare_results","ledger_claim","ledger_promote","write_file","finish"],"limits":{"max_steps":14,"max_seconds":1800,"command_timeout":900,"model_call_timeout":600},"checkpoint_interval":1000}
