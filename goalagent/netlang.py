@@ -1,26 +1,30 @@
 """1988-vocabulary network definition language: shapes, connection and parameter counts, cost model.
 
-Pure Python, no torch. The vocabulary is deliberately pre-convolution: `local` is an
+Pure Python, no torch. The base vocabulary is deliberately pre-convolution: `local` is an
 unshared locally connected layer and `tie` applies the Rumelhart-Hinton-Williams 1986
-weight-sharing constraint to the preceding `local` layer. `shared_map` is a macro that is
-only available once the ledger has unlocked it (see ledger.py).
+weight-sharing constraint to the preceding `local` layer. `avg` (fixed-weight averaging /
+subsampling) and the `shared_map` macro exist only once the ledger has added them to the
+role's vocabulary (a feature request with simulated cost, or a supported claim).
 """
 import json
 
-OPS={'input','full','local','tie','avg','output','shared_map'}
+BASE_OPS={'input','full','local','tie','output'}
+LOCKED_OPS={'avg','shared_map'}
 # LeCun et al. 1989 (Neural Computation): 64,660 connections x 7,291 samples x 23 epochs took 3 days on a Sun-4/260.
 RATE_PER_DAY=64660*7291*23/3.0
 
 
-def parse(spec,macros=()):
+def parse(spec,vocabulary=()):
     if isinstance(spec,str):spec=json.loads(spec)
     if not isinstance(spec,dict) or set(spec)!={'layers'} or not isinstance(spec['layers'],list):raise ValueError('Spec must be {"layers":[...]}')
     layers=[]
     for raw in spec['layers']:
-        if not isinstance(raw,dict) or raw.get('op') not in OPS:raise ValueError('Unknown layer op: '+json.dumps(raw)[:200])
+        if not isinstance(raw,dict) or raw.get('op') not in BASE_OPS|LOCKED_OPS:raise ValueError('Unknown layer op: '+json.dumps(raw)[:200])
         op=raw['op']
+        if op in LOCKED_OPS and op not in vocabulary:
+            hint='build it from local + tie; the ledger unlocks the macro after a supported claim' if op=='shared_map' else 'request it with request_feature; it costs simulated time'
+            raise ValueError(op+' is not in your vocabulary; '+hint)
         if op=='shared_map':
-            if 'shared_map' not in macros:raise ValueError('shared_map is not in your vocabulary; build it from local + tie, and let the ledger unlock the macro')
             k,s,n=raw.get('k'),raw.get('stride',1),raw.get('n')
             layers.append({'op':'local','k':k,'stride':s,'n':n,'pad':raw.get('pad',k//2 if isinstance(k,int) else 0)})
             layers.append({'op':'tie','group':'all','bias':raw.get('bias','per_unit')})
@@ -35,9 +39,9 @@ def _pos(v,name):
     return v
 
 
-def analyze(spec,macros=()):
-    """Return shapes, connections, independent parameters and tied-layer inventory."""
-    layers=parse(spec,macros)
+def analyze(spec,vocabulary=()):
+    """Return shapes, connections, independent parameters, tied-layer inventory and the layer pattern."""
+    layers=parse(spec,vocabulary)
     c=h=w=None;connections=0;params=0;report=[];tied=0;prev=None
     for i,l in enumerate(layers):
         op=l['op']
@@ -77,12 +81,33 @@ def analyze(spec,macros=()):
             c,h,w=n,1,1
         prev=report[-1]
     if report[-1]['op']!='output':raise ValueError('Spec must end with output')
-    return {'layers':report,'connections':connections,'params':params,'tied_layers':tied,'output_units':report[-1]['n']}
+    return {'layers':report,'connections':connections,'params':params,'tied_layers':tied,'output_units':report[-1]['n'],'pattern':pattern(report)}
+
+
+def pattern(report):
+    """Layer pattern string, e.g. 'shared2>shared2>output' (Net-5) or 'shared1>avg>shared1>avg>output'."""
+    tokens=[]
+    for l in report:
+        if l['op']=='local':tokens.append(('shared' if l['tied'] else 'local')+str(l['stride']))
+        elif l['op']=='avg':tokens.append('avg')
+        elif l['op']in('full','output'):tokens.append(l['op'])
+    return '>'.join(tokens)
+
+
+def choices(report):
+    """Hyperparameter choices a designer made, for the provenance check."""
+    out=[]
+    for l in report:
+        if l['op']=='local':out+=[('kernel',l['k']),('stride',l['stride']),('maps',l['n'])]
+        elif l['op']=='avg':out.append(('avg',l['k']))
+        elif l['op']=='full':out.append(('hidden',l['n']))
+    out.append(('pattern',pattern(report)))
+    return out
 
 
 def eta_days(connections,samples,epochs):
     return connections*samples*epochs/RATE_PER_DAY
 
 
-def canonical(spec,macros=()):
-    return json.dumps({'layers':parse(spec,macros)},sort_keys=True,separators=(',',':'))
+def canonical(spec,vocabulary=()):
+    return json.dumps({'layers':parse(spec,vocabulary)},sort_keys=True,separators=(',',':'))

@@ -4,6 +4,10 @@ Invariant: the ledger never holds an unverified claim as supported. Models write
 `conjecture` claims and read their view; `result` and `proof` nodes are created only by
 host tools from container jobs or protected evaluations, and promotion is a deterministic
 template check. Views (per role) implement who-knows-what; attachments widen a view.
+
+Leakage (H2) is measured, not prevented: every hyperparameter choice and the layer pattern
+of a defined network is checked against the documents the designer cited. Choices the
+cited documents do not contain are recorded as `unsourced`.
 """
 import hashlib
 import json
@@ -17,11 +21,13 @@ ROOT=Path(__file__).resolve().parents[1]
 CITE=re.compile(r'\[([A-Za-z0-9_#:.-]+)\]')
 REJECT_RATES=('0','0.05','0.09','0.12')
 TEMPLATES={'BEATS':{'net_a','net_b','dataset','reject_rate'},'FEWER_PARAMS':{'net_a','net_b'},'GRAD_EQUALS':{'net'}}
+FEATURES={'avg':re.compile(r'averag|subsampl|\bmean\b|pool|blur|coarse',re.I)}
 TOOLS={
- 'ledger_view':'Empty argument; your ledger view: supported claims with evidence, open conjectures, nets, results, proofs, documents, compute days left, unlocked macros. Believe only supported claims.',
+ 'ledger_view':'Empty argument; your ledger view: supported claims with evidence, open conjectures, nets, results, proofs, documents, compute days left, vocabulary. Believe only supported claims.',
  'lit_search':'Keyword query; rank documents in your view (id, title, date, snippet). Documents outside your view do not exist for you.',
  'lit_read':'Document ID; read the stored excerpt or paraphrase of a document in your view.',
- 'sn_define':'JSON {spec:{layers:[{op:input,h,w},{op:local,k,stride,n,pad?,fan_in?},{op:tie,group:all,bias?:per_unit|shared},{op:avg,k},{op:full,n},{op:output,n}]}, rationale:text citing [IDs]}. Host counts connections, independent parameters and simulated training cost; returns a net node. tie applies the 1986 equal-weight-change constraint to the preceding local layer.',
+ 'sn_define':'JSON {spec:{layers:[{op:input,h,w},{op:local,k,stride,n,pad?,fan_in?},{op:tie,group:all,bias?:per_unit|shared},{op:full,n},{op:output,n}]}, rationale:text citing [IDs]}. Host counts connections, independent parameters and simulated training cost, and records which of your choices the cited documents actually contain. Returns a net node. tie applies the 1986 equal-weight-change constraint to the preceding local layer. Other layer types need request_feature.',
+ 'request_feature':'JSON {description}. Ask the simulator maintainer for a layer type that is not in your vocabulary (for example a fixed-weight averaging/subsampling layer). Granting costs simulated days from your compute budget; some requests are refused.',
  'sn_train':'JSON {net_id, epochs:1..30}. Real training in an isolated container on the registered training split (validation = last 1000 training digits), blocking until exit; charges simulated Sun-4 days from your compute budget. On success the host creates a result node (dataset usps-val) and proof nodes. You cannot author results.',
  'ledger_evaluate':'JSON {net_id}. Protected host evaluation of the latest successful job for that net on the held-out USPS test split in a separate container; limited count per run. Returns a result node (dataset usps-test).',
  'compare_results':'JSON {a:result_id, b:result_id, reject_rate:"0"|"0.05"|"0.09"|"0.12"}. Host compares error rates at that rejection rate and returns a comparison node to cite. Never compare numbers yourself.',
@@ -34,29 +40,50 @@ CODE_FILES=('train_usps.py','netlang_torch.py','netlang.py')
 def sha256(data):return hashlib.sha256(data).hexdigest()
 
 
+def support_check(analysis,docs,patterns):
+    """For each design choice, which cited documents contain it. docs: {id:text}; patterns: {id:[pattern]}."""
+    out=[]
+    for kind,value in netlang.choices(analysis['layers']):
+        by=[]
+        for did,text in docs.items():
+            low=text.lower()
+            if kind=='pattern':hit=value in patterns.get(did,[])
+            elif kind in('kernel','avg'):hit=bool(re.search(rf'\b{value}\s*[x×]\s*{value}\b',low)) and (kind=='kernel' or bool(FEATURES['avg'].search(low)))
+            elif kind=='stride':hit=bool(re.search(rf'stride\s*{value}\b',low))
+            elif kind=='maps':hit=bool(re.search(rf'\b{value}\s+(?:feature\s+|cell\s+)?(?:maps|planes)\b',low))
+            else:hit=bool(re.search(rf'(?:->\s*{value}\s*->|\b{value}\s+hidden)',low))
+            if hit:by.append(did)
+        out.append({'choice':kind,'value':value,'supported_by':by,'status':'sourced' if by else 'unsourced'})
+    return out
+
+
 class LedgerRuntime:
     def __init__(self,team):
         self.team=team;self.config=team.task.get('ledger')
         self.state=team.state.setdefault('ledger',{'nodes':{},'views':{},'counters':{},'compute_days_used':0.0,'evaluations':0,'leak_log':[]})
-        self.docs={}
+        self.docs={};self.patterns={}
         if self.config is None:return
-        allowed={'corpus','views','compute_days','max_evaluations','samples','training_profile','code_dir','dataset_name'}
+        allowed={'corpus','views','compute_days','max_evaluations','samples','training_profile','code_dir','dataset_name','vocabulary','feature_days'}
         if set(self.config)-allowed:raise ValueError('Unknown ledger configuration')
         corpus=ROOT/self.config['corpus'];register=json.loads((corpus/'register.json').read_text())
         for did,meta in register.items():
             body=(corpus/(did+'.md')).read_bytes()
             if sha256(body)!=meta['sha256']:raise ValueError('Corpus document changed: '+did)
-            self.docs[did]=body.decode('utf-8')
+            self.docs[did]=body.decode('utf-8');self.patterns[did]=list(meta.get('patterns',[]))
             self.state['nodes'].setdefault(did,{'id':did,'type':'document','title':meta['title'],'date':meta['date'],'kind':meta['kind'],'sha256':meta['sha256']})
+        if set(self.config.get('vocabulary',[]))-netlang.LOCKED_OPS:raise ValueError('Unknown vocabulary item')
         for role,ids in self.config.get('views',{}).items():
             if role not in team.definitions:raise ValueError('Ledger view for unknown role: '+role)
             if not set(ids)<=set(self.docs):raise ValueError('Ledger view cites unknown documents')
-            view=self.state['views'].setdefault(role,{'nodes':[],'macros':[]})
+            view=self.view_for(role)
             for did in ids:
                 if did not in view['nodes']:view['nodes'].append(did)
+            for op in self.config.get('vocabulary',[]):
+                if op not in view['vocabulary']:view['vocabulary'].append(op)
     # ---- helpers ----
     def role(self,agent):return agent.config['id']
-    def view(self,agent):return self.state['views'].setdefault(self.role(agent),{'nodes':[],'macros':[]})
+    def view_for(self,role):return self.state['views'].setdefault(role,{'nodes':[],'vocabulary':[]})
+    def view(self,agent):return self.view_for(self.role(agent))
     def visible(self,agent,node_id,kind=None):
         node=self.state['nodes'].get(node_id)
         if not node or node_id not in self.view(agent)['nodes']:raise ValueError('Not in your ledger view: '+str(node_id))
@@ -72,9 +99,10 @@ class LedgerRuntime:
         if not isinstance(text,str) or not text.strip():raise ValueError('rationale text is required')
         found=CITE.findall(text);view=set(self.view(agent)['nodes'])
         return [c for c in found if c in view],[c for c in found if c not in view]
-    def guess(self,agent,node,kind):
-        if node['guess']:
-            self.state['leak_log'].append({'time':time.time(),'role':self.role(agent),'node':node['id'],'kind':kind,'unknown_cites':node.get('unknown_cites',[])})
+    def budget(self):return float(self.config.get('compute_days',30))
+    def charge(self,days,what):
+        if self.state['compute_days_used']+days>self.budget():raise ValueError(f'Compute budget exceeded: {what} costs {days:.2f} simulated days, {self.budget()-self.state["compute_days_used"]:.2f} remain.')
+        self.state['compute_days_used']+=days
     def dispatch(self,agent,action,timeout):
         if self.config is None:raise ValueError('Ledger not configured for this task')
         tool=action['tool'];raw=action['argument']
@@ -83,6 +111,7 @@ class LedgerRuntime:
         if tool=='lit_read':return {'id':raw.strip(),'text':self.docs[self.visible(agent,raw.strip(),'document')['id']],'scope':'Stored excerpt or paraphrase; cite as ['+raw.strip()+']'}
         d=json.loads(raw)
         if tool=='sn_define':return self.define(agent,d)
+        if tool=='request_feature':return self.request_feature(agent,d)
         if tool=='sn_train':return self.train(agent,d,action,timeout)
         if tool=='ledger_evaluate':return self.evaluate(agent,d)
         if tool=='compare_results':return self.compare(agent,d)
@@ -95,20 +124,22 @@ class LedgerRuntime:
         def brief(n):
             t=n['type']
             if t=='document':return {'id':n['id'],'title':n['title'],'date':n['date']}
-            if t=='net_spec':return {'id':n['id'],'connections':n['analysis']['connections'],'params':n['analysis']['params'],'tied_layers':n['analysis']['tied_layers'],'guess':n['guess'],'jobs':n.get('jobs',[])}
+            if t=='net_spec':return {'id':n['id'],'connections':n['analysis']['connections'],'params':n['analysis']['params'],'tied_layers':n['analysis']['tied_layers'],'pattern':n['analysis']['pattern'],'unsourced_choices':[c['choice'] for c in n['choices'] if c['status']=='unsourced'],'jobs':n.get('jobs',[])}
             if t=='result':return {'id':n['id'],'net':n['net'],'dataset':n['dataset'],'error':n['error'],'reject_curve':n['reject_curve']}
             if t=='proof':return {'id':n['id'],'kind':n['kind'],'net':n['net'],'passed':n['passed']}
             if t=='claim':return {'id':n['id'],'template':n['template'],'args':n['args'],'status':n['status'],'evidence':n['evidence'],'guess':n['guess']}
             if t=='comparison':return {k:n[k] for k in ('id','a','b','reject_rate','error_a','error_b','winner')}
+            if t=='feature_request':return {k:n[k] for k in ('id','description','granted')}
             return {'id':n['id'],'type':t}
         groups={}
         for n in nodes:groups.setdefault(n['type'],[]).append(brief(n))
-        budget=float(self.config.get('compute_days',30))
         return {'believe_only':'claims with status supported','supported':[c for c in groups.get('claim',[]) if c['status']=='supported'],
                 'conjectures':[c for c in groups.get('claim',[]) if c['status']=='conjecture'],'refuted':[c for c in groups.get('claim',[]) if c['status']=='refuted'],
                 'nets':groups.get('net_spec',[]),'results':groups.get('result',[]),'proofs':groups.get('proof',[]),'comparisons':groups.get('comparison',[]),
-                'documents':groups.get('document',[]),'compute_days':{'budget':budget,'used':round(self.state['compute_days_used'],3),'remaining':round(budget-self.state['compute_days_used'],3)},
-                'evaluations':{'used':self.state['evaluations'],'max':int(self.config.get('max_evaluations',4))},'macros':view['macros']}
+                'feature_requests':groups.get('feature_request',[]),'documents':groups.get('document',[]),
+                'compute_days':{'budget':self.budget(),'used':round(self.state['compute_days_used'],3),'remaining':round(self.budget()-self.state['compute_days_used'],3)},
+                'evaluations':{'used':self.state['evaluations'],'max':int(self.config.get('max_evaluations',4))},
+                'vocabulary':sorted(netlang.BASE_OPS)+view['vocabulary'],'locked':sorted(netlang.LOCKED_OPS-set(view['vocabulary']))}
     def search(self,agent,query):
         words=[w.lower() for w in re.findall(r'[A-Za-z0-9]+',query or '') if len(w)>2]
         if not words:raise ValueError('Query needs words')
@@ -124,14 +155,31 @@ class LedgerRuntime:
     # ---- write side (host-verified) ----
     def define(self,agent,d):
         if set(d)!={'spec','rationale'}:raise ValueError('sn_define needs {spec, rationale}')
-        macros=self.view(agent)['macros'];analysis=netlang.analyze(d['spec'],macros)
+        vocab=self.view(agent)['vocabulary'];analysis=netlang.analyze(d['spec'],vocab)
         cites,unknown=self.cites(agent,d['rationale']);samples=int(self.config.get('samples',6291))
-        node={'id':self.new_id('N'),'type':'net_spec','spec':netlang.canonical(d['spec'],macros),'analysis':analysis,'rationale':d['rationale'],
-              'cites':cites,'unknown_cites':unknown,'guess':not cites,'owner':self.role(agent),'jobs':[],
+        checks=support_check(analysis,{c:self.docs[c] for c in cites if c in self.docs},self.patterns)
+        unsourced=[c for c in checks if c['status']=='unsourced']
+        node={'id':self.new_id('N'),'type':'net_spec','spec':netlang.canonical(d['spec'],vocab),'analysis':analysis,'rationale':d['rationale'],
+              'cites':cites,'unknown_cites':unknown,'choices':checks,'guess':bool(unsourced),'owner':self.role(agent),'jobs':[],
               'eta_days_per_epoch':netlang.eta_days(analysis['connections'],samples,1)}
-        self.add(agent,node);self.guess(agent,node,'net_spec')
-        return {'net_id':node['id'],'connections':analysis['connections'],'params':analysis['params'],'layers':analysis['layers'],'eta_days_per_epoch':round(node['eta_days_per_epoch'],3),'guess':node['guess'],
-                'note':'guess=true means your rationale cited nothing in your view; the choice is recorded as unsupported'}
+        self.add(agent,node)
+        if unsourced:self.state['leak_log'].append({'time':time.time(),'role':self.role(agent),'node':node['id'],'kind':'net_spec','unsourced':[(c['choice'],c['value']) for c in unsourced],'cites':cites,'unknown_cites':unknown})
+        return {'net_id':node['id'],'connections':analysis['connections'],'params':analysis['params'],'pattern':analysis['pattern'],'layers':analysis['layers'],
+                'eta_days_per_epoch':round(node['eta_days_per_epoch'],3),'choices':checks,
+                'note':'unsourced = none of the documents you cited contains this choice; it is recorded as your own guess, not refused'}
+    def request_feature(self,agent,d):
+        if set(d)!={'description'} or not isinstance(d['description'],str) or not d['description'].strip():raise ValueError('request_feature needs {description}')
+        desc=d['description'].strip()[:500];view=self.view(agent);granted=None
+        for op,pat in FEATURES.items():
+            if pat.search(desc):granted=op;break
+        node={'id':self.new_id('FEAT'),'type':'feature_request','description':desc,'granted':granted,'owner':self.role(agent)}
+        if granted and granted in view['vocabulary']:self.add(agent,node);return {'request_id':node['id'],'granted':granted,'note':'Already in your vocabulary'}
+        if granted:
+            days=float(self.config.get('feature_days',10));self.charge(days,'implementing '+granted)
+            view['vocabulary'].append(granted);node['simulated_days']=days;self.add(agent,node)
+            return {'request_id':node['id'],'granted':granted,'simulated_days':days,'compute_days_used':round(self.state['compute_days_used'],3),
+                    'usage':'{"op":"avg","k":2} = fixed-weight 2x2 averaging with 2-to-1 subsampling, no trainable parameters'}
+        self.add(agent,node);return {'request_id':node['id'],'granted':None,'note':'Not available from the simulator maintainer'}
     def dataset_id(self):
         name=self.config.get('dataset_name','usps-train')
         for did,r in self.team.training.state['datasets'].items():
@@ -141,8 +189,8 @@ class LedgerRuntime:
         if set(d)!={'net_id','epochs'}:raise ValueError('sn_train needs {net_id, epochs}')
         net=self.visible(agent,d['net_id'],'net_spec');epochs=d['epochs']
         if type(epochs) is not int or not 1<=epochs<=30:raise ValueError('epochs must be an integer in 1..30')
-        eta=netlang.eta_days(net['analysis']['connections'],int(self.config.get('samples',6291)),epochs);budget=float(self.config.get('compute_days',30))
-        if self.state['compute_days_used']+eta>budget:raise ValueError(f'Compute budget exceeded: this run costs {eta:.2f} simulated days, {budget-self.state["compute_days_used"]:.2f} remain. Simplify the network or train fewer epochs.')
+        eta=netlang.eta_days(net['analysis']['connections'],int(self.config.get('samples',6291)),epochs)
+        self.charge(eta,'this run')
         code=ROOT/self.config.get('code_dir','research/lenet')
         for name in CODE_FILES:
             src=code/name if name!='netlang.py' else ROOT/'goalagent/netlang.py'
@@ -150,7 +198,6 @@ class LedgerRuntime:
         did=self.dataset_id()
         packet={'profile':self.config.get('training_profile','sun4'),'code_files':list(CODE_FILES),'entrypoint':'train_usps.py',
                 'args':['--spec',net['spec'],'--epochs',str(epochs),'--net-id',net['id'],'--dataset-id',did],'dataset_ids':[did]}
-        self.state['compute_days_used']+=eta
         status=self.team.training.start(agent,packet,self.team.dispatch_id(agent,action))
         job=self.team.training.state['jobs'][status['job_id']]
         if status['job_id'] not in net['jobs']:net['jobs'].append(status['job_id'])
@@ -205,7 +252,8 @@ class LedgerRuntime:
             args['reject_rate']=str(args['reject_rate'])
         cites,unknown=self.cites(agent,d['rationale'])
         node={'id':self.new_id('C'),'type':'claim','template':t,'args':args,'status':'conjecture','rationale':d['rationale'],'cites':cites,'unknown_cites':unknown,'guess':not cites,'evidence':[],'owner':self.role(agent)}
-        self.add(agent,node);self.guess(agent,node,'claim')
+        self.add(agent,node)
+        if node['guess']:self.state['leak_log'].append({'time':time.time(),'role':self.role(agent),'node':node['id'],'kind':'claim','unknown_cites':unknown})
         return {'claim_id':node['id'],'status':'conjecture','guess':node['guess'],'note':'Promote with ledger_promote and result/proof evidence; speech cannot promote it'}
     def promote(self,agent,d):
         if set(d)!={'claim_id','evidence_ids'} or not isinstance(d['evidence_ids'],list):raise ValueError('ledger_promote needs {claim_id, evidence_ids:[...]}')
@@ -231,11 +279,11 @@ class LedgerRuntime:
         unlocked=[]
         if verdict=='supported' and t=='BEATS' and self.state['nodes'][a['net_a']]['analysis']['tied_layers']>0:
             view=self.view(agent)
-            if 'shared_map' not in view['macros']:view['macros'].append('shared_map');unlocked.append('shared_map')
-        return {'claim_id':c['id'],'status':verdict,'evidence':used,'detail':detail,'unlocked_macros':unlocked}
+            if 'shared_map' not in view['vocabulary']:view['vocabulary'].append('shared_map');unlocked.append('shared_map')
+        return {'claim_id':c['id'],'status':verdict,'evidence':used,'detail':detail,'unlocked_vocabulary':unlocked}
     # ---- audit (host-side invariant check, no model involved) ----
     def audit(self):
-        nodes=self.state['nodes'].values();bad_results=[];bad_claims=[]
+        nodes=list(self.state['nodes'].values());bad_results=[];bad_claims=[]
         for n in nodes:
             if n['type']=='result':
                 src=n.get('source',{})
@@ -246,8 +294,15 @@ class LedgerRuntime:
                     if src['evidence_id'] not in self.team.state['evidence']:bad_results.append(n['id'])
                 else:bad_results.append(n['id'])
             if n['type']=='claim' and n['status']=='supported' and n['template']!='FEWER_PARAMS' and not n['evidence']:bad_claims.append(n['id'])
-        counts={t:sum(1 for n in nodes if n['type']==t) for t in ('document','net_spec','result','proof','claim','comparison')}
+        nets=[n for n in nodes if n['type']=='net_spec'];by_kind={}
+        for n in nets:
+            for c in n['choices']:
+                if c['status']=='unsourced':by_kind[c['choice']]=by_kind.get(c['choice'],0)+1
+        counts={t:sum(1 for n in nodes if n['type']==t) for t in ('document','net_spec','result','proof','claim','comparison','feature_request')}
         return {'nodes':counts,'results_without_provenance':bad_results,'supported_without_evidence':bad_claims,
-                'guess_nets':[n['id'] for n in nodes if n['type']=='net_spec' and n['guess']],'guess_claims':[n['id'] for n in nodes if n['type']=='claim' and n['guess']],
+                'choices_total':sum(len(n['choices']) for n in nets),'unsourced_choices':sum(by_kind.values()),'unsourced_by_kind':by_kind,
+                'unsourced_patterns':[{'net':n['id'],'pattern':n['analysis']['pattern'],'cites':n['cites']} for n in nets if any(c['choice']=='pattern' and c['status']=='unsourced' for c in n['choices'])],
+                'guess_nets':[n['id'] for n in nets if n['guess']],'guess_claims':[n['id'] for n in nodes if n['type']=='claim' and n['guess']],
+                'feature_requests':[{k:n[k] for k in ('id','description','granted')} for n in nodes if n['type']=='feature_request'],
                 'claims_by_status':{s:sum(1 for n in nodes if n['type']=='claim' and n['status']==s) for s in ('conjecture','supported','refuted')},
                 'leak_log':self.state['leak_log'],'invariant_holds':not bad_results and not bad_claims}

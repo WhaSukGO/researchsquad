@@ -58,11 +58,11 @@ class UspsEvaluator:
         finally:subprocess.run(['docker','rm','-f',name],capture_output=True,timeout=15)
 
 
-def task(image,*,compute_days=30.0,max_evaluations=4,budget=None):
+def task(image,*,compute_days=30.0,max_evaluations=4,budget=None,corpus=True,vocabulary=()):
     return {'goal':GOAL,'inputs':{},'network':False,
         'budget':budget or {'max_calls':80,'max_seconds':7200,'max_assignments':4,'max_depth':1},
         'training':{'profiles':{'sun4':{'image':image,'gpu':False,'memory':'2g','cpus':2,'max_seconds':1200,'max_output_bytes':50_000_000,'roles':['coordinator']}}},
-        'ledger':{'corpus':'research/lit-1988','views':{'coordinator':DOCS},'compute_days':compute_days,'max_evaluations':max_evaluations,
+        'ledger':{'corpus':'research/lit-1988','views':{'coordinator':DOCS if corpus else []},'vocabulary':list(vocabulary),'compute_days':compute_days,'max_evaluations':max_evaluations,
                   'samples':6291,'training_profile':'sun4','code_dir':'research/lenet','dataset_name':'usps-train'}}
 
 
@@ -125,18 +125,19 @@ def check(folder,image,cache):
     assert any(e['tool']=='ledger_promote' for e in errors) and any(e['tool']=='ledger_claim' for e in errors),errors
     results={k:{'net':v['net'],'dataset':v['dataset'],'error':v['error'],'reject_curve':v['reject_curve']} for k,v in nodes.items() if v['type']=='result'}
     summary={'status':'passed','outcome':outcome['status'],'claims':claims,'results':results,'audit':audit,'tool_errors':errors,
-             'compute_days_used':team.ledger.state['compute_days_used'],'macros':team.ledger.state['views']['coordinator']['macros'],
+             'compute_days_used':team.ledger.state['compute_days_used'],'vocabulary':team.ledger.state['views']['coordinator']['vocabulary'],
              'scope':'Scripted decisions through real CPU containers and a protected test adapter; validates the ledger invariant and tooling, not autonomous discovery'}
     atomic_json(team.folder/'verification.json',summary);team.trace.export(team.folder/'trace.html');team.close();return summary
 
 
-def live(folder,image,cache,model):
-    team=build(folder,image,cache,model=model)
+def live(folder,image,cache,model,**kw):
+    team=build(folder,image,cache,model=model,**kw)
     outcome=team.run();audit=team.ledger.audit();nodes=team.ledger.state['nodes']
     summary={'outcome':outcome,'audit':audit,'claims':{k:{'template':v['template'],'args':v['args'],'status':v['status'],'guess':v['guess']} for k,v in nodes.items() if v['type']=='claim'},
-             'nets':{k:{'params':v['analysis']['params'],'connections':v['analysis']['connections'],'tied':v['analysis']['tied_layers'],'guess':v['guess'],'rationale':v['rationale']} for k,v in nodes.items() if v['type']=='net_spec'},
+             'nets':{k:{'params':v['analysis']['params'],'connections':v['analysis']['connections'],'tied':v['analysis']['tied_layers'],'pattern':v['analysis']['pattern'],'cites':v['cites'],
+                        'unsourced':[(c['choice'],c['value']) for c in v['choices'] if c['status']=='unsourced'],'rationale':v['rationale']} for k,v in nodes.items() if v['type']=='net_spec'},
              'results':{k:{'net':v['net'],'dataset':v['dataset'],'error':v['error']} for k,v in nodes.items() if v['type']=='result'},
-             'calls':team.state['calls'],'compute_days_used':team.ledger.state['compute_days_used'],
+             'calls':team.state['calls'],'compute_days_used':team.ledger.state['compute_days_used'],'config':{'corpus':bool(team.task['ledger']['views']['coordinator']),'vocabulary':team.task['ledger']['vocabulary']},
              'scope':'Live model decisions; results are real container measurements; leakage is measured by guess tags, not prevented'}
     atomic_json(team.folder/'summary.json',summary);team.trace.export(team.folder/'trace.html');team.close();return summary
 
@@ -144,7 +145,8 @@ def live(folder,image,cache,model):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--mode',choices=['check','live'],default='check');p.add_argument('--run-dir',required=True)
     p.add_argument('--image',default='researchsquad-training:torch2.9.1-cu128');p.add_argument('--cache',default=str(Path.home()/'.cache/researchsquad/usps'))
-    p.add_argument('--model',default=None)
-    a=p.parse_args()
-    out=check(a.run_dir,a.image,a.cache) if a.mode=='check' else live(a.run_dir,a.image,a.cache,a.model)
+    p.add_argument('--model',default=None);p.add_argument('--corpus-off',action='store_true',help='C0 control: empty literature view')
+    p.add_argument('--vocab',default='',help='comma-separated locked ops to unlock from the start, e.g. avg (A4 variant)')
+    a=p.parse_args();vocab=tuple(v for v in a.vocab.split(',') if v)
+    out=check(a.run_dir,a.image,a.cache) if a.mode=='check' else live(a.run_dir,a.image,a.cache,a.model,corpus=not a.corpus_off,vocabulary=vocab)
     print(json.dumps(out,indent=2,default=str))

@@ -4,7 +4,10 @@
   "date": "1962",
   "kind": "paraphrase",
   "source": "F. Rosenblatt, Spartan Books, 1962",
-  "sha256": "db3146f5195673a61cbae2de358000c46bebd90fd53aab06503ac65410d2b7c2"
+  "sha256": "db3146f5195673a61cbae2de358000c46bebd90fd53aab06503ac65410d2b7c2",
+  "patterns": [
+   "local1>output"
+  ]
  },
  "HUBEL62": {
   "title": "Receptive fields, binocular interaction and functional architecture in the cat's visual cortex",
@@ -25,14 +28,22 @@
   "date": "1980",
   "kind": "paraphrase",
   "source": "K. Fukushima, Biological Cybernetics 36:193-202, 1980",
-  "sha256": "4610249e4a8c58dfc3f21e791021928791ad49474239cf852df9a9e8556eb038"
+  "sha256": "4610249e4a8c58dfc3f21e791021928791ad49474239cf852df9a9e8556eb038",
+  "patterns": [
+   "shared1>avg>shared1>avg>output",
+   "shared1>avg>shared1>avg>shared1>avg>output"
+  ]
  },
  "FUKUSHIMA82": {
   "title": "Neocognitron: A new algorithm for pattern recognition tolerant of deformations and shifts in position",
   "date": "1982",
   "kind": "paraphrase",
   "source": "K. Fukushima and S. Miyake, Pattern Recognition 15(6):455-469, 1982",
-  "sha256": "c1fa70ba634598333eeed7c09810376f2d730f13b43a7f5bf5b047f2583f4f55"
+  "sha256": "c1fa70ba634598333eeed7c09810376f2d730f13b43a7f5bf5b047f2583f4f55",
+  "patterns": [
+   "shared1>avg>shared1>avg>output",
+   "shared1>avg>shared1>avg>shared1>avg>output"
+  ]
  },
  "HOPFIELD82": {
   "title": "Neural networks and physical systems with emergent collective computational abilities",
@@ -67,7 +78,10 @@
   "date": "1986",
   "kind": "excerpt",
   "source": "D. E. Rumelhart, G. E. Hinton and R. J. Williams, in Parallel Distributed Processing, vol. 1, ch. 8, pp. 348-352, MIT Press 1986",
-  "sha256": "16aba1e5adc4f27a05de1a514e555db210f1f94a84a56ef6e77712ac818e5c55"
+  "sha256": "16aba1e5adc4f27a05de1a514e555db210f1f94a84a56ef6e77712ac818e5c55",
+  "patterns": [
+   "shared1>output"
+  ]
  },
  "DENKER87": {
   "title": "Large automatic learning, rule extraction, and generalization",
@@ -81,7 +95,10 @@
   "date": "1987",
   "kind": "paraphrase",
   "source": "A. Waibel, T. Hanazawa, G. Hinton, K. Shikano and K. Lang, ATR Technical Report TR-I-0006, October 1987 (later IEEE Trans. ASSP 37(3):328-339, 1989)",
-  "sha256": "76d57146c2241a6d115f81a56ef7ca37e5a7f202eaedd0532d6b0374156a0bb8"
+  "sha256": "76d57146c2241a6d115f81a56ef7ca37e5a7f202eaedd0532d6b0374156a0bb8",
+  "patterns": [
+   "shared1>shared1>output"
+  ]
  },
  "GRAF87": {
   "title": "VLSI implementation of a neural network memory with several hundreds of neurons",
@@ -95,7 +112,10 @@
   "date": "1988",
   "kind": "excerpt",
   "source": "J. S. Denker, W. R. Gardner, H. P. Graf, D. Henderson, R. E. Howard, W. Hubbard, L. D. Jackel, H. S. Baird and I. Guyon, Advances in Neural Information Processing Systems 1 (NIPS 1988), pp. 323-331",
-  "sha256": "43388fbb65c1da1a440864b85facaf1b437ee28f5077bc07170553ddfb152199"
+  "sha256": "43388fbb65c1da1a440864b85facaf1b437ee28f5077bc07170553ddfb152199",
+  "patterns": [
+   "template1>avg>full>output"
+  ]
  },
  "LECUN88": {
   "title": "A theoretical framework for back-propagation",
@@ -109,7 +129,14 @@
   "date": "1988-06",
   "kind": "excerpt",
   "source": "Y. Le Cun, Technical Report CRG-TR-89-4, Department of Computer Science, University of Toronto (experiments performed during the 1987-88 postdoctoral year; report dated June 1989); shortened version in Connectionism in Perspective, Elsevier 1989",
-  "sha256": "d847d38605f2f4594d104f638c3316fe4e2969102038cd60f189ab14aedf9f15"
+  "sha256": "9d98105a4cb15dc9f0ffb7cc744c3661218e28b30b9b4d68308dab72703f3607",
+  "patterns": [
+   "output",
+   "full>output",
+   "local2>local2>output",
+   "shared2>local2>output",
+   "shared2>shared2>output"
+  ]
  },
  "BOTTOU88": {
   "title": "SN: A simulator for connectionist models",

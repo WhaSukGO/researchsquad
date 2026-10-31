@@ -27,8 +27,8 @@ networks trained with back-propagation:
 | Net-1 | 16x16 -> 10, fully connected, no hidden layer | 2,570 | 2,570 | 80.0% |
 | Net-2 | 16x16 -> 12 -> 10, fully connected | 3,214 | 3,214 | 87.0% |
 | Net-3 | two locally connected hidden layers, 3x3 receptive fields, stride 2, no sharing | 1,226 | 1,226 | 88.5% |
-| Net-4 | one layer of shared-weight feature maps (2 maps, 8x8), then a locally connected layer | 2,266 | 1,132 | 94.0% |
-| Net-5 | two layers of shared-weight feature maps (2 maps 8x8, then 4 maps 4x4) | 5,194 | 1,060 | 98.4% |
+| Net-4 | one layer of shared-weight feature maps (2 maps, 8x8, 3 x 3 kernels at stride 2), then a locally connected layer (stride 2) | 2,266 | 1,132 | 94.0% |
+| Net-5 | two layers of shared-weight feature maps (2 maps 8x8 with 3 x 3 kernels at stride 2, then 4 maps 4x4 with 5 x 5 kernels at stride 2) | 5,194 | 1,060 | 98.4% |
 
 In Net-4 and Net-5 the units of a feature map are constrained to have identical weight vectors (the weight
 changes are summed, as in the T-C experiment of Rumelhart, Hinton and Williams), with a separate bias per unit.

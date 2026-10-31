@@ -53,7 +53,7 @@ class Tied(nn.Module):
 class Net(nn.Module):
     def __init__(self,spec):
         super().__init__()
-        self.analysis=analyze(spec,('shared_map',));mods=[];layers=self.analysis['layers']
+        self.analysis=analyze(spec,('shared_map','avg'));mods=[];layers=self.analysis['layers']
         for l in layers:
             if l['op']=='local':mods.append(Tied(l) if l['tied'] else Local(l))
             elif l['op']=='avg':mods.append(nn.AvgPool2d(l['k']))

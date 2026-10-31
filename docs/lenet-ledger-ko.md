@@ -20,7 +20,8 @@ LLM이 "검증했다"고 말해도 아무 효력이 없는 연구 런타임이�
 
 - **H1 결과 날조 불가**: `result`를 만드는 툴은 `sn_train`(SUCCEEDED 잡의 `metrics.json`, sha256 기록)과 `ledger_evaluate`(보호된 평가 evidence)뿐이다. `audit()`가 출처 없는 result를 찾아낸다.
 - **H3 틀린 추론 차단**: 수치 비교는 `compare_results` 노드로만 하고, 승격은 `ledger_promote`가 result 수치로 결정한다. 자유 문장 claim은 생성 자체가 거부된다.
-- **H2 기억 누출은 측정만**: `sn_define`과 `ledger_claim`의 rationale에 뷰 안의 ID 인용이 없으면 `guess` 태그와 `leak_log` 항목이 남는다.
+- **H2 기억 누출은 측정만**: `sn_define`은 설계의 선택 하나하나(커널 크기, stride, 맵 수, 평균층 크기, 은닉 유닛 수, 그리고 층 패턴 문자열 예: `shared2>shared2>output`)를 rationale이 인용한 문서 본문과 대조해 `sourced`/`unsourced`로 기록한다. 패턴은 코퍼스 register의 `patterns`(각 문서가 실제로 기술한 망 형태)와 정확히 일치해야 sourced다. 하나라도 unsourced면 `guess` 태그와 `leak_log` 항목이 남고, `audit()`가 `unsourced_choices`, `unsourced_by_kind`, `unsourced_patterns`를 집계한다. 반려하지는 않는다(탐색을 막지 않기 위해). 수치 매칭은 거칠어서(코퍼스에 "5 x 5"가 템플릿 맥락으로 있으면 5×5 커널이 sourced가 된다) **패턴 검사가 주 지표**, 수치 검사는 보조다.
+- **잠긴 어휘**: 기본 망 언어는 `input, full, local, tie, output`뿐이다. `avg`(고정 가중치 평균/서브샘플링)는 `request_feature`로 요청해야 하고, 호스트가 Bottou 역할을 대신해 시뮬레이션 10일을 차감한 뒤 어휘에 넣는다(무관한 요청은 기록만 하고 거절). `shared_map` 매크로는 묶인 망의 BEATS가 supported 될 때 열린다. 처음부터 `avg`를 주는 변형(A4)은 `--vocab avg`로 돌린다. 코퍼스 없는 대조군(C0)은 `--corpus-off`다.
 - 계산 예산: 1989년 수치(64,660 연결 × 7,291 샘플 × 23 에포크 = Sun-4/260에서 3일)로 보정한 시뮬레이션 일수를 `sn_train`마다 차감한다.
 
 ## 3. 실행 방법 (WSL2 Ubuntu-24.04 + Docker, 저장소 관례대로)

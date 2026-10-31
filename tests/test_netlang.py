@@ -30,14 +30,16 @@ def test_vocabulary_has_no_convolution_and_macro_is_locked_until_unlocked():
     with pytest.raises(ValueError):netlang.analyze({'layers':[I16,{'op':'conv','k':5,'n':4},{'op':'output','n':10}]})
     macro={'layers':[I16,{'op':'shared_map','k':3,'stride':2,'n':2},{'op':'output','n':10}]}
     with pytest.raises(ValueError,match='not in your vocabulary'):netlang.analyze(macro)
-    a=netlang.analyze(macro,macros=('shared_map',));assert a['tied_layers']==1 and a['params']==(2*9+2*64)+10*(2*64+1)
+    a=netlang.analyze(macro,vocabulary=('shared_map',));assert a['tied_layers']==1 and a['params']==(2*9+2*64)+10*(2*64+1)
+    assert a['pattern']=='shared2>output' and netlang.analyze(NET5)['pattern']=='shared2>shared2>output'
 
 
 def test_tie_must_follow_untied_local_and_avg_needs_divisible_input():
     with pytest.raises(ValueError):netlang.analyze({'layers':[I16,{'op':'tie'},{'op':'output','n':10}]})
     with pytest.raises(ValueError):netlang.analyze({'layers':[I16,{'op':'local','k':3,'stride':2,'n':2},{'op':'tie'},{'op':'tie'},{'op':'output','n':10}]})
-    with pytest.raises(ValueError):netlang.analyze({'layers':[I16,{'op':'avg','k':3},{'op':'output','n':10}]})
-    a=netlang.analyze({'layers':[I16,{'op':'avg','k':2},{'op':'output','n':10}]});assert a['params']==10*65 and a['layers'][1]['fixed']
+    with pytest.raises(ValueError,match='request_feature'):netlang.analyze({'layers':[I16,{'op':'avg','k':2},{'op':'output','n':10}]})
+    with pytest.raises(ValueError):netlang.analyze({'layers':[I16,{'op':'avg','k':3},{'op':'output','n':10}]},vocabulary=('avg',))
+    a=netlang.analyze({'layers':[I16,{'op':'avg','k':2},{'op':'output','n':10}]},vocabulary=('avg',));assert a['params']==10*65 and a['layers'][1]['fixed'] and a['pattern']=='avg>output'
 
 
 def test_canonical_is_stable_and_json_input_accepted():
