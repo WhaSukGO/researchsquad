@@ -1,0 +1,11 @@
+flowchart LR
+  S1["S1: JMLR 논문<br/>Dropout 방법·실험 구간"] --> R["Researcher<br/>출처를 직접 열고<br/>가설·비교 조건 선택"]
+  S2["S2: PyTorch 공개 코드<br/>커밋 고정 Python 본문"] --> R
+  R --> P["전달 자료<br/>원문 텍스트·출처표<br/>실험 계획·적용 차이"]
+  P --> C["Critic + 호스트<br/>해석 검토와<br/>출처 기록 검증"]
+  C --> E["Experiment Engineer<br/>계획과 원문 확인 후<br/>직접 학습 코드 작성"]
+  P --> E
+  classDef person fill:#e8f1ff,stroke:#3572b0,color:#153457;
+  classDef data fill:#f2f5f9,stroke:#738499,color:#22324b;
+  class R,C,E person;
+  class S1,S2,P data;

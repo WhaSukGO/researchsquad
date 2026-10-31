@@ -13,7 +13,9 @@ research projects. [Training operations](docs/training-runtime.md) and the
 implemented job/checkpoint/trace path and its remaining research limitations.
 The [external-source study guide](docs/external-source-study.md) connects actual
 paper/code discovery and body reading to source-informed GPU comparisons and
-independent final inference.
+independent final inference. The [actual source-study report](docs/external-source-results-ko.md)
+records the negative dropout result, final protected score, role decisions,
+storage intervention and report-review failures.
 
 ![The reusable agent loop](docs/diagrams/configurable-team-loop.png)
 

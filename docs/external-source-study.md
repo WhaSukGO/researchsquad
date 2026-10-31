@@ -92,3 +92,11 @@ Human reports should connect source → reading → decision → code → actual
 observed outcome. Keep original PDFs, downloaded source bodies, datasets,
 checkpoints and raw traces local rather than committing them. Commit maintained
 notes, bounded paraphrases, source URLs and measured summaries.
+
+The [actual execution report](external-source-results-ko.md) records a valid
+negative comparison and the limits encountered. For standalone report reviews,
+objections must target a registered artifact/candidate ID, not a file path with a
+passage label; put the passage in the objection statement. Explicitly grant
+`view_image` if a text-only reader is also expected to inspect an included PNG.
+The shipped training reader is text-only. Preserve incomplete/blocked reviews
+rather than calling their checkpoint an accepted review.
