@@ -44,6 +44,7 @@ TOOLS={
  'start_job':'JSON {profile,code_files:[workspace paths],entrypoint,args:[strings],dataset_ids:[ids],resume_model?:model_id}. Start a frozen Python job and return immediately. Output directory is /workspace/output; datasets are under /datasets/ID/; checkpoint input is /checkpoints/resume. No host execution.',
  'job_status':'Job ID; observe actual Docker status, bounded logs and output inventory. Terminal jobs have no running worker.',
  'read_job_output':'JSON {job_id,path}. Read a bounded regular UTF-8 job output (max 1 MB), such as progress/metrics JSON. This is reported experiment output, not protected measurement.',
+ 'publish_job_outputs':'JSON {job_id,files:{job_output_path:workspace_destination}}. After exit, freeze and copy up to 16 outputs directly into reviewable workspace artifacts without retyping content. Returns IDs/provenance, not file bodies. Include destinations in submit_report.files. Reported experiment output, not independent measurement.',
  'await_job':'Job ID; yield the current managed assignment while its job runs. Host observes completion without spending model calls, then continues this same assignment.',
  'cancel_job':'Job ID; stop your job, preserving completed output. Cancellation is not a valid training result.',
  'resume_job':'JSON {parent_job,model_id,args:[strings]}. New frozen attempt with the same source/profile/data and a registered checkpoint. Code must explicitly restore optimizer/RNG/data order; the host does not claim equivalence.',
@@ -116,6 +117,33 @@ class TrainingRuntime:
             return {'recorded':True,'scope':'Explicitly reported alternatives only'}
         if tool=='start_job':return self.start(agent,json.loads(raw),self.team.dispatch_id(agent,action))
         if tool=='job_status':return self.status(self.owned(agent,raw))
+        if tool=='publish_job_outputs':
+            d=json.loads(raw)
+            if set(d)!={'job_id','files'} or not isinstance(d['files'],dict) or not 1<=len(d['files'])<=16:raise ValueError('Expected 1..16 output mappings')
+            j=self.owned(agent,d['job_id'])
+            if self.status(j)['status'] not in {'SUCCEEDED','FAILED','CANCELLED'}:raise ValueError('Publish only exited jobs')
+            if len(set(d['files'].values()))!=len(d['files']):raise ValueError('Duplicate destinations')
+            pending=[];total=0
+            for source,destination in d['files'].items():
+                target=workspace_path(agent.workspace,destination)
+                if target.relative_to(agent.workspace).parts[0] in {'inputs','baselines'}:raise ValueError('Inputs are read-only')
+                content=read_file(self.root/'jobs'/j['id']/'output',source,limit=16_000_000)
+                total+=len(content)
+                if total>64_000_000:raise ValueError('Output bundle exceeds 64 MB')
+                if target.exists() and read_file(agent.workspace,destination)!=content:raise ValueError('Destination has different content')
+                pending.append((source,destination,target,content))
+            results=[]
+            for source,destination,target,content in pending:
+                artifact=self.team.register_artifact(content,owner='job:'+j['id'],path=source)
+                target.parent.mkdir(parents=True,exist_ok=True)
+                if not target.exists():
+                    with target.open('xb') as stream:stream.write(content)
+                record={'job_id':j['id'],'source':source,'destination':destination,'artifact_id':artifact['artifact_id'],'bytes':len(content)}
+                agent.state.setdefault('job_output_files',{})[destination]=record
+                results.append(record)
+            if hasattr(agent,'save'):agent.save()
+            self.emit('outputs_published',{'owner':self.owner(agent),'files':results})
+            return {'files':results,'scope':'Frozen reported outputs; not independent evaluation'}
         if tool=='read_job_output':
             d=json.loads(raw)
             if set(d)!={'job_id','path'}:raise ValueError('Invalid output read')

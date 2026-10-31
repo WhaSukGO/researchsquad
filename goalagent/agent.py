@@ -13,10 +13,8 @@ class Agent:
         self.config = config
         self.registry = registry or default_registry()
         self.registry.catalog(config['tools']) # reject unknown grants before model calls
-        self.schema = {"type":"object","properties":{
-            "tool":{"type":"string","enum":config['tools']},
-            "argument":{"type":"string"},"why":{"type":"string"}},
-            "required":["tool","argument","why"],"additionalProperties":False}
+        from .report_input import action_schema
+        self.schema = action_schema(config['tools'])
         self.folder = Path(folder)
         self.workspace = self.folder / "workspace"
         self.assignment = assignment
@@ -144,6 +142,9 @@ class Agent:
                                "remaining_seconds": visible_remaining(remaining()), "authored_files": self.state.get("written_files", [])[-32:],
                                "recent_actions": self.recent_context()}
                     context['progress'] = self.state.get('progress')
+                    context['job_output_files'] = self.state.get('job_output_files',{})
+                    if 'submit_report' in self.config['tools']:
+                        context['report_input'] = 'For submit_report/check_report use a structured argument object matching the output schema (not escaped JSON). Use empty arrays for unused sections and null failure_kind unless FAILED. Each claim needs scope document|empirical and real evidence IDs. Check_report validates without submitting; it does not grant acceptance.'
                     context['coordinator_guidance'] = self.state.get('guidance')
                     context['checkpoint_interval'] = checkpoint_interval
                     context['actions_until_checkpoint'] = (max(0, checkpoint_interval - (self.state['steps'] - self.state['period_start'])) if checkpoint_interval else None)
@@ -162,6 +163,8 @@ class Agent:
                         action, metadata = self.provider.call(
                             prompt, self.schema, self.folder / "turns" / f'{self.state["steps"]:03}',
                             image=self.state["image"], timeout=min(limit(self.policy["model_call_timeout"]), remaining()))
+                        from .report_input import normalize_action
+                        action=normalize_action(action)
                         self.trace.end(model_span,{'selected_action':action,'metadata':{
                             k:metadata[k] for k in ('provider','model','reasoning_effort','usage','elapsed_seconds','exit_code') if k in metadata}})
                         self.state['decision_trace']=model_span

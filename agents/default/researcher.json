@@ -17,6 +17,7 @@
     "finish",
     "checkpoint",
     "submit_report",
+    "check_report",
     "read_artifact",
     "review_gate"
   ],

@@ -15,6 +15,7 @@
     "list_files",
     "finish",
     "submit_report",
+    "check_report",
     "read_artifact",
     "continue_assignment",
     "project_state",
@@ -29,7 +30,8 @@
     "evaluate_model",
     "record_decision",
     "register_dataset",
-    "read_job_output"
+    "read_job_output",
+    "publish_job_outputs"
   ],
   "limits": {
     "max_steps": 24,

@@ -18,6 +18,7 @@
     "finish",
     "checkpoint",
     "submit_report",
+    "check_report",
     "read_artifact",
     "review_gate",
     "training_catalog",
@@ -30,7 +31,8 @@
     "evaluate_model",
     "record_decision",
     "register_dataset",
-    "read_job_output"
+    "read_job_output",
+    "publish_job_outputs"
   ],
   "limits": {
     "max_steps": 16,

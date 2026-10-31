@@ -40,12 +40,15 @@ def workspace_action(self, action, timeout):
         self.state['progress'] = data
         self.state['status'] = 'checkpointed'
         return {'status': 'checkpointed', 'progress': data}
-    if tool == 'submit_report':
+    if tool in {'submit_report','check_report'}:
         data = json.loads(argument)
         if hasattr(self, 'validate_report'):
             self.validate_report(data)
         else:
             validate_report(data)
+        if tool=='check_report':
+            manifest=capture_workspace(self.folder,self.workspace,files=data['files'])
+            return {'valid':True,'snapshot_id':manifest['snapshot_id'],'scope':'Current assignment report/evidence and file checks only; not submission, review or project acceptance'}
         manifest = capture_workspace(self.folder, self.workspace, files=data['files'])
         atomic_json(self.folder / 'submission.json', manifest)
         atomic_json(self.folder / 'source-snapshot.json', text_snapshot(self.folder, manifest))
@@ -131,8 +134,9 @@ def workspace_action(self, action, timeout):
 
 
 DESCRIPTIONS = {
+ "check_report": 'Structured report object with the same schema as submit_report; check current report shape, evidence and files without submitting. Errors require correction, never invented IDs or removed validation. Optional preflight, not a mandatory extra call.',
  "checkpoint": 'JSON {summary, next_test, findings?:[text], failures?:[text], files?:[paths]}; save durable progress and yield to coordinator. Work can continue without a new assignment or total budget limit. Describe what changed and what the next test distinguishes.',
- "submit_report": 'JSON {status:DONE|NEEDS_INPUT|FAILED, summary, files:[paths], failure_kind?:environment|implementation|measurement|performance|missing_input|other, claims?:[{statement,epistemic_status:observed|inferred|hypothesis|unknown,evidence_ids:[],limitations}], objections?:[{target_id,category,severity,statement,evidence_ids:[],resolution_test}], next_actions?:[{action,owner,expected_information,acceptance_check,requires_external}], open_questions?:[text]}. Empty files allowed for blocked work. DONE completes only this assignment; host alone verifies project success.',
+ "submit_report": 'JSON {status:DONE|NEEDS_INPUT|FAILED, summary, files:[paths], failure_kind?:environment|implementation|measurement|performance|missing_input|other, claims?:[{scope:document|empirical,statement,epistemic_status:observed|inferred|hypothesis|unknown,evidence_ids:[],limitations}], objections?:[{target_id,category:FACT|FEASIBILITY|EXPERIENCE|RESOURCE|OBJECTIVE|AUTHORIZATION,severity:BLOCKER|MAJOR|MINOR,statement,evidence_ids:[],resolution_test}], next_actions?:[{action,owner,expected_information,acceptance_check,requires_external}], open_questions?:[text]}. Empty files allowed for blocked work. DONE completes only this assignment; host alone verifies project success.',
  "read_file": 'JSON {path, offset?:0, limit?:4000}; read a workspace-relative file. limit must be an integer 1..8000; supplied inputs live under inputs/.',
  "write_file": 'JSON {path, content}; write a workspace text file; inputs are read-only.',
  "run": 'Shell command in a disposable Docker container. Full logs stay on disk. Download/install only if the execution policy permits.',
