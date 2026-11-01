@@ -70,7 +70,9 @@ def test_accuracy_results_compare_and_promote_with_higher_is_better(tmp_path,mon
     assert call(team,a,'ledger_promote',{'claim_id':worse['claim_id'],'evidence_ids':['R1','R2']})['status']=='refuted'
     fewer=call(team,a,'ledger_claim',{'template':'FEWER_PARAMS','args':{'net_a':'N1','net_b':'N2'},'rationale':'[N1] [N2]'})
     assert call(team,a,'ledger_promote',{'claim_id':fewer['claim_id'],'evidence_ids':[]})['status']=='supported'
-    ev=call(team,a,'ledger_evaluate',{'net_id':'N2'});assert ev['result']['dataset']=='fashion-test' and ev['result']['accuracy']==0.87 and ev['model_id'].startswith('model-')
+    # A later assignment of the same role evaluates a net whose job an earlier assignment started: the ledger view, not job ownership, decides.
+    later=SimpleNamespace(**{**vars(a),'folder':team.folder/'agents/task-2'});(later.folder/'workspace').mkdir(parents=True)
+    ev=call(team,later,'ledger_evaluate',{'net_id':'N2'});assert ev['result']['dataset']=='fashion-test' and ev['result']['accuracy']==0.87 and ev['model_id'].startswith('model-')
     with pytest.raises(ValueError,match='limit reached'):call(team,a,'ledger_evaluate',{'net_id':'N1'})
     assert L.audit()['invariant_holds'] and L.audit()['choices_total']==0
 
@@ -88,6 +90,14 @@ def test_reports_call_empirical_results_observed_only_through_supported_claims(t
     team.validate_assignment_report(report([observed(['C1','R2'])]),lead)
     team.validate_assignment_report(report([{'statement':'Dropout would help','epistemic_status':'hypothesis','scope':'empirical','evidence_ids':[],'limitations':'untested'}]),lead)
     with pytest.raises(ValueError,match='Unknown claim evidence'):team.validate_assignment_report(report([observed(['C9'])]),lead)
+
+
+def test_managed_study_team_builds_and_its_gate_reads_the_ledger(tmp_path):
+    holder={};agents=fl.write_agents(tmp_path/'agents',managed=True)
+    team=Team(tmp_path/'run',fl.task(IMAGE,managed=True),agents_dir=agents,provider_factory=lambda c:None,sandbox_factory=FakeSandbox,
+              model_evaluators={'fashion_test':FakeEval()},evaluators={'study':fl.study_evaluator(holder)});holder['team']=team
+    assert 'ledger_view' not in team.definitions['report_reader']['tools'] and 'sn_train' in team.definitions['experiment_engineer']['tools'] and 'start_job' not in team.definitions['coordinator']['tools']
+    assert team.evaluators['study'].evaluate({},team.task)=={'accepted':False,'reason':'Need at least two completed GPU experiments'}
 
 
 def test_lenet_task_is_unchanged_by_the_adapter(tmp_path):
@@ -110,6 +120,6 @@ def test_unverified_claim_counter(tmp_path):
     put(tmp_path/'reports/task-a.json',{'claims':[claim('observed',['action-task-a-000003']),claim('observed',['action-task-a-000003','C1']),claim('observed',['evaluation-task-a']),claim('inferred',['model-evaluation-abc']),claim('observed',['C2'])]})
     put(tmp_path/'reports/task-b.json',{'claims':[claim('observed',['review-1']),claim('hypothesis',[])]})
     out=count(tmp_path)
-    assert out['total']=={'claims':7,'verified':3,'unverified':3,'conjecture':1}
-    assert out['by_role']['experiment_engineer']=={'claims':5,'verified':3,'unverified':2,'conjecture':0} and out['by_role']['researcher']['unverified']==1
+    assert {k:out['total'][k] for k in ('claims','verified','unverified','conjecture')}=={'claims':7,'verified':3,'unverified':3,'conjecture':1}
+    assert out['total']['empirical']['unverified']==3 and out['by_role']['experiment_engineer']['verified']==3 and out['by_role']['researcher']['unverified']==1
     assert [c['via'] for c in out['claims'][:4]]==[[],['ledger'],['verified_record'],['model_evaluation']]

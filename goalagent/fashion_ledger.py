@@ -80,7 +80,7 @@ ledger.TASKS['fashion']=FashionTask
 BRIEF='''Conduct a real bounded Fashion-MNIST learning study on the research ledger. No scripted choices.
 Researcher: compare the two supported families (MLP and CNN), choose a baseline, a falsifiable improvement hypothesis, validation-based selection and stopping rules in plan.md. Distinguish sources actually opened from prior knowledge. Keep scope small.
 Engineering: read PLAN/plan.md and this protocol. The training code is owned by the host; you do not write train.py. You choose model specs with sn_define ({family:mlp|cnn, width, hidden, dropout}) and training settings with sn_train (epochs 1..5, lr, batch_size). Training uses seed 1337, the first 55,000 official training images and the last 5,000 for validation; results enter your ledger view as result nodes only from the container output (ledger_view shows them). Official test data is never available to you except through ledger_evaluate, once, on the model you select by validation.
-REQUIRED adaptive loop: define and train a baseline, read its result node. THEN record_decision citing the result ID and select a change to architecture or learning conditions; define/train again. Up to 4 successful jobs, <=5 launches. Retain negative outcomes. Compare only with compare_results; state comparisons as ledger claims (ledger_claim BEATS or FEWER_PARAMS) and promote them with ledger_promote using the result IDs as evidence. A claim you could not promote stays a conjecture.
+REQUIRED adaptive loop: define and train a baseline, read its result node. THEN record_decision citing the result ID and select a change to architecture or learning conditions; define/train again. Up to 4 successful jobs, <=5 launches. Retain negative outcomes. Compare only with compare_results; state comparisons as ledger claims (ledger_claim BEATS or FEWER_PARAMS) and promote them with ledger_promote using the result IDs as evidence. A claim you could not promote stays a conjecture. THEN, still in the same assignment and before submit_report, select one model by validation and run ledger_evaluate on it exactly once: the STUDY gate requires a fashion-test result node, and a submission without it is sent back.
 Reports: every observed empirical claim in submit_report must cite a supported ledger claim ID (C1, C2, ...) among its evidence_ids, next to the action receipt; a result you read but did not promote is a hypothesis, not observed. Before submitting, mail_send to "all" attaching your model, result and claim node IDs so reviewers can read them in ledger_view. Publish experiments.json (model IDs, result IDs, claim IDs with status, settings, selection) and report.md citing a ledger ID for every number.
 Reviewers: inspect the ledger (ledger_view) and the supplied evidence, not assumptions. Researcher reviews hypothesis/results; critic reviews leakage and whether a change actually followed an observed result, and may promote the engineer's decided claims in its own view (ledger_promote) when the evidence is in view; report_reader reads report alone for clarity. Reviewers cannot run training. Coordinator: advance PLAN on delivery/review, then evaluate the final STUDY candidate once; no accuracy threshold is imposed. Accept scientifically valid negative outcomes. No new work items for external papers or unbounded expansion. Original objective is this small adaptive run, not state-of-art accuracy.
 Public decision summaries only; no hidden reasoning. Task/review outputs must be based on actual tool evidence.
@@ -103,7 +103,7 @@ def task(image,*,managed=True,brief=BRIEF):
             {'id':'PLAN','description':'Choose candidate models, baseline and falsifiable adaptation rule; deliver plan.md','owner':'research','required_outputs':['plan.md'],'required_reviewers':['auditor'],
              'gates':[{'id':'plan','kind':'artifact','criterion':'Bounded real model experiment plan delivered','path':'plan.md'}]},
             {'id':'STUDY','description':'Run real GPU experiments through the ledger; read the baseline result before revising; choose on validation; one protected test through ledger_evaluate',
-             'owner':'engineering','required_outputs':['report.md','experiments.json'],'required_tools':['sn_train','ledger_promote','record_decision'],
+             'owner':'engineering','required_outputs':['report.md','experiments.json'],'required_tools':['ledger_view'],  # jobs, claims and the test result are checked from ledger state by the gate, so a revision need not retrain
              'required_reviewers':['research','auditor','report_reader'],'report_paths':['report.md'],'review_scopes':{'report_reader':'report_only'},
              'gates':[{'id':'study-measured','kind':'evaluation','criterion':'At least two successful real experiments, a supported ledger claim and one protected test result','accepted':True}]}]}
     return t
@@ -116,16 +116,17 @@ def write_agents(dest,*,managed=True,brief=BRIEF):
         if p.suffix=='.json':
             c=json.loads(p.read_text());c['limits'].update(max_steps=70,max_seconds=3600,command_timeout=700,model_call_timeout=240)
             if c['id']=='experiment_engineer':c['tools']=list(ENGINEER_TOOLS)
-            else:c['tools']=[t for t in c['tools'] if t not in TRAINING_TOOLS]+['ledger_view']+(['ledger_promote','mail_inbox'] if c['id'] in ('critic','researcher') else [])
+            elif c['id']!='report_reader':c['tools']=[t for t in c['tools'] if t not in TRAINING_TOOLS]+['ledger_view']+(['ledger_promote','mail_inbox'] if c['id'] in ('critic','researcher') else [])
             if c['id']=='coordinator' and not managed:c['tools']=list(ENGINEER_TOOLS)
             atomic_json(dest/p.name,c)
         else:(dest/p.name).write_text(p.read_text()+'\nStudy-specific protocol:\n'+brief)
     return dest
 
 
-def study_evaluator(team):
+def study_evaluator(holder):
+    """Gate evaluator reading ledger state; holder['team'] is set once the Team exists."""
     def evaluate(snapshot,_task):
-        L=team.ledger;nodes=list(L.state['nodes'].values())
+        team=holder['team'];L=team.ledger;nodes=list(L.state['nodes'].values())
         jobs=[j for j in team.training.state['jobs'].values() if j['status']=='SUCCEEDED']
         tests=[n for n in nodes if n['type']=='result' and n['dataset']=='fashion-test'];supported=[n['id'] for n in nodes if n['type']=='claim' and n['status']=='supported']
         if len(jobs)<2:return {'accepted':False,'reason':'Need at least two completed GPU experiments'}
@@ -167,8 +168,10 @@ def build(folder,image,cache,*,managed=True,provider_factory=None,model=None):
     folder=Path(folder).resolve();data=download(Path(cache))
     image=subprocess.run(['docker','image','inspect','--format','{{.Id}}',image],capture_output=True,text=True,check=True).stdout.strip()
     agents=write_agents(folder/'agents-config',managed=managed)
-    team=Team(folder,task(image,managed=managed),agents_dir=agents,provider_factory=provider_factory,model=model,model_evaluators={'fashion_test':StudyEvaluator(image,data)})
-    if managed:team.evaluators['study']=study_evaluator(team)
+    holder={}
+    team=Team(folder,task(image,managed=managed),agents_dir=agents,provider_factory=provider_factory,model=model,model_evaluators={'fashion_test':StudyEvaluator(image,data)},
+              evaluators={'study':study_evaluator(holder)} if managed else None)
+    holder['team']=team
     if not team.training.state['datasets']:
         team.training.register_dataset(DATASET,{'images.gz':data/'train-images-idx3-ubyte.gz','labels.gz':data/'train-labels-idx1-ubyte.gz'},{'source':'official Fashion-MNIST','split':'train','samples':60000})
     return team

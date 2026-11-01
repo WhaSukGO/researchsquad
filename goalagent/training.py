@@ -264,8 +264,8 @@ class TrainingRuntime:
         files=output_inventory(folder)
         return {'job_id':j['id'],'owner':j['owner'],'status':status,'parent_job':j['parent_job'],'docker':observation,
                 'log_tail':(logs.stdout+logs.stderr)[-6000:],'outputs':files}
-    def register_model(self,agent,job_id,path,kind):
-        j=self.owned(agent,job_id)
+    def register_model(self,agent,job_id,path,kind,*,trusted=False):
+        j=self.state['jobs'][job_id] if trusted else self.owned(agent,job_id)  # trusted: the caller (the ledger) already decided who may use this job
         if self.status(j)['status'] not in {'SUCCEEDED','FAILED','CANCELLED'}:raise ValueError('Freeze model only after job exits')
         if kind not in {'model','checkpoint'}:raise ValueError('Invalid model kind')
         source=workspace_path(self.root/'jobs'/job_id/'output',path)
@@ -273,10 +273,10 @@ class TrainingRuntime:
         mid='model-'+digest([job_id,path,ref['id']])[:24]
         record={'id':mid,'job_id':job_id,'kind':kind,'blob':ref}
         self.state['models'][mid]=record;self.emit('model_registered',record);return record
-    def evaluate(self,agent,model_id,evaluator):
+    def evaluate(self,agent,model_id,evaluator,*,trusted=False):
         m=self.state['models'].get(model_id)
         if not m:raise ValueError('Unknown model')
-        self.owned(agent,m['job_id'])
+        if not trusted:self.owned(agent,m['job_id'])
         e=self.evaluators.get(evaluator)
         if not e:raise ValueError('No maintainer model evaluator registered')
         path=self.store.verify(m['blob'])

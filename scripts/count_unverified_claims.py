@@ -31,17 +31,18 @@ def count(folder):
             kinds=sorted({k for k in (via(e) for e in c.get('evidence_ids',[])) if k});status=c['epistemic_status']
             cls='conjecture' if status in ('hypothesis','unknown') else ('verified' if kinds else 'unverified')
             rows.append({'assignment':aid,'role':role,'status':status,'scope':c.get('scope'),'class':cls,'via':kinds,'statement':c['statement'][:160]})
-    by={}
-    for r in rows:
-        d=by.setdefault(r['role'],{'claims':0,'verified':0,'unverified':0,'conjecture':0});d['claims']+=1;d[r['class']]+=1
-    total={'claims':len(rows),**{k:sum(1 for r in rows if r['class']==k) for k in ('verified','unverified','conjecture')}}
-    return {'run':folder.name,'by_role':by,'total':total,'claims':rows}
+    def tally(rs):
+        d={'claims':len(rs),**{k:sum(1 for r in rs if r['class']==k) for k in ('verified','unverified','conjecture')}}
+        emp=[r for r in rs if r['scope']=='empirical'];d['empirical']={'claims':len(emp),**{k:sum(1 for r in emp if r['class']==k) for k in ('verified','unverified','conjecture')}}
+        return d
+    by={role:tally([r for r in rows if r['role']==role]) for role in sorted({r['role'] for r in rows})}
+    return {'run':folder.name,'by_role':by,'total':tally(rows),'claims':rows}
 
 
 def table(out):
-    lines=[f"# {out['run']}",'','| role | claims | verified | unverified | conjecture |','|---|---|---|---|---|']
-    for role,d in sorted(out['by_role'].items()):lines.append(f"| {role} | {d['claims']} | {d['verified']} | {d['unverified']} | {d['conjecture']} |")
-    t=out['total'];lines.append(f"| **total** | {t['claims']} | {t['verified']} | {t['unverified']} | {t['conjecture']} |")
+    def row(name,d):e=d['empirical'];return f"| {name} | {d['claims']} | {d['verified']} | {d['unverified']} | {d['conjecture']} | {e['claims']} | {e['verified']} | {e['unverified']} | {e['conjecture']} |"
+    lines=[f"# {out['run']}",'','| role | claims | verified | unverified | conjecture | empirical | verified | unverified | conjecture |','|---|---|---|---|---|---|---|---|---|']
+    lines+=[row(role,d) for role,d in out['by_role'].items()]+[row('**total**',out['total'])]
     return '\n'.join(lines)
 
 

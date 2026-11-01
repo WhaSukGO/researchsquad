@@ -336,9 +336,9 @@ class LedgerRuntime:
         jobs=[j for j in net.get('jobs',[]) if self.team.training.state['jobs'][j]['status']=='SUCCEEDED']
         if not jobs:raise ValueError('No succeeded job for '+net['id'])
         if self.state['evaluations']>=limit:raise ValueError('Protected evaluation limit reached')
-        model=self.team.training.register_model(agent,jobs[-1],'weights.safetensors','model')
+        model=self.team.training.register_model(agent,jobs[-1],'weights.safetensors','model',trusted=True)  # the net is in the caller's view; job ownership belongs to the ledger
         self.state['evaluations']+=1
-        record=self.team.training.evaluate(agent,model['id'],self.config.get('evaluator','usps_test'));m=record['measurement']
+        record=self.team.training.evaluate(agent,model['id'],self.config.get('evaluator','usps_test'),trusted=True);m=record['measurement']
         result=self.add(agent,{'id':self.new_id('R'),'type':'result','net':net['id'],'dataset':self.datasets()[1],**self.task.measurement(m),
             'source':{'evidence_id':record['evidence_id'],'model_id':model['id'],'job_id':jobs[-1]},'owner':self.role(agent)})
         return {'result':{k:v for k,v in result.items() if k in RESULT_KEYS},'model_id':model['id'],'evidence_id':record['evidence_id'],'evaluations_remaining':limit-self.state['evaluations'],'scope':record['scope']}
