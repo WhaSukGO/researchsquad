@@ -25,13 +25,13 @@ GOAL=('It is 3 October 1988 (day 0). The department recognizes handwritten USPS 
       'Finish with report.md citing only ledger IDs.')
 
 
-def task(image,*,compute_days=20.0,max_evaluations=6,corpus=True,vocabulary=(),clock=True,visit_day=45):
-    views={r:(d if corpus or r!='coordinator' else []) for r,d in ROLE_DOCS.items()}
+def task(image,*,compute_days=20.0,max_evaluations=6,corpus=True,vocabulary=(),clock=True,visit_day=45,drop=None,overrides=None,max_compute_days=60):
+    views={r:[x for x in (d if corpus or r!='coordinator' else []) if x not in (drop or {}).get(r,())] for r,d in ROLE_DOCS.items()}
     return {'goal':GOAL,'inputs':{},'network':False,'budget':{'max_calls':420,'max_seconds':14400,'max_assignments':80,'max_depth':2},
         'training':{'profiles':{'sun4':{'image':image,'gpu':False,'memory':'2g','cpus':2,'max_seconds':1200,'max_output_bytes':50_000_000,'roles':['coordinator']}}},
         'ledger':{'corpus':'research/lit-1988','handles':HANDLES,'vocabulary':list(vocabulary),'views':views,'clock':clock,'mail_delay_days':1,
-                  'features_by_bottou':True,'feature_days':10,'max_compute_days':60,'chip_weights':4096,'visit_day':visit_day,
-                  'compute_days':compute_days,'max_evaluations':max_evaluations,'samples':6291,'training_profile':'sun4','code_dir':'research/lenet','dataset_name':'usps-train'}}
+                  'features_by_bottou':True,'feature_days':10,'max_compute_days':max_compute_days,'chip_weights':4096,'visit_day':visit_day,
+                  'compute_days':compute_days,'max_evaluations':max_evaluations,'samples':6291,'training_profile':'sun4','code_dir':'research/lenet','dataset_name':'usps-train'}|({'overrides':overrides} if overrides else {})}
 
 
 def build(folder,image,cache,*,provider_factory=None,model=None,**kw):
@@ -66,6 +66,7 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
     lead={'goal':team.task['goal'],'objective':'Coordinate measurable progress toward the goal','success_criteria':'Claims agreed by the department and a demonstration booked','depth':0,'inputs':[]}
     def run_role(role,objective):
         counts[role]+=1
+        ws=team.folder/'agents'/f'{role}-{counts[role]}'/'workspace';ws.mkdir(parents=True,exist_ok=True);(ws/'note.md').write_text('note\n')  # finish needs a file; the model need not write one
         return team.run_agent(f'{role}-{counts[role]}',defs[role],{'goal':team.task['goal'],'objective':objective,'depth':1,'inputs':[]})
     def judge_new():
         for m in L.state['mail']:
@@ -86,7 +87,8 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                     if pending or requests:
                         what=('letters '+', '.join(m['id'] for m in pending)) if pending else ''
                         what+=((' and ' if what else '')+'feature requests '+', '.join(n['id'] for n in requests)) if requests else ''
-                        run_role(role,f'Day {L.now():.0f}. {what.capitalize()} arrived for you. Read mail_inbox, act with your tools, answer with mail_send, write note.md, then finish.');take(team,role)
+                        letters='\n\n'.join(f"Letter {m['id']} from {m['from']} (attached: {', '.join(m['attach']) or 'nothing'}):\n{m['body']}" for m in pending)
+                        run_role(role,(f'Day {L.now():.0f}. {what.capitalize()} arrived for you; the letters are below and their attachments are already in your view. Act with your tools, answer with mail_send, then finish with files ["note.md"] (the file exists).\n\n'+letters)[:6000]);take(team,role)
                         if role=='hinton':hinton_last=L.now()
                         judge_new()
                 delivered=L.deliver()
@@ -232,7 +234,7 @@ class ScriptedRole:
             seq=[action('mail_send',{'to':'coordinator','body':'If you do all the sensible things it works; constrain the weights as in [RHW86-TC].','attach':[]})]
         elif self.role=='denker':
             return ScriptedDenker.call(self,prompt,schema,folder)
-        seq+=[action('write_file',{'path':'note.md','content':'done'}),action('finish',{'summary':'done','files':['note.md']})]
+        seq+=[action('finish',{'summary':'done','files':['note.md']})]  # note.md is pre-created by the orchestrator
         item=seq[min(self.n-2,len(seq)-1)];return (item() if callable(item) else item),{}
 
 

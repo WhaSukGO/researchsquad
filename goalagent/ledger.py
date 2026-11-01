@@ -32,7 +32,7 @@ TOOLS={
  'sn_train':'JSON {net_id, epochs:1..30}. Real training in an isolated container on the registered training split (validation = last 1000 training digits), blocking until exit; charges simulated Sun-4 days from your compute budget. On success the host creates a result node (dataset usps-val) and proof nodes. You cannot author results.',
  'ledger_evaluate':'JSON {net_id}. Protected host evaluation of the latest successful job for that net on the held-out USPS test split in a separate container; limited count per run. Returns a result node (dataset usps-test).',
  'compare_results':'JSON {a:result_id, b:result_id, reject_rate:"0"|"0.05"|"0.09"|"0.12"}. Host compares error rates at that rejection rate and returns a comparison node to cite. Never compare numbers yourself.',
- 'ledger_claim':'JSON {template:BEATS|FEWER_PARAMS|GRAD_EQUALS, args, rationale:text citing [IDs]}. Creates a conjecture; it is never supported by itself. BEATS args {net_a,net_b,dataset:usps-val|usps-test,reject_rate}; FEWER_PARAMS args {net_a,net_b}; GRAD_EQUALS args {net}.',
+ 'ledger_claim':'JSON {template:BEATS|FEWER_PARAMS|GRAD_EQUALS|INVARIANT_TO|FITS_CHIP, args, rationale:text citing [IDs]}. Creates a conjecture; it is never supported by itself. BEATS args {net_a,net_b,dataset:usps-val|usps-test,reject_rate}; FEWER_PARAMS args {net_a,net_b}; GRAD_EQUALS args {net}; INVARIANT_TO args {net,transform:shift1|shift2,tolerance in (0,1)} is decided from the invariance measurement every training result already carries (no simulator feature is needed; promote with that result as evidence); FITS_CHIP args {net,chip} is for the chip designer.',
  'ledger_promote':'JSON {claim_id, evidence_ids:[result/proof ids]}. Deterministic host check; returns supported, refuted, or an error that leaves the claim a conjecture. Nothing you say can promote a claim. A claim another role already decided can be promoted again in your own view; agreement exists when two roles have promoted it.',
  'mail_send':'JSON {to:role, body:text, attach:[node ids from your view]}. The only way to share knowledge: attached nodes enter the recipient view. The judge refuses letters with post-1988 vocabulary, citations outside your view, numbers without IDs, or claims of verification without a supported claim ID.',
  'mail_inbox':'Empty argument; read your unread letters (sender, body, attached node IDs). Attached nodes are already in your view.',
@@ -75,11 +75,13 @@ class LedgerRuntime:
         self.docs={};self.patterns={};self.adapters={}
         if self.config is None:return
         allowed={'corpus','views','compute_days','max_evaluations','samples','training_profile','code_dir','dataset_name','vocabulary','feature_days','handles',
-                 'clock','mail_delay_days','features_by_bottou','max_compute_days','chip_weights','visit_day'}
+                 'clock','mail_delay_days','features_by_bottou','max_compute_days','chip_weights','visit_day','overrides'}
         if set(self.config)-allowed:raise ValueError('Unknown ledger configuration')
         corpus=ROOT/self.config['corpus'];register=json.loads((corpus/'register.json').read_text())
+        overrides=self.config.get('overrides',{})  # {doc_id: {path, sha256, patterns?}}: a variant text replaces the corpus document under the same ID
         for did,meta in register.items():
-            body=(corpus/(did+'.md')).read_bytes()
+            if did in overrides:meta={**meta,**overrides[did]};body=(ROOT/meta['path']).read_bytes()
+            else:body=(corpus/(did+'.md')).read_bytes()
             if sha256(body)!=meta['sha256']:raise ValueError('Corpus document changed: '+did)
             self.docs[did]=body.decode('utf-8');self.patterns[did]=list(meta.get('patterns',[]))
             self.state['nodes'].setdefault(did,{'id':did,'type':'document','title':meta['title'],'date':meta['date'],'kind':meta['kind'],'sha256':meta['sha256']})
@@ -417,6 +419,8 @@ class LedgerRuntime:
         if self.role(agent)!='boser':raise ValueError('Only the chip designer estimates chip fit')
         if set(d)!={'net_id'}:raise ValueError('chip_estimate needs {net_id}')
         net=self.visible(agent,d['net_id'],'net_spec');cap=int(self.config.get('chip_weights',4096));w=net['analysis']['params']
+        old=[n for n in self.state['nodes'].values() if n['type']=='chip' and n['net']==net['id']]
+        if old:return {k:old[0][k] for k in ('id','net','chip','weights','capacity','fits','chars_per_sec','connections')}|{'note':'Already estimated; cite this chip node instead of estimating again'}
         node=self.add(agent,{'id':self.new_id('K'),'type':'chip','net':net['id'],'chip':'anna','weights':w,'capacity':cap,'fits':w<=cap,
                              'chars_per_sec':1000 if w<=cap else 0,'connections':net['analysis']['connections'],'owner':'boser'})
         return {k:node[k] for k in ('id','net','chip','weights','capacity','fits','chars_per_sec','connections')}|{'note':'The chip stores weights, not connections; shared weights are what make a network fit'}
@@ -440,6 +444,7 @@ class LedgerRuntime:
         return {'added_days':d['days'],'budget_days':self.budget(),'used':round(self.state['compute_days_used'],3)}
     def demo(self,agent,d):
         if self.role(agent)!='jackel':raise ValueError('Only the department head books the demonstration')
+        if self.state.get('demo_day'):return {'demo_day':self.state['demo_day'],'note':'Already booked; the booking stands. Do not call schedule_demo again.'}
         if set(d)!={'day'} or not isinstance(d['day'],(int,float)) or d['day']<=self.now():raise ValueError('schedule_demo needs {day} later than today')
         visit=self.config.get('visit_day',0)
         if d['day']<visit:raise ValueError(f'The Postal Service visit is on day {visit:g}; the demonstration cannot be booked earlier than that')

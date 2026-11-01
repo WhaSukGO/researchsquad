@@ -1,0 +1,11 @@
+{
+ "LECUN89TR": {
+  "path": "research/lit-1988-variants/LECUN89TR-noresults.md",
+  "sha256": "51954441f4c7f94750a5575454777a29f8ad54830d228eaa1636a4c506b9c63a",
+  "patterns": [
+   "output",
+   "full>output"
+  ],
+  "note": "A6: the Toronto report with the results table removed; only the conclusion remains"
+ }
+}
