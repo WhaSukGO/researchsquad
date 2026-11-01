@@ -45,3 +45,15 @@ def test_report_aggregates_runs(tmp_path):
     fake('m4-C1-1','C1',2,4,8);fake('m4-C1-2','C1',4,5,10);fake('m4-C0-1','C0',10,1,0)
     m=measure(tmp_path/'m4-C1-1');assert m['first_agreement_day']==3.0 and m['avg_used'] and m['unsourced_patterns']==['shared1>avg>output']
     text=report(tmp_path);assert '| C0 | 1 | 1/1 | 1.00 |' in text and '| C1 | 2 | 2/2 | 0.30 |' in text and (tmp_path/'report.md').exists()
+
+
+def test_lead_finish_is_refused_before_the_visit_day(tmp_path):
+    from goalagent.lenet_m3 import guard_finish, end_day
+    team=make(tmp_path);L=team.ledger;team.validate_assignment_report=lambda report,assignment:'ok';guard_finish(team)
+    done={'status':'DONE','summary':'x','files':['report.md']};lead={'depth':0};role={'depth':1}
+    assert end_day(L)==45
+    with pytest.raises(ValueError,match='visit is on day 45'):team.validate_assignment_report(done,lead)
+    assert team.validate_assignment_report(done,role)=='ok' and team.validate_assignment_report({'status':'CHECKPOINT'},lead)=='ok'
+    L.state['day']=45.0;assert team.validate_assignment_report(done,lead)=='ok'
+    L.state['day']=10.0;L.state['demo_day']=30.0;assert end_day(L)==30
+    with pytest.raises(ValueError,match='visit is on day 30'):team.validate_assignment_report(done,lead)

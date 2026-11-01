@@ -22,7 +22,8 @@ GOAL=('It is 3 October 1988 (day 0). The department recognizes handwritten USPS 
       'simulator in Paris; Hinton answers letters from Toronto. Obtain data by letter, define constrained networks in the 1988 vocabulary, '
       'train them (results arrive after simulated Sun-4 days), and establish agreed claims: FEWER_PARAMS, BEATS on usps-val and usps-test '
       'against the fully connected control and PIPELINE88, GRAD_EQUALS, INVARIANT_TO, and FITS_CHIP so that a demonstration can be booked. '
-      'Finish with report.md citing only ledger IDs.')
+      'An agreed claim is a milestone, not the end: keep lowering the test error at 9% rejection until the Postal Service visit. '
+      'report.md is written on the visit day, citing only ledger IDs.')
 
 
 def task(image,*,compute_days=20.0,max_evaluations=6,corpus=True,vocabulary=(),clock=True,visit_day=45,drop=None,overrides=None,max_compute_days=60):
@@ -39,13 +40,29 @@ def build(folder,image,cache,*,provider_factory=None,model=None,**kw):
     folder=Path(folder).resolve();data=download(cache)
     image=subprocess.run(['docker','image','inspect','--format','{{.Id}}',image],capture_output=True,text=True,check=True).stdout.strip()
     team=Team(folder,task(image,**kw),agents_dir=ROOT/'agents/lenet',provider_factory=provider_factory,model=model,model_evaluators={'usps_test':UspsEvaluator(image,data)})
-    team.ledger.adapters['baseline88']=Baseline88(image,data)
+    team.ledger.adapters['baseline88']=Baseline88(image,data);guard_finish(team)
     if not team.training.state['datasets']:
         team.training.register_dataset('usps-train',{'zip.train.gz':data/'zip.train.gz'},{'source':URL+'zip.train.gz','split':'train','samples':7291})
     return team
 
 
 WAKEABLE=('denker','jackel','boser','bottou','hinton')
+
+
+def end_day(L):
+    """The day the simulation ends: the booked demonstration, else the Postal Service visit."""
+    return L.state.get('demo_day') or L.config.get('visit_day') or 10**9
+
+
+def guard_finish(team):
+    """The department does not stop when a claim is agreed: the lead's finish is refused before the visit day."""
+    orig=team.validate_assignment_report
+    def guarded(report,assignment):
+        L=team.ledger
+        if report.get('status')=='DONE' and assignment.get('depth',1)==0 and L.config and L.config.get('clock') and L.now()<end_day(L):
+            raise ValueError(f'The Postal Service visit is on day {end_day(L):g}; today is day {L.now():.1f}. The department keeps working until then: a lower test error at 9% rejection, new networks, letters, checkpoint. report.md is written on the visit day.')
+        return orig(report,assignment)
+    team.validate_assignment_report=guarded
 
 
 def unread_for(team,role,direct=True):
@@ -95,9 +112,9 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                 for i in delivered:
                     if i['role']=='coordinator':notes.append(f"{i['kind']} {i['payload']} is now in your view")
                 if unread_for(team,'coordinator') or notes:break
-                if L.state.get('demo_day') and L.now()>=L.state['demo_day']:break
+                if L.now()>=end_day(L):break
                 nxt=L.next_event();monday=(int(L.now())//7+1)*7
-                candidates=[d for d in (nxt,monday,L.state.get('demo_day')) if d is not None and d>L.now()]
+                candidates=[d for d in (nxt,monday,end_day(L)) if d is not None and d>L.now()]
                 if not candidates:break
                 L.state['day']=float(min(candidates));team.save()
                 if L.now()%7==0 and len(L.state['meetings'])<max_meetings and len(L.state['nodes'])>last_meeting_nodes:
@@ -110,8 +127,8 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                     announced=True
                     run_role('jackel',f'Day {L.now():.0f}. The Postal Service visit is on day {visit:g}, {visit-L.now():.0f} days away. Tell "all" by mail_send what you need to book the demonstration (a supported FITS_CHIP claim in your view), and if one exists, call schedule_demo for day {visit:g}. Write note.md and finish.')
                     judge_new();notes.append('Jackel wrote to everyone about the demonstration')
-            if L.state.get('demo_day') and L.now()>=L.state['demo_day']:
-                continuation={'dispatch_id':f'round-{rounds}','guidance':f'Day {L.now():.0f}: the USPS demonstration day. Write report.md with the agreed claims and finish.'}
+            if L.now()>=end_day(L):
+                continuation={'dispatch_id':f'round-{rounds}','guidance':f'Day {L.now():.0f}: the Postal Service visit. Write report.md with the agreed claims and finish.'}
             else:
                 new=take(team,'coordinator')
                 letters='\n\n'.join(f"Letter {m['id']} from {m['from']} to {m['to']} (attached: {', '.join(m['attach']) or 'nothing'}):\n{m['body']}" for m in new)
