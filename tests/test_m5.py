@@ -100,6 +100,19 @@ def test_managed_study_team_builds_and_its_gate_reads_the_ledger(tmp_path):
     assert team.evaluators['study'].evaluate({},team.task)=={'accepted':False,'reason':'Need at least two completed GPU experiments'}
 
 
+def test_rework_limit_waits_for_operator_instead_of_livelocking(tmp_path):
+    # Live run fashion-ledger-3: a support item at the attempt limit with finished dependencies flipped WAITING<->REWORK 33,871 times without a model call.
+    agents=fl.write_agents(tmp_path/'agents',managed=True)
+    team=Team(tmp_path/'run',fl.task(IMAGE,managed=True),agents_dir=agents,provider_factory=lambda c:None,sandbox_factory=FakeSandbox);rt=team.managed
+    a=rt.board.add(key='a',owner='strategy',objective='fix',acceptance_check='c',stage='PLAN');rt.board.set_status(a,'DONE')
+    b=rt.board.add(key='b',owner='strategy',objective='revise',acceptance_check='c',stage='PLAN',depends_on=[a['work_id']])
+    b['attempts']=['t1','t2','t3'];rt.board.set_status(b,'REWORK')
+    rt._period(b);assert b['status']=='WAITING' and b['wait_kind']=='operator'
+    rt._wake();assert b['status']=='WAITING' and len(b['attempts'])==3
+    text=rt.instructions({'review_of':'task-x','candidate_receipt_id':'r','acceptance_checks':[{'check_id':'g'}],'parent_artifacts':[]})
+    assert 'inputs/parent/' in text and 'NOT the submission' in text
+
+
 def test_lenet_task_is_unchanged_by_the_adapter(tmp_path):
     from test_m3 import make as make_lenet, worker as lenet_worker
     team=make_lenet(tmp_path);L=team.ledger;lecun=lenet_worker(team,'coordinator')

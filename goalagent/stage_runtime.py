@@ -91,6 +91,8 @@ next_actions are recorded proposals; only typed work_items request additional di
             common += "\nThis is an independent review. Inspect the frozen candidate, call review_gate, then submit_report. A FAIL is a valid review result. Do not change the candidate or approve other gates. "
             common += 'The review_gate candidate field is the assignment ID '+assignment['review_of']+'. '
             common += 'The different receipt ID '+assignment['candidate_receipt_id']+' belongs in evidence_ids. '
+            parent_files=[self.team.state['artifacts'][a]['path'] for a in assignment.get('parent_artifacts',[])]
+            common += 'The frozen submission under review is inputs/parent/ ('+', '.join(parent_files)+'); files under inputs/candidate/ are what that submission itself received and are NOT the submission. '
             common += 'Copy this call shape, changing only verdict/summary and adding inspected evidence: '+json.dumps({
                 'gate_id':assignment['acceptance_checks'][0]['check_id'],'candidate':assignment['review_of'],
                 'verdict':'PASS|FAIL|UNKNOWN','evidence_ids':[assignment['candidate_receipt_id']],
@@ -203,6 +205,7 @@ next_actions are recorded proposals; only typed work_items request additional di
     def _period(self, job):
         if not job['assignment_id']:
             if len(job['attempts'])>=self.spec['work_policy']['max_attempts']:
+                job['wait_kind']='operator'  # operator must decide; _wake must not re-queue it
                 self.board.set_status(job,'WAITING','Rework attempt limit; a concrete operator decision is required')
                 return
             self._new_assignment(job)
@@ -384,7 +387,7 @@ next_actions are recorded proposals; only typed work_items request additional di
 
     def _wake(self):
         for job in self.board.jobs.values():
-            if job.get('wait_kind')=='storage_before_model':continue
+            if job.get('wait_kind') in ('storage_before_model','operator'):continue
             if job.get('wait_kind')=='training':
                 entry=self.team.state['assignments'][job['assignment_id']]
                 jid=entry.get('waiting_training_job')
