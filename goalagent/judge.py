@@ -18,10 +18,10 @@ def sentences(text):
     return [s.strip() for s in re.split(r'(?<=[.!?])\s+|\n+',text) if s.strip()]
 
 
-def check_text(text,view_ids,supported_ids=()):
+def check_text(text,view_ids,supported_ids=(),blacklist=BLACKLIST):
     """Return a list of (rule, detail) violations; empty means pass."""
     violations=[];low=text.lower()
-    for phrase in BLACKLIST:
+    for phrase in blacklist:
         if re.search(r'(?<![a-z])'+re.escape(phrase)+r'(?![a-z])',low):violations.append(('vocabulary',phrase))
     view=set(view_ids);supported=set(supported_ids)
     for cite in CITE.findall(text):

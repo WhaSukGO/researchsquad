@@ -42,11 +42,13 @@ def validate_claims(team, report, assignment):
         if claim['epistemic_status'] != 'observed':
             continue
         if claim.get('scope') == 'empirical':
-            if not any(eid in receipts for eid in claim['evidence_ids']):
+            if not any(eid in receipts or eid in team.ledger.state['nodes'] for eid in claim['evidence_ids']):
                 raise ValueError('Observed empirical claim needs successful source/execution evidence')
         else:
             supported = False
             for eid in claim['evidence_ids']:
+                if eid not in team.state['evidence']:
+                    continue  # a ledger node ID; the ledger rule in Team.validate_assignment_report governs it
                 record = team.evidence_record(eid)
                 if eid in receipts or set(record.get('artifact_ids', [])) & delivered:
                     supported = True

@@ -44,6 +44,7 @@ TOOLS={
  'schedule_demo':'JSON {day}. Department head only: book the USPS demonstration; accepted only when a FITS_CHIP claim is supported in your view.',
 }
 CODE_FILES=('train_usps.py','netlang_torch.py','netlang.py')
+RESULT_KEYS=('id','net','dataset','error','reject_curve','accuracy','loss','samples')
 
 
 def sha256(data):return hashlib.sha256(data).hexdigest()
@@ -66,6 +67,35 @@ def support_check(analysis,docs,patterns):
     return out
 
 
+class LenetTask:
+    """The 1988 task: netlang specs, train_usps.py in the Sun-4 profile, error at rejection rates."""
+    name='lenet';extra_keys=();max_epochs=30;TOOL_TEXT={}
+    def __init__(self,L):self.L=L
+    def analyze(self,spec,vocab):return netlang.canonical(spec,vocab),netlang.analyze(spec,vocab)
+    def choices(self,analysis,docs,patterns):return support_check(analysis,docs,patterns)
+    def eta(self,analysis,samples,epochs):return netlang.eta_days(analysis['connections'],samples,epochs)
+    def vocabulary(self,view):return {'vocabulary':sorted(netlang.BASE_OPS)+view['vocabulary'],'locked':sorted(netlang.LOCKED_OPS-set(view['vocabulary']))}
+    def packet(self,net,epochs,d,did,workspace):
+        code=ROOT/self.L.config.get('code_dir','research/lenet')
+        for name in CODE_FILES:
+            src=code/name if name!='netlang.py' else ROOT/'goalagent/netlang.py'
+            (workspace/name).write_bytes(src.read_bytes())
+        return {'profile':self.L.config.get('training_profile','sun4'),'code_files':list(CODE_FILES),'entrypoint':'train_usps.py',
+                'args':['--spec',net['spec'],'--epochs',str(epochs),'--net-id',net['id'],'--dataset-id',did],'dataset_ids':[did]}
+    def matches(self,m,net):return m.get('net_id')==net['id'] and m.get('spec')==net['spec']
+    def result(self,m):
+        return {'error':m['val_error'],'reject_curve':m['reject_curve'],'invariance':m.get('invariance'),'samples':m['train_count']},m['parameters'],m.get('grad_check'),m.get('per_epoch',[])
+    def measurement(self,m):return {'error':m['error'],'reject_curve':m['reject_curve'],'samples':m['samples']}
+
+
+TASKS={'lenet':LenetTask}  # other task adapters register themselves here on import (goalagent/fashion_ledger.py)
+
+
+def ledger_tools(task):
+    """Tool descriptions for a task: the 1988 wording by default, overridden by the task adapter."""
+    cfg=(task or {}).get('ledger') or {};return {**TOOLS,**TASKS[cfg.get('task','lenet')].TOOL_TEXT}
+
+
 class LedgerRuntime:
     def __init__(self,team):
         self.team=team;self.config=team.task.get('ledger')
@@ -75,9 +105,10 @@ class LedgerRuntime:
         self.docs={};self.patterns={};self.adapters={}
         if self.config is None:return
         allowed={'corpus','views','compute_days','max_evaluations','samples','training_profile','code_dir','dataset_name','vocabulary','feature_days','handles',
-                 'clock','mail_delay_days','features_by_bottou','max_compute_days','chip_weights','visit_day','overrides'}
+                 'clock','mail_delay_days','features_by_bottou','max_compute_days','chip_weights','visit_day','overrides','task','metric','datasets','templates','blacklist','evaluator'}
         if set(self.config)-allowed:raise ValueError('Unknown ledger configuration')
-        corpus=ROOT/self.config['corpus'];register=json.loads((corpus/'register.json').read_text())
+        self.task=TASKS[self.config.get('task','lenet')](self)
+        corpus=ROOT/self.config['corpus'] if self.config.get('corpus') else None;register=json.loads((corpus/'register.json').read_text()) if corpus else {}
         overrides=self.config.get('overrides',{})  # {doc_id: {path, sha256, patterns?}}: a variant text replaces the corpus document under the same ID
         for did,meta in register.items():
             if did in overrides:meta={**meta,**overrides[did]};body=(ROOT/meta['path']).read_bytes()
@@ -85,7 +116,7 @@ class LedgerRuntime:
             if sha256(body)!=meta['sha256']:raise ValueError('Corpus document changed: '+did)
             self.docs[did]=body.decode('utf-8');self.patterns[did]=list(meta.get('patterns',[]))
             self.state['nodes'].setdefault(did,{'id':did,'type':'document','title':meta['title'],'date':meta['date'],'kind':meta['kind'],'sha256':meta['sha256']})
-        if set(self.config.get('vocabulary',[]))-netlang.LOCKED_OPS:raise ValueError('Unknown vocabulary item')
+        if self.task.name=='lenet' and set(self.config.get('vocabulary',[]))-netlang.LOCKED_OPS:raise ValueError('Unknown vocabulary item')
         for hid,meta in self.config.get('handles',{}).items():
             if set(meta)!={'split','description'}:raise ValueError('Handle needs split and description')
             self.state['nodes'].setdefault(hid,{'id':hid,'type':'dataset','split':meta['split'],'description':meta['description']})
@@ -148,6 +179,20 @@ class LedgerRuntime:
             raise ValueError(f'{purpose} needs the data handle [{hid}], which is not in your view. Ask its owner ({", ".join(owners) or "unknown"}) by mail to attach it.')
     def supported_ids(self,agent):
         return [i for i in self.view(agent)['nodes'] if self.state['nodes'][i]['type']=='claim' and self.state['nodes'][i]['status']=='supported']
+    def supported_for(self,role):
+        return [i for i in self.view_for(role)['nodes'] if self.state['nodes'][i]['type']=='claim' and self.state['nodes'][i]['status']=='supported']
+    def reject_mode(self):return self.config.get('metric',{}).get('key','reject_curve')=='reject_curve'
+    def metric(self):return 'error' if self.reject_mode() else self.config['metric']['key']
+    def datasets(self):return tuple(self.config.get('datasets',('usps-val','usps-test')))
+    def templates(self):
+        keys=dict(TEMPLATES)
+        if not self.reject_mode():keys['BEATS']={'net_a','net_b','dataset'}
+        chosen=self.config.get('templates');return {k:v for k,v in keys.items() if not chosen or k in chosen}
+    def score(self,result,rate=None):return self.error_at(result,rate) if self.reject_mode() else float(result[self.metric()])
+    def better(self,x,y):return x>y if self.config.get('metric',{}).get('higher_is_better') else x<y
+    def require_split(self,agent,split,purpose):
+        for hid,n in self.state['nodes'].items():
+            if n['type']=='dataset' and n.get('split')==split:self.require_handle(agent,hid,purpose)
     def charge(self,days,what):
         if self.state['compute_days_used']+days>self.budget():raise ValueError(f'Compute budget exceeded: {what} costs {days:.2f} simulated days, {self.budget()-self.state["compute_days_used"]:.2f} remain.')
         self.state['compute_days_used']+=days
@@ -182,10 +227,10 @@ class LedgerRuntime:
             t=n['type']
             if t=='document':return {'id':n['id'],'title':n['title'],'date':n['date']}
             if t=='net_spec':return {'id':n['id'],'connections':n['analysis']['connections'],'params':n['analysis']['params'],'tied_layers':n['analysis']['tied_layers'],'pattern':n['analysis']['pattern'],'unsourced_choices':[c['choice'] for c in n['choices'] if c['status']=='unsourced'],'jobs':n.get('jobs',[])}
-            if t=='result':return {'id':n['id'],'net':n['net'],'dataset':n['dataset'],'error':n['error'],'reject_curve':n['reject_curve']}
+            if t=='result':return {'id':n['id'],'net':n['net'],'dataset':n['dataset'],**{k:n[k] for k in ('error','reject_curve','accuracy','loss') if k in n}}
             if t=='proof':return {'id':n['id'],'kind':n['kind'],'net':n['net'],'passed':n['passed']}
             if t=='claim':return {'id':n['id'],'template':n['template'],'args':n['args'],'status':n['status'],'evidence':n['evidence'],'guess':n['guess']}
-            if t=='comparison':return {k:n[k] for k in ('id','a','b','reject_rate','error_a','error_b','winner')}
+            if t=='comparison':return {k:v for k,v in n.items() if k not in ('type','owner')}
             if t=='feature_request':return {k:n[k] for k in ('id','description','granted')}
             if t=='dataset':return {k:n[k] for k in ('id','split','description')}
             if t=='chip':return {k:n[k] for k in ('id','net','chip','weights','fits','chars_per_sec')}
@@ -201,7 +246,7 @@ class LedgerRuntime:
                 'sealed':[{'kind':i['kind'],'payload':i['payload'],'ready_day':i['ready']} for i in self.state['pending'] if i['role']==self.role(agent)],
                 'compute_days':{'budget':self.budget(),'used':round(self.state['compute_days_used'],3),'remaining':round(self.budget()-self.state['compute_days_used'],3)},
                 'evaluations':{'used':self.state['evaluations'],'max':int(self.config.get('max_evaluations',4))},
-                'vocabulary':sorted(netlang.BASE_OPS)+view['vocabulary'],'locked':sorted(netlang.LOCKED_OPS-set(view['vocabulary']))}
+                **self.task.vocabulary(view)}
     def search(self,agent,query):
         words=[w.lower() for w in re.findall(r'[A-Za-z0-9]+',query or '') if len(w)>2]
         if not words:raise ValueError('Query needs words')
@@ -217,13 +262,13 @@ class LedgerRuntime:
     # ---- write side (host-verified) ----
     def define(self,agent,d):
         if set(d)!={'spec','rationale'}:raise ValueError('sn_define needs {spec, rationale}')
-        vocab=self.view(agent)['vocabulary'];analysis=netlang.analyze(d['spec'],vocab)
+        vocab=self.view(agent)['vocabulary'];spec,analysis=self.task.analyze(d['spec'],vocab)
         cites,unknown=self.cites(agent,d['rationale']);samples=int(self.config.get('samples',6291))
-        checks=support_check(analysis,{c:self.docs[c] for c in cites if c in self.docs},self.patterns)
+        checks=self.task.choices(analysis,{c:self.docs[c] for c in cites if c in self.docs},self.patterns)
         unsourced=[c for c in checks if c['status']=='unsourced']
-        node={'id':self.new_id('N'),'type':'net_spec','spec':netlang.canonical(d['spec'],vocab),'analysis':analysis,'rationale':d['rationale'],
+        node={'id':self.new_id('N'),'type':'net_spec','spec':spec,'analysis':analysis,'rationale':d['rationale'],
               'cites':cites,'unknown_cites':unknown,'choices':checks,'guess':bool(unsourced),'owner':self.role(agent),'jobs':[],
-              'eta_days_per_epoch':netlang.eta_days(analysis['connections'],samples,1)}
+              'eta_days_per_epoch':self.task.eta(analysis,samples,1)}
         self.add(agent,node)
         if unsourced:self.state['leak_log'].append({'time':time.time(),'role':self.role(agent),'node':node['id'],'kind':'net_spec','unsourced':[(c['choice'],c['value']) for c in unsourced],'cites':cites,'unknown_cites':unknown})
         return {'net_id':node['id'],'connections':analysis['connections'],'params':analysis['params'],'pattern':analysis['pattern'],'layers':analysis['layers'],
@@ -253,19 +298,13 @@ class LedgerRuntime:
             if r['name']==name:return did
         raise ValueError('Training dataset not registered: '+name)
     def train(self,agent,d,action,timeout):
-        if set(d)!={'net_id','epochs'}:raise ValueError('sn_train needs {net_id, epochs}')
+        if not {'net_id','epochs'}<=set(d) or set(d)-{'net_id','epochs'}-set(self.task.extra_keys):raise ValueError('sn_train needs {net_id, epochs'+''.join(', '+k+'?' for k in self.task.extra_keys)+'}')
         net=self.visible(agent,d['net_id'],'net_spec');epochs=d['epochs']
-        self.require_handle(agent,'USPS_TRAIN','Training')
-        if type(epochs) is not int or not 1<=epochs<=30:raise ValueError('epochs must be an integer in 1..30')
-        eta=netlang.eta_days(net['analysis']['connections'],int(self.config.get('samples',6291)),epochs)
+        self.require_split(agent,'train','Training')
+        if type(epochs) is not int or not 1<=epochs<=self.task.max_epochs:raise ValueError(f'epochs must be an integer in 1..{self.task.max_epochs}')
+        eta=self.task.eta(net['analysis'],int(self.config.get('samples',6291)),epochs)
         self.charge(eta,'this run')
-        code=ROOT/self.config.get('code_dir','research/lenet')
-        for name in CODE_FILES:
-            src=code/name if name!='netlang.py' else ROOT/'goalagent/netlang.py'
-            (Path(agent.workspace)/name).write_bytes(src.read_bytes())
-        did=self.dataset_id()
-        packet={'profile':self.config.get('training_profile','sun4'),'code_files':list(CODE_FILES),'entrypoint':'train_usps.py',
-                'args':['--spec',net['spec'],'--epochs',str(epochs),'--net-id',net['id'],'--dataset-id',did],'dataset_ids':[did]}
+        did=self.dataset_id();packet=self.task.packet(net,epochs,d,did,Path(agent.workspace))
         status=self.team.training.start(agent,packet,self.team.dispatch_id(agent,action))
         job=self.team.training.state['jobs'][status['job_id']]
         if status['job_id'] not in net['jobs']:net['jobs'].append(status['job_id'])
@@ -276,56 +315,60 @@ class LedgerRuntime:
         if status['status']!='SUCCEEDED':return {**out,'result':None,'note':'No result node: only a succeeded job produces one'}
         metrics_path=self.team.training.root/'jobs'/status['job_id']/'output/metrics.json'
         raw=metrics_path.read_bytes();m=json.loads(raw)
-        if m.get('net_id')!=net['id'] or m.get('spec')!=net['spec']:raise ValueError('Job output does not match the net spec')
+        if not self.task.matches(m,net):raise ValueError('Job output does not match the net spec')
+        fields,params,grad,per_epoch=self.task.result(m)
         ready=round(self.now()+eta,2);put=(lambda n:self.seal(agent,n,ready)) if self.clock() else (lambda n:self.add(agent,n))
-        result=put({'id':self.new_id('R'),'type':'result','net':net['id'],'dataset':'usps-val','error':m['val_error'],'reject_curve':m['reject_curve'],'invariance':m.get('invariance'),
-            'epochs':epochs,'samples':m['train_count'],'source':{'job_id':status['job_id'],'path':'metrics.json','sha256':sha256(raw)},'owner':self.role(agent)})
-        proofs=[put({'id':self.new_id('P'),'type':'proof','kind':'PARAM_COUNT','net':net['id'],'passed':m['parameters']==net['analysis']['params'],
-                    'detail':{'ledger_params':net['analysis']['params'],'container_params':m['parameters']},'source':result['source']})]
-        if m.get('grad_check'):
-            proofs.append(put({'id':self.new_id('P'),'type':'proof','kind':'GRAD_CHECK','net':net['id'],'passed':bool(m['grad_check']['passed']),'detail':m['grad_check'],'source':result['source']}))
+        result=put({'id':self.new_id('R'),'type':'result','net':net['id'],'dataset':self.datasets()[0],**fields,
+            'epochs':epochs,'source':{'job_id':status['job_id'],'path':'metrics.json','sha256':sha256(raw)},'owner':self.role(agent)})
+        proofs=[put({'id':self.new_id('P'),'type':'proof','kind':'PARAM_COUNT','net':net['id'],'passed':params==net['analysis']['params'],
+                    'detail':{'ledger_params':net['analysis']['params'],'container_params':params},'source':result['source']})]
+        if grad:
+            proofs.append(put({'id':self.new_id('P'),'type':'proof','kind':'GRAD_CHECK','net':net['id'],'passed':bool(grad['passed']),'detail':grad,'source':result['source']}))
         if self.clock():
             return {**out,'sealed':{'result':result['id'],'proofs':[p['id'] for p in proofs],'ready_day':round(ready,2),'today':self.now()},
                     'note':'The Sun-4 is running; the numbers enter your view on ready_day. Checkpoint to let time pass, or design something else meanwhile.'}
-        return {**out,'result':{k:result[k] for k in ('id','net','dataset','error','reject_curve')},'proofs':[{k:p[k] for k in ('id','kind','passed')} for p in proofs],
-                'per_epoch':m['per_epoch'][-3:],'scope':'Validation split result, not protected test measurement'}
+        return {**out,'result':{k:v for k,v in result.items() if k in RESULT_KEYS},'proofs':[{k:p[k] for k in ('id','kind','passed')} for p in proofs],
+                'per_epoch':per_epoch[-3:],'scope':'Validation split result, not protected test measurement'}
     def evaluate(self,agent,d):
         if set(d)!={'net_id'}:raise ValueError('ledger_evaluate needs {net_id}')
         net=self.visible(agent,d['net_id'],'net_spec');limit=int(self.config.get('max_evaluations',4))
-        self.require_handle(agent,'USPS_TEST','Protected evaluation')
+        self.require_split(agent,'test','Protected evaluation')
         jobs=[j for j in net.get('jobs',[]) if self.team.training.state['jobs'][j]['status']=='SUCCEEDED']
         if not jobs:raise ValueError('No succeeded job for '+net['id'])
         if self.state['evaluations']>=limit:raise ValueError('Protected evaluation limit reached')
         model=self.team.training.register_model(agent,jobs[-1],'weights.safetensors','model')
         self.state['evaluations']+=1
-        record=self.team.training.evaluate(agent,model['id'],'usps_test');m=record['measurement']
-        result=self.add(agent,{'id':self.new_id('R'),'type':'result','net':net['id'],'dataset':'usps-test','error':m['error'],'reject_curve':m['reject_curve'],'samples':m['samples'],
+        record=self.team.training.evaluate(agent,model['id'],self.config.get('evaluator','usps_test'));m=record['measurement']
+        result=self.add(agent,{'id':self.new_id('R'),'type':'result','net':net['id'],'dataset':self.datasets()[1],**self.task.measurement(m),
             'source':{'evidence_id':record['evidence_id'],'model_id':model['id'],'job_id':jobs[-1]},'owner':self.role(agent)})
-        return {'result':{k:result[k] for k in ('id','net','dataset','error','reject_curve')},'evidence_id':record['evidence_id'],'evaluations_remaining':limit-self.state['evaluations'],'scope':record['scope']}
+        return {'result':{k:v for k,v in result.items() if k in RESULT_KEYS},'model_id':model['id'],'evidence_id':record['evidence_id'],'evaluations_remaining':limit-self.state['evaluations'],'scope':record['scope']}
     def error_at(self,result,rate):
         if rate not in REJECT_RATES:raise ValueError('reject_rate must be one of '+', '.join(REJECT_RATES))
         return float(result['reject_curve'][rate])
     def compare(self,agent,d):
-        if set(d)!={'a','b','reject_rate'}:raise ValueError('compare_results needs {a, b, reject_rate}')
-        a=self.visible(agent,d['a'],'result');b=self.visible(agent,d['b'],'result');rate=str(d['reject_rate'])
+        keys={'a','b','reject_rate'} if self.reject_mode() else {'a','b'}
+        if set(d)!=keys:raise ValueError('compare_results needs {'+', '.join(sorted(keys))+'}')
+        a=self.visible(agent,d['a'],'result');b=self.visible(agent,d['b'],'result');rate=str(d['reject_rate']) if self.reject_mode() else None
         if a['dataset']!=b['dataset']:raise ValueError('Results come from different datasets: '+a['dataset']+' vs '+b['dataset'])
-        ea,eb=self.error_at(a,rate),self.error_at(b,rate)
-        node=self.add(agent,{'id':self.new_id('CMP'),'type':'comparison','a':a['id'],'b':b['id'],'dataset':a['dataset'],'reject_rate':rate,'error_a':ea,'error_b':eb,'winner':a['id'] if ea<eb else b['id'] if eb<ea else 'tie','owner':self.role(agent)})
-        return {k:node[k] for k in ('id','a','b','dataset','reject_rate','error_a','error_b','winner')}
+        ea,eb=self.score(a,rate),self.score(b,rate);m=self.metric()
+        node=self.add(agent,{'id':self.new_id('CMP'),'type':'comparison','a':a['id'],'b':b['id'],'dataset':a['dataset'],'metric':m,'reject_rate':rate,m+'_a':ea,m+'_b':eb,
+                             'winner':a['id'] if self.better(ea,eb) else b['id'] if self.better(eb,ea) else 'tie','owner':self.role(agent)})
+        return {k:v for k,v in node.items() if k not in ('type','owner')}
     def claim(self,agent,d):
         if set(d)!={'template','args','rationale'}:raise ValueError('ledger_claim needs {template, args, rationale}')
-        t=d['template'];args=d['args']
-        if t not in TEMPLATES:raise ValueError('Free-text claims stay conjectures forever; use a template: '+', '.join(TEMPLATES))
-        if not isinstance(args,dict) or set(args)!=TEMPLATES[t]:raise ValueError(t+' args must be exactly '+', '.join(sorted(TEMPLATES[t])))
+        t=d['template'];args=d['args'];T=self.templates()
+        if t not in T:raise ValueError('Free-text claims stay conjectures forever; use a template: '+', '.join(T))
+        if not isinstance(args,dict) or set(args)!=T[t]:raise ValueError(t+' args must be exactly '+', '.join(sorted(T[t])))
         for key in ('net','net_a','net_b'):
             if key in args:self.visible(agent,args[key],'net_spec')
         if t=='INVARIANT_TO':
             if args['transform'] not in ('shift1','shift2') or not isinstance(args['tolerance'],(int,float)) or not 0<args['tolerance']<1:raise ValueError('INVARIANT_TO needs transform shift1|shift2 and tolerance in (0,1)')
         if t=='FITS_CHIP' and args['chip']!='anna':raise ValueError('The only chip is "anna"')
         if t=='BEATS':
-            if args['dataset'] not in ('usps-val','usps-test'):raise ValueError('dataset must be usps-val or usps-test')
-            if str(args['reject_rate']) not in REJECT_RATES:raise ValueError('reject_rate must be one of '+', '.join(REJECT_RATES))
-            args['reject_rate']=str(args['reject_rate'])
+            if args['dataset'] not in self.datasets():raise ValueError('dataset must be one of '+', '.join(self.datasets()))
+            if self.reject_mode():
+                if str(args['reject_rate']) not in REJECT_RATES:raise ValueError('reject_rate must be one of '+', '.join(REJECT_RATES))
+                args['reject_rate']=str(args['reject_rate'])
         cites,unknown=self.cites(agent,d['rationale'])
         node={'id':self.new_id('C'),'type':'claim','template':t,'args':args,'status':'conjecture','rationale':d['rationale'],'cites':cites,'unknown_cites':unknown,'guess':not cites,'evidence':[],'owner':self.role(agent)}
         self.add(agent,node)
@@ -362,8 +405,9 @@ class LedgerRuntime:
             ra=[e for e in evidence if e['type']=='result' and e['net']==a['net_a'] and e['dataset']==a['dataset']]
             rb=[e for e in evidence if e['type']=='result' and e['net']==a['net_b'] and e['dataset']==a['dataset']]
             if not ra or not rb:raise ValueError('BEATS needs one result for each net on dataset '+a['dataset']+' among the evidence; results on other datasets do not count')
-            ea=min(self.error_at(r,a['reject_rate']) for r in ra);eb=min(self.error_at(r,a['reject_rate']) for r in rb)
-            verdict='supported' if ea<eb else 'refuted';detail={'error_a':ea,'error_b':eb,'reject_rate':a['reject_rate']};used=[r['id'] for r in ra+rb]
+            best=max if self.config.get('metric',{}).get('higher_is_better') else min;rate=a.get('reject_rate');m=self.metric()
+            ea=best(self.score(r,rate) for r in ra);eb=best(self.score(r,rate) for r in rb)
+            verdict='supported' if self.better(ea,eb) else 'refuted';detail={m+'_a':ea,m+'_b':eb,'reject_rate':rate};used=[r['id'] for r in ra+rb]
         c['status']=verdict;c['evidence']=used;c['detail']=detail;c['decided_at']=time.time();c['endorsed_by']=[role]
         self.team.event('ledger_promote',{'claim':c['id'],'status':verdict,'role':role})
         unlocked=[]
@@ -378,7 +422,7 @@ class LedgerRuntime:
         if to!='all' and (to not in self.team.definitions or to==sender or to=='judge'):raise ValueError('Unknown recipient role: '+str(to))
         if not d['body'].strip() or len(d['body'])>6000:raise ValueError('Letter body must be 1..6000 characters')
         for nid in d['attach']:self.visible(agent,nid)
-        violations=judge.check_text(d['body'],self.view(agent)['nodes'],self.supported_ids(agent))
+        violations=judge.check_text(d['body'],self.view(agent)['nodes'],self.supported_ids(agent),judge.BLACKLIST if self.config.get('blacklist',True) else [])
         if violations:
             self.state['leak_log'].append({'time':time.time(),'role':sender,'kind':'mail_rejected','violations':violations,'body':d['body'][:500]})
             raise ValueError('Letter refused by the judge ('+judge.describe(violations)+'). Rewrite it: 1988 vocabulary, cite only IDs in your view, attach an ID to every number, call nothing verified without a supported claim ID.')

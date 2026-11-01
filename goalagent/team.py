@@ -75,8 +75,8 @@ class Team:
         for name,(description,handler) in handlers.items():self.registry.register(Tool(name,description,handler))
         from .training import TOOLS
         for name,description in TOOLS.items():self.registry.register(Tool(name,description,self.training_tool))
-        from .ledger import TOOLS as LEDGER_TOOLS
-        for name,description in LEDGER_TOOLS.items():self.registry.register(Tool(name,description,self.ledger_tool))
+        from .ledger import ledger_tools
+        for name,description in ledger_tools(task).items():self.registry.register(Tool(name,description,self.ledger_tool))
         for config in self.definitions.values():self.registry.catalog(config['tools'])
         contract={'task':task,'agents':self.definitions,'model':model,'evaluators':{name:e.version for name,e in self.evaluators.items()},
                   'model_evaluators':{name:e.version for name,e in (model_evaluators or {}).items()},
@@ -215,9 +215,16 @@ class Team:
     def validate_assignment_report(self, report, assignment):
         from .report_context import resolve_objections
         resolutions=resolve_objections(self,report,assignment)
-        validate_report(report,self.state['evidence'],set(self.state['artifacts']) | set(self.state['assignments']) |
+        ledger=self.ledger.config is not None
+        validate_report(report,set(self.state['evidence'])|(set(self.ledger.state['nodes']) if ledger else set()),set(self.state['artifacts']) | set(self.state['assignments']) |
             set(self.state['claims']) | {g['id'] for s in self.workflow_spec['stages'] for g in s['gates']} |
             (set(self.managed.board.jobs) if self.managed else set()))
+        if ledger:
+            # The ledger decides what is observed: an empirical result is observed only through a claim the host promoted.
+            ok=set(self.ledger.supported_for(assignment.get('agent','coordinator')))
+            for c in report.get('claims',[]):
+                if c['epistemic_status']=='observed' and c.get('scope')=='empirical' and not set(c['evidence_ids'])&ok:
+                    raise ValueError('Observed empirical claims cite a supported ledger claim ID in your view'+(' ('+', '.join(sorted(ok))+')' if ok else '; none is supported yet')+'. A result you only read is a hypothesis until ledger_promote supports it.')
         if self.managed:self.managed.validate_report(report,assignment)
         if report['status']=='DONE' and not {o['path'] for o in assignment.get('required_outputs',[])}<=set(report['files']):
             raise ValueError('DONE report omits required outputs; use NEEDS_INPUT or FAILED with partial work')
