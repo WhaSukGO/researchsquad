@@ -191,12 +191,58 @@ python -m goalagent.lenet_m1 --mode live --run-dir /home/ws/rsq-runs/lenet-m1-li
 
 전사는 `D:\whasuk\yannlecun\runs\m4\<run>\transcript.md`, 집계는 같은 폴더의 `report.md`.
 
+## 5.5 마일스톤 5: 원장을 LeNet에서 떼어 ResearchSquad 과제 위로 (브랜치 `feat/lenet-ledger-m5`, da40581 · c43b114 · 59e4d6f)
+
+목적(PROPOSAL §13): 원장을 과제 독립 런타임으로 만들고, ResearchSquad 보고서의 observed claim이 원장 supported ID를 인용하지 않으면 통과하지 못하게 하고, 원장 없이 돌렸던 Fashion-MNIST 스터디(`fashion-live-01`, `fashion-handoff-live-01`, 2026-10-30)를 원장 위에서 다시 돌려 "검증 없는 주장" 수를 비교한다. 이것이 프로젝트의 출발점("검증하지 않은 모델을 정답처럼 말한다")에 대한 직접 답이다.
+
+추가된 것.
+- **과제 어댑터**(`goalagent/ledger.py` `LenetTask`, `TASKS` 레지스트리): spec 분석(파라미터 수·선택 단위), 학습 패킷, `metrics.json` → result 매핑, 보호 평가 매핑, 툴 설명을 어댑터가 정한다. 설정 `task·metric·datasets·templates·blacklist·evaluator`가 추가되고 `corpus`는 선택이 됐다. 기본값은 LeNet이라 M1~M4 코드·테스트는 그대로다(어댑터로 옮긴 것은 함수 본문 이동뿐, 새 로직 없음).
+- **Fashion 어댑터·런처**(`goalagent/fashion_ledger.py`): spec `{family: mlp|cnn, width, hidden, dropout}`, 파라미터 수는 산술로(mlp h=128 → 101,770; cnn w32·h128 → 421,642), 학습 코드는 호스트 소유(`research/fashion-live/train.py`; 에이전트는 spec·epochs·lr·batch만 고른다), 지표 accuracy(높을수록 좋음), 템플릿 BEATS·FEWER_PARAMS, 보호 시험 1회(`ledger_evaluate` → 공식 test 10,000). 역할·워크플로(PLAN→STUDY)·예산(160호출·7,200초)·보고서 형식은 비교를 위해 `fashion_live.py`와 같다. 엔지니어의 학습 툴(`start_job`·`register_model` 등)은 전부 원장 툴로 바뀌고, 리서처·비평가는 `ledger_view`(비평가·리서처는 `ledger_promote`도)를 받는다. `--check`는 LLM 없이 대본으로 Docker·GPU·평가기·검사기를 확인한다.
+- **보고서 검사기**(`team.py validate_assignment_report`): 원장이 켜진 런에서 `observed`이고 `scope=empirical`인 claim은 보고자 뷰 안의 supported 원장 claim ID를 인용해야 한다. 아니면 "A result you only read is a hypothesis until ledger_promote supports it"로 거부. 원장 노드 ID가 evidence로 인정된다. 통과 방법은 두 가지뿐이다: 원장 ID를 인용하거나 `hypothesis`로 적는다.
+- **계수기**(`scripts/count_unverified_claims.py`): 런 폴더만 읽는 오프라인 도구. observed/inferred claim의 evidence 중 호스트가 VERIFIED로 적은 기록(`evaluation-*`), 보호 평가(`model-evaluation-*`), supported 원장 claim 중 하나라도 있으면 **검증됨**, 없으면(실행 영수증·리뷰 기록만) **검증 없음**. hypothesis/unknown은 정직한 추측으로 따로 센다. 역할별·empirical 범위별 표.
+- 테스트 8개(`tests/test_m5.py`; 전체 211 통과), 스크립트 검사 통과(`check-220124`: GPU 1 epoch mlp 83.2% / cnn 86.0% 검증, 시험 85.0%, C1·C2 supported, 불변식 유지, 검사기가 원장 ID 없는 observed 주장을 거부하고 인용한 것은 통과).
+
+실제 실행(2026-11-01 22:04 ~ 11-02 01:51, gpt-6-astra, RTX 3080 Laptop). 네 번 돌렸고 처음 세 번은 모두 **원장이 아닌 관리 런타임의 역학 결함**으로 게이트를 넘지 못했다. M3처럼 결함을 고치고 다시 돌렸다.
+
+| 런 | 시각 | 호출 | 활성 초 | 결과 | 원장 (val / test) | empirical claim 검증 | 멈춘 이유(역학) → 수정 |
+|---|---|---|---|---|---|---|---|
+| fashion-ledger-1 | 22:04~22:34 | 134 | 1,769 | 게이트 FAIL | mlp 86.08 / cnn 90.14; C1 BEATS supported; 시험 없음 | 2/2 | 수정 assignment의 `ledger_evaluate`가 학습 런타임의 job 소유권 검사(assignment 단위)에 막힘 → 원장이 뷰로 소유권을 판단(`trusted=True`) |
+| fashion-ledger-2 | 22:39~23:15 | 160(예산) | 2,200 | 예산 소진 | 같음 + R3 시험 89.12; C1·C2 supported | 5/5 (리서처 1 포함) | 첫 제출에 보호 시험이 없어 REVISE → 수정 assignment에도 `required_tools`(sn_train·ledger_promote·record_decision)를 요구해 "Missing actual required actions" → 요구 툴을 `ledger_view`만으로, BRIEF에 "제출 전 ledger_evaluate 1회" |
+| fashion-ledger-3 | 23:17~01:17 | 75 | 7,200(시간예산) | PLAN에서 정지, 망 0 | 없음 | 0/0 | 비평가 3명이 `inputs/candidate/plan.md`(수정 전 계획)를 읽고 수정본에 없는 문장으로 FAIL ×3; 재시도 한도에 걸린 작업을 `_wake`가 REWORK로 되돌리는 무한 루프(상태 전환 33,871회, LLM 호출 0) → `wait_kind=operator`, 리뷰 지침에 `inputs/parent/` 명시 |
+| fashion-ledger-4 | 01:25~01:51 | 128 | 1,571 | **goal_met, 게이트 5/5 PASS** | N2 mlp 86.08 / N3 cnn 90.14; C1 BEATS supported; R3 시험 89.12 | 1/1 | - |
+
+4회차의 흐름: 리서처가 계획을 쓰고 비평가가 "spec 값이 원장이 허용하는 값과 다르다"로 FAIL → 엔지니어가 `ledger_view`로 허용값을 확인해 계획을 고치고 N1을 정의 → ADVANCE → STUDY에서 N2(mlp)·N3(cnn) 학습(3 epoch, lr 0.001, batch 128) → `compare_results` → BEATS claim → `ledger_promote` supported → `ledger_evaluate`(N3, 시험 89.12%) → 노드 7개를 `mail_send`로 전원에 첨부 → 보고서. 비평가·리서처·report_reader 리뷰 PASS, `study-measured` 게이트는 원장 상태(SUCCEEDED job 2, supported claim, fashion-test result)로 PASS.
+
+**비교: 같은 계수기를 과거 두 런과 새 네 런에 적용.** 과거 런의 수치는 docs/fashion-live-results-ko.md의 것(mlp 86.74 / cnn 88.06 / 시험 87.55; spec w16·h256·dropout 0.2).
+
+| 런 | 원장 | claim | 검증됨 | 검증 없음 | hypothesis | empirical claim | 검증됨 | 검증 없음 |
+|---|---|---|---|---|---|---|---|---|
+| fashion-live-01 (10-30) | 없음 | 12 | 0 | 12 | 0 | 1 | 0 | **1** |
+| fashion-handoff-live-01 (10-30) | 없음 | 9 | 0 | 9 | 0 | 2 | 0 | **2** |
+| fashion-ledger-1 | 있음 | 26 | 2 | 24 | 0 | 2 | **2** | 0 |
+| fashion-ledger-2 | 있음 | 28 | 5 | 23 | 0 | 5 | **5** | 0 |
+| fashion-ledger-3 | 있음 | 29 | 0 | 29 | 0 | 0 | 0 | 0 |
+| fashion-ledger-4 | 있음 | 24 | 1 | 23 | 0 | 1 | **1** | 0 |
+
+관찰.
+1. **경험적 주장의 검증 없음: 3/3 → 0/8.** 과거 런의 empirical claim 3건은 전부 엔지니어가 자기 job 로그를 읽은 영수증(`action-*`, verification PENDING)만 인용했다("final validation accuracies of 0.8674 and 0.8806"). 새 런에서 STUDY에 도달한 3런의 empirical claim 8건은 전부 supported 원장 claim(C1·C2)을 인용했고, 그 claim은 호스트가 만든 result 노드의 비교로만 supported가 됐다. 이것은 설득의 결과가 아니라 구조의 결과다. 검사기가 그 외의 observed empirical claim을 거부하므로 비율은 100%일 수밖에 없고, 그래서 이 수치의 의미는 "검사기가 우회되지 않았다"다.
+2. **도피 경로는 쓰이지 않았다.** 검사기를 피하는 길은 (a) claim을 `hypothesis`로 돌리기, (b) `scope=document`로 적기다. (a)는 6런 모두 0건. (b)는 엔지니어의 document claim을 보면 보고서·manifest·메일 발송에 관한 것이어서 범위가 맞다. 수치가 들어간 document claim(비평가가 "보고서에 90.14%라고 적혀 있다"고 적는 류)은 과거 런과 같은 종류이며 읽었다는 주장으로서 정직하다.
+3. **전체 "검증 없음" 수는 줄지 않았다(12 → 23~24).** 늘어난 것은 전부 document 범위, 즉 리뷰어가 문서를 읽었다는 주장이고(비평가 9~10, 리서처 6, report_reader 2), 정의상 영수증 외의 근거가 있을 수 없다. 계수기는 그래서 empirical 열을 따로 둔다. 원장이 바꾼 것은 경험적 주장의 근거이고, 문서 주장의 수는 모델의 수다(비평가가 더 길게 쓴다).
+4. **원장 쪽 불변식 4/4.** 모델 호출이 result/proof를 만든 적 없음. 학습 결과는 결정적(seed 고정)이어서 1·2·4회차의 수치가 같다(86.08 / 90.14 / 89.12). 리서처가 2회차에서 C1을 인용한 것은 리뷰어가 "검증됐다"고 말할 수 있는 유일한 길이 원장이라는 설계가 작동한 예다.
+5. **게이트를 막은 것은 전부 호스트 쪽이었고 그중 둘은 M5와 무관한 잠복 결함이다.** job 소유권(1회차)과 assignment별 required_tools(2회차)는 원장을 관리 워크플로에 끼운 데서 나왔지만, 리뷰어의 `inputs/candidate/` 오독과 재시도 한도 무한 루프(3회차)는 `fashion_live`에서도 똑같이 일어날 수 있는 `stage_runtime` 결함이었다. 3회차는 LLM 호출 0으로 시간예산 7,200초를 태웠다. 수정 뒤 4회차는 26분에 끝났다.
+6. **비용.** 4런 497호출, 활성 시간 약 3.5시간(3회차의 2시간 포함). 성공 런 1회는 128호출·26분으로 과거 fashion-live-01과 같은 규모다.
+
+아쉬운 점: 4회차에서 N1·N2가 같은 spec(mlp)으로 중복 정의됐다(PLAN에서 한 번, STUDY에서 다시; 원장이 중복을 허용). 성공 런이 1회라 수치는 사례이지 통계가 아니다. empirical claim 수 자체가 작다(1~5건/런). 비평가는 `ledger_promote`를 받았지만 쓰지 않았다(합의 0건; 리뷰어가 같은 result로 같은 claim을 독립 승격하는 길은 열려 있으나 BRIEF가 요구하지 않았다).
+
+전사는 `D:\whasuk\yannlecun\runs\m5\fashion-ledger-{1,2,3,4}\transcript.md`.
+
 ## 6. 범위와 한계
 
 - 스크립트 검사는 툴과 불변식을 검증한 것이지 자율 연구 품질을 검증한 것이 아니다(AGENTS.md 원칙).
 - 템플릿 밖의 통찰은 원장에 들어가지 않는다. 템플릿은 BEATS, FEWER_PARAMS, GRAD_EQUALS, INVARIANT_TO, FITS_CHIP 다섯이다.
 - 규칙 심판은 편지 ID·행동 ID 인용과 "accept/approve"류 어휘를 반려한다. 편지는 고쳐 보내지므로 실행은 막히지 않지만 반려 수에 들어간다.
 - 실제 런은 LeCun의 스텝 한도(120)에서 끝난다. 데모일(45일)까지 간 런은 없다.
+- M5의 원장은 경험적 주장만 검증한다. 문서 범위 claim(리뷰어가 읽었다는 주장)은 영수증 기반으로 남고, 계수기의 '검증 없음' 총수는 그래서 줄지 않는다(§5.5 관찰 3). 성공 런은 1회다.
 - C0는 LeCun의 초기 뷰만 비운다. 동료의 첨부로 문헌이 다시 들어오고, 페르소나 5행이 토론토 결과의 결론과 ID를 담고 있다(§5.4 관찰 3). A1·A2·A3·A5·X1은 실행하지 않았다.
 - `local` 비공유층은 입력 맵 전체 fan-in만 지원한다. `tie`는 `fan_in` 부분 연결을 지원한다(1989 LeNet-1의 8/12 맵 연결을 64,660 / 9,760으로 재현).
 - 보호 평가는 실행당 4회로 제한된다. 테스트 분할은 학습 컨테이너에 마운트되지 않는다.
