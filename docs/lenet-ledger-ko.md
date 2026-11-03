@@ -45,7 +45,7 @@ set -a; . /path/to/.env; set +a          # META_API_KEY
 python -m goalagent.lenet_m4 --condition C0 --runs 1 --base /home/ws/rsq-runs/meta --model muse-spark-1.3
 ```
 
-완주 런을 위해 한도를 올렸다: 조정자 `max_steps` 120 → 400(`agents/lenet/coordinator.json`), 팀 `max_calls` 420 → 1200, `max_seconds` 14400 → 28800(`lenet_m3.task`), `live()`의 `max_rounds` 60 → 120. §5.4의 M4 수치는 모두 이전 한도(조정자 120 step)에서 측정된 것이며, 런들은 그 한도에서 `budget_exhausted`로 끝났다.
+완주 런을 위해 한도를 올렸다: 조정자 `max_steps` 120 → 900(`agents/lenet/coordinator.json`), 팀 `max_calls` 420 → 2400, `max_seconds` 14400 → 43200(`lenet_m3.task`), `live()`의 `max_rounds` 60 → 200. (muse-spark-1.3의 LeCun은 하루 약 12 step을 쓴다: gpt 런의 두 배.) §5.4의 M4 수치는 모두 이전 한도(조정자 120 step)에서 측정된 것이며, 런들은 그 한도에서 `budget_exhausted`로 끝났다.
 
 ## 4. 스크립트 검사 결과 (2026-10-31, `lenet-m1-check-20261031-133056`)
 
