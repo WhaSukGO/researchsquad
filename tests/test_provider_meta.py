@@ -22,7 +22,7 @@ def test_call_and_retry(tmp_path,monkeypatch):
     monkeypatch.setattr(urllib.request,'urlopen',fake_urlopen)
     action,meta=P.MetaProvider('muse-spark-1.3','high').call('prompt',SCHEMA,tmp_path/'turn')
     assert action==ANSWER and len(seen)==2
-    body=json.loads(seen[-1].data);assert body['model']=='muse-spark-1.3' and body['reasoning_effort']=='high' and body['response_format']['json_schema']['schema']==SCHEMA
+    body=json.loads(seen[-1].data);assert body['model']=='muse-spark-1.3' and body['reasoning_effort']=='high' and body['response_format']['json_schema']['schema']==SCHEMA and body['response_format']['json_schema']['strict'] is True
     assert seen[-1].get_header('Authorization')=='Bearer LLM_1_secret'
     assert meta['provider']=='meta-api' and meta['usage']['prompt_tokens']==10 and meta['exit_code']==200
     assert json.loads((tmp_path/'turn'/'answer.json').read_text())==ANSWER and (tmp_path/'turn'/'metadata.json').exists()
@@ -32,6 +32,10 @@ def test_client_error_raises(tmp_path,monkeypatch):
     def fake(request,timeout=None):raise urllib.error.HTTPError(request.full_url,400,'bad',{},io.BytesIO(b'{"error":"unsupported"}'))
     monkeypatch.setattr(urllib.request,'urlopen',fake)
     with pytest.raises(RuntimeError,match='400'):P.MetaProvider().call('p',SCHEMA,tmp_path/'t')
+
+def test_prose_prefix_is_stripped():
+    assert P.extract_json('Pulling my ledger first. {"tool":"finish","argument":"","why":"x"} trailing')=={'tool':'finish','argument':'','why':'x'}
+    with pytest.raises(RuntimeError):P.extract_json('no json here')
 
 def test_provider_for(monkeypatch):
     monkeypatch.delenv('RSQ_PROVIDER',raising=False)

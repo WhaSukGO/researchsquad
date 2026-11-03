@@ -137,19 +137,26 @@ class MetaProvider:
         folder = Path(folder).resolve(); folder.mkdir(parents=True, exist_ok=True)
         (folder/'schema.json').write_text(json.dumps(schema)); (folder/'prompt.txt').write_text(prompt)
         body = {'model': self.model, 'messages': [{'role': 'user', 'content': prompt}], 'reasoning_effort': self.effort,
-                'response_format': {'type': 'json_schema', 'json_schema': {'name': 'action', 'schema': schema, 'strict': False}}}
+                'response_format': {'type': 'json_schema', 'json_schema': {'name': 'action', 'schema': schema, 'strict': True}}}
         # ponytail: one non-streaming request; switch to stream=True if 504s appear on long calls
         start = time.monotonic()
         status, reply = self._post(body, None if timeout is None or math.isinf(timeout) else timeout)
-        content = reply['choices'][0]['message']['content']
-        (folder/'answer.json').write_text(content)
+        content = reply['choices'][0]['message']['content'] or ''
+        (folder/'raw.json').write_text(json.dumps(reply)); (folder/'answer.json').write_text(content)
         metadata = {'provider': 'meta-api', 'model': self.model, 'reasoning_effort': self.effort,
                     'elapsed_seconds': time.monotonic()-start, 'exit_code': status, 'usage': reply.get('usage', {}),
                     'prompt_sha256': hashlib.sha256(prompt.encode()).hexdigest(), 'image_sha256': None,
                     'context_isolation': 'single user message: explicit prompt and schema only', 'os_read_isolation': True,
                     'unexpected_tool_events': [], 'billing': 'Meta Model API pay-as-you-go; usage above is the API report'}
         (folder/'metadata.json').write_text(json.dumps(metadata, indent=2))
-        return json.loads(content), metadata
+        return extract_json(content), metadata
+
+
+def extract_json(text):
+    """The model occasionally prefixes prose to the JSON object; parse from the first brace."""
+    start = text.find('{')
+    if start < 0: raise RuntimeError(f'Model returned no JSON object: {text[:200]!r}')
+    return json.JSONDecoder().raw_decode(text[start:])[0]
 
 
 def provider_for(model, effort):
