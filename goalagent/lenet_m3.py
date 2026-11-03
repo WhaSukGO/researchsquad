@@ -28,7 +28,7 @@ GOAL=('It is 3 October 1988 (day 0). The department recognizes handwritten USPS 
 
 def task(image,*,compute_days=20.0,max_evaluations=6,corpus=True,vocabulary=(),clock=True,visit_day=45,drop=None,overrides=None,max_compute_days=60):
     views={r:[x for x in (d if corpus or r!='coordinator' else []) if x not in (drop or {}).get(r,())] for r,d in ROLE_DOCS.items()}
-    return {'goal':GOAL,'inputs':{},'network':False,'budget':{'max_calls':420,'max_seconds':14400,'max_assignments':80,'max_depth':2},
+    return {'goal':GOAL,'inputs':{},'network':False,'budget':{'max_calls':1200,'max_seconds':28800,'max_assignments':80,'max_depth':2},
         'training':{'profiles':{'sun4':{'image':image,'gpu':False,'memory':'2g','cpus':2,'max_seconds':1200,'max_output_bytes':50_000_000,'roles':['coordinator']}}},
         'ledger':{'corpus':'research/lit-1988','handles':HANDLES,'vocabulary':list(vocabulary),'views':views,'clock':clock,'mail_delay_days':1,
                   'features_by_bottou':True,'feature_days':10,'max_compute_days':max_compute_days,'chip_weights':4096,'visit_day':visit_day,
@@ -285,7 +285,7 @@ def check(folder,image,cache):
 
 def live(folder,image,cache,model,**kw):
     team=build(folder,image,cache,model=model,**kw)
-    outcome=simulate(team,max_rounds=60);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
+    outcome=simulate(team,max_rounds=120);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
     summary={'outcome':outcome,'day':L.now(),'demo_day':L.state['demo_day'],'meetings':L.state['meetings'],'path':path_score(team),
              'audit':{k:v for k,v in audit.items() if k!='leak_log'},'leak_log':audit['leak_log'],
              'claims':{k:{'template':v['template'],'args':v['args'],'status':v['status'],'endorsed_by':v.get('endorsed_by',[])} for k,v in nodes.items() if v['type']=='claim'},

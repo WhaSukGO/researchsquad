@@ -36,6 +36,17 @@ python -m goalagent.lenet_m1 --mode live --run-dir /home/ws/rsq-runs/lenet-m1-li
 ```
 실행 디렉터리는 절대 경로이며 ext4(`/home/...`) 아래를 권장한다(DrvFS 교체 쓰기 문제는 #14에서 완화됐지만 피한다). 이미지는 기존 `researchsquad-training:torch2.9.1-cu128`를 `gpu:False` 프로필로 쓴다.
 
+### 3.x Meta Model API로 돌리기 (2026-11-04)
+
+모델 호출은 `goalagent/provider.py`의 `provider_for(model, effort)`가 고른다. 모델 이름이 `muse-`로 시작하거나 `RSQ_PROVIDER=meta`이면 `MetaProvider`(`https://api.meta.ai/v1/chat/completions`, 키는 `META_API_KEY` 또는 `MODEL_API_KEY`, 액션 스키마를 `response_format=json_schema`로 강제, 429·5xx는 공급자 안에서 최대 5회 재시도), 아니면 기존 Codex CLI다.
+
+```bash
+set -a; . /path/to/.env; set +a          # META_API_KEY
+python -m goalagent.lenet_m4 --condition C0 --runs 1 --base /home/ws/rsq-runs/meta --model muse-spark-1.3
+```
+
+완주 런을 위해 한도를 올렸다: 조정자 `max_steps` 120 → 400(`agents/lenet/coordinator.json`), 팀 `max_calls` 420 → 1200, `max_seconds` 14400 → 28800(`lenet_m3.task`), `live()`의 `max_rounds` 60 → 120. §5.4의 M4 수치는 모두 이전 한도(조정자 120 step)에서 측정된 것이며, 런들은 그 한도에서 `budget_exhausted`로 끝났다.
+
 ## 4. 스크립트 검사 결과 (2026-10-31, `lenet-m1-check-20261031-133056`)
 
 모델 호출 없이 22개 결정을 고정한 실행. 실제 학습 2회, 보호 평가 2회.
