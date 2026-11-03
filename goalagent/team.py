@@ -13,7 +13,7 @@ from .agent import Agent
 from .budgets import limit, valid_limit, visible_remaining
 from .configuration import load_agent, validate_agent
 from .contracts import atomic_json, digest, AtomicWriteError
-from .provider import CodexProvider
+from .provider import CodexProvider, provider_for
 from .sandbox import DockerSandbox, read_file, workspace_path
 from .toolkit import Tool, default_registry
 from .artifacts import ArtifactStore, capture_workspace, MAX_BUNDLE, MAX_FILE
@@ -35,7 +35,7 @@ class Team:
             task['budget']={key:None for key in ('max_calls','max_seconds','max_assignments','max_depth')}
         self.task=task;self.model=model;self.sandbox_factory=sandbox_factory
         self.workflow_spec = workflow.load_workflow(task.get('workflow'))
-        self.provider_factory=provider_factory or (lambda config:CodexProvider(config['model'] or model,config['reasoning_effort']))
+        self.provider_factory=provider_factory or (lambda config:provider_for(config['model'] or model,config['reasoning_effort']))
         self.evaluators=evaluators or {}
         if any(not isinstance(getattr(e,'version',None),str) for e in self.evaluators.values()):raise ValueError('Protected evaluators require an explicit version')
         self.assets={}
@@ -190,7 +190,7 @@ class Team:
         if policy_path.exists():policy=json.loads(policy_path.read_text())
         else:policy=self.policy(effective);atomic_json(policy_path,policy)
         provider=self.provider_factory(effective)
-        if isinstance(provider,CodexProvider):provider.preflight()
+        if hasattr(provider,'preflight'):provider.preflight()
         instance=Agent(folder,assignment,provider,policy,effective,self.registry,self.sandbox_factory,trace=self.trace)
         instance.trace_parent_agent=self.state['assignments'].get(id,{}).get('caller')
         instance.trace_parent_span=self.state['assignments'].get(id,{}).get('trace_parent')

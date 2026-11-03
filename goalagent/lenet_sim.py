@@ -261,8 +261,8 @@ BENCH=[('1989','Shifting the input will shift the result on the feature map, but
 def judge_bench(folder,model=None):
     folder=Path(folder).resolve();folder.mkdir(parents=True,exist_ok=True)
     from .configuration import load_agent
-    from .provider import CodexProvider
-    config=load_agent(ROOT/'agents/lenet/judge.json');provider=CodexProvider(config['model'] or model,config['reasoning_effort']);provider.preflight()
+    from .provider import provider_for
+    config=load_agent(ROOT/'agents/lenet/judge.json');provider=provider_for(config['model'] or model,config['reasoning_effort']);provider.preflight()
     rows=[]
     for i,(label,sentence) in enumerate(BENCH):
         context={'assignment':{'objective':f'Referee letter B{i}','mail_id':f'B{i}','from':'bench','to':'bench','letter':sentence},'tools':[{'name':'judge_verdict','description':'JSON {mail_id, verdict:pass|future_knowledge|unsupported, reason}','version':'1'}]}
