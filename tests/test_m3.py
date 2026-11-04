@@ -74,16 +74,56 @@ def test_chip_and_fits_chip_and_demo_gating(tmp_path):
     assert L.audit()['chips'][0]['fits'] and L.audit()['demo_day']==45 and call(team,jackel,'ledger_view')['visit_day']==45
 
 
-def test_invariant_to_needs_measured_invariance(tmp_path):
+CURVE={'0':0.1,'0.05':0.1,'0.09':0.1,'0.12':0.1}
+
+
+def result(L,agent,rid,net,err=0.1,inv=None,dataset='usps-val'):
+    L.add(agent,{'id':rid,'type':'result','net':net,'dataset':dataset,'error':err,'reject_curve':{k:err for k in CURVE},**({'invariance':inv} if inv else {}),'source':{'evidence_id':'x'},'owner':'coordinator'})
+
+
+def test_more_invariant_compares_the_latest_results_of_two_nets(tmp_path):
     team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
-    call(team,lecun,'sn_define',{'spec':TIED,'rationale':'[LECUN89TR]'})
-    curve={'0':0.1,'0.05':0.1,'0.09':0.1,'0.12':0.1}
-    L.add(lecun,{'id':'R1','type':'result','net':'N1','dataset':'usps-val','error':0.1,'reject_curve':curve,'invariance':{'shift1':0.9,'shift2':0.6},'source':{'evidence_id':'x'},'owner':'coordinator'})
-    with pytest.raises(ValueError,match='transform shift1'):call(team,lecun,'ledger_claim',{'template':'INVARIANT_TO','args':{'net':'N1','transform':'rotate','tolerance':0.2},'rationale':'[R1]'})
-    c=call(team,lecun,'ledger_claim',{'template':'INVARIANT_TO','args':{'net':'N1','transform':'shift1','tolerance':0.2},'rationale':'[R1]'})
-    assert call(team,lecun,'ledger_promote',{'claim_id':c['claim_id'],'evidence_ids':['R1']})['status']=='supported'
-    c2=call(team,lecun,'ledger_claim',{'template':'INVARIANT_TO','args':{'net':'N1','transform':'shift2','tolerance':0.2},'rationale':'[R1]'})
-    assert call(team,lecun,'ledger_promote',{'claim_id':c2['claim_id'],'evidence_ids':['R1']})['status']=='refuted'
+    call(team,lecun,'sn_define',{'spec':TIED,'rationale':'[LECUN89TR]'});call(team,lecun,'sn_define',{'spec':FULL,'rationale':'[LECUN89TR]'})
+    assert 'INVARIANT_TO' not in L.templates()
+    with pytest.raises(ValueError,match='transform shift1'):call(team,lecun,'ledger_claim',{'template':'MORE_INVARIANT','args':{'net_a':'N1','net_b':'N2','transform':'rotate'},'rationale':'[N1]'})
+    early=call(team,lecun,'ledger_claim',{'template':'MORE_INVARIANT','args':{'net_a':'N1','net_b':'N2','transform':'shift1'},'rationale':'[N1]'})
+    assert early['status']=='conjecture' and 'shift1 measurement' in early['not_yet_decidable']
+    result(L,lecun,'R1','N1',inv={'shift1':0.95,'shift2':0.6});result(L,lecun,'R2','N2',inv={'shift1':0.9,'shift2':0.6})
+    result(L,lecun,'R3','N1',inv={'shift1':0.85,'shift2':0.6})  # a later run of N1 holds up worse: the earlier one cannot be picked
+    c=call(team,lecun,'ledger_claim',{'template':'MORE_INVARIANT','args':{'net_a':'N1','net_b':'N2','transform':'shift1'},'rationale':'[R3] [R2]'})
+    assert c['status']=='refuted' and c['detail']['kept_a']==0.85 and c['evidence']==['R3','R2']
+    tie=call(team,lecun,'ledger_claim',{'template':'MORE_INVARIANT','args':{'net_a':'N1','net_b':'N2','transform':'shift2'},'rationale':'[R3] [R2]'})
+    assert tie['status']=='refuted'
+    assert call(team,lecun,'ledger_promote',{'claim_id':early['claim_id'],'evidence_ids':['R3','R2']})['status']=='refuted'
+
+
+def test_beats_uses_the_latest_result_per_net_and_claims_promote_at_once(tmp_path):
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
+    call(team,lecun,'sn_define',{'spec':TIED,'rationale':'[LECUN89TR]'});call(team,lecun,'sn_define',{'spec':FULL,'rationale':'[LECUN89TR]'})
+    result(L,lecun,'R1','N1',err=0.02);result(L,lecun,'R2','N2',err=0.05);result(L,lecun,'R3','N1',err=0.08)
+    c=call(team,lecun,'ledger_claim',{'template':'BEATS','args':{'net_a':'N1','net_b':'N2','dataset':'usps-val','reject_rate':'0.09'},'rationale':'[R1] [R2]'})
+    assert c['status']=='refuted' and c['evidence']==['R3','R2']  # decided on R3, not the better earlier R1
+    assert L.state['nodes'][c['claim_id']]['endorsed_by']==['coordinator']
+
+
+def test_promote_takes_a_list_and_decides_each_claim(tmp_path):
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator');denker=worker(team,'denker')
+    call(team,lecun,'sn_define',{'spec':TIED,'rationale':'[LECUN89TR]'});call(team,lecun,'sn_define',{'spec':FULL,'rationale':'[LECUN89TR]'})
+    a=call(team,lecun,'ledger_claim',{'template':'FEWER_PARAMS','args':{'net_a':'N1','net_b':'N2'},'rationale':'[N1] [N2]'})['claim_id']
+    b=call(team,lecun,'ledger_claim',{'template':'FEWER_PARAMS','args':{'net_a':'N2','net_b':'N1'},'rationale':'[N1] [N2]'})['claim_id']
+    call(team,lecun,'mail_send',{'to':'denker','body':'Please promote [C1] [C2].','attach':[a,b,'N1','N2']})
+    out=call(team,denker,'ledger_promote',{'claim_ids':[a,b,'C9'],'evidence_ids':[]})['claims']
+    assert [o.get('status') for o in out]==['supported','refuted',None] and out[0]['agreed'] and 'Not in your ledger view' in out[2]['error']
+
+
+def test_delivered_validation_results_get_host_comparisons(tmp_path):
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
+    call(team,lecun,'sn_define',{'spec':TIED,'rationale':'[LECUN89TR]'});call(team,lecun,'sn_define',{'spec':FULL,'rationale':'[LECUN89TR]'})
+    result(L,lecun,'R1','PIPELINE88',err=0.03);result(L,lecun,'R2','N2',err=0.05);result(L,lecun,'R3','N2',err=0.04)
+    L.seal(lecun,{'id':'R4','type':'result','net':'N1','dataset':'usps-val','error':0.02,'reject_curve':{k:0.02 for k in CURVE},'source':{'evidence_id':'x'},'owner':'coordinator'},2.0)
+    L.state['day']=2.0;out=L.deliver();cmps=[i['payload'] for i in out if i['payload'].startswith('CMP')]
+    nodes=L.state['nodes'];assert [(nodes[c]['a'],nodes[c]['b'],nodes[c]['winner']) for c in cmps]==[('R4','R1','R4'),('R4','R3','R4')]
+    assert all(c in L.view(lecun)['nodes'] and nodes[c]['reject_rate']=='0.09' for c in cmps)
 
 
 def test_training_is_sealed_on_the_clock_without_docker(tmp_path,monkeypatch):
@@ -146,6 +186,63 @@ def test_one_sun4_queues_jobs_back_to_back(tmp_path,monkeypatch):
     monkeypatch.setattr(L,'dataset_id',lambda:'dataset-x');monkeypatch.setattr(L.task,'packet',lambda *a:{})
     monkeypatch.setattr(team.training,'start',start);monkeypatch.setattr(L.task,'matches',lambda m,n:True)
     monkeypatch.setattr(L.task,'result',lambda m:({'error':0.05},L.state['nodes']['N1']['analysis']['params'],None,[]))
-    a=call(team,lecun,'sn_train',{'net_id':'N1','epochs':5});b=call(team,lecun,'sn_train',{'net_id':'N1','epochs':5})
+    a=call(team,lecun,'sn_train',{'net_id':'N1','epochs':5});b=call(team,lecun,'sn_train',{'net_id':'N1','epochs':6})
     assert a['sealed']['ready_day']>0 and b['sealed']['ready_day']==pytest.approx(a['sealed']['ready_day']+a['simulated_days'],abs=0.02)
     assert 'starts on day' in b['note']
+    again=call(team,lecun,'sn_train',{'net_id':'N1','epochs':5})  # deterministic training: the same run is not repeated
+    assert again['result']==a['sealed']['result'] and again['simulated_days']==0 and len(team.training.state['jobs'])==2
+    assert again['sealed']['ready_day']==a['sealed']['ready_day'] and L.state['compute_days_used']==pytest.approx(a['simulated_days']+b['simulated_days'],abs=0.01)
+
+
+def test_the_floor_is_once_a_day_and_a_woken_colleague_ends_on_its_letter(tmp_path):
+    team=make(tmp_path);L=team.ledger;boser=worker(team,'boser');lecun=worker(team,'coordinator')
+    call(team,boser,'mail_send',{'to':'all','body':'Shared weights fit the chip [GRAF87].','attach':[]})
+    with pytest.raises(ValueError,match='already wrote to all today'):call(team,boser,'mail_send',{'to':'all','body':'Again [GRAF87].','attach':[]})
+    jackel=worker(team,'jackel');jackel.assignment['ends_on_letter']=True;(jackel.workspace/'note.md').write_text('note')
+    out=call(team,jackel,'mail_send',{'to':'coordinator','body':'Book it when the chip fits [GRAF87].','attach':[]})
+    assert jackel.state['status']=='submitted' and 'last action' in out['note'] and (jackel.folder/'submission.json').exists()
+    out=call(team,lecun,'mail_send',{'to':'denker','body':'Data please [LECUN89TR].','attach':[]});assert 'status' not in lecun.state
+
+
+def test_woken_colleagues_get_a_host_briefing_and_the_lead_reads_the_floor(tmp_path):
+    from goalagent.lenet_m3 import briefing, take
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator');denker=worker(team,'denker');boser=worker(team,'boser')
+    first=briefing(team,'denker');assert 'USPS_TRAIN' in first and 'none' in first
+    call(team,lecun,'sn_define',{'spec':TIED,'rationale':'[LECUN89TR]'});c=call(team,lecun,'ledger_claim',{'template':'GRAD_EQUALS','args':{'net':'N1'},'rationale':'[N1]'})
+    call(team,lecun,'mail_send',{'to':'denker','body':'See [N1].','attach':['N1',c['claim_id']]})
+    call(team,denker,'mail_send',{'to':'coordinator','body':'Got [N1].','attach':[]})
+    second=briefing(team,'denker');assert '"N1"' in second and c['claim_id'] in second and 'USPS_TRAIN' not in second and 'M2 to coordinator' in second
+    call(team,boser,'mail_send',{'to':'all','body':'Shared weights fit the chip [GRAF87].','attach':[]})
+    L.state['day']=1.0;assert [m['id'] for m in take(team,'coordinator',direct=False)]==['M2','M3'] and take(team,'coordinator',direct=False)==[]
+
+
+def test_the_lead_wakes_at_most_once_a_day_after_the_days_last_event(tmp_path):
+    from goalagent.lenet_m3 import lead_wakes
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
+    L.state['day']=2.3;L.defer('coordinator','node','R9',2.8)
+    assert not lead_wakes(L,['news'],1)  # another event comes due later today
+    L.state['day']=2.8;L.deliver();assert lead_wakes(L,['news'],1) and not lead_wakes(L,['news'],2) and not lead_wakes(L,[],1)
+
+
+def test_idle_checkpoint_is_refused_inside_the_tool_once_a_day(tmp_path):
+    from goalagent.lenet_m3 import guard_checkpoint
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator');guard_checkpoint(team)
+    L.view(lecun)['nodes'].append('USPS_TRAIN');tool=team.registry.tools['checkpoint']
+    progress=action('checkpoint',{'summary':'waiting','next_test':'later'})
+    with pytest.raises(ValueError,match='Checkpoint refused: the Sun-4 is idle'):tool.handler(lecun,progress,10)
+    assert tool.handler(lecun,progress,10)['status']=='checkpointed'
+
+
+def test_prompt_puts_stable_fields_first_and_keeps_the_latest_ledger_view_whole(tmp_path):
+    import json
+    from goalagent.agent import Agent
+    prompts=[]
+    class Provider:
+        def call(self,prompt,schema,folder,**kw):prompts.append(prompt);return action('finish',{'summary':'x','files':['note.md']}),{}
+    team=Team(tmp_path,task(IMAGE),agents_dir=ROOT/'agents/lenet',provider_factory=lambda c:Provider(),sandbox_factory=FakeSandbox)
+    ws=tmp_path/'agents/jackel-1/workspace';ws.mkdir(parents=True);(ws/'note.md').write_text('note')
+    team.run_agent('jackel-1',team.definitions['jackel'],{'goal':'g','objective':'o','depth':1,'inputs':[]})
+    ctx=json.loads(prompts[0].split('Task data:\n',1)[1]);assert list(ctx)[:3]==['tools','assignment','workspace'] and list(ctx)[-1]=='team'
+    big={'tool':'ledger_view','observation':{'nets':'x'*9000}}
+    out=Agent.recent_context(SimpleNamespace(state={'history':[big,{'tool':'mail_inbox','observation':{}},dict(big)]}))
+    assert out[0]['observation']['truncated'] and out[2]['observation']['nets']=='x'*9000

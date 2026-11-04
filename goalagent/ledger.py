@@ -21,7 +21,7 @@ from . import judge
 ROOT=Path(__file__).resolve().parents[1]
 CITE=re.compile(r'\[([A-Za-z0-9_#:.-]+)\]')
 REJECT_RATES=('0','0.05','0.09','0.12')
-TEMPLATES={'BEATS':{'net_a','net_b','dataset','reject_rate'},'FEWER_PARAMS':{'net_a','net_b'},'GRAD_EQUALS':{'net'},'INVARIANT_TO':{'net','transform','tolerance'},'FITS_CHIP':{'net','chip'}}
+TEMPLATES={'BEATS':{'net_a','net_b','dataset','reject_rate'},'FEWER_PARAMS':{'net_a','net_b'},'GRAD_EQUALS':{'net'},'MORE_INVARIANT':{'net_a','net_b','transform'},'FITS_CHIP':{'net','chip'}}
 FEATURES={'avg':re.compile(r'averag|subsampl|\bmean\b|pool|blur|coarse',re.I)}
 TOOLS={
  'ledger_view':'Empty argument; your ledger view: supported claims with evidence, open conjectures, nets, results, proofs, documents, compute days left, vocabulary. Believe only supported claims.',
@@ -32,8 +32,8 @@ TOOLS={
  'sn_train':'JSON {net_id, epochs:1..30}. Real training in an isolated container on the registered training split (validation = last 1000 training digits), blocking until exit; charges simulated Sun-4 days from your compute budget. On success the host creates a result node (dataset usps-val) and proof nodes. You cannot author results.',
  'ledger_evaluate':'JSON {net_id}. Protected host evaluation of the latest successful job for that net on the held-out USPS test split in a separate container; limited count per run. Returns a result node (dataset usps-test).',
  'compare_results':'JSON {a:result_id, b:result_id, reject_rate:"0"|"0.05"|"0.09"|"0.12"}. Host compares error rates at that rejection rate and returns a comparison node to cite. Never compare numbers yourself.',
- 'ledger_claim':'JSON {template:BEATS|FEWER_PARAMS|GRAD_EQUALS|INVARIANT_TO|FITS_CHIP, args, rationale:text citing [IDs]}. Creates a conjecture; it is never supported by itself. BEATS args {net_a,net_b,dataset:usps-val|usps-test,reject_rate}; FEWER_PARAMS args {net_a,net_b}; GRAD_EQUALS args {net}; INVARIANT_TO args {net,transform:shift1|shift2,tolerance in (0,1)} is decided from the invariance measurement every training result already carries (no simulator feature is needed; promote with that result as evidence); FITS_CHIP args {net,chip} is for the chip designer.',
- 'ledger_promote':'JSON {claim_id, evidence_ids:[result/proof ids]}. Deterministic host check; returns supported, refuted, or an error that leaves the claim a conjecture. Nothing you say can promote a claim. A claim another role already decided can be promoted again in your own view; agreement exists when two roles have promoted it.',
+ 'ledger_claim':'JSON {template:BEATS|FEWER_PARAMS|GRAD_EQUALS|MORE_INVARIANT|FITS_CHIP, args, rationale:text citing [IDs]}. Creates a conjecture and the host at once tries the deterministic promotion with the eligible evidence in your view (BEATS and MORE_INVARIANT use the latest result of each net); the reply says supported, refuted, or why it stays a conjecture. Your words never support it. BEATS args {net_a,net_b,dataset:usps-val|usps-test,reject_rate}; FEWER_PARAMS args {net_a,net_b}; GRAD_EQUALS args {net}; MORE_INVARIANT args {net_a,net_b,transform:shift1|shift2} is supported when net_a keeps more validation digits unchanged under that shift than net_b, from the shift measurement every training result already carries (ties are refuted; net_b may be PIPELINE88); FITS_CHIP args {net,chip} is for the chip designer.',
+ 'ledger_promote':'JSON {claim_id or claim_ids:[...], evidence_ids:[result/proof ids]}. Deterministic host check, each claim decided on its own; returns supported, refuted, or an error that leaves the claim a conjecture. Nothing you say can promote a claim. A claim another role already decided can be promoted again in your own view; agreement exists when two roles have promoted it.',
  'mail_send':'JSON {to:role, body:text, attach:[node ids from your view]}. The only way to share knowledge: attached nodes enter the recipient view. The judge refuses letters with post-1988 vocabulary, citations outside your view, numbers without IDs, or claims of verification without a supported claim ID.',
  'mail_inbox':'Empty argument; read your unread letters (sender, body, attached node IDs). Attached nodes are already in your view.',
  'pipeline_run':'Empty argument; run the hand-designed baseline pipeline on the training/validation split and the held-out test split (data owner only). Returns result nodes for net PIPELINE88 on usps-val and usps-test.',
@@ -70,6 +70,7 @@ def support_check(analysis,docs,patterns):
 class LenetTask:
     """The 1988 task: netlang specs, train_usps.py in the Sun-4 profile, error at rejection rates."""
     name='lenet';extra_keys=();max_epochs=30;TOOL_TEXT={}
+    deterministic=True  # train_usps.py seeds torch and the batch order with 1988: same net and arguments, same numbers
     def __init__(self,L):self.L=L
     def analyze(self,spec,vocab):return netlang.canonical(spec,vocab),netlang.analyze(spec,vocab)
     def choices(self,analysis,docs,patterns):return support_check(analysis,docs,patterns)
@@ -139,10 +140,11 @@ class LedgerRuntime:
         return node
     def new_id(self,prefix):
         n=self.state['counters'].get(prefix,0)+1;self.state['counters'][prefix]=n;return prefix+str(n)
-    def add(self,agent,node):
-        self.state['nodes'][node['id']]=node;view=self.view(agent)
+    def add(self,agent,node):return self.add_for(self.role(agent),node)
+    def add_for(self,role,node):
+        self.state['nodes'][node['id']]=node;view=self.view_for(role)
         if node['id'] not in view['nodes']:view['nodes'].append(node['id'])
-        self.team.event('ledger_'+node['type'],{'id':node['id'],'role':self.role(agent)});return node
+        self.team.event('ledger_'+node['type'],{'id':node['id'],'role':role});return node
     def cites(self,agent,text):
         if not isinstance(text,str) or not text.strip():raise ValueError('rationale text is required')
         found=CITE.findall(text);view=set(self.view(agent)['nodes'])
@@ -164,7 +166,19 @@ class LedgerRuntime:
             elif item['kind']=='vocab':
                 if item['payload'] not in view['vocabulary']:view['vocabulary'].append(item['payload'])
             out.append(item)
-        self.state['pending']=keep;return out
+        self.state['pending']=keep
+        for item in list(out):
+            node=self.state['nodes'].get(item['payload']) if item['kind']=='node' else None
+            if node and node['type']=='result':out+=[{'role':item['role'],'kind':'node','payload':c,'ready':item['ready']} for c in self.auto_compare(item['role'],node)]
+        return out
+    def auto_compare(self,role,r):
+        """Host comparisons for a delivered validation result at 9% rejection: against PIPELINE88 and against the best other net in the view."""
+        if not self.reject_mode() or r['dataset']!=self.datasets()[0] or r['net']=='PIPELINE88':return []
+        mine=[self.state['nodes'][i] for i in self.view_for(role)['nodes'] if i!=r['id']]
+        others=[n for n in mine if n['type']=='result' and n['dataset']==r['dataset'] and n['net']!=r['net']]
+        base=[n for n in others if n['net']=='PIPELINE88'];rest=[n for n in others if n['net']!='PIPELINE88']
+        picks=base[-1:]+([min(rest,key=lambda n:self.score(n,'0.09'))] if rest else [])
+        return [self.comparison(role,r,b,'0.09')['id'] for b in picks]
     def next_event(self):
         days=[i['ready'] for i in self.state['pending'] if i['ready']>self.now()]
         days+=[m['delivered'] for m in self.state['mail'] if m.get('delivered',0)>self.now()]
@@ -221,20 +235,22 @@ class LedgerRuntime:
         if tool=='ledger_promote':return self.promote(agent,d)
         raise ValueError('Unknown ledger tool')
     # ---- read side ----
+    @staticmethod
+    def brief(n):
+        """The host's one-line form of a node, shared by ledger_view and the orchestrator's guidance."""
+        t=n['type']
+        if t=='document':return {'id':n['id'],'title':n['title'],'date':n['date']}
+        if t=='net_spec':return {'id':n['id'],'connections':n['analysis']['connections'],'params':n['analysis']['params'],'tied_layers':n['analysis']['tied_layers'],'pattern':n['analysis']['pattern'],'unsourced_choices':[c['choice'] for c in n['choices'] if c['status']=='unsourced'],'jobs':n.get('jobs',[])}
+        if t=='result':return {'id':n['id'],'net':n['net'],'dataset':n['dataset'],**{k:n[k] for k in ('epochs','error','reject_curve','invariance','accuracy','loss') if k in n}}
+        if t=='proof':return {'id':n['id'],'kind':n['kind'],'net':n['net'],'passed':n['passed']}
+        if t=='claim':return {'id':n['id'],'template':n['template'],'args':n['args'],'status':n['status'],'evidence':n['evidence'],'guess':n['guess']}
+        if t=='comparison':return {k:v for k,v in n.items() if k not in ('type','owner')}
+        if t=='feature_request':return {k:n[k] for k in ('id','description','granted')}
+        if t=='dataset':return {k:n[k] for k in ('id','split','description')}
+        if t=='chip':return {k:n[k] for k in ('id','net','chip','weights','fits','chars_per_sec')}
+        return {'id':n['id'],'type':t}
     def render(self,agent):
-        view=self.view(agent);nodes=[self.state['nodes'][i] for i in view['nodes']]
-        def brief(n):
-            t=n['type']
-            if t=='document':return {'id':n['id'],'title':n['title'],'date':n['date']}
-            if t=='net_spec':return {'id':n['id'],'connections':n['analysis']['connections'],'params':n['analysis']['params'],'tied_layers':n['analysis']['tied_layers'],'pattern':n['analysis']['pattern'],'unsourced_choices':[c['choice'] for c in n['choices'] if c['status']=='unsourced'],'jobs':n.get('jobs',[])}
-            if t=='result':return {'id':n['id'],'net':n['net'],'dataset':n['dataset'],**{k:n[k] for k in ('error','reject_curve','accuracy','loss') if k in n}}
-            if t=='proof':return {'id':n['id'],'kind':n['kind'],'net':n['net'],'passed':n['passed']}
-            if t=='claim':return {'id':n['id'],'template':n['template'],'args':n['args'],'status':n['status'],'evidence':n['evidence'],'guess':n['guess']}
-            if t=='comparison':return {k:v for k,v in n.items() if k not in ('type','owner')}
-            if t=='feature_request':return {k:n[k] for k in ('id','description','granted')}
-            if t=='dataset':return {k:n[k] for k in ('id','split','description')}
-            if t=='chip':return {k:n[k] for k in ('id','net','chip','weights','fits','chars_per_sec')}
-            return {'id':n['id'],'type':t}
+        view=self.view(agent);nodes=[self.state['nodes'][i] for i in view['nodes']];brief=self.brief
         groups={}
         for n in nodes:groups.setdefault(n['type'],[]).append(brief(n))
         return {'believe_only':'claims with status supported','supported':[c for c in groups.get('claim',[]) if c['status']=='supported'],
@@ -302,6 +318,12 @@ class LedgerRuntime:
         net=self.visible(agent,d['net_id'],'net_spec');epochs=d['epochs']
         self.require_split(agent,'train','Training')
         if type(epochs) is not int or not 1<=epochs<=self.task.max_epochs:raise ValueError(f'epochs must be an integer in 1..{self.task.max_epochs}')
+        key=json.dumps(d,sort_keys=True);done=self.state.setdefault('trained',{}).get(key)
+        if done and getattr(self.task,'deterministic',False):
+            sealed=[i for i in self.state['pending'] if i['kind']=='node' and i['payload']==done['result']]
+            return {'job_id':done['job_id'],'result':done['result'],'proofs':done['proofs'],'simulated_days':0,'compute_days_used':round(self.state['compute_days_used'],3),
+                    **({'sealed':{'result':done['result'],'ready_day':sealed[0]['ready']}} if sealed else {}),
+                    'note':'Training is deterministic (seed 1988): this net was already trained with these arguments, so no job started and no computing time was charged. Cite the existing result.'}
         eta=self.task.eta(net['analysis'],int(self.config.get('samples',6291)),epochs)
         self.charge(eta,'this run')
         did=self.dataset_id();packet=self.task.packet(net,epochs,d,did,Path(agent.workspace))
@@ -327,6 +349,7 @@ class LedgerRuntime:
                     'detail':{'ledger_params':net['analysis']['params'],'container_params':params},'source':result['source']})]
         if grad:
             proofs.append(put({'id':self.new_id('P'),'type':'proof','kind':'GRAD_CHECK','net':net['id'],'passed':bool(grad['passed']),'detail':grad,'source':result['source']}))
+        self.state.setdefault('trained',{})[key]={'job_id':status['job_id'],'result':result['id'],'proofs':[p['id'] for p in proofs]}
         if self.clock():
             return {**out,'sealed':{'result':result['id'],'proofs':[p['id'] for p in proofs],'ready_day':round(ready,2),'today':self.now()},
                     'note':f'The department has one Sun-4 and it runs one job at a time: this job starts on day {start:.2f} and its numbers enter your view on ready_day. Checkpoint to let time pass, or design something else meanwhile.'}
@@ -355,10 +378,12 @@ class LedgerRuntime:
         if set(d)!=keys:raise ValueError('compare_results needs {'+', '.join(sorted(keys))+'}')
         a=self.visible(agent,d['a'],'result');b=self.visible(agent,d['b'],'result');rate=str(d['reject_rate']) if self.reject_mode() else None
         if a['dataset']!=b['dataset']:raise ValueError('Results come from different datasets: '+a['dataset']+' vs '+b['dataset'])
-        ea,eb=self.score(a,rate),self.score(b,rate);m=self.metric()
-        node=self.add(agent,{'id':self.new_id('CMP'),'type':'comparison','a':a['id'],'b':b['id'],'dataset':a['dataset'],'metric':m,'reject_rate':rate,m+'_a':ea,m+'_b':eb,
-                             'winner':a['id'] if self.better(ea,eb) else b['id'] if self.better(eb,ea) else 'tie','owner':self.role(agent)})
+        node=self.comparison(self.role(agent),a,b,rate)
         return {k:v for k,v in node.items() if k not in ('type','owner')}
+    def comparison(self,role,a,b,rate):
+        ea,eb=self.score(a,rate),self.score(b,rate);m=self.metric()
+        return self.add_for(role,{'id':self.new_id('CMP'),'type':'comparison','a':a['id'],'b':b['id'],'dataset':a['dataset'],'metric':m,'reject_rate':rate,m+'_a':ea,m+'_b':eb,
+                             'winner':a['id'] if self.better(ea,eb) else b['id'] if self.better(eb,ea) else 'tie','owner':role})
     def claim(self,agent,d):
         if set(d)!={'template','args','rationale'}:raise ValueError('ledger_claim needs {template, args, rationale}')
         t=d['template'];args=d['args'];T=self.templates()
@@ -366,8 +391,9 @@ class LedgerRuntime:
         if not isinstance(args,dict) or set(args)!=T[t]:raise ValueError(t+' args must be exactly '+', '.join(sorted(T[t])))
         for key in ('net','net_a','net_b'):
             if key in args:self.visible(agent,args[key],'net_spec')
-        if t=='INVARIANT_TO':
-            if args['transform'] not in ('shift1','shift2') or not isinstance(args['tolerance'],(int,float)) or not 0<args['tolerance']<1:raise ValueError('INVARIANT_TO needs transform shift1|shift2 and tolerance in (0,1)')
+        if t=='MORE_INVARIANT':
+            if args['transform'] not in ('shift1','shift2'):raise ValueError('MORE_INVARIANT needs transform shift1|shift2')
+            if args['net_a']==args['net_b']:raise ValueError('MORE_INVARIANT compares two different nets')
         if t=='FITS_CHIP' and args['chip']!='anna':raise ValueError('The only chip is "anna"')
         if t=='BEATS':
             if args['dataset'] not in self.datasets():raise ValueError('dataset must be one of '+', '.join(self.datasets()))
@@ -378,12 +404,29 @@ class LedgerRuntime:
         node={'id':self.new_id('C'),'type':'claim','template':t,'args':args,'status':'conjecture','rationale':d['rationale'],'cites':cites,'unknown_cites':unknown,'guess':not cites,'evidence':[],'owner':self.role(agent)}
         self.add(agent,node)
         if node['guess']:self.state['leak_log'].append({'time':time.time(),'role':self.role(agent),'node':node['id'],'kind':'claim','unknown_cites':unknown})
-        return {'claim_id':node['id'],'status':'conjecture','guess':node['guess'],'note':'Promote with ledger_promote and result/proof evidence; speech cannot promote it'}
+        # The host tries the deterministic promotion at once with every eligible node in the claimant's view; nothing the model wrote is evidence.
+        nets={args[k] for k in ('net','net_a','net_b') if k in args}
+        eligible=[i for i in self.view(agent)['nodes'] if self.state['nodes'][i]['type'] in ('result','proof','chip') and self.state['nodes'][i].get('net') in nets]
+        try:return {**self.promote(agent,{'claim_id':node['id'],'evidence_ids':eligible}),'guess':node['guess']}
+        except ValueError as error:
+            return {'claim_id':node['id'],'status':'conjecture','guess':node['guess'],'not_yet_decidable':str(error),'note':'Promote with ledger_promote once the evidence is in your view; speech cannot promote it'}
+    def latest(self,agent,net,dataset,transform=None):
+        """The most recently created result for a net on a dataset in the view: re-runs cannot be cherry-picked."""
+        order={k:i for i,k in enumerate(self.state['nodes'])};nodes=self.state['nodes']
+        rs=[nodes[i] for i in self.view(agent)['nodes'] if nodes[i]['type']=='result' and nodes[i]['net']==net and nodes[i]['dataset']==dataset
+            and (transform is None or (nodes[i].get('invariance') or {}).get(transform) is not None)]
+        return max(rs,key=lambda r:order[r['id']]) if rs else None
     def promote(self,agent,d):
-        if set(d)!={'claim_id','evidence_ids'} or not isinstance(d['evidence_ids'],list):raise ValueError('ledger_promote needs {claim_id, evidence_ids:[...]}')
+        if isinstance(d,dict) and set(d)=={'claim_ids','evidence_ids'} and isinstance(d['claim_ids'],list) and d['claim_ids']:
+            out=[]
+            for cid in d['claim_ids']:
+                try:out.append(self.promote(agent,{'claim_id':cid,'evidence_ids':d['evidence_ids']}))
+                except ValueError as error:out.append({'claim_id':cid,'error':str(error)})
+            return {'claims':out}
+        if set(d)!={'claim_id','evidence_ids'} or not isinstance(d['evidence_ids'],list):raise ValueError('ledger_promote needs {claim_id or claim_ids:[...], evidence_ids:[...]}')
         c=self.visible(agent,d['claim_id'],'claim');role=self.role(agent);c.setdefault('endorsed_by',[])
         if c['status']!='conjecture':
-            if role in c['endorsed_by']:return {'claim_id':c['id'],'status':c['status'],'evidence':c['evidence'],'endorsed_by':c['endorsed_by'],'note':'Already decided'}
+            if role in c['endorsed_by']:return {'claim_id':c['id'],'status':c['status'],'evidence':c['evidence'],'endorsed_by':c['endorsed_by'],'agreed':len(c['endorsed_by'])>=2,'note':'Already decided'}
             missing=[e for e in c['evidence'] if e not in self.view(agent)['nodes']]
             if missing:raise ValueError('To promote this claim yourself you need its evidence in your view; missing: '+', '.join(missing))
             c['endorsed_by'].append(role);self.team.event('ledger_endorse',{'claim':c['id'],'role':role})
@@ -401,18 +444,17 @@ class LedgerRuntime:
             chips=[e for e in evidence if e['type']=='chip' and e['net']==a['net'] and e['chip']==a['chip']]
             if not chips:raise ValueError('FITS_CHIP needs a chip node for '+a['net']+' from chip_estimate among the evidence')
             verdict='supported' if all(k['fits'] for k in chips) else 'refuted';detail={k['id']:{'weights':k['weights'],'capacity':k['capacity']} for k in chips};used=[k['id'] for k in chips]
-        elif t=='INVARIANT_TO':
-            rs=[e for e in evidence if e['type']=='result' and e['net']==a['net'] and e.get('invariance') and a['transform'] in e['invariance']]
-            if not rs:raise ValueError('INVARIANT_TO needs a validation result for '+a['net']+' carrying an invariance measurement for '+str(a['transform']))
-            tol=float(a['tolerance']);kept=max(r['invariance'][a['transform']] for r in rs)
-            verdict='supported' if kept>=1-tol else 'refuted';detail={'fraction_unchanged':kept,'tolerance':tol,'transform':a['transform']};used=[r['id'] for r in rs]
+        elif t=='MORE_INVARIANT':
+            x=a['transform'];ra=self.latest(agent,a['net_a'],self.datasets()[0],x);rb=self.latest(agent,a['net_b'],self.datasets()[0],x)
+            if not ra or not rb:raise ValueError(f'MORE_INVARIANT needs a {self.datasets()[0]} result carrying a {x} measurement for each net in your view')
+            ka,kb=ra['invariance'][x],rb['invariance'][x]
+            verdict='supported' if ka>kb else 'refuted';detail={'kept_a':ka,'kept_b':kb,'transform':x,'results':[ra['id'],rb['id']]};used=[ra['id'],rb['id']]
         else:
-            ra=[e for e in evidence if e['type']=='result' and e['net']==a['net_a'] and e['dataset']==a['dataset']]
-            rb=[e for e in evidence if e['type']=='result' and e['net']==a['net_b'] and e['dataset']==a['dataset']]
-            if not ra or not rb:raise ValueError('BEATS needs one result for each net on dataset '+a['dataset']+' among the evidence; results on other datasets do not count')
-            best=max if self.config.get('metric',{}).get('higher_is_better') else min;rate=a.get('reject_rate');m=self.metric()
-            ea=best(self.score(r,rate) for r in ra);eb=best(self.score(r,rate) for r in rb)
-            verdict='supported' if self.better(ea,eb) else 'refuted';detail={m+'_a':ea,m+'_b':eb,'reject_rate':rate};used=[r['id'] for r in ra+rb]
+            ra=self.latest(agent,a['net_a'],a['dataset']);rb=self.latest(agent,a['net_b'],a['dataset'])
+            if not ra or not rb:raise ValueError('BEATS needs one result for each net on dataset '+a['dataset']+' in your view; results on other datasets do not count')
+            rate=a.get('reject_rate');m=self.metric()
+            ea=self.score(ra,rate);eb=self.score(rb,rate)
+            verdict='supported' if self.better(ea,eb) else 'refuted';detail={m+'_a':ea,m+'_b':eb,'reject_rate':rate,'latest_results':[ra['id'],rb['id']]};used=[ra['id'],rb['id']]
         c['status']=verdict;c['evidence']=used;c['detail']=detail;c['decided_at']=time.time();c['endorsed_by']=[role]
         self.team.event('ledger_promote',{'claim':c['id'],'status':verdict,'role':role})
         unlocked=[]
@@ -431,7 +473,7 @@ class LedgerRuntime:
         if violations:
             self.state['leak_log'].append({'time':time.time(),'role':sender,'kind':'mail_rejected','violations':violations,'body':d['body'][:500]})
             raise ValueError('Letter refused by the judge ('+judge.describe(violations)+'). Rewrite it: 1988 vocabulary, cite only IDs in your view, attach an ID to every number, call nothing verified without a supported claim ID.')
-        if self.clock() and to!='all':
+        if self.clock():  # the meeting floor too: one statement per person per day
             today=[m for m in self.state['mail'] if m['from']==sender and m['to']==to and m.get('sent_day')==self.now()]
             if today:raise ValueError(f'You already wrote to {to} today ({today[-1]["id"]}); the mail goes out once a day and no answer can arrive while you keep writing. Checkpoint to let the day pass, then act on the reply.')
         recipients=[r for r in self.team.definitions if r not in (sender,'judge')] if to=='all' else [to]
@@ -443,7 +485,12 @@ class LedgerRuntime:
         mail={'id':self.new_id('M'),'from':sender,'to':to,'body':d['body'],'attach':list(d['attach']),'time':time.time(),'read':False,'verdict':None,
               'sent_day':self.now(),'delivered':self.now()+delay,'read_by':[]}
         self.state['mail'].append(mail);self.team.event('ledger_mail',{'id':mail['id'],'from':sender,'to':to,'attach':mail['attach'],'day':self.now()})
-        return {'mail_id':mail['id'],'delivered_to':to,'attached':mail['attach'],'arrives_day':mail['delivered'],'note':'A reply takes time; checkpoint if you must wait for it'}
+        out={'mail_id':mail['id'],'delivered_to':to,'attached':mail['attach'],'arrives_day':mail['delivered'],'note':'A reply takes time; checkpoint if you must wait for it'}
+        if getattr(agent,'assignment',{}).get('ends_on_letter'):  # a woken colleague's letter is its last action: the host writes the finish
+            from .toolkit import workspace_action
+            workspace_action(agent,{'tool':'finish','argument':json.dumps({'summary':f'Letter {mail["id"]} to {to} sent; the host closed the assignment','files':['note.md']}),'why':'host: the letter is the last action'},None)
+            out['note']='Your letter is sent. It was your last action: the host has closed this assignment.'
+        return out
     def inbox(self,agent):
         role=self.role(agent);rows=[];recent=[]
         for m in self.state['mail']:

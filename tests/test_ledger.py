@@ -41,11 +41,13 @@ def test_claims_are_born_conjectures_and_free_text_is_rejected(tmp_path):
     n1=call(team,a,'sn_define',{'spec':FULL,'rationale':'control [LECUN89TR]'});n2=call(team,a,'sn_define',{'spec':TIED,'rationale':'[RHW86-TC] constraint, Net-5 of [LECUN89TR]'})
     assert (n1['net_id'],n2['net_id'])==('N1','N2') and n2['params']==1060 and not team.ledger.state['nodes']['N2']['guess']
     c=call(team,a,'ledger_claim',{'template':'FEWER_PARAMS','args':{'net_a':'N2','net_b':'N1'},'rationale':'[N1] [N2]'})
-    assert c['status']=='conjecture'
+    assert c['status']=='supported' and c['detail']['params_a']==1060  # decided at once by the host's parameter count, not by the claimant
+    g=call(team,a,'ledger_claim',{'template':'GRAD_EQUALS','args':{'net':'N2'},'rationale':'[N2]'})
+    assert g['status']=='conjecture' and 'GRAD_CHECK' in g['not_yet_decidable']
     with pytest.raises(ValueError,match='Free-text'):call(team,a,'ledger_claim',{'template':'IS_BETTER','args':{'net':'N2'},'rationale':'x'})
     with pytest.raises(ValueError,match='exactly'):call(team,a,'ledger_claim',{'template':'BEATS','args':{'net_a':'N2'},'rationale':'x'})
     assert call(team,a,'ledger_promote',{'claim_id':'C1','evidence_ids':[]})['status']=='supported'
-    view=call(team,a,'ledger_view');assert view['supported'][0]['id']=='C1' and view['conjectures']==[]
+    view=call(team,a,'ledger_view');assert view['supported'][0]['id']=='C1' and [c['id'] for c in view['conjectures']]==['C2']
 
 
 def test_beats_needs_results_on_the_same_dataset_and_decides_deterministically(tmp_path):

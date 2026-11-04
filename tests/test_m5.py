@@ -116,7 +116,7 @@ def test_rework_limit_waits_for_operator_instead_of_livelocking(tmp_path):
 def test_lenet_task_is_unchanged_by_the_adapter(tmp_path):
     from test_m3 import make as make_lenet, worker as lenet_worker
     team=make_lenet(tmp_path);L=team.ledger;lecun=lenet_worker(team,'coordinator')
-    assert L.task.name=='lenet' and L.reject_mode() and L.datasets()==('usps-val','usps-test') and set(L.templates())=={'BEATS','FEWER_PARAMS','GRAD_EQUALS','INVARIANT_TO','FITS_CHIP'}
+    assert L.task.name=='lenet' and L.reject_mode() and L.datasets()==('usps-val','usps-test') and set(L.templates())=={'BEATS','FEWER_PARAMS','GRAD_EQUALS','MORE_INVARIANT','FITS_CHIP'}
     assert 'locked' in call(team,lecun,'ledger_view') and team.registry.tools['sn_train'].description.startswith('JSON {net_id, epochs:1..30}')
 
 
