@@ -317,7 +317,10 @@ class LedgerRuntime:
         raw=metrics_path.read_bytes();m=json.loads(raw)
         if not self.task.matches(m,net):raise ValueError('Job output does not match the net spec')
         fields,params,grad,per_epoch=self.task.result(m)
-        ready=round(self.now()+eta,2);put=(lambda n:self.seal(agent,n,ready)) if self.clock() else (lambda n:self.add(agent,n))
+        start=max(self.now(),self.state.get('sun4_free',0.0))  # one Sun-4: a job starts when the previous one ends
+        ready=round(start+eta,2)
+        if self.clock():self.state['sun4_free']=ready
+        put=(lambda n:self.seal(agent,n,ready)) if self.clock() else (lambda n:self.add(agent,n))
         result=put({'id':self.new_id('R'),'type':'result','net':net['id'],'dataset':self.datasets()[0],**fields,
             'epochs':epochs,'source':{'job_id':status['job_id'],'path':'metrics.json','sha256':sha256(raw)},'owner':self.role(agent)})
         proofs=[put({'id':self.new_id('P'),'type':'proof','kind':'PARAM_COUNT','net':net['id'],'passed':params==net['analysis']['params'],
@@ -326,7 +329,7 @@ class LedgerRuntime:
             proofs.append(put({'id':self.new_id('P'),'type':'proof','kind':'GRAD_CHECK','net':net['id'],'passed':bool(grad['passed']),'detail':grad,'source':result['source']}))
         if self.clock():
             return {**out,'sealed':{'result':result['id'],'proofs':[p['id'] for p in proofs],'ready_day':round(ready,2),'today':self.now()},
-                    'note':'The Sun-4 is running; the numbers enter your view on ready_day. Checkpoint to let time pass, or design something else meanwhile.'}
+                    'note':f'The department has one Sun-4 and it runs one job at a time: this job starts on day {start:.2f} and its numbers enter your view on ready_day. Checkpoint to let time pass, or design something else meanwhile.'}
         return {**out,'result':{k:v for k,v in result.items() if k in RESULT_KEYS},'proofs':[{k:p[k] for k in ('id','kind','passed')} for p in proofs],
                 'per_epoch':per_epoch[-3:],'scope':'Validation split result, not protected test measurement'}
     def evaluate(self,agent,d):

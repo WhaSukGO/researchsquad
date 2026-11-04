@@ -28,7 +28,7 @@ GOAL=('It is 3 October 1988 (day 0). The department recognizes handwritten USPS 
 
 def task(image,*,compute_days=20.0,max_evaluations=1,corpus=True,vocabulary=(),clock=True,visit_day=45,drop=None,overrides=None,max_compute_days=60):
     views={r:[x for x in (d if corpus or r!='coordinator' else []) if x not in (drop or {}).get(r,())] for r,d in ROLE_DOCS.items()}
-    return {'goal':GOAL,'inputs':{},'network':False,'budget':{'max_calls':2400,'max_seconds':43200,'max_assignments':80,'max_depth':2},
+    return {'goal':GOAL,'inputs':{},'network':False,'budget':{'max_calls':5000,'max_seconds':86400,'max_assignments':80,'max_depth':2},
         'training':{'profiles':{'sun4':{'image':image,'gpu':False,'memory':'2g','cpus':2,'max_seconds':1200,'max_output_bytes':50_000_000,'roles':['coordinator']}}},
         'ledger':{'corpus':'research/lit-1988','handles':HANDLES,'vocabulary':list(vocabulary),'views':views,'clock':clock,'mail_delay_days':1,
                   'features_by_bottou':True,'feature_days':10,'max_compute_days':max_compute_days,'chip_weights':4096,'visit_day':visit_day,

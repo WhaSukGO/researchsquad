@@ -132,3 +132,20 @@ def test_test_split_opens_on_the_visit_day_and_checklist_counts_only_sourced_com
     c=lenet_checklist(L)  # TIED is Net-5: two shared stages, no averaging
     assert c['shared_maps']['net']==c['two_stage_hierarchy']['net']=='N1' and c['subsampling'] is None and c['beats_pipeline_test'] is None and c['reached']==2
     assert c['discovered']==sum(c[k]['provenance']=='sourced' for k in ('shared_maps','two_stage_hierarchy'))
+
+
+def test_one_sun4_queues_jobs_back_to_back(tmp_path,monkeypatch):
+    import json
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
+    L.add(lecun,dict(L.state['nodes'].get('USPS_TRAIN') or {'id':'USPS_TRAIN','type':'dataset','split':'train'}))
+    call(team,lecun,'sn_define',{'spec':FULL,'rationale':'[LECUN89TR]'})
+    def start(agent,packet,dispatch):  # stand-in for the container: a succeeded job with metrics on disk
+        jid=f"job-{len(team.training.state['jobs'])}";team.training.state['jobs'][jid]={}
+        out=team.training.root/'jobs'/jid/'output';out.mkdir(parents=True);(out/'metrics.json').write_text(json.dumps({}))
+        return {'job_id':jid,'status':'SUCCEEDED','log_tail':''}
+    monkeypatch.setattr(L,'dataset_id',lambda:'dataset-x');monkeypatch.setattr(L.task,'packet',lambda *a:{})
+    monkeypatch.setattr(team.training,'start',start);monkeypatch.setattr(L.task,'matches',lambda m,n:True)
+    monkeypatch.setattr(L.task,'result',lambda m:({'error':0.05},L.state['nodes']['N1']['analysis']['params'],None,[]))
+    a=call(team,lecun,'sn_train',{'net_id':'N1','epochs':5});b=call(team,lecun,'sn_train',{'net_id':'N1','epochs':5})
+    assert a['sealed']['ready_day']>0 and b['sealed']['ready_day']==pytest.approx(a['sealed']['ready_day']+a['simulated_days'],abs=0.02)
+    assert 'starts on day' in b['note']
