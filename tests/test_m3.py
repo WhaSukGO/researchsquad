@@ -174,6 +174,15 @@ def test_test_split_opens_on_the_visit_day_and_checklist_counts_only_sourced_com
     assert c['discovered']==sum(c[k]['provenance']=='sourced' for k in ('shared_maps','two_stage_hierarchy'))
 
 
+def test_the_visit_opens_the_test_handle_to_the_lead(tmp_path):
+    from goalagent.lenet_m3 import visit_guidance
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
+    if 'USPS_TEST' not in L.state['nodes']:L.add_for('denker',{'id':'USPS_TEST','type':'dataset','split':'test'})
+    assert 'USPS_TEST' not in L.view(lecun)['nodes']
+    visit_guidance(L);visit_guidance(L)
+    assert L.view(lecun)['nodes'].count('USPS_TEST')==1 and L.require_handle(lecun,'USPS_TEST','Evaluation') is None
+
+
 def test_one_sun4_queues_jobs_back_to_back(tmp_path,monkeypatch):
     import json
     team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
