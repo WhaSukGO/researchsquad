@@ -155,10 +155,11 @@ def lead_guidance(team,head,arrived):
 
 
 def visit_guidance(L):
-    """The visit opens the held-out test handle to the lead: a request to Denker on the visit day could never be answered,
-    because the simulation does not pass another day."""
-    view=L.view_for('coordinator')['nodes']
-    if 'USPS_TEST' in L.state['nodes'] and 'USPS_TEST' not in view:view.append('USPS_TEST');L.team.event('visit_opened_test',{'day':L.now()})
+    """The visit opens the held-out test handle and the pipeline's test results to the lead: a request to Denker on the visit
+    day could never be answered, because the simulation does not pass another day."""
+    view=L.view_for('coordinator')['nodes'];nodes=L.state['nodes']
+    opened=[i for i,n in nodes.items() if i not in view and (i=='USPS_TEST' or n['type']=='result' and n.get('net')=='PIPELINE88' and n.get('dataset')=='usps-test')]
+    if opened:view.extend(opened);L.team.event('visit_opened_test',{'day':L.now(),'nodes':opened})
     return f'Day {L.now():.0f}: the Postal Service visit. The held-out test split is open today for one ledger_evaluate: evaluate the network you choose, compare it with the pipeline test result at 9% rejection, then write report.md with the agreed claims and finish.'
 
 
