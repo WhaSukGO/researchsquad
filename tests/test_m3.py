@@ -188,7 +188,7 @@ def test_one_sun4_queues_jobs_back_to_back(tmp_path,monkeypatch):
     monkeypatch.setattr(L.task,'result',lambda m:({'error':0.05},L.state['nodes']['N1']['analysis']['params'],None,[]))
     a=call(team,lecun,'sn_train',{'net_id':'N1','epochs':5});b=call(team,lecun,'sn_train',{'net_id':'N1','epochs':6})
     assert a['sealed']['ready_day']>0 and b['sealed']['ready_day']==pytest.approx(a['sealed']['ready_day']+a['simulated_days'],abs=0.02)
-    assert 'starts on day' in b['note']
+    assert 'starts on day' in b['note'] and L.state['inflight']=={}  # the in-flight marker is cleared once the result exists
     again=call(team,lecun,'sn_train',{'net_id':'N1','epochs':5})  # deterministic training: the same run is not repeated
     assert again['result']==a['sealed']['result'] and again['simulated_days']==0 and len(team.training.state['jobs'])==2
     assert again['sealed']['ready_day']==a['sealed']['ready_day'] and L.state['compute_days_used']==pytest.approx(a['simulated_days']+b['simulated_days'],abs=0.01)
@@ -268,3 +268,34 @@ def test_woken_colleagues_run_concurrently_and_keep_the_ledger_consistent(tmp_pa
     L.state['day']=2.0
     with pytest.raises(RuntimeError,match='boser has no model'):run_batch(team,[prepare(team,counts,'boser','Write once.'),prepare(team,counts,'jackel','Write once.')])
     assert L.state['mail'][-1]['from']=='jackel' and len(L.state['mail'])==4  # the failing colleague does not stop the other
+
+
+def test_simulation_locals_survive_a_restart_and_the_lead_resumes(tmp_path):
+    import json
+    from goalagent.lenet_m3 import simulate
+    class Quiet:  # the lead waits, colleagues have nothing to add
+        def __init__(self,config):self.role=config['id']
+        def call(self,prompt,schema,folder,**kw):
+            if self.role=='coordinator':return action('checkpoint',{'summary':'wait','next_test':'later'}),{}
+            return action('finish',{'summary':'nothing to add','files':['note.md']}),{}
+    def open_team():return Team(tmp_path,task(IMAGE),agents_dir=ROOT/'agents/lenet',provider_factory=Quiet,sandbox_factory=FakeSandbox)
+    team=open_team();simulate(team,max_rounds=1);S=team.state['sim'];team.close()
+    assert S['rounds']==1 and S['counts']['jackel']>=1 and S['lead_seen']>0 and S['continuation']['dispatch_id']=='round-1'
+    team=open_team();assert team.state['sim']==S  # round trip through team-state.json
+    simulate(team,max_rounds=2,resume=True)  # reusing a colleague's folder name would raise 'Worker assignment changed'
+    lead=json.loads((tmp_path/'agents/lead/worker-state.json').read_text())
+    assert team.state['sim']['rounds']==2 and team.state['sim']['resumes']==1 and lead['continuation_id']=='resume-1'
+    assert team.state['sim']['counts']['jackel']>S['counts']['jackel'] and 'resumed after an interruption' in lead['guidance']
+    assert any(e['kind']=='simulation_resumed' for e in team.state['events'])
+
+
+def test_stale_inflight_training_is_refunded_exactly_once(tmp_path):
+    team=make(tmp_path);L=team.ledger
+    L.state['compute_days_used']=3.0;L.state['inflight']={'k':{'net':'N1','args':{'net_id':'N1','epochs':5},'days':2.0,'job_id':'job-x','day':1.0}}
+    assert [m['net'] for m in L.recover_inflight()]==['N1'] and L.state['compute_days_used']==1.0
+    assert L.recover_inflight()==[] and L.state['compute_days_used']==1.0 and L.state['inflight']=={}
+
+
+def test_resume_refuses_a_changed_contract(tmp_path):
+    make(tmp_path).close()
+    with pytest.raises(ValueError,match='Team contract changed'):make(tmp_path,visit_day=50)

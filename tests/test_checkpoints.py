@@ -219,3 +219,15 @@ def test_committed_shell_receipt_is_not_executed_again_after_restart(tmp_path):
     result=worker.run(lambda:None,lambda:float('inf'),checkpoint_interval=8)
     assert result['status']=='submitted' and calls==[]
     assert worker.state['history'][0]['observation']['tail']=='already executed'
+
+
+def test_a_committed_refused_checkpoint_is_not_reapplied_after_restart(tmp_path):
+    team=make(tmp_path,lambda c:Scripted([]));worker=instance(team,'experiment_engineer')
+    stop=action('checkpoint',{'summary':'wait','next_test':'later'})
+    worker.state.update(pending=stop,steps=1,history=[])
+    refused={'error':'ValueError','detail':'Checkpoint refused: the Sun-4 is idle'}
+    path=worker.folder/'actions/001.json';path.parent.mkdir(parents=True);path.write_text(json.dumps({'action':stop,'step':1,'tool':'checkpoint','why':stop['why'],'observation':refused}))
+    worker.save()
+    worker.provider=Scripted([action('submit_report',{'status':'DONE','summary':'Continued after the refusal','files':[]})])
+    result=worker.run(lambda:None,lambda:float('inf'),checkpoint_interval=8)
+    assert result['status']=='submitted' and worker.state['history'][0]['observation']==refused  # replaying it would have checkpointed

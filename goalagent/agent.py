@@ -209,8 +209,9 @@ class Agent:
                     saved_receipt = json.loads(receipt_path.read_text())
                     if saved_receipt['action'] != action:
                         raise ValueError('Pending action differs from its committed receipt')
-                    if action.get('tool') in {'checkpoint', 'submit_report', 'finish', 'request_environment'}:
-                        # Reapply local state effects only; these tools have no external actions.
+                    if action.get('tool') in {'checkpoint', 'submit_report', 'finish', 'request_environment'} and 'error' not in saved_receipt['observation']:
+                        # Reapply local state effects only; these tools have no external actions. A committed refusal had no effect
+                        # to reapply, and re-running it could now succeed (the idle-checkpoint guard is once per day), so it stands.
                         observation = self.execute(action, min(limit(self.policy['command_timeout']), remaining()))
                     else:
                         observation = saved_receipt['observation']

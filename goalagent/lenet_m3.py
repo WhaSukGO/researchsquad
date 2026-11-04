@@ -146,21 +146,65 @@ def run_batch(team,jobs):
     return [f.result() for f in futures]
 
 
-def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,phase=None):
-    L=team.ledger;defs=team.definitions;counts={r:0 for r in defs};judged=set();hinton_last=-99;announced=False;lead_day=-1
+def lead_guidance(team,head,arrived):
+    """The lead's continuation: host records of nodes that entered its view, then its unread letters and the meeting floor."""
+    L=team.ledger;new=take(team,'coordinator',direct=False)
+    nodes=('New in your view (host records): '+json.dumps([L.brief(L.state['nodes'][i]) for i in arrived],ensure_ascii=False)+'\n') if arrived else ''
+    body=('These letters arrived; attachments are already in your view. Act on them now; do not poll mail_inbox.\n\n'+letters_text(new)) if new else ('' if arrived else 'Nothing new arrived. Continue your own work or write again.')
+    return (head+nodes+body)[:12000]
+
+
+def visit_guidance(L):
+    return f'Day {L.now():.0f}: the Postal Service visit. The held-out test split is open today for one ledger_evaluate: evaluate the network you choose, compare it with the pipeline test result at 9% rejection, then write report.md with the agreed claims and finish.'
+
+
+def highest_instance(team,role):
+    """The last numbered agent folder of a role, so a resumed run never reuses a folder name."""
+    return max([int(p.name.rsplit('-',1)[1]) for p in (team.folder/'agents').glob(role+'-*') if p.name.rsplit('-',1)[1].isdigit()],default=0)
+
+
+def reopen(folder):
+    """An agent killed mid-period is left 'running' (or 'interrupted'); the host ends that period so a continuation can start a new one.
+    Its pending action and history stay. Returns the status the agent now has (None if it never ran)."""
+    path=Path(folder)/'worker-state.json'
+    if not path.exists():return None
+    state=json.loads(path.read_text())
+    if state['status'] in ('running','interrupted'):state['status']='checkpointed';atomic_json(path,state)
+    return state['status']
+
+
+def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,phase=None,resume=False):
+    L=team.ledger;defs=team.definitions;counts={r:0 for r in defs};judged=set();hinton_last=-99;announced=False;lead_day=-1;lead_seen=0;resumes=0
     lead={'goal':team.task['goal'],'objective':'Coordinate measurable progress toward the goal','success_criteria':'Claims agreed by the department and a demonstration booked','depth':0,'inputs':[]}
     def run_role(role,objective):return team.run_agent(*prepare(team,counts,role,objective))
     order={r:i for i,r in enumerate(('coordinator',)+WAKEABLE)}
     def judge_new():  # fixed order (role, then letter number): concurrent letters get IDs in completion order
         for m in sorted(L.state['mail'],key=lambda m:(order.get(m['from'],len(order)),int(m['id'][1:]))):
             if use_referee and m['id'] not in judged and m['verdict'] is None:referee(team,m);judged.add(m['id'])
-    team.started=time.monotonic();team.state['inflight_started']=time.time();team.save();continuation=None;rounds=0;outcome=None
+    def persist():  # the loop's own memory, saved with the team state so a crashed run can resume (simulate(resume=True))
+        team.state['sim']={'rounds':rounds,'counts':dict(counts),'judged':sorted(judged),'hinton_last':hinton_last,'announced':announced,
+                           'lead_day':lead_day,'lead_seen':lead_seen,'resumes':resumes,'continuation':continuation};team.save()
+    continuation=None;rounds=0;outcome=None
+    if resume:
+        S=team.state.get('sim') or {}
+        rounds=S.get('rounds',0);judged=set(S.get('judged',[]));hinton_last=S.get('hinton_last',-99);announced=S.get('announced',False)
+        lead_day=S.get('lead_day',-1);lead_seen=S.get('lead_seen',0);resumes=S.get('resumes',0)+1
+        for r in counts:counts[r]=max(S.get('counts',{}).get(r,0),highest_instance(team,r))
+        refunds=L.recover_inflight()
+        if reopen(team.folder/'agents'/'lead')=='checkpointed':
+            head=f"Day {L.now():.0f}. The simulation resumed after an interruption; your earlier actions and the ledger are intact"+(f"; {len(refunds)} training run(s) that never finished were refunded, so train them again if you need them" if refunds else '')+'. '
+            view=L.view_for('coordinator')['nodes']
+            continuation={'dispatch_id':f'resume-{resumes}','guidance':head+visit_guidance(L) if L.now()>=end_day(L) else lead_guidance(team,head,view[lead_seen:])}
+        else:continuation=None  # finished, failed or never started: the lead's own state decides
+        team.event('simulation_resumed',{'day':L.now(),'rounds':rounds,'refunds':refunds});persist()
+    team.started=time.monotonic();team.state['inflight_started']=time.time();team.save()
     try:
         while rounds<max_rounds and L.now()<=max_days:
             rounds+=1
             if phase is not None:phase['lead']=rounds-1
-            lead_day=int(L.now())
+            lead_day=int(L.now());persist()
             outcome=team.run_agent('lead',defs['coordinator'],lead,continuation);judge_new()
+            lead_seen=len(L.view_for('coordinator')['nodes']);persist()
             if outcome['status']!='checkpointed':break
             notes=[];arrived=[]
             for _ in range(8):  # process the department until something reaches LeCun
@@ -174,7 +218,7 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                         what+=((' and ' if what else '')+'feature requests '+', '.join(n['id'] for n in requests)) if requests else ''
                         jobs.append(prepare(team,counts,role,(f'Day {L.now():.0f}. {what.capitalize()} arrived for you; the letters are below and their attachments are already in your view. Act with your tools, then answer with mail_send. {LAST}\n\n'+letters_text(pending))[:7000]));take(team,role)
                         if role=='hinton':hinton_last=L.now()
-                if jobs:run_batch(team,jobs);judge_new()
+                if jobs:run_batch(team,jobs);judge_new();persist()
                 for i in L.deliver():
                     if i['role']!='coordinator':continue
                     if i['kind']=='node':arrived.append(i['payload'])
@@ -193,20 +237,15 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                         floor=[m for m in unread_for(team,role,False) if m['to']=='all']
                         jobs.append(prepare(team,counts,role,(f'Day {L.now():.0f}, Monday meeting. Below are the statements made to "all" before this meeting. Jackel, Denker and Boser now speak at the same time, so you will not see each other\'s statements today. Say one thing to "all" with mail_send (at most three sentences, every number with a ledger ID, attach what colleagues need). Jackel decides compute_allocate first if someone showed a supported claim. {LAST}\n\n'+(letters_text(floor) or 'Nobody has spoken yet.'))[:7000]))
                         for m in floor:m.setdefault('read_by',[]).append(role)
-                    run_batch(team,jobs);judge_new();notes.append(f'Monday meeting held on day {L.now():.0f}; the floor statements are among the letters below')
+                    run_batch(team,jobs);judge_new();persist();notes.append(f'Monday meeting held on day {L.now():.0f}; the floor statements are among the letters below')
                 visit=L.config.get('visit_day',0)
                 if L.now()>=visit-15 and not announced and not L.state.get('demo_day'):
                     announced=True
                     run_role('jackel',f'Day {L.now():.0f}. The Postal Service visit is on day {visit:g}, {visit-L.now():.0f} days away. If a supported FITS_CHIP claim is in your view, first call schedule_demo for day {visit:g}. Then tell "all" by mail_send what you booked or what you still need (a supported FITS_CHIP claim in your view). {LAST}')
-                    judge_new();notes.append('Jackel wrote to everyone about the demonstration')
-            if L.now()>=end_day(L):
-                continuation={'dispatch_id':f'round-{rounds}','guidance':f'Day {L.now():.0f}: the Postal Service visit. The held-out test split is open today for one ledger_evaluate: evaluate the network you choose, compare it with the pipeline test result at 9% rejection, then write report.md with the agreed claims and finish.'}
-            else:
-                new=take(team,'coordinator',direct=False)  # direct letters and the meeting floor
-                head=f"Day {L.now():.0f}. "+('; '.join(notes)+'. ' if notes else '')
-                nodes=('New in your view (host records): '+json.dumps([L.brief(L.state['nodes'][i]) for i in arrived],ensure_ascii=False)+'\n') if arrived else ''
-                body=('These letters arrived; attachments are already in your view. Act on them now; do not poll mail_inbox.\n\n'+letters_text(new)) if new else ('' if arrived else 'Nothing new arrived. Continue your own work or write again.')
-                continuation={'dispatch_id':f'round-{rounds}','guidance':(head+nodes+body)[:12000]}
+                    judge_new();persist();notes.append('Jackel wrote to everyone about the demonstration')
+            if L.now()>=end_day(L):continuation={'dispatch_id':f'round-{rounds}','guidance':visit_guidance(L)}
+            else:continuation={'dispatch_id':f'round-{rounds}','guidance':lead_guidance(team,f"Day {L.now():.0f}. "+('; '.join(notes)+'. ' if notes else ''),arrived)}
+            persist()  # round boundary: the next lead turn's guidance is saved with the letters it marked read
         team.state['outcome']=outcome;return outcome
     finally:
         team.state['active_seconds']+=time.monotonic()-team.started;team.started=None;team.state.pop('inflight_started',None);team.save()
@@ -285,8 +324,10 @@ class ScriptedLecun:
         if L.now()>=120:return 'final'
         return 'wait'
     def call(self,prompt,schema,folder,**kw):
-        if self.n==0:self.current=self.phase()
-        steps=WAIT if self.current=='wait' else PHASES[self.current];step=steps[min(self.n,len(steps)-1)];self.n+=1
+        # The phase position lives in the ledger state, so a lead resumed after a crash finishes the phase it was in.
+        st=self.team.ledger.state.setdefault('script_lead',{'phase':None,'n':0});steps=lambda p:WAIT if p=='wait' else PHASES[p]
+        if self.n==0 and (st['phase'] is None or st['n']>=len(steps(st['phase']))):st.update(phase=self.phase(),n=0)
+        seq=steps(st['phase']);step=seq[min(st['n'],len(seq)-1)];st['n']+=1;self.n+=1
         return step(lecun_state(self.team)),{'provider':'scripted'}
 
 
@@ -328,7 +369,7 @@ class Locked:
         with self.lock:return self.provider.call(*a,**k)
 
 
-def check(folder,image,cache):
+def check(folder,image,cache,resume=False):
     phase={'lead':0};holder={}
     def factory(c):
         t=holder['team']
@@ -336,7 +377,7 @@ def check(folder,image,cache):
         if c['id']=='judge':return ScriptedJudge()
         return Locked(ScriptedDenker(t) if c['id']=='denker' else ScriptedRole(c['id'],t),t.lock)
     team=build(folder,image,cache,provider_factory=factory);holder['team']=team
-    outcome=simulate(team,phase=phase,max_rounds=60);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
+    outcome=simulate(team,phase=phase,max_rounds=60,resume=resume);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
     sealed=[e for e in team.state['events'] if e['kind'] in ('ledger_result','ledger_proof') and 'sealed_until' in e['data']]
     claims={k:(v['status'],v.get('endorsed_by',[])) for k,v in nodes.items() if v['type']=='claim'}
     assert outcome['status']=='submitted',outcome
@@ -375,9 +416,9 @@ def lenet_checklist(L):
     return out
 
 
-def live(folder,image,cache,model,**kw):
+def live(folder,image,cache,model,resume=False,**kw):
     team=build(folder,image,cache,model=model,**kw)
-    outcome=simulate(team,max_rounds=200);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
+    outcome=simulate(team,max_rounds=200,resume=resume);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
     summary={'outcome':outcome,'day':L.now(),'demo_day':L.state['demo_day'],'meetings':L.state['meetings'],'path':path_score(team),
              'audit':{k:v for k,v in audit.items() if k!='leak_log'},'leak_log':audit['leak_log'],
              'claims':{k:{'template':v['template'],'args':v['args'],'status':v['status'],'endorsed_by':v.get('endorsed_by',[])} for k,v in nodes.items() if v['type']=='claim'},
@@ -393,6 +434,7 @@ if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--mode',choices=['check','live'],default='check');p.add_argument('--run-dir',required=True)
     p.add_argument('--image',default='researchsquad-training:torch2.9.1-cu128');p.add_argument('--cache',default=str(Path.home()/'.cache/researchsquad/usps'))
     p.add_argument('--model',default=None);p.add_argument('--corpus-off',action='store_true');p.add_argument('--vocab',default='')
+    p.add_argument('--resume',action='store_true',help='reopen an existing run folder and continue the simulation where it stopped')
     a=p.parse_args();vocab=tuple(v for v in a.vocab.split(',') if v)
-    out=check(a.run_dir,a.image,a.cache) if a.mode=='check' else live(a.run_dir,a.image,a.cache,a.model,corpus=not a.corpus_off,vocabulary=vocab)
+    out=check(a.run_dir,a.image,a.cache,a.resume) if a.mode=='check' else live(a.run_dir,a.image,a.cache,a.model,a.resume,corpus=not a.corpus_off,vocabulary=vocab)
     print(json.dumps(out,indent=2,default=str))

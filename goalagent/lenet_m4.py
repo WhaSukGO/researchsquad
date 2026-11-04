@@ -24,11 +24,13 @@ CONDITIONS={
 # X1 (a non-digit task) needs another dataset and evaluator; it is not a setting of this task.
 
 
-def run(condition,base,n,image,cache,model,start=1):
+def run(condition,base,n,image,cache,model,start=1,resume=False):
+    """resume=True reopens existing run folders and continues their simulations; a run that already wrote summary.json is kept."""
     outs=[]
     for i in range(start,start+n):
         folder=Path(base)/f'm4-{condition}-{i}'
-        s=live(folder,image,cache,model,**CONDITIONS[condition]);s['condition']=condition
+        if resume and (folder/'summary.json').exists():outs.append(json.loads((folder/'summary.json').read_text()));continue
+        s=live(folder,image,cache,model,resume,**CONDITIONS[condition]);s['condition']=condition
         (folder/'summary.json').write_text(json.dumps(s,indent=1,default=str));outs.append(s)
     return outs
 
@@ -78,7 +80,8 @@ if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--condition',choices=sorted(CONDITIONS));p.add_argument('--runs',type=int,default=1);p.add_argument('--start',type=int,default=1)
     p.add_argument('--base',required=True);p.add_argument('--image',default='researchsquad-training:torch2.9.1-cu128');p.add_argument('--cache',default=str(Path.home()/'.cache/researchsquad/usps'))
     p.add_argument('--model',default=None);p.add_argument('--report',action='store_true')
+    p.add_argument('--resume',action='store_true',help='reopen existing run folders after a crash and continue them')
     a=p.parse_args()
     if a.condition:
-        for s in run(a.condition,a.base,a.runs,a.image,a.cache,a.model,a.start):print(json.dumps({k:s[k] for k in ('condition','calls','day','demo_day','meetings','path')},default=str))
+        for s in run(a.condition,a.base,a.runs,a.image,a.cache,a.model,a.start,a.resume):print(json.dumps({k:s[k] for k in ('condition','calls','day','demo_day','meetings','path')},default=str))
     if a.report or not a.condition:print(report(a.base))

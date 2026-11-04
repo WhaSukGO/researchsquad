@@ -326,9 +326,14 @@ class LedgerRuntime:
                     'note':'Training is deterministic (seed 1988): this net was already trained with these arguments, so no job started and no computing time was charged. Cite the existing result.'}
         eta=self.task.eta(net['analysis'],int(self.config.get('samples',6291)),epochs)
         self.charge(eta,'this run')
+        # In-flight marker, persisted with the charge: if the process dies before the result exists, recover_inflight refunds it.
+        self.state.setdefault('inflight',{})[key]={'net':net['id'],'args':d,'days':eta,'job_id':None,'day':self.now()}
+        try:return self._job(agent,d,action,timeout,net,epochs,eta,key)
+        finally:self.state['inflight'].pop(key,None)
+    def _job(self,agent,d,action,timeout,net,epochs,eta,key):
         did=self.dataset_id();packet=self.task.packet(net,epochs,d,did,Path(agent.workspace))
         status=self.team.training.start(agent,packet,self.team.dispatch_id(agent,action))
-        job=self.team.training.state['jobs'][status['job_id']]
+        job=self.team.training.state['jobs'][status['job_id']];self.state['inflight'][key]['job_id']=status['job_id']
         if status['job_id'] not in net['jobs']:net['jobs'].append(status['job_id'])
         deadline=time.time()+max(30,(timeout or 600)-20)
         while status['status'] in ('STARTING','RUNNING') and time.time()<deadline:
@@ -355,6 +360,13 @@ class LedgerRuntime:
                     'note':f'The department has one Sun-4 and it runs one job at a time: this job starts on day {start:.2f} and its numbers enter your view on ready_day. Checkpoint to let time pass, or design something else meanwhile.'}
         return {**out,'result':{k:v for k,v in result.items() if k in RESULT_KEYS},'proofs':[{k:p[k] for k in ('id','kind','passed')} for p in proofs],
                 'per_epoch':per_epoch[-3:],'scope':'Validation split result, not protected test measurement'}
+    def recover_inflight(self):
+        """After a crash: refund every training run that was charged but never produced a result (deterministic, so a re-run is equal)."""
+        out=[]
+        for key,m in list(self.state.get('inflight',{}).items()):
+            self.state['compute_days_used']=max(0.0,self.state['compute_days_used']-m['days']);self.state['inflight'].pop(key)
+            self.team.event('ledger_refund',{'net':m['net'],'days':m['days'],'job_id':m['job_id']});out.append(m)
+        return out
     def evaluate(self,agent,d):
         if set(d)!={'net_id'}:raise ValueError('ledger_evaluate needs {net_id}')
         net=self.visible(agent,d['net_id'],'net_spec');limit=int(self.config.get('max_evaluations',4))
