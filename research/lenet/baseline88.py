@@ -49,8 +49,11 @@ def main():
     targets=-np.ones((n,10));targets[np.arange(n),y]=1.0
     A=f[tr];w=np.linalg.solve(A.T@A+1e-2*np.eye(A.shape[1]),A.T@targets[tr])
     val=curve(f[va]@w,y[va]);test=curve(ft@w,yt)
+    def shifted(dx):  # same transform as train_usps.py: move right by dx, blank columns at -1
+        s=np.roll(x[va],dx,axis=2);s[:,:,:dx]=-1.0;return s
+    base=(f[va]@w).argmax(1);invariance={f'shift{d}':float(((features(shifted(d))@w).argmax(1)==base).mean()) for d in (1,2)}
     print(json.dumps({'accepted':True,'features':int(f.shape[1]-1),'classifier_params':int(w.size),
-        'val':{'error':val['0'],'reject_curve':val,'samples':int(a.valid)},'test':{'error':test['0'],'reject_curve':test,'samples':int(len(yt))},
+        'val':{'error':val['0'],'reject_curve':val,'samples':int(a.valid),'invariance':invariance},'test':{'error':test['0'],'reject_curve':test,'samples':int(len(yt))},
         'scope':'Fixed hand-designed templates plus a least-squares classifier; a 1988-style baseline stand-in, not a reproduction of the Denker system'}))
 
 

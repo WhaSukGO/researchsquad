@@ -20,13 +20,13 @@ ROLE_DOCS={'coordinator':LECUN_DOCS,'denker':DENKER_DOCS+list(HANDLES),'jackel':
 GOAL=('It is 3 October 1988 (day 0). The department recognizes handwritten USPS zip code digits; Denker owns the data and a hand-designed '
       'baseline; Boser designs the analog chip; Jackel runs the department and books the USPS demonstration; Bottou maintains the SN '
       'simulator in Paris; Hinton answers letters from Toronto. Obtain data by letter, define constrained networks in the 1988 vocabulary, '
-      'train them (results arrive after simulated Sun-4 days), and establish agreed claims: FEWER_PARAMS, BEATS on usps-val and usps-test '
+      'train them (results arrive after simulated Sun-4 days), and establish agreed claims: FEWER_PARAMS, BEATS on usps-val '
       'against the fully connected control and PIPELINE88, GRAD_EQUALS, INVARIANT_TO, and FITS_CHIP so that a demonstration can be booked. '
-      'An agreed claim is a milestone, not the end: keep lowering the test error at 9% rejection until the Postal Service visit. '
-      'report.md is written on the visit day, citing only ledger IDs.')
+      'An agreed claim is a milestone, not the end: keep lowering the validation error at 9% rejection until the Postal Service visit. '
+      'The held-out test split opens on the visit day for one evaluation; report.md is written that day, citing only ledger IDs.')
 
 
-def task(image,*,compute_days=20.0,max_evaluations=6,corpus=True,vocabulary=(),clock=True,visit_day=45,drop=None,overrides=None,max_compute_days=60):
+def task(image,*,compute_days=20.0,max_evaluations=1,corpus=True,vocabulary=(),clock=True,visit_day=45,drop=None,overrides=None,max_compute_days=60):
     views={r:[x for x in (d if corpus or r!='coordinator' else []) if x not in (drop or {}).get(r,())] for r,d in ROLE_DOCS.items()}
     return {'goal':GOAL,'inputs':{},'network':False,'budget':{'max_calls':2400,'max_seconds':43200,'max_assignments':80,'max_depth':2},
         'training':{'profiles':{'sun4':{'image':image,'gpu':False,'memory':'2g','cpus':2,'max_seconds':1200,'max_output_bytes':50_000_000,'roles':['coordinator']}}},
@@ -60,7 +60,7 @@ def guard_finish(team):
     def guarded(report,assignment):
         L=team.ledger
         if report.get('status')=='DONE' and assignment.get('depth',1)==0 and L.config and L.config.get('clock') and L.now()<end_day(L):
-            raise ValueError(f'The Postal Service visit is on day {end_day(L):g}; today is day {L.now():.1f}. The department keeps working until then: a lower test error at 9% rejection, new networks, letters, checkpoint. report.md is written on the visit day.')
+            raise ValueError(f'The Postal Service visit is on day {end_day(L):g}; today is day {L.now():.1f}. The department keeps working until then: a lower validation error at 9% rejection, new networks, letters, checkpoint. report.md is written on the visit day.')
         return orig(report,assignment)
     team.validate_assignment_report=guarded
 
@@ -79,7 +79,7 @@ def take(team,role):
 
 
 def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,phase=None):
-    L=team.ledger;defs=team.definitions;counts={r:0 for r in defs};judged=set();hinton_last=-99;announced=False;last_meeting_nodes=0
+    L=team.ledger;defs=team.definitions;counts={r:0 for r in defs};judged=set();hinton_last=-99;announced=False;refused_day=None
     lead={'goal':team.task['goal'],'objective':'Coordinate measurable progress toward the goal','success_criteria':'Claims agreed by the department and a demonstration booked','depth':0,'inputs':[]}
     def run_role(role,objective):
         counts[role]+=1
@@ -95,6 +95,13 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
             if phase is not None:phase['lead']=rounds-1
             outcome=team.run_agent('lead',defs['coordinator'],lead,continuation);judge_new()
             if outcome['status']!='checkpointed':break
+            left=L.budget()-L.state['compute_days_used']
+            running=any(i['role']=='coordinator' and i['kind']=='node' and L.state['nodes'][i['payload']]['type']=='result' for i in L.state['pending'])
+            can_train='USPS_TRAIN' in L.view_for('coordinator')['nodes']
+            if L.clock() and can_train and L.now()<end_day(L) and left>=1 and not running and refused_day!=L.now():
+                refused_day=L.now()  # once per simulated day, so a second checkpoint always passes
+                continuation={'dispatch_id':f'round-{rounds}','guidance':f'Day {L.now():.0f}. Checkpoint refused: the Sun-4 is idle and {left:.1f} computing days remain before the visit on day {end_day(L):g}; letting days pass now leaves them unused. Define or train a network (or say in a new checkpoint why not), then checkpoint.'}
+                continue
             notes=[]
             for _ in range(8):  # process the department until something reaches LeCun
                 for role in WAKEABLE:
@@ -117,8 +124,8 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                 candidates=[d for d in (nxt,monday,end_day(L)) if d is not None and d>L.now()]
                 if not candidates:break
                 L.state['day']=float(min(candidates));team.save()
-                if L.now()%7==0 and len(L.state['meetings'])<max_meetings and len(L.state['nodes'])>last_meeting_nodes:
-                    last_meeting_nodes=len(L.state['nodes']);L.state['meetings'].append(L.now())
+                if L.now()%7==0 and len(L.state['meetings'])<max_meetings and L.now() not in L.state['meetings']:  # every Monday, news or not
+                    L.state['meetings'].append(L.now())
                     for role in ('jackel','denker','boser'):
                         run_role(role,f'Day {L.now():.0f}, Monday meeting. Read mail_inbox for the floor, then say one thing to "all" with mail_send (at most three sentences, every number with a ledger ID, attach what colleagues need). Jackel decides compute_allocate if someone showed a supported claim. Then write note.md and finish.')
                     judge_new();notes.append(f'Monday meeting held on day {L.now():.0f}; read the floor with mail_inbox')
@@ -128,7 +135,7 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                     run_role('jackel',f'Day {L.now():.0f}. The Postal Service visit is on day {visit:g}, {visit-L.now():.0f} days away. Tell "all" by mail_send what you need to book the demonstration (a supported FITS_CHIP claim in your view), and if one exists, call schedule_demo for day {visit:g}. Write note.md and finish.')
                     judge_new();notes.append('Jackel wrote to everyone about the demonstration')
             if L.now()>=end_day(L):
-                continuation={'dispatch_id':f'round-{rounds}','guidance':f'Day {L.now():.0f}: the Postal Service visit. Write report.md with the agreed claims and finish.'}
+                continuation={'dispatch_id':f'round-{rounds}','guidance':f'Day {L.now():.0f}: the Postal Service visit. The held-out test split is open today for one ledger_evaluate: evaluate the network you choose, compare it with the pipeline test result at 9% rejection, then write report.md with the agreed claims and finish.'}
             else:
                 new=take(team,'coordinator')
                 letters='\n\n'.join(f"Letter {m['id']} from {m['from']} to {m['to']} (attached: {', '.join(m['attach']) or 'nothing'}):\n{m['body']}" for m in new)
@@ -176,17 +183,11 @@ PHASES={
   lambda s:action('ledger_claim',{'template':'INVARIANT_TO','args':{'net':'N2','transform':'shift1','tolerance':0.5},'rationale':'[R2]'}),lambda s:action('ledger_promote',{'claim_id':'C3','evidence_ids':['R2']}),
   lambda s:action('mail_send',{'to':'denker','body':'John, the shared-weight network [N2] beats the control [N1] on the validation split at 9% rejection [C2] [CMP1]. Could you promote the claim in your view, run your baseline, and attach the test handle? [R2]','attach':['N2','R2','C2','R1','N1']}),
   lambda s:action('checkpoint',{'summary':'Asked Denker for baseline and test handle','next_test':'Evaluate on test'})],
- 'test':[
-  lambda s:action('ledger_evaluate',{'net_id':'N2'}),lambda s:action('ledger_evaluate',{'net_id':'N1'}),
-  lambda s:action('compare_results',{'a':s['test_n2'],'b':s['test_n1'],'reject_rate':'0.09'}),
-  lambda s:action('ledger_claim',{'template':'BEATS','args':{'net_a':'N2','net_b':'N1','dataset':'usps-test','reject_rate':'0.09'},'rationale':'['+s['cmp_last']+']'}),
-  lambda s:action('ledger_promote',{'claim_id':s['claim_last'],'evidence_ids':[s['test_n2'],s['test_n1']]}),
-  lambda s:action('mail_send',{'to':'denker','body':'John, on the test split the shared-weight network ['+s['test_n2']+'] beats the control ['+s['test_n1']+'] at 9% rejection ['+s['cmp_last']+'] ['+s['claim_last']+']. Could you promote it in your view? Attached.','attach':[s['test_n2'],s['test_n1'],s['claim_last'],s['cmp_last']]}),
-  lambda s:action('checkpoint',{'summary':'Asked Denker to endorse the test claim','next_test':'Forward the chip claim to Jackel'})],
  'jackel':[
   lambda s:action('mail_send',{'to':'jackel','body':'Larry, Boser promoted the chip claim for [N2] ['+s['fits']+']; attached so you can book the demonstration.','attach':[s['fits'],'N2']+([s['chip']] if s['chip'] else [])}),
   lambda s:action('checkpoint',{'summary':'Asked Jackel to book','next_test':'Report on demonstration day'})],
  'final':[
+  lambda s:action('ledger_evaluate',{'net_id':'N2'}),
   lambda s:action('write_file',{'path':'report.md','content':'# Milestone 3 (scripted)\nAgreed claims are in the ledger audit.'}),
   lambda s:action('finish',{'summary':'Scripted department fixture complete','files':['report.md']})]}
 
@@ -212,7 +213,6 @@ class ScriptedLecun:
         if 'R1' not in V or 'R2' not in V:return 'wait'
         if 'validate' not in done:done.append('validate');return 'validate'
         if 'USPS_TEST' not in V:return 'wait'
-        if 'test' not in done:done.append('test');return 'test'
         fits=[n for n in nodes.values() if n['type']=='claim' and n['template']=='FITS_CHIP' and n['id'] in V]
         if fits and 'jackel' not in done:done.append('jackel');return 'jackel'
         if L.state.get('demo_day') and L.now()>=L.state['demo_day']:return 'final'
@@ -283,6 +283,26 @@ def check(folder,image,cache):
     atomic_json(team.folder/'verification.json',summary);team.trace.export(team.folder/'trace.html');team.close();return summary
 
 
+def lenet_checklist(L):
+    """Host-only scoring of LeNet components; agents never see it. For each component: the first trained net that has it,
+    and whether the design choice carrying it was sourced (found in a document the designer cited) or unsourced (recall)."""
+    nodes=L.state['nodes'];nets=[n for n in nodes.values() if n['type']=='net_spec' and n['id']!='PIPELINE88' and n.get('jobs')]
+    tests={r['net']:r for r in nodes.values() if r['type']=='result' and r['dataset']=='usps-test'};base=tests.get('PIPELINE88')
+    def tokens(n):return n['analysis']['pattern'].split('>')
+    def prov(n,kind):
+        c=[c for c in n['choices'] if c['choice']==kind];return 'sourced' if c and all(x['status']=='sourced' for x in c) else 'unsourced'
+    comps={'shared_maps':(lambda n:any(t.startswith('shared') for t in tokens(n)),'pattern'),
+           'subsampling':(lambda n:'avg' in tokens(n),'avg'),
+           'two_stage_hierarchy':(lambda n:sum(t.startswith('shared') for t in tokens(n))>=2,'pattern'),
+           'beats_pipeline_test':(lambda n:bool(base) and n['id'] in tests and tests[n['id']]['reject_curve']['0.09']<base['reject_curve']['0.09'],'pattern')}
+    out={}
+    for name,(has,kind) in comps.items():
+        hit=[n for n in nets if has(n)];first=next((n for n in hit if prov(n,kind)=='sourced'),hit[0] if hit else None)
+        out[name]={'net':first['id'],'provenance':prov(first,kind),'cites':sorted(set(first['cites']))} if first else None
+    out['discovered']=sum(1 for v in out.values() if v and v['provenance']=='sourced');out['reached']=sum(1 for k,v in out.items() if k!='discovered' and v)
+    return out
+
+
 def live(folder,image,cache,model,**kw):
     team=build(folder,image,cache,model=model,**kw)
     outcome=simulate(team,max_rounds=200);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
@@ -292,7 +312,7 @@ def live(folder,image,cache,model,**kw):
              'nets':{k:{'params':v['analysis']['params'],'pattern':v['analysis']['pattern'],'cites':v['cites'],'unsourced':[(c['choice'],c['value']) for c in v['choices'] if c['status']=='unsourced']} for k,v in nodes.items() if v['type']=='net_spec'},
              'results':{k:(v['net'],v['dataset'],round(v['error'],4),round(v['reject_curve']['0.09'],4)) for k,v in nodes.items() if v['type']=='result'},
              'mail':[{k:m[k] for k in ('id','from','to','attach','verdict')}|{'day':m.get('sent_day'),'body':m['body'][:300]} for m in L.state['mail']],
-             'calls':team.state['calls'],'compute':{'used':L.state['compute_days_used'],'budget':L.budget()},
+             'calls':team.state['calls'],'compute':{'used':L.state['compute_days_used'],'budget':L.budget()},'lenet_checklist':lenet_checklist(L),
              'scope':'Live department simulation; results are real container measurements; leakage is measured, not prevented'}
     atomic_json(team.folder/'summary.json',summary);team.trace.export(team.folder/'trace.html');team.close();return summary
 

@@ -121,3 +121,14 @@ def test_letters_handed_over_by_the_orchestrator_count_as_read(tmp_path):
     call(team,denker,'mail_send',{'to':'coordinator','body':'Handle attached [USPS_TRAIN].','attach':['USPS_TRAIN']})
     L.state['day']=1.0;assert [m['id'] for m in unread_for(team,'coordinator')]==['M1']
     assert [m['id'] for m in take(team,'coordinator')]==['M1'] and unread_for(team,'coordinator')==[] and take(team,'coordinator')==[]
+
+
+def test_test_split_opens_on_the_visit_day_and_checklist_counts_only_sourced_components(tmp_path):
+    from goalagent.lenet_m3 import lenet_checklist
+    team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
+    L.add(lecun,dict(L.state['nodes'].get('USPS_TEST') or {'id':'USPS_TEST','type':'dataset','split':'test'}))
+    call(team,lecun,'sn_define',{'spec':TIED,'rationale':'[LECUN89TR]'});L.state['nodes']['N1']['jobs']=['job-x']
+    with pytest.raises(ValueError,match='opens on the Postal Service visit day'):call(team,lecun,'ledger_evaluate',{'net_id':'N1'})
+    c=lenet_checklist(L)  # TIED is Net-5: two shared stages, no averaging
+    assert c['shared_maps']['net']==c['two_stage_hierarchy']['net']=='N1' and c['subsampling'] is None and c['beats_pipeline_test'] is None and c['reached']==2
+    assert c['discovered']==sum(c[k]['provenance']=='sourced' for k in ('shared_maps','two_stage_hierarchy'))

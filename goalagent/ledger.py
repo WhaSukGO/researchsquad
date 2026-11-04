@@ -28,7 +28,7 @@ TOOLS={
  'lit_search':'Keyword query; rank documents in your view (id, title, date, snippet). Documents outside your view do not exist for you.',
  'lit_read':'Document ID; read the stored excerpt or paraphrase of a document in your view.',
  'sn_define':'JSON {spec:{layers:[{op:input,h,w},{op:local,k,stride,n,pad?,fan_in?},{op:tie,group:all,bias?:per_unit|shared},{op:full,n},{op:output,n}]}, rationale:text citing [IDs]}. Host counts connections, independent parameters and simulated training cost, and records which of your choices the cited documents actually contain. Returns a net node. tie applies the 1986 equal-weight-change constraint to the preceding local layer. Other layer types need request_feature.',
- 'request_feature':'JSON {description}. Ask the simulator maintainer for a layer type that is not in your vocabulary (for example a fixed-weight averaging/subsampling layer). Granting costs simulated days from your compute budget; some requests are refused.',
+ 'request_feature':'JSON {description}. Ask the simulator maintainer for a layer type that is not in your vocabulary. Granting costs simulated days from your compute budget; some requests are refused.',
  'sn_train':'JSON {net_id, epochs:1..30}. Real training in an isolated container on the registered training split (validation = last 1000 training digits), blocking until exit; charges simulated Sun-4 days from your compute budget. On success the host creates a result node (dataset usps-val) and proof nodes. You cannot author results.',
  'ledger_evaluate':'JSON {net_id}. Protected host evaluation of the latest successful job for that net on the held-out USPS test split in a separate container; limited count per run. Returns a result node (dataset usps-test).',
  'compare_results':'JSON {a:result_id, b:result_id, reject_rate:"0"|"0.05"|"0.09"|"0.12"}. Host compares error rates at that rejection rate and returns a comparison node to cite. Never compare numbers yourself.',
@@ -333,6 +333,8 @@ class LedgerRuntime:
         if set(d)!={'net_id'}:raise ValueError('ledger_evaluate needs {net_id}')
         net=self.visible(agent,d['net_id'],'net_spec');limit=int(self.config.get('max_evaluations',4))
         self.require_split(agent,'test','Protected evaluation')
+        opens=self.state.get('demo_day') or self.config.get('visit_day')
+        if self.clock() and opens and self.now()<opens:raise ValueError(f'The held-out test split opens on the Postal Service visit day (day {opens:g}); today is day {self.now():.1f}. Compare on usps-val until then.')
         jobs=[j for j in net.get('jobs',[]) if self.team.training.state['jobs'][j]['status']=='SUCCEEDED']
         if not jobs:raise ValueError('No succeeded job for '+net['id'])
         if self.state['evaluations']>=limit:raise ValueError('Protected evaluation limit reached')
@@ -514,6 +516,7 @@ class LedgerRuntime:
         out=[]
         for split,dataset in (('val','usps-val'),('test','usps-test')):
             r=self.add(agent,{'id':self.new_id('R'),'type':'result','net':'PIPELINE88','dataset':dataset,'error':m[split]['error'],'reject_curve':m[split]['reject_curve'],'samples':m[split]['samples'],
+                              **({'invariance':m[split]['invariance']} if 'invariance' in m[split] else {}),
                               'source':{'evidence_id':record['evidence_id'],'adapter':'baseline88'},'owner':self.role(agent)})
             out.append({k:r[k] for k in ('id','net','dataset','error','reject_curve')})
         return {'results':out,'baseline_net':'PIPELINE88','scope':record['scope']}
