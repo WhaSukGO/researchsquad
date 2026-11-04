@@ -10,6 +10,7 @@ import argparse
 import json
 from pathlib import Path
 import time
+from concurrent.futures import ThreadPoolExecutor
 from .contracts import atomic_json
 from .team import Team, ROOT
 from .lenet_m1 import download, UspsEvaluator, URL, DOCS, action, FULL, TIED
@@ -122,18 +123,36 @@ def lead_wakes(L,news,lead_day):
 
 
 LAST='Your letter is your last action: the host closes this assignment when mail_send succeeds, so do everything else first.'
+MAX_CONCURRENT=4
+
+
+def prepare(team,counts,role,objective):
+    """Fix everything a woken colleague will see before it runs: its folder, note.md, the objective and the host briefing."""
+    counts[role]+=1;aid=f'{role}-{counts[role]}'
+    ws=team.folder/'agents'/aid/'workspace';ws.mkdir(parents=True,exist_ok=True);(ws/'note.md').write_text('note\n')  # finish needs a file; the model need not write one
+    objective=(objective+'\n\n'+briefing(team,role))[:12000]
+    return aid,team.definitions[role],{'goal':team.task['goal'],'objective':objective,'depth':1,'inputs':[],'ends_on_letter':True}
+
+
+def run_batch(team,jobs):
+    """Run prepared assignments at once (at most MAX_CONCURRENT). Each worker holds team.lock for all state access and releases it
+    only around its model call (Agent.model_gate), so model calls overlap and ledger/events/budget stay single-writer.
+    Every job finishes before the first failure, in job order, is raised."""
+    def work(job):
+        with team.lock:return team.run_agent(*job,gate=team.lock)
+    with ThreadPoolExecutor(max_workers=MAX_CONCURRENT) as pool:futures=[pool.submit(work,j) for j in jobs]
+    errors=[f.exception() for f in futures if f.exception() is not None]
+    if errors:raise errors[0]
+    return [f.result() for f in futures]
 
 
 def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,phase=None):
     L=team.ledger;defs=team.definitions;counts={r:0 for r in defs};judged=set();hinton_last=-99;announced=False;lead_day=-1
     lead={'goal':team.task['goal'],'objective':'Coordinate measurable progress toward the goal','success_criteria':'Claims agreed by the department and a demonstration booked','depth':0,'inputs':[]}
-    def run_role(role,objective):
-        counts[role]+=1
-        ws=team.folder/'agents'/f'{role}-{counts[role]}'/'workspace';ws.mkdir(parents=True,exist_ok=True);(ws/'note.md').write_text('note\n')  # finish needs a file; the model need not write one
-        objective=(objective+'\n\n'+briefing(team,role))[:12000]
-        return team.run_agent(f'{role}-{counts[role]}',defs[role],{'goal':team.task['goal'],'objective':objective,'depth':1,'inputs':[],'ends_on_letter':True})
-    def judge_new():
-        for m in L.state['mail']:
+    def run_role(role,objective):return team.run_agent(*prepare(team,counts,role,objective))
+    order={r:i for i,r in enumerate(('coordinator',)+WAKEABLE)}
+    def judge_new():  # fixed order (role, then letter number): concurrent letters get IDs in completion order
+        for m in sorted(L.state['mail'],key=lambda m:(order.get(m['from'],len(order)),int(m['id'][1:]))):
             if use_referee and m['id'] not in judged and m['verdict'] is None:referee(team,m);judged.add(m['id'])
     team.started=time.monotonic();team.state['inflight_started']=time.time();team.save();continuation=None;rounds=0;outcome=None
     try:
@@ -145,6 +164,7 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
             if outcome['status']!='checkpointed':break
             notes=[];arrived=[]
             for _ in range(8):  # process the department until something reaches LeCun
+                jobs=[]  # everyone woken at this moment is prepared first, then runs concurrently
                 for role in WAKEABLE:
                     pending=unread_for(team,role)
                     requests=[n for n in L.state['nodes'].values() if n['type']=='feature_request' and n.get('status')=='requested'] if role=='bottou' else []
@@ -152,9 +172,9 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                     if pending or requests:
                         what=('letters '+', '.join(m['id'] for m in pending)) if pending else ''
                         what+=((' and ' if what else '')+'feature requests '+', '.join(n['id'] for n in requests)) if requests else ''
-                        run_role(role,(f'Day {L.now():.0f}. {what.capitalize()} arrived for you; the letters are below and their attachments are already in your view. Act with your tools, then answer with mail_send. {LAST}\n\n'+letters_text(pending))[:7000]);take(team,role)
+                        jobs.append(prepare(team,counts,role,(f'Day {L.now():.0f}. {what.capitalize()} arrived for you; the letters are below and their attachments are already in your view. Act with your tools, then answer with mail_send. {LAST}\n\n'+letters_text(pending))[:7000]));take(team,role)
                         if role=='hinton':hinton_last=L.now()
-                        judge_new()
+                if jobs:run_batch(team,jobs);judge_new()
                 for i in L.deliver():
                     if i['role']!='coordinator':continue
                     if i['kind']=='node':arrived.append(i['payload'])
@@ -168,11 +188,12 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                 L.state['day']=float(min(candidates));team.save()
                 if L.now()%7==0 and len(L.state['meetings'])<max_meetings and L.now() not in L.state['meetings']:  # every Monday, news or not
                     L.state['meetings'].append(L.now())
-                    for role in ('jackel','denker','boser'):
+                    jobs=[]
+                    for role in ('jackel','denker','boser'):  # one shared floor: statements made before the meeting
                         floor=[m for m in unread_for(team,role,False) if m['to']=='all']
-                        run_role(role,(f'Day {L.now():.0f}, Monday meeting. The floor so far is below. Say one thing to "all" with mail_send (at most three sentences, every number with a ledger ID, attach what colleagues need). Jackel decides compute_allocate first if someone showed a supported claim. {LAST}\n\n'+(letters_text(floor) or 'Nobody has spoken yet.'))[:7000])
+                        jobs.append(prepare(team,counts,role,(f'Day {L.now():.0f}, Monday meeting. Below are the statements made to "all" before this meeting. Jackel, Denker and Boser now speak at the same time, so you will not see each other\'s statements today. Say one thing to "all" with mail_send (at most three sentences, every number with a ledger ID, attach what colleagues need). Jackel decides compute_allocate first if someone showed a supported claim. {LAST}\n\n'+(letters_text(floor) or 'Nobody has spoken yet.'))[:7000]))
                         for m in floor:m.setdefault('read_by',[]).append(role)
-                    judge_new();notes.append(f'Monday meeting held on day {L.now():.0f}; the floor statements are among the letters below')
+                    run_batch(team,jobs);judge_new();notes.append(f'Monday meeting held on day {L.now():.0f}; the floor statements are among the letters below')
                 visit=L.config.get('visit_day',0)
                 if L.now()>=visit-15 and not announced and not L.state.get('demo_day'):
                     announced=True
@@ -300,14 +321,20 @@ class ScriptedRole:
         item=seq[min(self.n-2,len(seq)-1)];return (item() if callable(item) else item),{}
 
 
+class Locked:
+    """Scripted department providers read the ledger inside call; with concurrent roles that read takes the team lock (a real model call does not)."""
+    def __init__(self,provider,lock):self.provider=provider;self.lock=lock
+    def call(self,*a,**k):
+        with self.lock:return self.provider.call(*a,**k)
+
+
 def check(folder,image,cache):
     phase={'lead':0};holder={}
     def factory(c):
         t=holder['team']
         if c['id']=='coordinator':return ScriptedLecun(t,phase)
         if c['id']=='judge':return ScriptedJudge()
-        if c['id']=='denker':return ScriptedDenker(t)
-        return ScriptedRole(c['id'],t)
+        return Locked(ScriptedDenker(t) if c['id']=='denker' else ScriptedRole(c['id'],t),t.lock)
     team=build(folder,image,cache,provider_factory=factory);holder['team']=team
     outcome=simulate(team,phase=phase,max_rounds=60);audit=team.ledger.audit();nodes=team.ledger.state['nodes'];L=team.ledger
     sealed=[e for e in team.state['events'] if e['kind'] in ('ledger_result','ledger_proof') and 'sealed_until' in e['data']]

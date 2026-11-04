@@ -7,6 +7,7 @@ import json
 import re
 import shlex
 import subprocess
+import threading
 import time
 from pathlib import Path
 from .agent import Agent
@@ -112,6 +113,7 @@ class Team:
         from .tracing import Trace
         from .training import TrainingRuntime
         self.trace=Trace(self.folder/'traces')
+        self.lock=threading.RLock()  # concurrent agents hold it for all state access except their model call (Agent.model_gate)
         self.training=TrainingRuntime(self,model_evaluators)
         from .ledger import LedgerRuntime
         self.ledger=LedgerRuntime(self)
@@ -176,7 +178,7 @@ class Team:
         network=self.task.get('network',False) and (self.task.get('network_roles') is None or config['id'] in self.task['network_roles'])
         return {'image':env['image'] if env else BASE,'network':network,
                 'memory':'2g','cpus':2,'managed_environment':bool(env),**config['limits']}
-    def run_agent(self,id,config,assignment,continuation=None):
+    def run_agent(self,id,config,assignment,continuation=None,gate=None):
         folder=self.folder/'agents'/id
         effective=copy.deepcopy(config)
         if self.managed:effective['system_prompt'] += self.managed.instructions(assignment)
@@ -192,6 +194,7 @@ class Team:
         provider=self.provider_factory(effective)
         if hasattr(provider,'preflight'):provider.preflight()
         instance=Agent(folder,assignment,provider,policy,effective,self.registry,self.sandbox_factory,trace=self.trace)
+        instance.model_gate=gate  # the caller holds it once; the agent releases it only around provider.call
         instance.trace_parent_agent=self.state['assignments'].get(id,{}).get('caller')
         instance.trace_parent_span=self.state['assignments'].get(id,{}).get('trace_parent')
         instance.validate_report = lambda report: self.validate_assignment_report(report,assignment)

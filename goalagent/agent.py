@@ -179,9 +179,16 @@ class Agent:
                                   'image_reference':self.state['image'],
                                   'provider_prompt':prompt,'available_tools':context['tools'],
                                   'candidate_visibility':'Only explicitly reported alternatives; no hidden reasoning'})
-                        action, metadata = self.provider.call(
-                            prompt, self.schema, self.folder / "turns" / f'{self.state["steps"]:03}',
-                            image=self.state["image"], timeout=min(limit(self.policy["model_call_timeout"]), remaining()))
+                        timeout = min(limit(self.policy["model_call_timeout"]), remaining())
+                        # A concurrent caller holds the team lock for everything but the model call itself.
+                        gate = getattr(self, 'model_gate', None)
+                        if gate: gate.release()
+                        try:
+                            action, metadata = self.provider.call(
+                                prompt, self.schema, self.folder / "turns" / f'{self.state["steps"]:03}',
+                                image=self.state["image"], timeout=timeout)
+                        finally:
+                            if gate: gate.acquire()
                         from .report_input import normalize_action
                         action=normalize_action(action)
                         self.trace.end(model_span,{'selected_action':action,'metadata':{

@@ -246,3 +246,25 @@ def test_prompt_puts_stable_fields_first_and_keeps_the_latest_ledger_view_whole(
     big={'tool':'ledger_view','observation':{'nets':'x'*9000}}
     out=Agent.recent_context(SimpleNamespace(state={'history':[big,{'tool':'mail_inbox','observation':{}},dict(big)]}))
     assert out[0]['observation']['truncated'] and out[2]['observation']['nets']=='x'*9000
+
+
+def test_woken_colleagues_run_concurrently_and_keep_the_ledger_consistent(tmp_path):
+    import time
+    from goalagent.lenet_m3 import prepare, run_batch
+    class Slow:  # a model call that takes 0.5 s and answers with one letter
+        def __init__(self,role):self.role=role
+        def preflight(self):
+            if self.role=='boser':raise RuntimeError('boser has no model')
+        def call(self,prompt,schema,folder,**kw):
+            time.sleep(0.5);return action('mail_send',{'to':'coordinator','body':f'{self.role} read it [DENKER88].','attach':[]}),{}
+    team=Team(tmp_path,task(IMAGE),agents_dir=ROOT/'agents/lenet',provider_factory=lambda c:Slow(c['id']),sandbox_factory=FakeSandbox);L=team.ledger
+    counts={r:0 for r in team.definitions}
+    start=time.monotonic();run_batch(team,[prepare(team,counts,'denker','Write once.')]);single=time.monotonic()-start
+    L.state['day']=1.0
+    start=time.monotonic();out=run_batch(team,[prepare(team,counts,'denker','Write once.'),prepare(team,counts,'jackel','Write once.')]);both=time.monotonic()-start
+    assert both<1.5*single and [o['status'] for o in out]==['submitted','submitted']
+    ids=[m['id'] for m in L.state['mail']];assert sorted(ids)==['M1','M2','M3'] and {m['from'] for m in L.state['mail'][1:]}=={'denker','jackel'}
+    assert sorted(e['data']['id'] for e in team.state['events'] if e['kind']=='ledger_mail')==ids and L.audit()['invariant_holds']
+    L.state['day']=2.0
+    with pytest.raises(RuntimeError,match='boser has no model'):run_batch(team,[prepare(team,counts,'boser','Write once.'),prepare(team,counts,'jackel','Write once.')])
+    assert L.state['mail'][-1]['from']=='jackel' and len(L.state['mail'])==4  # the failing colleague does not stop the other
