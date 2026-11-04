@@ -151,7 +151,13 @@ def lead_guidance(team,head,arrived):
     L=team.ledger;new=take(team,'coordinator',direct=False)
     nodes=('New in your view (host records): '+json.dumps([L.brief(L.state['nodes'][i]) for i in arrived],ensure_ascii=False)+'\n') if arrived else ''
     body=('These letters arrived; attachments are already in your view. Act on them now; do not poll mail_inbox.\n\n'+letters_text(new)) if new else ('' if arrived else 'Nothing new arrived. Continue your own work or write again.')
-    return (head+nodes+body)[:12000]
+    path=team.folder/'agents/lead/workspace/memo.md'  # the lead's own weekly memo stays in front of it (replay H11: memo -> action)
+    memo=('\n\nYour own research memo (memo.md):\n'+path.read_text()[:3000]) if path.exists() else ''
+    return (head+nodes+body)[:12000-len(memo)]+memo
+
+
+MEMO_ASK=('Monday: before anything else, write memo.md with write_file, a short research memo in prose: the largest measured weakness '
+          'of your best network, and the next network you would build, including any layer type you would have to request. Then act. ')
 
 
 def visit_guidance(L):
@@ -249,7 +255,9 @@ def simulate(team,*,max_days=180,max_meetings=6,max_rounds=40,use_referee=True,p
                     run_role('jackel',f'Day {L.now():.0f}. The Postal Service visit is on day {visit:g}, {visit-L.now():.0f} days away. If a supported FITS_CHIP claim is in your view, first call schedule_demo for day {visit:g}. Then tell "all" by mail_send what you booked or what you still need (a supported FITS_CHIP claim in your view). {LAST}')
                     judge_new();persist();notes.append('Jackel wrote to everyone about the demonstration')
             if L.now()>=end_day(L):continuation={'dispatch_id':f'round-{rounds}','guidance':visit_guidance(L)}
-            else:continuation={'dispatch_id':f'round-{rounds}','guidance':lead_guidance(team,f"Day {L.now():.0f}. "+('; '.join(notes)+'. ' if notes else ''),arrived)}
+            else:
+                ask=MEMO_ASK if any(n.startswith('Monday meeting held') for n in notes) else ''
+                continuation={'dispatch_id':f'round-{rounds}','guidance':lead_guidance(team,f"Day {L.now():.0f}. "+ask+('; '.join(notes)+'. ' if notes else ''),arrived)}
             persist()  # round boundary: the next lead turn's guidance is saved with the letters it marked read
         team.state['outcome']=outcome;return outcome
     finally:

@@ -185,6 +185,13 @@ def test_the_visit_opens_the_test_handle_to_the_lead(tmp_path):
     assert v.count('USPS_TEST')==1 and v.count('R99')==1 and 'R98' not in v and L.require_handle(lecun,'USPS_TEST','Evaluation') is None
 
 
+def test_the_leads_memo_stays_at_the_end_of_its_guidance(tmp_path):
+    from goalagent.lenet_m3 import lead_guidance
+    team=make(tmp_path);assert 'memo.md' not in lead_guidance(team,'Day 7. ',[])
+    ws=team.folder/'agents/lead/workspace';ws.mkdir(parents=True);(ws/'memo.md').write_text('Next: ask for a new layer.')
+    g=lead_guidance(team,'Day 7. ',[]);assert g.endswith('Next: ask for a new layer.') and len(g)<=12000
+
+
 def test_one_sun4_queues_jobs_back_to_back(tmp_path,monkeypatch):
     import json
     team=make(tmp_path);L=team.ledger;lecun=worker(team,'coordinator')
