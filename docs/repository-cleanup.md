@@ -66,6 +66,6 @@ sharing violation; locked dependencies were therefore also tested through Docker
 from Windows, without forcing a WSL restart. GPU visibility and an actual CUDA
 kernel were checked separately. These are not neural-model training evidence.
 
-The [training benchmark proposal](training-benchmark-plan-ko.md) supplies nine
+The training benchmark proposal supplies nine
 learning projects and identifies required GPU/job/dataset/checkpoint/evaluator
 extensions. This cleanup does not silently claim those extensions are implemented.

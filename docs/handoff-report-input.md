@@ -45,5 +45,5 @@ The wire retains string arguments for compatibility and a report-object alternat
 It does not yet discriminate the argument type by selected tool in the schema. A
 non-report tool with a report object is rejected before dispatch, never coerced.
 The actual study observed one such rejected list_files action and a corrected retry.
-See handoff-comparison-results-ko.md for the complete outcome; fewer malformed
+In the actual-agent comparison, fewer malformed
 report fields did not imply fewer total calls or eliminate semantic evidence errors.

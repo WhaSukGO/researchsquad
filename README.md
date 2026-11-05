@@ -4,24 +4,31 @@ A configurable research team with one reusable `Agent`, JSON/Markdown role defin
 explicit tools, host-managed work, independent reviews and protected evaluation.
 Product and research workflows select responsibilities and required evidence.
 
-The [current TODO](docs/TODO-ko.md) separates existing runtime repairs from future
-cross-run experience and adaptive research work. [Repair verification](docs/runtime-reliability-results-ko.md)
-records fault checks, real GPU regression and actual reader evidence.
-The [R12 follow-up](docs/r12-publication-results-ko.md) records the real mount-race
-reproduction, pinned-directory publication fix and its limits.
+## LeNet rediscovery with Meta Muse Spark
 
-Start with the [Korean operating guide](docs/managed-workflow-ko.md),
-[configuration and recovery guide](docs/managed-workflow.md), and
-[implementation notes](docs/managed-workflow-notes.md).
-The [training benchmark proposal](docs/training-benchmark-plan-ko.md) describes nine
-research projects. [Training operations](docs/training-runtime.md) and the
-[measured implementation report](docs/training-runtime-results-ko.md) describe the
-implemented job/checkpoint/trace path and its remaining research limitations.
+This branch (`feat/lenet-discovery`) adds the engine behind [Cruyff](https://github.com/WhaSukGO/cruyff):
+six Bell Labs researchers from October 1988 (LeCun, Denker, Jackel, Boser, Bottou, Hinton) played by
+Muse Spark agents through the Meta Model API (`MetaProvider` in `goalagent/provider.py`), each limited to the papers that
+person had (`research/lit-1988`). Knowledge moves only by letters; a rule check and a Muse Spark referee
+return letters that use post-1988 knowledge. A deterministic ledger (`goalagent/lenet_m3.py`,
+`goalagent/lenet_m4.py`) trains every proposed network in a network-less Docker sandbox, judges every
+claim from measured results, and scores the LeNet checklist (shared weights, subsampling, two-stage
+hierarchy, beating Denker's pipeline) with provenance.
+
+```sh
+export META_API_KEY=...   # never commit it
+uv run python -m goalagent.lenet_m4 --condition C0 --runs 1 --base ~/rsq-runs/meta --model muse-spark-1.3
+# after a crash or shutdown: add --resume
+```
+
+## Guides
+
+Start with the [configuration and recovery guide](docs/managed-workflow.md) and
+[implementation notes](docs/managed-workflow-notes.md). [Training operations](docs/training-runtime.md)
+describe the implemented job/checkpoint/trace path and its remaining research limitations.
 The [external-source study guide](docs/external-source-study.md) connects actual
 paper/code discovery and body reading to source-informed GPU comparisons and
-independent final inference. The [actual source-study report](docs/external-source-results-ko.md)
-records the negative dropout result, final protected score, role decisions,
-storage intervention and report-review failures.
+independent final inference.
 
 ![The reusable agent loop](docs/diagrams/configurable-team-loop.png)
 
@@ -77,8 +84,6 @@ Custom version-1 workflows retain their coordinator-directed interface.
 Default containers currently have no GPU grant, a 2 GB memory limit and two CPUs.
 Opt-in GPU profiles, detached jobs, large dataset/model references and observable
 traces are now implemented; see [training operations](docs/training-runtime.md).
-The [benchmark plan](docs/training-benchmark-plan-ko.md) describes the research
-quality questions beyond the included fixed learning fixture.
 
 ## Verify
 

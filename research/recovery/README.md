@@ -35,4 +35,4 @@ Use Linux/WSL with the approved CUDA image and configured provider authenticatio
 but **no model calls**; it is not evidence of agent diagnosis or repair.
 `scripts.export_recovery_report` reads preserved evidence and exports the Korean
 report, case traces, source patches and structured records without executing agent
-code. See docs/recovery-results-ko.md for measured scope, errors and limitations.
+code.

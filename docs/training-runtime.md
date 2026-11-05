@@ -5,10 +5,7 @@ This implements the first local training increment. All roles still use `Agent`.
 the training service observes them and commits job changes through Team events.
 It does not import experiment code or run it on the host.
 
-See [the Korean implementation/results report](training-runtime-results-ko.md) for
-the actual learning outcome, failures found and measured scope.
-
-The subsequent [actual-agent study](fashion-live-results-ko.md) replaces scripted
+The subsequent actual-agent study replaces scripted
 decisions with real provider calls, agent-authored training code, validation-driven
 model selection and separate role reviews. Run `python -m goalagent.fashion_live
 --run-dir tmp/NEW-LIVE-STUDY` to start a fresh bounded study; this consumes provider
@@ -16,11 +13,11 @@ usage and restricts architecture selection to a reviewed declarative MLP/CNN reg
 
 Direct job output publication and typed report input are described in
 [handoff/report interfaces](handoff-report-input.md). Their
-[actual-agent comparison](handoff-comparison-results-ko.md) found less manual
+actual-agent comparison found less manual
 Engineering packaging and no missing report-field errors, but no reduction in
 overall calls or repeated reading. It records both improvements and remaining gaps.
 
-[Actual-agent recovery validation](recovery-results-ko.md) exercises an externally
+Actual-agent recovery validation exercises an externally
 killed training container, invalid input dimensions and nonfinite loss. The source
 and replay guide are in research/recovery/; these bounded seeded incidents do not
 establish generic recovery from arbitrary failures.

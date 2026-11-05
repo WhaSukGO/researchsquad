@@ -108,7 +108,7 @@ pilot. See [managed operations](managed-workflow.md) for scope and external even
 Training labels in a future training task must be explicit public training inputs;
 protected evaluation labels remain separate. The present generic text evaluator is
 not a model-checkpoint evaluator, and default containers do not receive a GPU.
-See [the training assessment](training-benchmark-plan-ko.md) for concrete gaps.
+See the training assessment for concrete gaps.
 
 Unlimited mode uses JSON `null`, keeps usage accounting and preserves container,
 file, evidence and evaluation boundaries. It does not provide GPU scheduling,

@@ -25,5 +25,5 @@ provider, not scripted choices. A reviewed declarative MLP/CNN registry bounds m
 selection so the independent evaluator never imports agent Python. The runner
 protects a single final test selection. A valid study is not a promised accuracy.
 
-Full role rationale, errors and limitations: `docs/fashion-live-results-ko.md` and
+Full role rationale, errors and limitations:
 `docs/verification/fashion-live-20261030.json`. Raw traces/data/weights stay local.

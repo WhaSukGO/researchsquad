@@ -2,7 +2,7 @@
 
 `--mode check` runs scripted decisions (no model calls) through real CPU containers and
 audits the ledger invariant. `--mode live` runs the common Agent with the configured
-provider. Neither mode claims autonomous scientific quality; see docs/lenet-ledger-ko.md.
+provider. Neither mode claims autonomous scientific quality.
 """
 import argparse
 import hashlib

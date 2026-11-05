@@ -8,8 +8,8 @@ coordinator-directed interface.
 
 ## Repaired runtime interfaces
 
-The [current TODO](TODO-ko.md) and [runtime repair verification](runtime-reliability-results-ko.md)
-track the source-study findings. Same-assignment reading coverage is now available
+Runtime repair verification records
+the source-study findings. Same-assignment reading coverage is now available
 in `observed_work`, separate from the six recent action bodies. `read_file` preserves
 its bounded text in the next model context and returns total `bytes`, window
 `returned_bytes`, `end_offset`, `next_offset` and `eof`; advance by `next_offset`,
@@ -39,7 +39,7 @@ Other failure boundaries keep their existing recovery requirements.
 JSON and artifact content publication pin one parent directory descriptor for
 temporary creation, replacement and cleanup. This prevents two absolute lookups
 from crossing mount instances during a same-directory mount transition. EXDEV
-does not trigger a copy fallback. See [the R12 reproduction](r12-publication-results-ko.md)
+does not trigger a copy fallback. See the R12 reproduction
 for actual mount-race checks and the distinction from the unrecorded historical trigger.
 
 Registered `Evaluator.preflight(snapshot, task)` may provide mechanical checks
